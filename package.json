@@ -15,9 +15,14 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:",
+    "@rollup/plugin-commonjs": "^28.0.3",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@rollup/plugin-typescript": "^12.1.2",
     "@tanstack/eslint-plugin-query": "catalog:",
     "@unocss/eslint-plugin": "catalog:",
     "eslint": "catalog:",
-    "eslint-plugin-format": "catalog:"
+    "eslint-plugin-format": "catalog:",
+    "rollup-plugin-dts": "^6.1.1",
+    "tsup": "^8.4.0"
   }
 }

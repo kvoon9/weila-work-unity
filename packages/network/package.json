@@ -1,0 +1,34 @@
+{
+  "name": "@weila/network",
+  "type": "module",
+  "version": "0.0.1",
+  "packageManager": "pnpm@10.9.0",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
+  "exports": {
+    ".": "./dist/index.js",
+    "./package.json": "./package.json"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "rollup -cw",
+    "build": "rollup -c"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "catalog:",
+    "@rollup/plugin-node-resolve": "catalog:",
+    "@rollup/plugin-typescript": "catalog:",
+    "@types/crypto-js": "catalog:",
+    "@types/md5": "catalog:",
+    "crypto-js": "catalog:",
+    "md5": "catalog:",
+    "ofetch": "catalog:",
+    "rollup": "catalog:"
+  }
+}

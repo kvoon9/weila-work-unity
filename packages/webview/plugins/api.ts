@@ -1,6 +1,7 @@
 import type { AxiosInstance, AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios'
 import type { NitroFetchOptions, NitroFetchRequest } from 'nitropack'
 import type weilaApiList from '~~/fixture/mock'
+import { createWeilaFetchV2 } from '@weila/network'
 import axios from 'axios'
 import { parseURL } from 'ufo'
 import { headers, isDev, isMocking } from '~/shared/const'
@@ -159,19 +160,39 @@ export default defineNuxtPlugin(() => {
     ...weilaFetchOptions,
   })
 
-  const v2 = $fetch.create({
-    ...weilaFetchOptions,
-    baseURL: useBaseURL('v2', 'proxy2'),
-    onRequest({ options }) {
-      const { access_token, app_id, app_sign_v2 } = useAuthStore()
+  // const v2 = $fetch.create({
+  //   ...weilaFetchOptions,
+  //   onRequest({ options }) {
+  //     const { access_token, app_id, app_sign_v2 } = useAuthStore()
 
-      options.query = {
-        appid: app_id,
-        token: access_token,
-        et: String(et.value),
-        sign: app_sign_v2,
-        ...options.query,
-      }
+  //     options.query = {
+  //       appid: app_id,
+  //       token: access_token,
+  //       et: String(et.value),
+  //       sign: app_sign_v2,
+  //       ...options.query,
+  //     }
+  //   },
+  // })
+
+  const v2 = createWeilaFetchV2({
+    baseURL: useBaseURL('v2', 'proxy2'),
+    onError(error) {
+      if (error instanceof Error)
+        throw error
+
+      const { errcode, errmsg } = error as WeilaRes
+
+      console.error(`${errcode} ${errmsg}`)
+      toast({
+        title: `Oops: ${errcode}`,
+        description: `${errmsg}`,
+      })
+      throw new Error(`${errcode} ${errmsg}`)
+    },
+    onLogout() {
+      const { logout } = useAuthStore()
+      logout()
     },
   })
 

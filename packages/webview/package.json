@@ -42,6 +42,7 @@
     "@vueuse/integrations": "catalog:",
     "@vueuse/router": "catalog:",
     "@vueuse/sound": "catalog:",
+    "@weila/network": "workspace:*",
     "axios": "catalog:",
     "browser-image-compression": "catalog:",
     "class-variance-authority": "catalog:",
