@@ -1,0 +1,277 @@
+TTS: TTS
+account:
+  txt: 账号
+add-device: 添加设备
+add-member: 添加成员
+avatar: 头像
+back: 返回
+batch-operation: 批量操作
+binding-phone: 绑定手机号
+binding-phone-form:
+  err-msg:
+    password: 密码为必填项
+    phone-number: 手机号为必填项
+    verify-code: 短信验证码为必填项
+    verify-image-code: 图形验证码为必选项
+  title: 绑定手机号
+breadcrumb:
+  binding-phone: 绑定手机
+  me: 我
+  reset-password: 重置密码
+btn:
+  create: 创建
+burst-mode: 对讲模式
+burst-mode-0: 排麦
+burst-mode-1: 抢麦
+burst-mode-2: 抢断
+button:
+  add: 添加
+  add-device: 添加设备
+  add-group-member: 添加群成员
+  add-member: 添加成员
+  back: 返回
+  cancel: 取消
+  checkout: 查看
+  copied: 复制成功
+  copy: 复制
+  create: 创建
+  create-dept: 创建部门
+  create-group: 创建群组
+  create-member: 创建成员
+  delete: 删除
+  delete-dept: 删除部门
+  edit: 编辑
+  edit-dept: 编辑部门
+  edit-group: 修改群组
+  edit-group-member: 修改群成员
+  login: 登录
+  remove: 移除
+  reset: 重置
+  reset-password: 重置密码
+  save: 保存
+  send: 发送
+  submit: 提交
+change-member:
+  form:
+    avatar:
+      label: 头像
+    gender:
+      label: 性别
+    loc_share:
+      label: 位置共享
+    name:
+      label: 名称
+    phone:
+      label: 电话
+    title: 更改成员
+    track:
+      label: 轨迹
+change-member-settings-form:
+  title: Edit Member Info
+close: 关闭
+confirm-password: 确认密码
+controls: 操作
+copy:
+  current-copy: 已复制
+corp:
+  create:
+    form:
+      title: 创建企业
+  edit: 修改企业
+  member: 组织成员
+corp-info: 企业详情
+corp-number: 企业号
+create-member: 创建成员
+created: 创建日期
+crop:
+  avatar: 裁剪头像
+delete:
+  modal:
+    content: 您确定要删除吗？
+    hint: 此操作无法撤销
+    title: 删除
+dept:
+  create: 添加部门
+  edit: 修改部门
+  form:
+    name:
+      label: 名称
+      placeholder: 名称是必需的
+  name: 部门
+edit: 编辑
+edit-device: 修改设备
+edit-member: 修改成员
+female: 女
+gender: 性别
+group:
+  create: 创建群组
+  member: 群成员
+  my-groups: 我的群组
+  settings:
+    members: 成员
+    title: 群组设置
+hint:
+  please-select: 请选择...
+job-number: 工号
+latitude: 纬度
+loc_share: 位置共享
+location-detail: 位置信息
+login:
+  form:
+    forgetPassword: 忘记密码
+    login: 登录
+    password:
+      errMsg: 用户密码未填写
+      placeholder: 密码
+    register: 注册
+    rememberPassword: 记住密码
+    successMsg: 登录成功
+    title: 登录
+    userName:
+      errMsg: 用户名未填写
+      placeholder: 用户名/手机号
+  type:
+    phone: 手机号
+    username: 账号
+login.banner.slogan1: 开箱即用的高质量模板
+login.banner.slogan2: 内置了常见问题的解决方案
+login.banner.slogan3: 接入可视化增强工具AUX
+login.banner.subSlogan1: 丰富的的页面模板，覆盖大多数典型业务场景
+login.banner.subSlogan2: 国际化，路由配置，状态管理应有尽有
+login.banner.subSlogan3: 实现灵活的区块式开发
+logout: 退出登录
+longitude: 经度
+male: 男
+member:
+  form:
+    avatar:
+      label: 头像
+    dept:
+      label: 部门
+    gender:
+      label: 性别
+    job-num:
+      label: 工号
+    loc_share:
+      label: 位置共享
+    name:
+      label: 名称
+    password:
+      label: 密码
+    phone:
+      label: 手机号
+    track:
+      label: 轨迹
+  state: 状态
+member-list: 成员列表
+member-state:
+  enabled: 启用
+  paused: 停用
+member-type:
+  host: 群主
+  member: 成员
+members: 成员
+menu:
+  contact: 通讯录
+  me: 我
+  message: 历史消息
+  workbench: 工作台
+message:
+  not-support: 不支持的消息
+  revoke: 消息已撤回
+  success: 成功
+name: 名称
+new-password: 新密码
+no-data: 暂无数据
+no-intro-data: 无描述信息
+none: 无
+not-supported: 不支持
+offline: 离线
+old-password: 旧密码
+online: 在线
+open: 打开
+org:
+  created-date: 创建日期
+  devices: 设备
+  groups: 群组
+  members: 成员
+org-form:
+  avatar:
+    label: 头像
+  name:
+    label: 名称
+organazition: 组织
+password: 密码
+phone: 电话
+phone-number: 电话号码
+priority: 优先级
+project:
+  name: 微喇企业管理系统
+register:
+  form:
+    getSMS: 获取短信
+    imgVerifyCode:
+      errMsg: 图形验证码为必填项
+      placeholder: 图形验证码
+    login: 登录
+    password:
+      errMsg: 密码为必填项
+    phone:
+      errMsg: 输入正确的电话号码
+      placeholder: 电话号码
+    sendSMS: 发送
+    submit: 提交
+    successMsg: 注册成功
+    title: 注册
+    verifyCode:
+      errMsg: 验证码为必填项
+      placeholder: 验证码
+reset-password:
+  button: 重置密码
+  form:
+    password:
+      label: 新密码
+    title: 重置密码
+reset-password-form:
+  title: 重置密码
+reset-pwd:
+  form:
+    phone:
+      errMsg: 输入正确的电话号码
+      placeholder: 你的电话号码
+    title: 重置密码
+selected: 已选择
+sendSMS:
+  success:
+    hint: 发送成功，请注意查看短信消息
+shutup: 禁言
+shutup-disable: 不禁言
+shutup-enable: 禁言
+sms-code: 短信验证码
+state:
+  online: 在线
+submenu:
+  dept-manage: 部门管理
+  group-manage: 群组管理
+  member-manage: 成员管理
+time: 时间
+track: 轨迹
+track-type:
+  close: 关闭
+  high: 高
+  keep: 保持
+  low: 低
+  medium: 中等
+type: 类型
+user:
+  gender: 性别
+  phone: 电话
+user-count: 用户数量
+user-track: 用户轨迹
+user-type:
+  device: 设备
+  member: 成员
+  owner: 企业主
+verify-code: 验证码
+verify-image-code: 验证图形代码
+weila-number: 微喇号

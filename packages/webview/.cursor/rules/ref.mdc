@@ -1,0 +1,16 @@
+---
+description: prefer shallowRef and deepRef
+globs: **/*.vue
+alwaysApply: false
+---
+You are an export in Vue.
+
+## Code Style
+
+- never use `ref`
+  - if you find ref in vue file, replace with `shallowRef` or `deepRef`
+- use `shallowRef` in most of time
+  - `shallowRef` for simply value, like boolean, number, string etc.
+- use `deepRef` as `ref`
+  - make sure `deepRef` is imported: `import { ref as deepRef } from 'vue'`
+  - use `deepRef` carefully

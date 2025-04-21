@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "duckduckgo-mcp-server": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "@smithery/cli@latest",
+        "run",
+        "@nickclyde/duckduckgo-mcp-server",
+        "--config",
+        "{}"
+      ]
+    }
+  }
+}

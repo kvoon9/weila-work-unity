@@ -1,0 +1,10 @@
+{
+  "i18n-ally.localesPaths": [
+    "i18n",
+    "i18n/locales",
+    "pages/messages"
+  ],
+  "commentTranslate.multiLineMerge": true,
+  "autoHide.enable": true,
+  "autoHide.mode": "auto"
+}

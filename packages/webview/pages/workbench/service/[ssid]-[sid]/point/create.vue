@@ -1,0 +1,150 @@
+<script setup lang="ts">
+import type { FileUploader } from '#components'
+import type { RegeoV2 } from '~/shared/types'
+import { objectKeys } from '@antfu/utils'
+import { toTypedSchema } from '@vee-validate/zod'
+import { useForm } from 'vee-validate'
+import { ref as deepRef, shallowRef } from 'vue'
+
+definePageMeta({
+  layout: 'back',
+})
+
+appHead.value = '创建服务点'
+
+const router = useRouter()
+const avatarRef = templateRef<any>('avatarRef')
+const sid = useRouteParams('sid', 0, { transform: Number })
+
+const { handleSubmit, errors, defineField } = useForm({
+  validationSchema: toTypedSchema(createBusinessPointSchema),
+})
+
+const [name, nameAttrs] = defineField('name')
+const [avatar, avatarAttrs] = defineField('avatar')
+const [intro, introAttrs] = defineField('intro')
+const [phone, phoneAttrs] = defineField('phone')
+const [album] = defineField('album')
+const regeo = deepRef<(RegeoV2 & {
+  lat: number
+  lon: number
+}) | null>(null)
+const albumRef = templateRef<Pick<InstanceType<typeof FileUploader>, 'filelist'>>('albumRef')
+
+const { mutateAsync, isPending } = createBusinessPoint()
+
+async function createPoint(values: CreateBusinessPointPayload) {
+  // 上传头像
+  const { upload } = avatarRef.value
+  const avatarUrl = values.avatar && !isRemoteImage(values.avatar)
+    ? await upload()
+    : values.avatar
+
+  // 构建请求体
+  const payload: CreateBusinessPointPayload = {
+    sid: sid.value,
+    name: values.name,
+    avatar: avatarUrl || 'http://weilaavatar.oss-cn-shenzhen.aliyuncs.com/default/user.png',
+    intro: values.intro || '',
+    phone: values.phone || '',
+    album: albumRef.value.filelist.map(f => f.url).filter((url): url is string => url !== undefined),
+    lat: regeo.value?.lat || 0,
+    lon: regeo.value?.lon || 0,
+    adcode: regeo.value?.adcode || '',
+    address: regeo.value?.Address || '',
+  }
+
+  await mutateAsync(payload)
+  const { toast } = useToast()
+  toast({ title: '创建服务点成功' })
+  router.back()
+}
+
+const onSubmit = handleSubmit(createPoint, ({ errors, values }) => {
+  document.querySelector(`label[for="${objectKeys(errors)[0]}"]`)?.scrollIntoView()
+  console.error('values', values)
+  console.error('errors', errors)
+})
+
+const openAddrPicker = shallowRef(false)
+</script>
+
+<template>
+  <div p8>
+    <form flex flex-col space-y-2 @submit.prevent="onSubmit">
+      <label label for="name">名称</label>
+      <input v-bind="nameAttrs" v-model="name" input type="text" name="name">
+      <span text-red>{{ errors.name }}</span>
+
+      <label label for="phone">手机号</label>
+      <input v-bind="phoneAttrs" v-model="phone" input type="text" name="phone">
+      <span text-red>{{ errors.phone }}</span>
+
+      <label label for="avatar">头像</label>
+      <AvatarUploader ref="avatarRef" v-bind="avatarAttrs" v-model:src="avatar" />
+      <span text-red>{{ errors.avatar }}</span>
+
+      <label label for="intro">简介 ({{ intro?.length || 0 }}/200)</label>
+      <textarea v-bind="introAttrs" v-model="intro" input h-fit resize-none rows="3" name="intro" />
+      <span text-red>{{ errors.intro }}</span>
+
+      <label label for="album">业务展示</label>
+      <FileUploader ref="albumRef" @update:files="(files) => album = files" />
+      <span text-red>{{ errors.album }}</span>
+
+      <label label for="address">地址</label>
+      <div relative h-fit>
+        <textarea
+          :value="regeo ? regeo.Address : ''"
+          w-full relative rows="3" type="text" bg-none name="address"
+          @input="(e) => {
+            // @ts-expect-error type error
+            regeo.Address = e.target.value
+          }"
+        />
+
+        <DialogRoot v-model:open="openAddrPicker">
+          <DialogTrigger as-child>
+            <div absolute right-2 bottom-4 btn="primary sm" flex items-center space-x-2 rounded-md w-fit>
+              <Icon name="ph:map-pin" />
+              <span break-keep>位置选择</span>
+            </div>
+          </DialogTrigger>
+          <DialogPortal to="body">
+            <DialogOverlay fixed inset-0 z-130 backdrop-blur-90 />
+            <DialogContent fixed position-center w90vw h90vh z131>
+              <DialogTitle text-lg font-semibold>
+                位置选择
+              </DialogTitle>
+              <DialogDescription color-secondary>
+                请选择一个位置
+              </DialogDescription>
+              <DialogClose class="absolute top-2 right-2">
+                <Icon name="ph:x-bold" />
+              </DialogClose>
+              <MapPicker
+                border="3 ~"
+                rounded-xl of-hidden h80vh @update:value="(data) => {
+                  regeo = data
+                  openAddrPicker = false
+                }"
+              />
+            </DialogContent>
+          </DialogPortal>
+        </DialogRoot>
+      </div>
+
+      <button v-is-loading="isPending" type="submit" btn-primary border-none>
+        创建
+      </button>
+    </form>
+  </div>
+</template>
+
+<style scoped>
+input,
+select,
+textarea {
+  --at-apply: p2 rounded bg-secondary;
+}
+</style>

@@ -1,0 +1,278 @@
+TTS: TTS
+account:
+  txt: Account
+add-device: Add device
+add-member: Add member
+avatar: Avatar
+back: Return
+batch-operation: Batch Operation
+binding-phone: Bind mobile phone number
+binding-phone-form:
+  err-msg:
+    password: password required
+    phone-number: phone number Required
+    verify-code: message code Required
+    verify-image-code: verify image code required
+  title: Binding Phone
+breadcrumb:
+  binding-phone: binding phone
+  me: me
+  reset-password: reset password
+btn:
+  create: create
+burst-mode: Burst Mode
+burst-mode-0: Arrange wheat
+burst-mode-1: grab the mic.
+burst-mode-2: Intercom
+button:
+  add: add
+  add-device: Add Device
+  add-group-member: Add group members
+  add-member: Add Member
+  back: Return
+  cancel: cancel
+  checkout: View
+  copied: Copy successful.
+  copy: Copy
+  create: Create
+  create-dept: Create Department
+  create-group: Create group
+  create-member: Create Member
+  delete: Delete
+  delete-dept: Delete Dept
+  edit: Edit
+  edit-dept: Edit Dept
+  edit-group: Modify group
+  edit-group-member: Modify group members
+  login: Login
+  remove: remove
+  reset: reset
+  reset-password: Reset Password
+  save: Save
+  send: Send
+  submit: Submit
+change-member:
+  form:
+    avatar:
+      label: Avatar
+    gender:
+      label: gender
+    loc_share:
+      label: location share
+    name:
+      label: name
+    phone:
+      label: phone
+    title: Change Member
+    track:
+      label: track
+change-member-settings-form:
+  title: Edit Member Info
+close: close
+confirm-password: Confirm Password
+controls: Operation
+copy:
+  current-copy: Copied
+corp:
+  create:
+    form:
+      title: create corp
+  edit: Modify enterprise
+  member: Organizational members
+corp-info: Company Details
+corp-number: Enterprise account
+create-member: Create member
+created: created date
+crop:
+  avatar: Crop avatar
+delete:
+  modal:
+    content: Are you sure your want to delete?
+    hint: This action cannot be undone
+    title: Delete
+dept:
+  create: Add Dept
+  edit: Modification Department
+  form:
+    name:
+      label: name
+      placeholder: name is required
+  name: Department
+edit: Edit
+edit-device: Modify device
+edit-member: Modify member
+female: Female
+gender: Gender
+group:
+  create: Create Group
+  member: Group members
+  my-groups: My Groups
+  settings:
+    members: Members
+    title: Group Settings
+hint:
+  please-select: Please select...
+job-number: Employee ID
+latitude: latitude
+loc_share: location share
+location-detail: Location information
+login:
+  __i18n_ally_root__:
+    form:
+      successMsg: Login successful.
+  form:
+    forgetPassword: forget the password
+    login: Login
+    password:
+      errMsg: password is not filled in
+      placeholder: password
+    register: register
+    rememberPassword: Remember password
+    title: Login
+    userName:
+      errMsg: username is not filled in
+      placeholder: username
+  type:
+    phone: phone
+    username: account
+login.banner.slogan1: Out-of-the-box high-quality template
+login.banner.slogan2: Built-in solutions to common problems
+login.banner.slogan3: Access visualization enhancement tool AUX
+login.banner.subSlogan1: Rich page templates, covering most typical business scenarios
+login.banner.subSlogan2: Internationalization, routing configuration, state management everything
+login.banner.subSlogan3: Realize flexible block development
+logout: Log out
+longitude: longitude
+male: Male
+member:
+  form:
+    avatar:
+      label: Avatar
+    dept:
+      label: Department
+    gender:
+      label: Gender
+    job-num:
+      label: Employee ID
+    loc_share:
+      label: Share Location
+    name:
+      label: Label
+    password:
+      label: Password
+    phone:
+      label: Phoen
+    track:
+      label: Track
+  state: State
+member-list: Member List
+member-state:
+  enabled: Enabled
+  paused: paused
+member-type:
+  host: Group owner
+  member: Member
+members: Members
+menu:
+  contact: Contact
+  me: Me
+  message: Message
+  workbench: Workbench
+message:
+  not-support: Not Supported Message
+  success: Success
+name: Name
+new-password: New password
+no-data: No data available.
+no-intro-data: No description information.
+none: None
+not-supported: Not supported
+offline: Offline
+old-password: Old password
+online: Online
+open: open
+org:
+  created-date: Created Date
+  devices: Devices
+  groups: Groups
+  members: Members
+org-form:
+  avatar:
+    label: Avatar
+  name:
+    label: Name
+organazition: organazition
+password: Password
+phone: phone
+phone-number: Phone Number
+priority: Priority
+project:
+  name: Weila Enterprise Manager
+register:
+  form:
+    getSMS: Get SMS
+    imgVerifyCode:
+      errMsg: image verify code is needed
+      placeholder: image verify code
+    login: login
+    password:
+      errMsg: password need be filled
+    phone:
+      errMsg: Enter correct phone number
+      placeholder: your phone number
+    sendSMS: send
+    submit: submit
+    successMsg: Success
+    title: Register
+    verifyCode:
+      errMsg: verify code is needed
+      placeholder: verify code
+reset-password:
+  button: Reset Password
+  form:
+    password:
+      label: new password
+    title: Reset Password
+reset-password-form:
+  title: Reset Password
+reset-pwd:
+  form:
+    phone:
+      errMsg: Enter correct phone number
+      placeholder: your phone number
+    title: Reset Password
+selected: Selected
+sendSMS:
+  success:
+    hint: Sent successfully, please pay attention to your message
+shutup: Mute
+shutup-disable: Not muted.
+shutup-enable: Muted
+sms-code: Message Code
+state:
+  online: Online status
+submenu:
+  dept-manage: Department management
+  group-manage: Group Management
+  member-manage: Member Management
+time: Time
+track: Track
+track-type:
+  close: Close
+  high: High
+  keep: Keep
+  low: Low
+  medium: Medium
+type: Type
+user:
+  gender: Gender
+  phone: Phone
+user-count: Number of users
+user-track: User trajectory
+user-type:
+  device: Device
+  member: Member
+  owner: business owner
+verify-code: Verification code
+verify-image-code: Verify Image Code
+weila-number: Micro trumpet

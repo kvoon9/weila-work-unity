@@ -1,0 +1,23 @@
+{
+  "name": "weila-crop-mgr",
+  "version": "1.0.0",
+  "packageManager": "pnpm@10.9.0",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
+  "main": "index.js",
+  "scripts": {
+    "web": "pnpm -C packages/web run dev",
+    "webview": "pnpm -C packages/webview run dev",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix ."
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "catalog:",
+    "@tanstack/eslint-plugin-query": "catalog:",
+    "@unocss/eslint-plugin": "catalog:",
+    "eslint": "catalog:",
+    "eslint-plugin-format": "catalog:"
+  }
+}
