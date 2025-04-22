@@ -5,7 +5,7 @@ export function getMd5Middle8Chars(md5: string) {
   return md5.slice(12, 20)
 }
 
-export function getV1Options() {
+export function getOptionsV1() {
   const app_id = '102036'
   const key = 'b3c658bd2e637c65efb134fb381d4a18'
   const access_token = localStorage.getItem('token') || ''
@@ -21,7 +21,7 @@ export function getV1Options() {
   }
 }
 
-export function getV2Options() {
+export function getOptionsV2() {
   const app_id = '102036'
   const key = 'b3c658bd2e637c65efb134fb381d4a18'
   const access_token = localStorage.getItem('token') || ''
