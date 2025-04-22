@@ -13,7 +13,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "prepare": "pnpm run prepare:network",
-    "prepare:network": "pnpm -C packages/network run build"
+    "prepare:network": "pnpm -C packages/network run build",
+    "lint-staged": "npx lint-staged"
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:",
@@ -23,6 +24,13 @@
     "eslint-factory": "catalog:",
     "eslint-plugin-format": "catalog:",
     "eslint-plugin-unimport": "catalog:",
+    "lint-staged": "catalog:",
     "unbuild": "catalog:"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged"
+  },
+  "lint-staged": {
+    "*": "eslint --fix"
   }
 }

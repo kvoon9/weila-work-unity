@@ -17,7 +17,6 @@
     "preview": "vite preview --host",
     "preview-https": "serve dist",
     "typecheck": "vue-tsc --noEmit --skipLibCheck",
-    "lint-staged": "npx lint-staged",
     "up": "taze -I major",
     "prepare": "simple-git-hooks",
     "lint": "eslint .",
@@ -98,7 +97,6 @@
     "https-localhost": "catalog:",
     "jiti": "catalog:",
     "less": "catalog:",
-    "lint-staged": "catalog:",
     "lodash": "catalog:",
     "marked": "catalog:",
     "mockjs": "catalog:",
@@ -143,11 +141,5 @@
     "bin-wrapper": "npm:bin-wrapper-china",
     "gifsicle": "5.2.0",
     "rollup": "^4.28.1"
-  },
-  "simple-git-hooks": {
-    "pre-commit": "npx lint-staged"
-  },
-  "lint-staged": {
-    "*": "eslint --fix"
   }
 }

@@ -1,9 +1,7 @@
 import type { AxiosInstance, AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios'
 import type weilaApiList from '~~/fixture/mock'
-import axios from 'axios'
 import { parseURL } from 'ufo'
 import { headers, isDev, isMocking } from '~/shared/const'
-import { et } from '~/shared/states'
 
 export interface WeilaRequestInstance extends AxiosInstance {
   post: <T = any, R = WeilaRes<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>) => Promise<R>

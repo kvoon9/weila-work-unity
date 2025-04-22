@@ -476,6 +476,9 @@ importers:
       eslint-plugin-unimport:
         specifier: 'catalog:'
         version: 0.1.2(eslint@9.25.0(jiti@2.4.2))(rollup@4.40.0)(typescript@5.8.3)
+      lint-staged:
+        specifier: 'catalog:'
+        version: 15.5.1
       unbuild:
         specifier: 'catalog:'
         version: 3.5.0(typescript@5.8.3)(vue-tsc@2.2.8(typescript@5.8.3))(vue@3.5.13(typescript@5.8.3))
@@ -730,9 +733,6 @@ importers:
       less:
         specifier: 'catalog:'
         version: 4.3.0
-      lint-staged:
-        specifier: 'catalog:'
-        version: 15.5.1
       lodash:
         specifier: 'catalog:'
         version: 4.17.21
