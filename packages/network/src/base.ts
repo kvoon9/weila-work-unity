@@ -72,8 +72,17 @@ export function createFetch(opts?: CreateWeilaApiOptions) {
     onRequestError(reqError) {
       console.error('reqError', reqError)
     },
-    onResponseError({ error }) {
-      console.error('resError', error)
+    onResponseError({ error, response }) {
+      if (error) {
+        onError?.(error)
+        console.error('resError', error)
+      }
+      else {
+        const errcode = response.status
+        const errmsg = response.statusText
+        onError?.({ errcode, errmsg })
+        console.error('resError', errcode, errmsg)
+      }
     },
   })
 }
