@@ -1,16 +1,18 @@
 <script setup lang="ts">
 import { useRouteQuery } from '@vueuse/router'
+import { useMyBusiness } from '@weila/network'
 
 definePageMeta({
   layout: 'back',
 })
 
-const { data: myBusiness } = useMyBusiness()
+const { data: myBusiness } = useMyBusiness($v2)
 
 // appHead.value = '服务点'
 watchEffect(() => {
-  if (myBusiness.value)
+  if (myBusiness.value) {
     appHead.value = myBusiness.value.merchant.name
+  }
 })
 
 const ssid = useRouteParams<number>('ssid', 0, { transform: Number })

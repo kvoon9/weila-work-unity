@@ -22,6 +22,7 @@ export default antfu(
     unocss: false,
     vue: true,
     pnpm: true,
+    typescript: true,
     ignores,
   },
   pluginQuery.configs['flat/recommended'],

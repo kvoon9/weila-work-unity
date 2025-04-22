@@ -8,27 +8,34 @@
   "license": "ISC",
   "keywords": [],
   "exports": {
-    ".": "./dist/index.js",
+    ".": "./dist/index.mjs",
     "./package.json": "./package.json"
   },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "dev": "rollup -cw",
-    "build": "rollup -c"
+    "dev": "unbuild --stub",
+    "build": "unbuild"
+  },
+  "dependencies": {
+    "@types/md5": "catalog:",
+    "axios": "catalog:",
+    "md5": "catalog:",
+    "ofetch": "catalog:"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "catalog:",
     "@rollup/plugin-node-resolve": "catalog:",
     "@rollup/plugin-typescript": "catalog:",
-    "@types/crypto-js": "catalog:",
-    "@types/md5": "catalog:",
-    "crypto-js": "catalog:",
-    "md5": "catalog:",
-    "ofetch": "catalog:",
-    "rollup": "catalog:"
+    "@tanstack/vue-query": "catalog:",
+    "@vueuse/core": "catalog:",
+    "rollup": "catalog:",
+    "unbuild": "catalog:",
+    "vue": "catalog:",
+    "zod": "catalog:"
   }
 }

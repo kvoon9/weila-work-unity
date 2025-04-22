@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { useQuery } from '@tanstack/vue-query'
+import Message from '@arco-design/web-vue/es/message'
 import { useRouteParams } from '@vueuse/router'
-import { weilaFetchV2 } from '~/api/instances/fetcherV2'
+import { delBusinessPoint, useBusinessPointList } from '@weila/network'
+import CreateBusinessPointModal from '../components/CreateBusinessPointModal.vue'
 
 // 定义服务点类型接口
 interface ServicePointModel {
@@ -16,50 +17,60 @@ interface ServicePointModel {
 const { t } = useI18n()
 
 const sid = useRouteParams('sid', 0, { transform: Number })
-// const ssid = useRouteParams('ssid', 0, { transform: Number })
+const ssid = useRouteParams('ssid', 0, { transform: Number })
 
-const { data, refetch } = useQuery<ServicePointModel[]>({
-  queryKey: ['/corp/busi/get-business-point-list', sid],
-  queryFn: () => {
-    return weilaFetchV2(
-      '/corp/busi/get-business-point-list',
-      {
-        body: {
-          sid: sid.value,
-        },
-      },
-    ).then(i => i.points)
-  },
-})
+const { data, refetch } = useBusinessPointList($v2, computed(() => ({ sid: sid.value })))
 
 // 用于编辑和删除服务点的状态管理
-const isEditServicePointModalVisible = ref(false)
+const isEditServicePointModalVisible = shallowRef(false)
+
 const selectedServicePoint = ref<ServicePointModel | undefined>(undefined)
 
 function openEdit(servicePoint: ServicePointModel) {
   selectedServicePoint.value = servicePoint
   isEditServicePointModalVisible.value = true
 }
+
+const isDelModalVisible = shallowRef(false)
+const { mutateAsync: del, isPending: isDelPending } = delBusinessPoint($v2, {
+  onSuccess() {
+    Message.success('删除成功')
+    refetch()
+    isDelModalVisible.value = false
+  },
+})
 </script>
 
 <template>
   <div w-full p4 space-y-4>
-    <a-breadcrumb>
-      <RouterLink to="/workbench">
-        <a-breadcrumb-item>{{ t('menu.workbench') }}</a-breadcrumb-item>
-      </RouterLink>
-      <a-breadcrumb-item>服务点列表</a-breadcrumb-item>
-    </a-breadcrumb>
+    <div flex items-center justify-between>
+      <a-breadcrumb>
+        <RouterLink to="/workbench">
+          <a-breadcrumb-item>{{ t('menu.workbench') }}</a-breadcrumb-item>
+        </RouterLink>
+        <a-breadcrumb-item>服务号</a-breadcrumb-item>
+      </a-breadcrumb>
+      <div space-x-2 >
+        <a-button type="primary" @click="() => $router.push(`/workbench/service/${sid}-${ssid}/staff`)">
+          服务号客服
+        </a-button>
+        <a-button type="primary" @click="() => $router.push(`/workbench/service/${sid}-${ssid}/detail`)">
+          服务号详情
+        </a-button>
+      </div>
+    </div>
 
     <div w-full rounded p4 space-y-4 bg-base>
       <section space-x-2>
-        <a-button type="primary">
-          {{ '创建服务点' }}
-        </a-button>
+        <CreateBusinessPointModal :sid="sid">
+          <a-button type="primary">
+            {{ '创建服务点' }}
+          </a-button>
+        </CreateBusinessPointModal>
       </section>
 
       <a-table
-        :data="data"
+        :data="data?.points"
         size="medium"
         :column-resizable="true"
         :scroll="{
@@ -101,7 +112,12 @@ function openEdit(servicePoint: ServicePointModel) {
                 <a-button @click="() => openEdit(record)">
                   {{ t('button.edit') || '编辑' }}
                 </a-button>
-                <a-button status="danger">
+                <a-button
+                  v-is-loading="isDelPending" status="danger" @click="() => {
+                    isDelModalVisible = true
+                    selectedServicePoint = record
+                  }"
+                >
                   {{ t('button.delete') || '删除' }}
                 </a-button>
               </div>
@@ -112,9 +128,18 @@ function openEdit(servicePoint: ServicePointModel) {
     </div>
   </div>
 
-  <EditServicePointModal v-model:open="isEditServicePointModalVisible" :service-point="selectedServicePoint" @success="refetch" />
+  <TheModal v-model:open="isDelModalVisible" title="删除服务点">
+    <template #content>
+      <p>
+        确定删除该服务点吗？
+      </p>
+    </template>
+    <template #footer>
+      <a-button type="primary" @click="() => del({ pid: selectedServicePoint!.id })">
+        确定
+      </a-button>
+    </template>
+  </TheModal>
 
-  <div class="p4">
-    <FileUploader />
-  </div>
+  <EditServicePointModal v-model:open="isEditServicePointModalVisible" :service-point="selectedServicePoint" @success="refetch" />
 </template>

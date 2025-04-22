@@ -11,18 +11,18 @@
     "web": "pnpm -C packages/web run dev",
     "webview": "pnpm -C packages/webview run dev",
     "lint": "eslint .",
-    "lint:fix": "eslint --fix ."
+    "lint:fix": "eslint --fix .",
+    "prepare": "pnpm run prepare:network",
+    "prepare:network": "pnpm -C packages/network run build"
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:",
-    "@rollup/plugin-commonjs": "^28.0.3",
-    "@rollup/plugin-node-resolve": "^16.0.1",
-    "@rollup/plugin-typescript": "^12.1.2",
     "@tanstack/eslint-plugin-query": "catalog:",
     "@unocss/eslint-plugin": "catalog:",
     "eslint": "catalog:",
+    "eslint-factory": "catalog:",
     "eslint-plugin-format": "catalog:",
-    "rollup-plugin-dts": "^6.1.1",
-    "tsup": "^8.4.0"
+    "eslint-plugin-unimport": "catalog:",
+    "unbuild": "catalog:"
   }
 }

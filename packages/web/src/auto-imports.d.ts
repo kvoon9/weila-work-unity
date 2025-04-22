@@ -7,6 +7,7 @@
 export {}
 declare global {
   const $inspect: typeof import('./utils/inspect')['$inspect']
+  const $v2: typeof import('./api/instances/fetcherV2')['$v2']
   const DEFAULT_LAYOUT: typeof import('./layout/index')['DEFAULT_LAYOUT']
   const EffectScope: typeof import('vue')['EffectScope']
   const FIRST_LAYOUT: typeof import('./layout/index')['FIRST_LAYOUT']
@@ -358,12 +359,15 @@ declare global {
   const watchThrottled: typeof import('@vueuse/core')['watchThrottled']
   const watchTriggerable: typeof import('@vueuse/core')['watchTriggerable']
   const watchWithFilter: typeof import('@vueuse/core')['watchWithFilter']
+  const weilaFetch: typeof import('./api/instances/fetcher')['weilaFetch']
+  const weilaRequest: typeof import('./api/instances/request')['weilaRequest']
+  const weilaRequestV2: typeof import('./api/instances/requestV2')['weilaRequestV2']
   const whenever: typeof import('@vueuse/core')['whenever']
 }
 // for type re-export
 declare global {
   // @ts-ignore
-  export type { Component, ComponentPublicInstance, ComputedRef, DirectiveBinding, ExtractDefaultPropTypes, ExtractPropTypes, ExtractPublicPropTypes, InjectionKey, PropType, Ref, MaybeRef, MaybeRefOrGetter, VNode, WritableComputedRef } from 'vue'
+  export type { Component, Slot, Slots, ComponentPublicInstance, ComputedRef, DirectiveBinding, ExtractDefaultPropTypes, ExtractPropTypes, ExtractPublicPropTypes, InjectionKey, PropType, Ref, MaybeRef, MaybeRefOrGetter, VNode, WritableComputedRef } from 'vue'
   import('vue')
   // @ts-ignore
   export type { CorpModel } from './stores/corp'
@@ -379,6 +383,7 @@ declare module 'vue' {
   interface GlobalComponents {}
   interface ComponentCustomProperties {
     readonly $inspect: UnwrapRef<typeof import('./utils/inspect')['$inspect']>
+    readonly $v2: UnwrapRef<typeof import('./api/instances/fetcherV2')['$v2']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
     readonly UseImage: UnwrapRef<typeof import('@vueuse/components')['UseImage']>
     readonly acceptHMRUpdate: UnwrapRef<typeof import('pinia')['acceptHMRUpdate']>
@@ -696,6 +701,9 @@ declare module 'vue' {
     readonly watchThrottled: UnwrapRef<typeof import('@vueuse/core')['watchThrottled']>
     readonly watchTriggerable: UnwrapRef<typeof import('@vueuse/core')['watchTriggerable']>
     readonly watchWithFilter: UnwrapRef<typeof import('@vueuse/core')['watchWithFilter']>
+    readonly weilaFetch: UnwrapRef<typeof import('./api/instances/fetcher')['weilaFetch']>
+    readonly weilaRequest: UnwrapRef<typeof import('./api/instances/request')['weilaRequest']>
+    readonly weilaRequestV2: UnwrapRef<typeof import('./api/instances/requestV2')['weilaRequestV2']>
     readonly whenever: UnwrapRef<typeof import('@vueuse/core')['whenever']>
   }
 }

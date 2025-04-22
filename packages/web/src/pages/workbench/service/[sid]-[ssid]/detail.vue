@@ -1,18 +1,19 @@
 <script setup lang="ts">
-import { useQuery } from '@tanstack/vue-query'
 import { computed } from 'vue'
-import { weilaFetchV2 } from '~/api/instances/fetcherV2'
+import { useMyBusiness } from '@weila/network'
+import { useRouteParams } from '@vueuse/router'
 
 const { t } = useI18n()
 
-const { data } = useQuery({
-  queryKey: ['/corp/busi/get-my-business'],
-  queryFn: () => weilaFetchV2('/corp/busi/get-my-business'),
-})
+const { data } = useMyBusiness($v2)
+
+const ssid = useRouteParams('ssid', 0, { transform: Number })
+const sid = useRouteParams('sid', 0, { transform: Number })
+
 
 // 计算服务号状态文本及颜色
 const serviceStatus = computed(() => {
-  if (!data.value?.business)
+  if (!data.value)
     return { text: '未知', color: '' }
 
   const stateMap: Record<number, { text: string, color: string }> = {
@@ -21,15 +22,15 @@ const serviceStatus = computed(() => {
     2: { text: '已禁用', color: 'red' },
   }
 
-  const state = data.value.business.state as number
+  const state = data.value.state as number
   return stateMap[state] || { text: '未知', color: '' }
 })
 
 // 获取服务号信息的简便访问
 const serviceInfo = computed(() => {
-  if (!data.value?.business?.merchant)
+  if (!data.value?.merchant)
     return null
-  return data.value.business.merchant
+  return data.value.merchant
 })
 
 interface TypeMap {
@@ -50,14 +51,17 @@ const typeMap: TypeMap = {
         <RouterLink to="/workbench">
           <a-breadcrumb-item>{{ t('menu.workbench') }}</a-breadcrumb-item>
         </RouterLink>
-        <a-breadcrumb-item>服务号</a-breadcrumb-item>
+        <RouterLink :to="`/workbench/service/${sid}-${ssid}`">
+          <a-breadcrumb-item>服务号</a-breadcrumb-item>
+        </RouterLink>
+          <a-breadcrumb-item>服务号详情</a-breadcrumb-item>
       </a-breadcrumb>
     </div>
 
-    <div class="p-4">
-      <a-card v-if="data?.business" :bordered="false" class="rounded-lg shadow-sm">
+    <div class="px4">
+      <a-card v-if="data" :bordered="false" class="rounded-lg shadow-sm">
         <!-- 服务号基本信息 -->
-        <div class="p-4">
+        <div p-4 relative>
           <!-- 头像和名称部分 - 使用flex布局水平排列 -->
           <div class="flex items-center gap-4">
             <a-avatar
@@ -74,12 +78,17 @@ const typeMap: TypeMap = {
               </h1>
               <div class="mt-2">
                 <a-space>
-                  <a-tag>ID: {{ data.business.id }}</a-tag>
-                  <a-tag>SID: {{ data.business.sid }}</a-tag>
-                  <a-tag>类型: {{ typeMap[data.business.type] || '未知' }}</a-tag>
+                  <a-tag>ID: {{ data.id }}</a-tag>
+                  <a-tag>SID: {{ data.sid }}</a-tag>
+                  <a-tag>类型: {{ typeMap[data.type] || '未知' }}</a-tag>
                 </a-space>
               </div>
             </div>
+          </div>
+          <div absolute top-0 right-0>
+            <a-button type="primary" @click="() => $router.push(`/workbench/service/${sid}-${ssid}/edit`)">
+              编辑
+            </a-button>
           </div>
         </div>
 

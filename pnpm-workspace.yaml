@@ -115,6 +115,7 @@ catalog:
   taze: ^19.0.4
   typescript: ^5.8.3
   ufo: ^1.6.1
+  unbuild: ^3.5.0
   undici: ^7.8.0
   unfetch: ^5.0.0
   unified: ^11.0.5

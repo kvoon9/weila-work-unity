@@ -58,11 +58,13 @@ export default defineConfig({
     proxy: {
       '/v1': {
         target: 'http://demo.weila.hk',
+        timeout: 20 * 1000,
         // target: 'http://192.168.0.125:8088',
         changeOrigin: true,
       },
       '/v2': {
         target: 'http://demo.weila.hk',
+        timeout: 20 * 1000,
         // target: 'http://192.168.0.125:8088',
         changeOrigin: true,
       },
@@ -119,6 +121,7 @@ export default defineConfig({
         'src/stores',
         'src/layout',
         'src/utils',
+        'src/api/instances',
       ],
       vueTemplate: true,
       resolvers: [VueAmapResolver()],

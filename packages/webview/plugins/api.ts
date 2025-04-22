@@ -1,7 +1,5 @@
 import type { AxiosInstance, AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios'
-import type { NitroFetchOptions, NitroFetchRequest } from 'nitropack'
 import type weilaApiList from '~~/fixture/mock'
-import { createWeilaFetchV2 } from '@weila/network'
 import axios from 'axios'
 import { parseURL } from 'ufo'
 import { headers, isDev, isMocking } from '~/shared/const'
@@ -71,7 +69,7 @@ export function weilaApiUrl(key: WeilaApiUrlShort) {
   return key
 }
 
-const { toast } = useToast()
+// const { toast } = useToast()
 
 export function useBaseURL(base: string, proxy: string) {
   /**
@@ -109,161 +107,76 @@ const baseConfig = computed(() => (reactive({
   mode: 'cors',
 } as const)))
 
-const weilaFetchOptions: NitroFetchOptions<NitroFetchRequest> = {
-  ...baseConfig.value,
-  onRequest({ options }) {
-    const { access_token, app_id, app_sign } = useAuthStore()
-
-    options.query = {
-      'app_id': app_id,
-      'access-token': access_token,
-      'et': String(et.value),
-      'sign': app_sign,
-      ...options.query,
-    }
-  },
-  onResponse({ response }) {
-    const { errcode, errmsg } = response._data as WeilaRes
-
-    const { logout } = useAuthStore()
-
-    if (errcode === WeilaErrorCode.SUCCESS) {
-      response._data = response._data.data
-    }
-    else if (
-      weilaLogoutErrorCodes
-        .findIndex(i => errcode === i) >= 0
-    ) {
-      logout()
-    }
-    else {
-      console.error(`${errcode} ${errmsg}`)
-      toast({
-        title: `Oops: ${errcode}`,
-        description: `${errmsg}`,
-      })
-      throw new Error(`${errcode} ${errmsg}`)
-    }
-  },
-  onRequestError(reqError) {
-    console.error('reqError', reqError)
-  },
-  onResponseError(resError) {
-    console.error('resError', resError)
-  },
-}
-
 export default defineNuxtPlugin(() => {
   const weilaFetch = $fetch.create(baseConfig.value)
 
-  const v1 = $fetch.create({
-    ...weilaFetchOptions,
-  })
-
-  // const v2 = $fetch.create({
-  //   ...weilaFetchOptions,
-  //   onRequest({ options }) {
-  //     const { access_token, app_id, app_sign_v2 } = useAuthStore()
-
-  //     options.query = {
-  //       appid: app_id,
-  //       token: access_token,
-  //       et: String(et.value),
-  //       sign: app_sign_v2,
-  //       ...options.query,
-  //     }
-  //   },
+  // const weilaRequest: WeilaRequestInstance = axios.create({
+  //   ...baseConfig.value,
   // })
 
-  const v2 = createWeilaFetchV2({
-    baseURL: useBaseURL('v2', 'proxy2'),
-    onError(error) {
-      if (error instanceof Error)
-        throw error
+  // weilaRequest.interceptors.request.use(
+  //   (config: WeilaRequestConfig) => {
+  //     const { access_token, app_id, app_sign } = useAuthStore()
 
-      const { errcode, errmsg } = error as WeilaRes
+  //     if (config && access_token) {
+  //       config.params = {
+  //         ...config.params,
+  //         'app_id': app_id,
+  //         'access-token': access_token,
+  //         'et': String(et.value),
+  //         'sign': app_sign,
+  //       }
+  //     }
 
-      console.error(`${errcode} ${errmsg}`)
-      toast({
-        title: `Oops: ${errcode}`,
-        description: `${errmsg}`,
-      })
-      throw new Error(`${errcode} ${errmsg}`)
-    },
-    onLogout() {
-      const { logout } = useAuthStore()
-      logout()
-    },
-  })
+  //     return config
+  //   },
+  //   (error) => {
+  //     return Promise.reject(error)
+  //   },
+  // )
 
-  const weilaRequest: WeilaRequestInstance = axios.create({
-    ...baseConfig.value,
-  })
+  // weilaRequest.interceptors.response.use(
+  //   // @ts-expect-error type error
+  //   (response: AxiosResponse<WeilaRes>) => {
+  //     const { logout } = useAuthStore()
+  //     const { errcode, code } = response.data
 
-  weilaRequest.interceptors.request.use(
-    (config: WeilaRequestConfig) => {
-      const { access_token, app_id, app_sign } = useAuthStore()
+  //     if (errcode === WeilaErrorCode.SUCCESS || code === 200) {
+  //       return response.data
+  //     // return { data: undefined, ...response.data }
+  //     }
+  //     else if (
+  //       weilaLogoutErrorCodes
+  //         .findIndex(i => errcode === i) >= 0
+  //     ) {
+  //       logout()
+  //     }
+  //     else {
+  //       const { errcode, errmsg } = response.data
 
-      if (config && access_token) {
-        config.params = {
-          ...config.params,
-          'app_id': app_id,
-          'access-token': access_token,
-          'et': String(et.value),
-          'sign': app_sign,
-        }
-      }
+  //       toast({
+  //         title: `Oops: ${errcode}`,
+  //         description: `${errmsg}`,
+  //       })
 
-      return config
-    },
-    (error) => {
-      return Promise.reject(error)
-    },
-  )
+  //       throw new Error(`${errcode} ${errmsg}`)
+  //     }
+  //   },
+  //   (error: Error) => {
+  //     toast({
+  //       title: `Oops`,
+  //       description: `${String(error)}`,
+  //     })
+  //     return Promise.reject(error)
+  //   },
+  // )
 
-  weilaRequest.interceptors.response.use(
-    // @ts-expect-error type error
-    (response: AxiosResponse<WeilaRes>) => {
-      const { logout } = useAuthStore()
-      const { errcode, code } = response.data
-
-      if (errcode === WeilaErrorCode.SUCCESS || code === 200) {
-        return response.data
-      // return { data: undefined, ...response.data }
-      }
-      else if (
-        weilaLogoutErrorCodes
-          .findIndex(i => errcode === i) >= 0
-      ) {
-        logout()
-      }
-      else {
-        const { errcode, errmsg } = response.data
-
-        toast({
-          title: `Oops: ${errcode}`,
-          description: `${errmsg}`,
-        })
-
-        throw new Error(`${errcode} ${errmsg}`)
-      }
-    },
-    (error: Error) => {
-      toast({
-        title: `Oops`,
-        description: `${String(error)}`,
-      })
-      return Promise.reject(error)
-    },
-  )
-
-  // Expose to useNuxtApp().$v1
   return {
     provide: {
-      v1,
-      v2,
+      v1: $v1,
+      v2: $v2,
       weilaFetch,
-      weilaRequest,
+      weilaRequest: $weilaRequestV1,
     },
   }
 })

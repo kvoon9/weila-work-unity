@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useQuery } from '@tanstack/vue-query'
-import { weilaFetchV2 } from '~/api/instances/fetcherV2'
+import { useMyBusiness, useServiceLegal } from '@weila/network'
+import { $v2 } from '~/api/instances/fetcherV2'
 
 const { t } = useI18n()
 
@@ -14,15 +14,8 @@ definePage({
   },
 })
 
-const { data: myBusiness, isFetching: isFetchingBusiness } = useQuery({
-  queryKey: ['/corp/busi/get-my-business'],
-  queryFn: ({ queryKey }) => weilaFetchV2(queryKey[0]).then(i => i.business),
-})
-
-const { data: myLegal } = useQuery({
-  queryKey: ['/corp/busi/legal/get-my-legal'],
-  queryFn: ({ queryKey }) => weilaFetchV2(queryKey[0]).then(i => i.legal),
-})
+const { data: myBusiness } = useMyBusiness($v2)
+const { data: myLegal } = useServiceLegal($v2)
 
 enum ServiceState {
   Uncreated = '未创建',
@@ -69,13 +62,13 @@ const serviceState = computed(() => {
       </RouterLink>
 
       <button
-        :disabled="isFetchingBusiness"
+        :disabled="!myBusiness"
         class="rounded-lg bg-white p-6 shadow-md transition-shadow duration-300 dark:bg-gray-800 hover:shadow-lg"
-        @click="() => $router.push(`/workbench/service/${myBusiness.sid}-${myBusiness.id}`)"
+        @click="() => $router.push(`/workbench/service/${myBusiness?.sid}-${myBusiness?.id}`)"
       >
         <div class="mb-4 flex items-center gap3">
-          <a-spin v-if="isFetchingBusiness" />
-          <i v-else class="i-carbon-group text-2xl text-primary-600 dark:text-primary-400" />
+          <!-- <a-spin v-if="isFetchingBusiness" /> -->
+          <i class="i-carbon-group text-2xl text-primary-600 dark:text-primary-400" />
           <h3 class="text-xl text-gray-900 font-semibold dark:text-gray-100">
             <span>服务号</span>
             <span
