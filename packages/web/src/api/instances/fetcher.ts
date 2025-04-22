@@ -1,45 +1,26 @@
-import type { WeilaRes } from '..'
 import { Message } from '@arco-design/web-vue'
-import { ofetch } from 'ofetch'
-import { timestamp } from '~/shared/states'
+import { createWeilaFetchV1 } from '@weila/network'
 import { useAuthStore } from '~/stores/auth'
-import defaultConfig, { WeilaErrorCode, weilaLogoutErrorCodes } from '..'
 
-export const weilaFetch = ofetch.create({
-  ...defaultConfig,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  onRequest({ options }) {
-    const { access_token, app_id, app_sign } = useAuthStore()
-
-    options.query = {
-      'app_id': app_id,
-      'access-token': access_token,
-      'et': String(timestamp.value),
-      'sign': app_sign,
-      ...options.query,
-    }
-  },
-  onResponse({ response }) {
-    const { logout } = useAuthStore()
-    const { errcode, errmsg } = response._data as WeilaRes
-
-    if (errcode === WeilaErrorCode.SUCCESS) {
-      // response._data = { data: undefined, ...response._data.data }
-      response._data = response._data.data
-    }
-    else if (
-      weilaLogoutErrorCodes
-        .findIndex(i => errcode === i) >= 0
-    ) {
-      logout()
+export const weilaFetch = createWeilaFetchV1({
+  baseURL: 'v1',
+  onError(error) {
+    if (error instanceof Error) {
+      Message.error(error.message)
     }
     else {
-      Message.error(`${errcode} ${errmsg}`)
+      const { errcode, errmsg } = error
+      if (errcode !== undefined && errmsg !== undefined) {
+        Message.error(`${errcode}: ${errmsg}`)
+      }
+      else {
+        console.error(error)
+      }
     }
   },
-  onResponseError({ error }) {
-    Message.error(error?.message || 'Unknown Fetch Error')
+  onLogout() {
+    const { logout } = useAuthStore()
+
+    logout()
   },
 })
