@@ -17,7 +17,7 @@ const open = defineModel('open', { default: false })
         bg-base :class="classes"
         class="fixed left-[50%] top-[50%] z-[100] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] data-[state=open]:animate-ease-in focus:outline-none"
       >
-        <DialogTitle class="m0 text-center text-lg font-semibold leading-loose">
+        <DialogTitle class="my4 text-center text-lg font-semibold leading-loose">
           {{ title }}
         </DialogTitle>
 

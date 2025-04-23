@@ -34,8 +34,12 @@ declare module 'vue-router/auto-routes' {
     '/register/': RouteRecordInfo<'/register/', '/register', Record<never, never>, Record<never, never>>,
     '/reset-password/': RouteRecordInfo<'/reset-password/', '/reset-password', Record<never, never>, Record<never, never>>,
     '/workbench/': RouteRecordInfo<'/workbench/', '/workbench', Record<never, never>, Record<never, never>>,
+    '/workbench/service/[sid]-[ssid]': RouteRecordInfo<'/workbench/service/[sid]-[ssid]', '/workbench/service/:sid-:ssid', { sid: ParamValue<true>, ssid: ParamValue<true> }, { sid: ParamValue<false>, ssid: ParamValue<false> }>,
     '/workbench/service/[sid]-[ssid]/': RouteRecordInfo<'/workbench/service/[sid]-[ssid]/', '/workbench/service/:sid-:ssid', { sid: ParamValue<true>, ssid: ParamValue<true> }, { sid: ParamValue<false>, ssid: ParamValue<false> }>,
     '/workbench/service/[sid]-[ssid]/detail': RouteRecordInfo<'/workbench/service/[sid]-[ssid]/detail', '/workbench/service/:sid-:ssid/detail', { sid: ParamValue<true>, ssid: ParamValue<true> }, { sid: ParamValue<false>, ssid: ParamValue<false> }>,
+    '/workbench/service/[sid]-[ssid]/index1': RouteRecordInfo<'/workbench/service/[sid]-[ssid]/index1', '/workbench/service/:sid-:ssid/index1', { sid: ParamValue<true>, ssid: ParamValue<true> }, { sid: ParamValue<false>, ssid: ParamValue<false> }>,
+    '/workbench/service/[sid]-[ssid]/point/': RouteRecordInfo<'/workbench/service/[sid]-[ssid]/point/', '/workbench/service/:sid-:ssid/point', { sid: ParamValue<true>, ssid: ParamValue<true> }, { sid: ParamValue<false>, ssid: ParamValue<false> }>,
+    '/workbench/service/[sid]-[ssid]/point/[pid]-[ppid]': RouteRecordInfo<'/workbench/service/[sid]-[ssid]/point/[pid]-[ppid]', '/workbench/service/:sid-:ssid/point/:pid-:ppid', { sid: ParamValue<true>, ssid: ParamValue<true>, pid: ParamValue<true>, ppid: ParamValue<true> }, { sid: ParamValue<false>, ssid: ParamValue<false>, pid: ParamValue<false>, ppid: ParamValue<false> }>,
     '/workbench/service/[sid]-[ssid]/staff': RouteRecordInfo<'/workbench/service/[sid]-[ssid]/staff', '/workbench/service/:sid-:ssid/staff', { sid: ParamValue<true>, ssid: ParamValue<true> }, { sid: ParamValue<false>, ssid: ParamValue<false> }>,
     '/workbench/user-track': RouteRecordInfo<'/workbench/user-track', '/workbench/user-track', Record<never, never>, Record<never, never>>,
   }

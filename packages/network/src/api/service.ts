@@ -37,12 +37,12 @@ export interface GetMyBusinessModel {
   }
 }
 
-export const useMyBusiness = createSharedComposable(($v2: $Fetch) => {
+export function useMyBusiness($v2: $Fetch) {
   return useQuery({
     queryKey: ['corp-busi-get-my-business'],
     queryFn: () => $v2<GetMyBusinessModel>('corp/busi/get-my-business').then(i => i.business),
   })
-})
+}
 
 interface ServiceLegal {
   id: number
@@ -117,27 +117,28 @@ export interface ChangeBusinessPayload {
   business: {
     id: number
     merchant: {
-      type: number
-      name: string
-      avatar: string
-      intro: string
-      phone: string
-      album: string[]
-      citycode: string
-      adcode: string
-      lat: number
-      lon: number
-      township: string
-      address: string
+      type?: number
+      name?: string
+      avatar?: string
+      intro?: string
+      phone?: string
+      album?: string[]
+      citycode?: string
+      adcode?: string
+      lat?: number
+      lon?: number
+      township?: string
+      address?: string
     }
   }
 }
 
 export type ChangeBusinessModel = never
 
-export const useMutateBusiness = createSharedComposable(($v2: $Fetch) => {
+export const useMutateBusiness = createSharedComposable(($v2: $Fetch, options?: UseMutationOptions<ChangeBusinessModel, DefaultError, ChangeBusinessPayload>) => {
   return useMutation<ChangeBusinessModel, DefaultError, ChangeBusinessPayload>({
     mutationFn: body => $v2<ChangeBusinessModel>('corp/busi/change-business', { body }),
+    ...options,
   })
 })
 

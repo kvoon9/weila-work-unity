@@ -1,36 +1,22 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useMyBusiness } from '@weila/network'
 import { useRouteParams } from '@vueuse/router'
+import { useMyBusiness, useServiceLegal } from '@weila/network'
+import { computed } from 'vue'
+import EditBusinessModal from './components/EditBusinessModal.vue'
 
 const { t } = useI18n()
 
-const { data } = useMyBusiness($v2)
+const { data: businessData } = useMyBusiness($v2)
+const { data: legalData } = useServiceLegal($v2)
 
 const ssid = useRouteParams('ssid', 0, { transform: Number })
 const sid = useRouteParams('sid', 0, { transform: Number })
 
-
-// 计算服务号状态文本及颜色
-const serviceStatus = computed(() => {
-  if (!data.value)
-    return { text: '未知', color: '' }
-
-  const stateMap: Record<number, { text: string, color: string }> = {
-    0: { text: '正常', color: 'green' },
-    1: { text: '审核中', color: 'orange' },
-    2: { text: '已禁用', color: 'red' },
-  }
-
-  const state = data.value.state as number
-  return stateMap[state] || { text: '未知', color: '' }
-})
-
 // 获取服务号信息的简便访问
 const serviceInfo = computed(() => {
-  if (!data.value?.merchant)
+  if (!businessData.value?.merchant)
     return null
-  return data.value.merchant
+  return businessData.value.merchant
 })
 
 interface TypeMap {
@@ -42,26 +28,32 @@ const typeMap: TypeMap = {
   2: '企业',
   3: '个人',
 }
+
+const isEditBusinessModalOpen = shallowRef(false)
+const isEditLegalModalOpen = shallowRef(false)
 </script>
 
 <template>
-  <div>
-    <div class="p-4">
+  <div p4 space-y-4>
+    <div>
       <a-breadcrumb>
         <RouterLink to="/workbench">
           <a-breadcrumb-item>{{ t('menu.workbench') }}</a-breadcrumb-item>
         </RouterLink>
-        <RouterLink :to="`/workbench/service/${sid}-${ssid}`">
-          <a-breadcrumb-item>服务号</a-breadcrumb-item>
-        </RouterLink>
-          <a-breadcrumb-item>服务号详情</a-breadcrumb-item>
+        <a-breadcrumb-item>{{ serviceInfo?.name ?? '服务号详情' }}</a-breadcrumb-item>
       </a-breadcrumb>
     </div>
 
-    <div class="px4">
-      <a-card v-if="data" :bordered="false" class="rounded-lg shadow-sm">
+    <div>
+      <a-skeleton v-if="!businessData" animation>
+        <a-space direction="vertical" :style="{ width: '100%' }" size="large">
+          <a-skeleton-line :rows="4" />
+        </a-space>
+      </a-skeleton>
+
+      <a-card v-else :bordered="false" class="rounded-lg shadow-sm">
         <!-- 服务号基本信息 -->
-        <div p-4 relative>
+        <div relative p-4>
           <!-- 头像和名称部分 - 使用flex布局水平排列 -->
           <div class="flex items-center gap-4">
             <a-avatar
@@ -70,25 +62,13 @@ const typeMap: TypeMap = {
               :alt="serviceInfo?.name"
             />
             <div class="flex-1">
-              <h1 class="m-0 flex items-center gap-2 text-2xl text-gray-900 font-semibold">
+              <h1 class="m-0 flex items-center gap-2 text-2xl font-semibold">
                 {{ serviceInfo?.name }}
-                <a-tag v-if="serviceStatus.color" :color="serviceStatus.color" class="ml-2 text-xs">
-                  {{ serviceStatus.text }}
-                </a-tag>
               </h1>
-              <div class="mt-2">
-                <a-space>
-                  <a-tag>ID: {{ data.id }}</a-tag>
-                  <a-tag>SID: {{ data.sid }}</a-tag>
-                  <a-tag>类型: {{ typeMap[data.type] || '未知' }}</a-tag>
-                </a-space>
-              </div>
             </div>
           </div>
-          <div absolute top-0 right-0>
-            <a-button type="primary" @click="() => $router.push(`/workbench/service/${sid}-${ssid}/edit`)">
-              编辑
-            </a-button>
+          <div absolute position-y-center right-0>
+            <EditBusinessModal />
           </div>
         </div>
 
@@ -159,21 +139,21 @@ const typeMap: TypeMap = {
           <h3 class="mb-3 flex items-center gap-2 text-lg font-medium">
             <icon-location /> 位置信息
           </h3>
-          <div class="mt-3 rounded-lg bg-gray-100 p-4">
+          <div class="mt-3 rounded-lg bg-neutral-100 p-4 dark:bg-neutral-800">
             <a-row :gutter="16">
               <a-col :span="12">
                 <a-descriptions
                   :data="[
                     { label: '纬度', value: serviceInfo.lat },
                     { label: '经度', value: serviceInfo.lon },
-                    { label: '地址', value: serviceInfo.address },
                     { label: '区域', value: `${serviceInfo.citycode} ${serviceInfo.adcode}` },
+                    { label: '地址', value: serviceInfo.address },
                     { label: '街道', value: serviceInfo.township || '未知' },
                   ]" layout="inline-horizontal" :column="1"
                 />
               </a-col>
               <a-col :span="12">
-                <div class="h-48 flex flex-col items-center justify-center rounded-lg bg-gray-200 text-gray-500">
+                <div class="h-48 flex flex-col items-center justify-center rounded-lg bg-neutral-200 text-gray-500 dark:bg-neutral-700">
                   <icon-loading />
                   <p>地图加载中...</p>
                   <p class="text-xs">
@@ -184,10 +164,56 @@ const typeMap: TypeMap = {
             </a-row>
           </div>
         </div>
-      </a-card>
 
-      <!-- 加载状态展示 -->
-      <a-spin v-else />
+        <a-divider />
+
+        <!-- 资质信息 -->
+        <div class="mt-4 px-4">
+          <h3 class="mb-3 flex items-center gap-2 text-lg font-medium">
+            <icon-book /> 资质信息
+          </h3>
+          <div v-if="legalData" class="grid grid-cols-1 gap-4">
+            <div class="flex items-center justify-between">
+              <span class="text-gray-500">ID</span>
+              <span>{{ legalData.id }}</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-gray-500">类别</span>
+              <span>{{ legalData.category }}</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-gray-500">类型</span>
+              <span>{{ typeMap[legalData.type] || legalData.type }}</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-gray-500">营业执照</span>
+              <a-image
+                :src="legalData.merchant.business_license"
+                width="96"
+                height="96"
+                fit="cover"
+                class="cursor-pointer rounded-lg"
+                preview
+              />
+            </div>
+            <div class="flex justify-end">
+              <TheModal v-model:open="isEditLegalModalOpen" title="编辑资质信息">
+                <a-button type="primary">
+                  编辑资质
+                </a-button>
+                <template #content>
+                  123
+                </template>
+              </TheModal>
+            </div>
+          </div>
+          <a-skeleton v-else animation>
+            <a-space direction="vertical" :style="{ width: '100%' }" size="large">
+              <a-skeleton-line :rows="4" />
+            </a-space>
+          </a-skeleton>
+        </div>
+      </a-card>
     </div>
   </div>
 </template>

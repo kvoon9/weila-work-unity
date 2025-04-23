@@ -8,12 +8,14 @@
   "keywords": [],
   "main": "index.js",
   "scripts": {
-    "web": "pnpm -C packages/web run dev",
-    "webview": "pnpm -C packages/webview run dev",
+    "dev:web": "pnpm -C packages/web run dev",
+    "dev:webview": "pnpm -C packages/webview run dev",
+    "dev:network": "pnpm -C packages/network run dev",
+    "build:web": "pnpm -C packages/web run build",
+    "build:webview": "pnpm -C packages/webview run build",
+    "build:network": "pnpm -C packages/network run build",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "prepare": "pnpm run prepare:network",
-    "prepare:network": "pnpm -C packages/network run build",
     "lint-staged": "npx lint-staged"
   },
   "devDependencies": {

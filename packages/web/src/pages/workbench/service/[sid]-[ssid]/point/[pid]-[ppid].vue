@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { useRouteParams } from '@vueuse/router'
-import { useBusinessStaffList } from '@weila/network'
+import { useGetBusinessPointStaffList } from '@weila/network'
 
 const { t } = useI18n()
 
 const sid = useRouteParams('sid', 0, { transform: Number })
-// const ssid = useRouteParams('ssid', 0, { transform: Number })
+const ssid = useRouteParams('ssid', 0, { transform: Number })
+const pid = useRouteParams('pid', 0, { transform: Number })
 
-const { data } = useBusinessStaffList($v2, { sid: sid.value })
+const { data } = useGetBusinessPointStaffList($v2, { pid: pid.value })
 </script>
 
 <template>
@@ -17,7 +18,10 @@ const { data } = useBusinessStaffList($v2, { sid: sid.value })
         <RouterLink to="/workbench">
           <a-breadcrumb-item>{{ t('menu.workbench') }}</a-breadcrumb-item>
         </RouterLink>
-        <a-breadcrumb-item>客服管理</a-breadcrumb-item>
+        <RouterLink :to="`/workbench/service/${sid}-${ssid}/point`">
+          <a-breadcrumb-item>服务点管理</a-breadcrumb-item>
+        </RouterLink>
+        <a-breadcrumb-item>服务点客服管理</a-breadcrumb-item>
       </a-breadcrumb>
     </div>
     <div rounded p4 space-y-2 bg-base>
