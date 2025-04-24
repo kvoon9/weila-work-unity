@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { toArray } from '@antfu/utils'
+import { ImagePreview } from '@arco-design/web-vue'
 import Message from '@arco-design/web-vue/es/message'
 import { useFileDialog } from '@vueuse/core'
 import { toFileWrapper, useUploadFile } from '@weila/network'
-import Viewer from 'viewerjs'
 import { computed, ref as deepRef, shallowRef, watch } from 'vue'
 import { $weilaRequestV2 } from '~/utils/api'
 import TheCropper from './TheCropper.vue'
@@ -83,19 +83,12 @@ const uploadStateClassMap = {
   error: 'color-red',
 }
 
-let viewer: Viewer | null = null
+const viewerVisible = ref(false)
+const currentImage = ref<string>('')
 
-function handlePreview() {
-  const images = document.querySelector<HTMLDivElement>('#root')
-  console.log('images', images)
-  if (images) {
-    viewer?.destroy()
-
-    viewer = new Viewer(images, {
-      inline: false,
-    })
-    console.log('viewer', viewer)
-  }
+function handlePreview(file: { url?: string, dataUrl?: string }) {
+  currentImage.value = file.url || file.dataUrl || ''
+  viewerVisible.value = true
 }
 
 defineExpose({
@@ -104,9 +97,14 @@ defineExpose({
 </script>
 
 <template>
-  <div id="root" class="w-full" grid="~ cols-3 gap4">
+  <div
+    id="root" class="w-full" grid="~ gap4" :grid-cols="limit === 1 ? '1' : '3'"
+    :class="{
+      'w-30': limit === 1,
+    }"
+  >
     <div v-for="(file, index) in filelist" :key="index" :class="classes" class="relative aspect-square overflow-hidden rounded-md">
-      <img :src="file.url || file.dataUrl" class="file-uploader-image-item h-full w-full object-cover" @click="handlePreview">
+      <img :src="file.url || file.dataUrl" class="file-uploader-image-item h-full w-full object-cover" @click="() => handlePreview(file)">
 
       <i
         :class="[
@@ -115,16 +113,18 @@ defineExpose({
         ]" absolute bottom-2 right-2 rounded-full color-primary size-4
       />
 
-      <button type="button" absolute right-2 top-2 rounded-full bg-white @click="() => filelist.splice(index, 1)">
-        <span rounded-full color-black size-4>x</span>
-        <i i-ph-x rounded-full size-4 />
+      <button type="button" absolute right-2 top-2 flex items-center rounded-full bg-white:50 @click="() => filelist.splice(index, 1)">
+        <i i-carbon-close inline-block rounded-full bg-black size-8 />
       </button>
     </div>
 
     <div
       v-if="filelist.length < (limit || 9)"
-      :class="classes"
-      class="aspect-square flex cursor-pointer items-center justify-center rounded-md bg-neutral-200"
+      :class="{
+        ...toArray(classes),
+        'min-w-80': limit === 1,
+      }"
+      class="aspect-square flex cursor-pointer items-center justify-center rounded-md bg-neutral-200 dark:bg-neutral-800"
       @click="() => open()"
     >
       <i i-ph-plus size-6 />
@@ -163,5 +163,6 @@ defineExpose({
         </DialogContent>
       </DialogPortal>
     </DialogRoot>
+    <ImagePreview v-model:visible="viewerVisible" z-9999 :src="currentImage" />
   </div>
 </template>

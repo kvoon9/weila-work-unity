@@ -9,6 +9,7 @@ declare global {
   const $inspect: typeof import('./utils/inspect')['$inspect']
   const $v1: typeof import('./utils/api')['$v1']
   const $v2: typeof import('./utils/api')['$v2']
+  const $weilaPublicRequest: typeof import('./utils/api')['$weilaPublicRequest']
   const $weilaRequestV1: typeof import('./utils/api')['$weilaRequestV1']
   const $weilaRequestV2: typeof import('./utils/api')['$weilaRequestV2']
   const EffectScope: typeof import('vue')['EffectScope']
@@ -329,7 +330,7 @@ declare global {
   const watchTriggerable: typeof import('@vueuse/core')['watchTriggerable']
   const watchWithFilter: typeof import('@vueuse/core')['watchWithFilter']
   const weilaFetch: typeof import('./utils/api')['weilaFetch']
-  const weilaRequest: typeof import('./api/instances/request')['weilaRequest']
+  const weilaRequest: typeof import('./utils/api')['weilaRequest']
   const weilaRequestV2: typeof import('./api/instances/requestV2')['weilaRequestV2']
   const whenever: typeof import('@vueuse/core')['whenever']
 }
@@ -354,6 +355,7 @@ declare module 'vue' {
     readonly $inspect: UnwrapRef<typeof import('./utils/inspect')['$inspect']>
     readonly $v1: UnwrapRef<typeof import('./utils/api')['$v1']>
     readonly $v2: UnwrapRef<typeof import('./utils/api')['$v2']>
+    readonly $weilaPublicRequest: UnwrapRef<typeof import('./utils/api')['$weilaPublicRequest']>
     readonly $weilaRequestV1: UnwrapRef<typeof import('./utils/api')['$weilaRequestV1']>
     readonly $weilaRequestV2: UnwrapRef<typeof import('./utils/api')['$weilaRequestV2']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
@@ -674,6 +676,7 @@ declare module 'vue' {
     readonly watchTriggerable: UnwrapRef<typeof import('@vueuse/core')['watchTriggerable']>
     readonly watchWithFilter: UnwrapRef<typeof import('@vueuse/core')['watchWithFilter']>
     readonly weilaFetch: UnwrapRef<typeof import('./utils/api')['weilaFetch']>
+    readonly weilaRequest: UnwrapRef<typeof import('./utils/api')['weilaRequest']>
     readonly whenever: UnwrapRef<typeof import('@vueuse/core')['whenever']>
   }
 }

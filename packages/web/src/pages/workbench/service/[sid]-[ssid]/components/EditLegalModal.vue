@@ -33,13 +33,15 @@ const form = reactive({
     <template #content>
       <a-form :model="form">
         <a-form-item field="business_license" label="营业执照">
-          <FileUploader
-            v-model:is-uploading="isUploadingFile"
-            :limit="1"
-            classes="bg-neutral-200 dark:bg-neutral-800" w-full
-            :initial-files="form.business_license"
-            @update:files="(files) => form.business_license = files[0]"
-          />
+          <div>
+            <FileUploader
+              v-model:is-uploading="isUploadingFile"
+              :limit="1"
+              classes="bg-neutral-200 dark:bg-neutral-800" w-full
+              :initial-files="form.business_license"
+              @update:files="(files) => form.business_license = files[0]"
+            />
+          </div>
         </a-form-item>
       </a-form>
     </template>
@@ -53,7 +55,7 @@ const form = reactive({
             id: legalData?.id || 0,
             type: legalData?.type || 0,
             merchant: {
-              business_license: form.business_license[0],
+              business_license: form.business_license,
             },
           },
         })"

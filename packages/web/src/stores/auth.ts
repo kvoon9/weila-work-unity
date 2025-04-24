@@ -4,6 +4,7 @@ import md5 from 'md5'
 
 import { ENCRYPTION_KEY } from '~/shared/const'
 import { et, timestamp } from '~/shared/states'
+import { $weilaPublicRequest } from '~/utils/api'
 
 export const useAuthStore = defineStore('auth', () => {
   const router = useRouter()
@@ -71,23 +72,29 @@ export const useAuthStore = defineStore('auth', () => {
 
     const { account, password } = params
 
-    const { data } = await weilaRequest.post<LoginModel['data']>(
-      `/corp/web/login`,
-      {
-        account,
-        password: md5(password),
-      },
-    )
+    try {
+      const { data } = await $weilaPublicRequest.post<LoginModel['data']>(
+        `/corp/web/login`,
+        {
+          account,
+          password: md5(password),
+        },
+      )
 
-    if (data) {
-      access_token.value = data.access_token
-      refresh_token.value = data.refresh_token
-      expires_in.value = data.expires_in
-      if (remember)
-        accountHistoryRecord.value.set(account, password)
+      if (data) {
+        access_token.value = data.access_token
+        refresh_token.value = data.refresh_token
+        expires_in.value = data.expires_in
+        if (remember)
+          accountHistoryRecord.value.set(account, password)
+      }
+
+      return data
     }
-
-    return data
+    catch (error) {
+      console.error('login', error)
+      throw error
+    }
   }
 
   function logout() {

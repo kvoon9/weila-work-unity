@@ -70,6 +70,7 @@
     "@arco-plugins/vite-vue": "catalog:",
     "@iconify-json/carbon": "catalog:",
     "@iconify-json/ph": "catalog:",
+    "@iconify-json/svg-spinners": "catalog:",
     "@intlify/eslint-plugin-vue-i18n": "catalog:",
     "@modyfi/vite-plugin-yaml": "catalog:",
     "@tanstack/eslint-plugin-query": "catalog:",

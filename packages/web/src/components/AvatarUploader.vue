@@ -33,7 +33,7 @@ function upload() {
   const formData = new FormData()
   formData.append('file', compressedFile.value)
 
-  return weilaRequest.post<{ url: string }>('/corp/web/avatar-upload', formData, {
+  return $weilaRequestV1.post<{ url: string }>('/corp/web/avatar-upload', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },

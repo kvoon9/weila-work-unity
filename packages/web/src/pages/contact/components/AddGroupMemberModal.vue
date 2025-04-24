@@ -69,7 +69,7 @@ const data = computed(() => members.value?.map((member): TransferItem => {
 
 const { mutate, isPending } = useMutation({
   mutationFn: () => {
-    return weilaRequest.post('/corp/web/group-member-add', {
+    return $weilaRequestV1.post('/corp/web/group-member-add', {
       group_id: Number(props.groupId),
       member_ids: selectedIds.value,
     })

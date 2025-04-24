@@ -13,6 +13,7 @@ import { setup } from './setup'
 import '~/assets/style/global.less'
 import 'cropperjs/dist/cropper.min.css'
 import '~/styles/main.css'
+import 'viewerjs/dist/viewer.css'
 
 import '@unocss/reset/tailwind.css'
 import 'virtual:uno.css'

@@ -23,7 +23,7 @@ const form = reactive<BindingPhonePayload>({
 })
 
 const { mutate, isPending } = useMutation({
-  mutationFn: (data: BindingPhonePayload) => weilaRequest.post('/corp/web/user-bind-phone', data),
+  mutationFn: (data: BindingPhonePayload) => $weilaRequestV1.post('/corp/web/user-bind-phone', data),
   onSuccess() {
     Message.success('Success')
   },

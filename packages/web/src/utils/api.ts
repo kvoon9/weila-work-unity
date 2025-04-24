@@ -1,6 +1,6 @@
 import type { CreateWeilaApiOptions } from '@weila/network'
 import { Message } from '@arco-design/web-vue'
-import { createWeilaFetchV1, createWeilaFetchV2, createWeilaRequestV1, createWeilaRequestV2 } from '@weila/network'
+import { createRequest, createWeilaFetchV1, createWeilaFetchV2, createWeilaRequestV1, createWeilaRequestV2 } from '@weila/network'
 import { useAuthStore } from '~/stores/auth'
 
 const options: CreateWeilaApiOptions = {
@@ -37,10 +37,20 @@ export const $v2 = createWeilaFetchV2({
   ...options,
 })
 
+export const $weilaPublicRequest = createRequest({
+  baseURL: 'v1',
+  ...options,
+  options() {
+    return {}
+  },
+})
+
 export const $weilaRequestV1 = createWeilaRequestV1({
   baseURL: 'v1',
   ...options,
 })
+
+export const weilaRequest = $weilaRequestV1
 
 export const $weilaRequestV2 = createWeilaRequestV2({
   baseURL: 'v2',

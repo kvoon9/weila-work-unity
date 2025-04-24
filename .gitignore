@@ -8,3 +8,4 @@ dist
 .DS_Store
 .node-modules-inspector
 .vite-inspect
+pkg

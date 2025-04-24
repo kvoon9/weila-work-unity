@@ -6,5 +6,5 @@ export interface SendVerifySmsModel {
 }
 
 export async function sendVerifySms(params: SendVerifySmsModel) {
-  return await weilaRequest.post('/corp/web/send-sms-verifycode', params)
+  return await $weilaPublicRequest.post('/corp/web/send-sms-verifycode', params)
 }

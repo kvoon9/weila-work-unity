@@ -68,7 +68,6 @@ onMounted(async () => {
     <div class="login-form-title" mb-4>
       {{ t('login.form.title') }}
     </div>
-    <!-- @vue-expect-error type error -->
     <a-form :model="form" class="login-form" layout="vertical" @submit="handleSubmit">
       <a-form-item
         field="account" :rules="[{ required: true, message: t('login.form.userName.errMsg') }]"
@@ -77,7 +76,7 @@ onMounted(async () => {
         <a-auto-complete
           v-model="form.account" :data="Array.from(accountHistoryRecord.keys())"
           :placeholder="t('login.form.userName.placeholder')" allow-clear relative
-          @select="(account) => form.password = accountHistoryRecord.get(account) || form.password"
+          @select="(account: string) => form.password = accountHistoryRecord.get(account) || form.password"
         >
           <template #option="{ data: { label } }">
             <div w-full flex justify-between>
