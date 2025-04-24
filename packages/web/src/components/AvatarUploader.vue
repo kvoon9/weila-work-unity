@@ -3,7 +3,7 @@ import Message from '@arco-design/web-vue/es/message'
 import { UseImage } from '@vueuse/components'
 import { defineEmits } from 'unplugin-vue-macros/macros'
 import { shallowRef } from 'vue'
-import { weilaRequest } from '~/api/instances/request'
+
 import TheCropper from '~/components/TheCropper.vue'
 
 const emits = defineEmits<{

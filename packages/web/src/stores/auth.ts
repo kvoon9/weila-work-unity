@@ -1,7 +1,7 @@
 import type { LoginModel, RefreshModel } from 'generated/mock/weila'
 import CryptoJS from 'crypto-js'
 import md5 from 'md5'
-import { weilaRequest } from '~/api/instances/request'
+
 import { ENCRYPTION_KEY } from '~/shared/const'
 import { et, timestamp } from '~/shared/states'
 

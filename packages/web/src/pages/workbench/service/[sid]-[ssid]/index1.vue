@@ -2,6 +2,7 @@
 import Message from '@arco-design/web-vue/es/message'
 import { useRouteParams } from '@vueuse/router'
 import { delBusinessPoint, useBusinessPointList } from '@weila/network'
+import { shallowRef } from 'vue'
 import CreateBusinessPointModal from '../components/CreateBusinessPointModal.vue'
 
 // 定义服务点类型接口
@@ -24,7 +25,7 @@ const { data, refetch } = useBusinessPointList($v2, computed(() => ({ sid: sid.v
 // 用于编辑和删除服务点的状态管理
 const isEditServicePointModalVisible = shallowRef(false)
 
-const selectedServicePoint = ref<ServicePointModel | undefined>(undefined)
+const selectedServicePoint = shallowRef<ServicePointModel | undefined>(undefined)
 
 function openEdit(servicePoint: ServicePointModel) {
   selectedServicePoint.value = servicePoint

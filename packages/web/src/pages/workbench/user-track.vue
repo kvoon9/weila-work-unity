@@ -8,12 +8,11 @@ import { ElAmapLoca, ElAmapLocaLine } from '@vuemap/vue-amap-loca'
 import { nanoid } from 'nanoid'
 import { shallowRef } from 'vue'
 import { weilaApiUrl } from '~/api'
-import { weilaFetch } from '~/api/instances/fetcher'
 
 const { t } = useI18n()
 
-const selectedUserId = ref()
-const selectedDate = ref('')
+const selectedUserId = shallowRef()
+const selectedDate = shallowRef('')
 
 const contactStore = useContactStore()
 const { data: contact } = storeToRefs(contactStore)

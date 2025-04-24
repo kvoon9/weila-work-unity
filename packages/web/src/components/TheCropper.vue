@@ -73,7 +73,7 @@ function save() {
 </script>
 
 <template>
-  <div relative h800px w800px>
+  <div relative h800px w-full>
     <img ref="imgRef" :src="src" block h-full w-full object-contain @load="onImageLoad">
     <ToolbarRoot
       class="shadow-blackA7 absolute bottom-4 position-x-center max-w-[610px] w-fit flex rounded-md p-[10px] shadow-[0_2px_10px] !min-w-max bg-base"

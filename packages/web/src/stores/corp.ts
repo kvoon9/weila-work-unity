@@ -1,7 +1,7 @@
 import { objectPick } from '@antfu/utils'
 import { useQuery } from '@tanstack/vue-query'
 import { weilaApiUrl } from '~/api'
-import { weilaFetch } from '~/api/instances/fetcher'
+
 import { useAuthStore } from './auth'
 
 export interface CorpModel {

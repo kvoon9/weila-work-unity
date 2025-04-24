@@ -5,8 +5,6 @@ import { Message } from '@arco-design/web-vue'
 import { useMutation, useQuery } from '@tanstack/vue-query'
 import { weilaApiUrl } from '~/api'
 import { TrackType } from '~/api/contact'
-import { weilaFetch } from '~/api/instances/fetcher'
-import { weilaRequest } from '~/api/instances/request'
 
 const props = defineProps<{
   member?: MemberGetallModel['data']['members'][number]

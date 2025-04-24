@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/vue-query'
 import { UseImage } from '@vueuse/components'
 import { createReusableTemplate, useFullscreen, useToggle } from '@vueuse/core'
 import { computed, inject } from 'vue'
-import { weilaFetch } from '~/api/instances/fetcher'
+
 import Menu from '~/components/menu/index.vue'
 import { isDark } from '~/shared/states'
 import { useAuthStore } from '~/stores/auth'

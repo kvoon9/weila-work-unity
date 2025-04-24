@@ -4,7 +4,8 @@ import { objectKeys } from '@antfu/utils'
 import Message from '@arco-design/web-vue/es/message'
 import { useMutation } from '@tanstack/vue-query'
 import md5 from 'md5'
-import { weilaRequest } from '~/api/instances/request'
+import { shallowRef } from 'vue'
+
 import { useAuthStore } from '~/stores/auth'
 
 definePage({
@@ -17,11 +18,11 @@ definePage({
 const { login } = useAuthStore()
 
 const { t } = useI18n()
-const errorMessage = ref('')
+const errorMessage = shallowRef('')
 
 const verifyImg = templateRef('verifyImg')
 
-const account = ref('')
+const account = shallowRef('')
 const router = useRouter()
 
 interface Form {

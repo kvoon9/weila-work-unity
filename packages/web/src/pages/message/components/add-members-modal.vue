@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { Message } from '@arco-design/web-vue'
 import { useMutation } from '@tanstack/vue-query'
-import { weilaRequest } from '~/api/instances/request'
 
 const { groupId } = defineProps<{ groupId: number }>()
 

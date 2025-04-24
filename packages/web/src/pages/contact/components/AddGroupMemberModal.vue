@@ -5,8 +5,6 @@ import type { MemberModel } from '~/api/contact'
 import { Message } from '@arco-design/web-vue'
 import { useMutation, useQuery } from '@tanstack/vue-query'
 import { weilaApiUrl } from '~/api'
-import { weilaFetch } from '~/api/instances/fetcher'
-import { weilaRequest } from '~/api/instances/request'
 
 const props = defineProps<{
   groupId: number

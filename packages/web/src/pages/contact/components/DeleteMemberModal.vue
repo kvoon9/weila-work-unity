@@ -3,7 +3,6 @@ import type { MemberGetallModel } from 'generated/mock/weila'
 import Message from '@arco-design/web-vue/es/message'
 import { useMutation } from '@tanstack/vue-query'
 import { weilaApiUrl } from '~/api'
-import { weilaRequest } from '~/api/instances/request'
 
 const props = defineProps<{
   member?: MemberGetallModel['data']['members'][number]

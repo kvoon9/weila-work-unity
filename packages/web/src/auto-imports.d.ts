@@ -7,17 +7,16 @@
 export {}
 declare global {
   const $inspect: typeof import('./utils/inspect')['$inspect']
-  const $v2: typeof import('./api/instances/fetcherV2')['$v2']
-  const DEFAULT_LAYOUT: typeof import('./layout/index')['DEFAULT_LAYOUT']
+  const $v1: typeof import('./utils/api')['$v1']
+  const $v2: typeof import('./utils/api')['$v2']
+  const $weilaRequestV1: typeof import('./utils/api')['$weilaRequestV1']
+  const $weilaRequestV2: typeof import('./utils/api')['$weilaRequestV2']
   const EffectScope: typeof import('vue')['EffectScope']
-  const FIRST_LAYOUT: typeof import('./layout/index')['FIRST_LAYOUT']
-  const PAGE_LAYOUT: typeof import('./layout/index')['PAGE_LAYOUT']
   const UseImage: typeof import('@vueuse/components')['UseImage']
   const acceptHMRUpdate: typeof import('pinia')['acceptHMRUpdate']
   const addEventListen: typeof import('./utils/event')['addEventListen']
   const asyncComputed: typeof import('@vueuse/core')['asyncComputed']
   const autoResetRef: typeof import('@vueuse/core')['autoResetRef']
-  const clearToken: typeof import('./utils/auth')['clearToken']
   const clsx: typeof import('clsx')['clsx']
   const computed: typeof import('vue')['computed']
   const computedAsync: typeof import('@vueuse/core')['computedAsync']
@@ -47,40 +46,20 @@ declare global {
   const eagerComputed: typeof import('@vueuse/core')['eagerComputed']
   const effectScope: typeof import('vue')['effectScope']
   const emojify: typeof import('./utils/emoji')['emojify']
-  const env: typeof import('./utils/env')['default']
   const extendRef: typeof import('@vueuse/core')['extendRef']
-  const failResponseWrap: typeof import('./utils/setup-mock')['failResponseWrap']
-  const genRootRouteRecord: typeof import('./utils/route')['genRootRouteRecord']
   const getActivePinia: typeof import('pinia')['getActivePinia']
   const getCurrentInstance: typeof import('vue')['getCurrentInstance']
   const getCurrentScope: typeof import('vue')['getCurrentScope']
-  const getToken: typeof import('./utils/auth')['getToken']
   const h: typeof import('vue')['h']
   const ignorableWatch: typeof import('@vueuse/core')['ignorableWatch']
   const inject: typeof import('vue')['inject']
   const injectLocal: typeof import('@vueuse/core')['injectLocal']
-  const inspect: typeof import('./utils/inspect')['inspect']
-  const isArray: typeof import('./utils/is')['isArray']
-  const isBlob: typeof import('./utils/is')['isBlob']
   const isDefined: typeof import('@vueuse/core')['isDefined']
-  const isEmptyObject: typeof import('./utils/is')['isEmptyObject']
-  const isExist: typeof import('./utils/is')['isExist']
-  const isFile: typeof import('./utils/is')['isFile']
-  const isFunction: typeof import('./utils/is')['isFunction']
-  const isLogin: typeof import('./utils/auth')['isLogin']
-  const isNull: typeof import('./utils/is')['isNull']
-  const isNumber: typeof import('./utils/is')['isNumber']
-  const isObject: typeof import('./utils/is')['isObject']
   const isProxy: typeof import('vue')['isProxy']
   const isReactive: typeof import('vue')['isReactive']
   const isReadonly: typeof import('vue')['isReadonly']
   const isRef: typeof import('vue')['isRef']
-  const isRegExp: typeof import('./utils/is')['isRegExp']
   const isRemoteImage: typeof import('./utils/is')['isRemoteImage']
-  const isString: typeof import('./utils/is')['isString']
-  const isUndefined: typeof import('./utils/is')['isUndefined']
-  const isWindow: typeof import('./utils/is')['isWindow']
-  const listenerRouteChange: typeof import('./utils/route-listener')['listenerRouteChange']
   const makeDestructurable: typeof import('@vueuse/core')['makeDestructurable']
   const mapActions: typeof import('pinia')['mapActions']
   const mapGetters: typeof import('pinia')['mapGetters']
@@ -131,21 +110,15 @@ declare global {
   const refWithControl: typeof import('@vueuse/core')['refWithControl']
   const regexUrl: typeof import('./utils/index')['regexUrl']
   const removeEventListen: typeof import('./utils/event')['removeEventListen']
-  const removeRouteListener: typeof import('./utils/route-listener')['removeRouteListener']
   const resolveComponent: typeof import('vue')['resolveComponent']
   const resolveRef: typeof import('@vueuse/core')['resolveRef']
   const resolveUnref: typeof import('@vueuse/core')['resolveUnref']
-  const safeSubmit: typeof import('./utils/form')['safeSubmit']
   const setActivePinia: typeof import('pinia')['setActivePinia']
   const setMapStoreSuffix: typeof import('pinia')['setMapStoreSuffix']
-  const setRouteEmitter: typeof import('./utils/route-listener')['setRouteEmitter']
-  const setToken: typeof import('./utils/auth')['setToken']
-  const setupMock: typeof import('./utils/setup-mock')['default']
   const shallowReactive: typeof import('vue')['shallowReactive']
   const shallowReadonly: typeof import('vue')['shallowReadonly']
   const shallowRef: typeof import('vue')['shallowRef']
   const storeToRefs: typeof import('pinia')['storeToRefs']
-  const successResponseWrap: typeof import('./utils/setup-mock')['successResponseWrap']
   const syncRef: typeof import('@vueuse/core')['syncRef']
   const syncRefs: typeof import('@vueuse/core')['syncRefs']
   const templateRef: typeof import('@vueuse/core')['templateRef']
@@ -233,7 +206,6 @@ declare global {
   const useFileSystemAccess: typeof import('@vueuse/core')['useFileSystemAccess']
   const useFocus: typeof import('@vueuse/core')['useFocus']
   const useFocusWithin: typeof import('@vueuse/core')['useFocusWithin']
-  const useForm: typeof import('@tanstack/vue-form')['useForm']
   const useFps: typeof import('@vueuse/core')['useFps']
   const useFullscreen: typeof import('@vueuse/core')['useFullscreen']
   const useGamepad: typeof import('@vueuse/core')['useGamepad']
@@ -249,7 +221,6 @@ declare global {
   const useIntervalFn: typeof import('@vueuse/core')['useIntervalFn']
   const useKeyModifier: typeof import('@vueuse/core')['useKeyModifier']
   const useLastChanged: typeof import('@vueuse/core')['useLastChanged']
-  const useLink: typeof import('vue-router')['useLink']
   const useLocalStorage: typeof import('@vueuse/core')['useLocalStorage']
   const useMagicKeys: typeof import('@vueuse/core')['useMagicKeys']
   const useManualRefHistory: typeof import('@vueuse/core')['useManualRefHistory']
@@ -289,7 +260,6 @@ declare global {
   const useResizeObserver: typeof import('@vueuse/core')['useResizeObserver']
   const useRoute: typeof import('vue-router')['useRoute']
   const useRouter: typeof import('vue-router')['useRouter']
-  const useRouterStore: typeof import('./stores/auth')['useRouterStore']
   const useSSRWidth: typeof import('@vueuse/core')['useSSRWidth']
   const useScreenOrientation: typeof import('@vueuse/core')['useScreenOrientation']
   const useScreenSafeArea: typeof import('@vueuse/core')['useScreenSafeArea']
@@ -309,7 +279,6 @@ declare global {
   const useStyleTag: typeof import('@vueuse/core')['useStyleTag']
   const useSupported: typeof import('@vueuse/core')['useSupported']
   const useSwipe: typeof import('@vueuse/core')['useSwipe']
-  const useTabBarStore: typeof import('./stores/tab-bar')['useTabBarStore']
   const useTemplateRef: typeof import('vue')['useTemplateRef']
   const useTemplateRefsList: typeof import('@vueuse/core')['useTemplateRefsList']
   const useTextDirection: typeof import('@vueuse/core')['useTextDirection']
@@ -359,7 +328,7 @@ declare global {
   const watchThrottled: typeof import('@vueuse/core')['watchThrottled']
   const watchTriggerable: typeof import('@vueuse/core')['watchTriggerable']
   const watchWithFilter: typeof import('@vueuse/core')['watchWithFilter']
-  const weilaFetch: typeof import('./api/instances/fetcher')['weilaFetch']
+  const weilaFetch: typeof import('./utils/api')['weilaFetch']
   const weilaRequest: typeof import('./api/instances/request')['weilaRequest']
   const weilaRequestV2: typeof import('./api/instances/requestV2')['weilaRequestV2']
   const whenever: typeof import('@vueuse/core')['whenever']
@@ -383,7 +352,10 @@ declare module 'vue' {
   interface GlobalComponents {}
   interface ComponentCustomProperties {
     readonly $inspect: UnwrapRef<typeof import('./utils/inspect')['$inspect']>
-    readonly $v2: UnwrapRef<typeof import('./api/instances/fetcherV2')['$v2']>
+    readonly $v1: UnwrapRef<typeof import('./utils/api')['$v1']>
+    readonly $v2: UnwrapRef<typeof import('./utils/api')['$v2']>
+    readonly $weilaRequestV1: UnwrapRef<typeof import('./utils/api')['$weilaRequestV1']>
+    readonly $weilaRequestV2: UnwrapRef<typeof import('./utils/api')['$weilaRequestV2']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
     readonly UseImage: UnwrapRef<typeof import('@vueuse/components')['UseImage']>
     readonly acceptHMRUpdate: UnwrapRef<typeof import('pinia')['acceptHMRUpdate']>
@@ -701,9 +673,7 @@ declare module 'vue' {
     readonly watchThrottled: UnwrapRef<typeof import('@vueuse/core')['watchThrottled']>
     readonly watchTriggerable: UnwrapRef<typeof import('@vueuse/core')['watchTriggerable']>
     readonly watchWithFilter: UnwrapRef<typeof import('@vueuse/core')['watchWithFilter']>
-    readonly weilaFetch: UnwrapRef<typeof import('./api/instances/fetcher')['weilaFetch']>
-    readonly weilaRequest: UnwrapRef<typeof import('./api/instances/request')['weilaRequest']>
-    readonly weilaRequestV2: UnwrapRef<typeof import('./api/instances/requestV2')['weilaRequestV2']>
+    readonly weilaFetch: UnwrapRef<typeof import('./utils/api')['weilaFetch']>
     readonly whenever: UnwrapRef<typeof import('@vueuse/core')['whenever']>
   }
 }

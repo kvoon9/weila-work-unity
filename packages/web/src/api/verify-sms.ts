@@ -1,5 +1,3 @@
-import { weilaRequest } from './instances/request'
-
 export interface SendVerifySmsModel {
   phone: string
   country_code: '86'

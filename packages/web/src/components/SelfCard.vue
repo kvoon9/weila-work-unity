@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useQuery } from '@tanstack/vue-query'
 import { UseImage } from '@vueuse/components'
-import { weilaFetch } from '~/api/instances/fetcher'
 
 const { t } = useI18n()
 

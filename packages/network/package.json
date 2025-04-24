@@ -28,6 +28,7 @@
     "ofetch": "catalog:"
   },
   "devDependencies": {
+    "@antfu/utils": "catalog:",
     "@rollup/plugin-commonjs": "catalog:",
     "@rollup/plugin-node-resolve": "catalog:",
     "@rollup/plugin-typescript": "catalog:",

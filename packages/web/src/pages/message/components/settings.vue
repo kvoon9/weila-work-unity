@@ -4,8 +4,7 @@ import Message from '@arco-design/web-vue/es/message'
 import { useMutation, useQuery } from '@tanstack/vue-query'
 import { UseImage } from '@vueuse/components'
 import { TrackType } from '~/api/contact'
-import { weilaFetch } from '~/api/instances/fetcher'
-import { weilaRequest } from '~/api/instances/request'
+
 import AddMembersModal from './add-members-modal.vue'
 
 const { groupId } = defineProps<{

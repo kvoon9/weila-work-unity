@@ -3,7 +3,7 @@ import type { GroupGetallModel } from 'generated/mock/weila'
 import type { GroupModel } from '~/api/contact'
 import { useQuery } from '@tanstack/vue-query'
 import { ref } from 'vue'
-import { weilaFetch } from '~/api/instances/fetcher'
+
 import CreateGroupModal from './components/CreateGroupModal.vue'
 import DeleteGroupModal from './components/DeleteGroupModal.vue'
 import EditGroupModal from './components/EditGroupModal.vue'

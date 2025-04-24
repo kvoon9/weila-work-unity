@@ -3,7 +3,7 @@ import type { MessageGetGroupHistoryMessageModel, MessageGetGroupHistoryMessageP
 import type { Reactive } from 'vue'
 import { useInfiniteQuery } from '@tanstack/vue-query'
 import { weilaApiUrl } from '~/api'
-import { weilaFetch } from '~/api/instances/fetcher'
+
 import MessageFileContent from '~/components/MessageFileContent.vue'
 import MessageLocationContent from '~/components/MessageLocationContent.vue'
 import MessagePictureContent from '~/components/MessagePictureContent.vue'

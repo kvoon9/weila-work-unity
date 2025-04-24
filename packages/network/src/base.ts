@@ -113,7 +113,7 @@ export function createRequest(opts?: CreateWeilaApiOptions) {
       if (config) {
         config.params = {
           ...config.params,
-          ...options,
+          ...options(),
         }
       }
       return config

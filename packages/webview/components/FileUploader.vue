@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { toArray } from '@antfu/utils'
+import { toFileWrapper, useUploadFile } from '@weila/network'
 import Viewer from 'viewerjs'
 import { ref as deepRef, shallowRef } from 'vue'
-
-import { toFileWrapper } from '~/composables/uploadFile'
 
 const props = defineProps<{
   classes?: string | string[]
@@ -27,7 +26,7 @@ const { files, open } = useFileDialog({
   accept: 'image/*',
 })
 
-const { mutateAsync: uploadFile, filelist } = useUploadFile()
+const { mutateAsync: uploadFile, filelist } = useUploadFile($weilaRequestV2)
 
 filelist.value.push(...initialFiles.value.map(toFileWrapper))
 

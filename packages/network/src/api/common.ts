@@ -1,8 +1,9 @@
 import type { UseMutationOptions } from '@tanstack/vue-query'
 import type { Reactive } from 'vue'
+import type { WeilaRequestInstance } from '../base'
 import { toArray } from '@antfu/utils'
 import { useMutation } from '@tanstack/vue-query'
-import { ref as deepRef } from 'vue'
+import { computed, ref as deepRef, reactive } from 'vue'
 
 export type UploadFileWarpper = Reactive<{
   id: string
@@ -22,7 +23,7 @@ export function toFileWrapper(url: string) {
   }
 }
 
-export function useUploadFile(options?: Omit<UseMutationOptions, 'mutationFn'>) {
+export function useUploadFile(request: WeilaRequestInstance, options?: Omit<UseMutationOptions, 'mutationFn'>) {
   const filelist = deepRef<UploadFileWarpper[]>([])
 
   const hasPending = computed(() => filelist.value.some(f => f.state === 'pending'))
@@ -54,7 +55,7 @@ export function useUploadFile(options?: Omit<UseMutationOptions, 'mutationFn'>) 
           formData.append('file', f)
 
           try {
-            const url = await weilaAxiosInstanceV2.post<string>(
+            const { data } = await request.post<{ url: string }>(
               'common/upload-file',
               formData,
               {
@@ -64,7 +65,7 @@ export function useUploadFile(options?: Omit<UseMutationOptions, 'mutationFn'>) 
               },
             )
 
-            wrapper.url = url
+            wrapper.url = data?.url || ''
             wrapper.state = 'success'
           }
           catch (error) {

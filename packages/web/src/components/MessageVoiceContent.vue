@@ -2,7 +2,7 @@
 import { useQuery } from '@tanstack/vue-query'
 import { useSound } from '@vueuse/sound'
 import { weilaApiUrl } from '~/api'
-import { weilaFetch } from '~/api/instances/fetcher'
+
 import { useSpeakerIcon } from '~/composition/useSpeakerIcon'
 
 const props = defineProps<{

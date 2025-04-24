@@ -2,7 +2,6 @@
 import Message from '@arco-design/web-vue/es/message'
 import { useMutation } from '@tanstack/vue-query'
 import { weilaApiUrl } from '~/api'
-import { weilaRequest } from '~/api/instances/request'
 
 const emits = defineEmits(['success'])
 

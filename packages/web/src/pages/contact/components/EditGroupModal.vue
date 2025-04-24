@@ -2,7 +2,6 @@
 import type { GroupGetallModel } from 'generated/mock/weila'
 import Message from '@arco-design/web-vue/es/message'
 import { useMutation } from '@tanstack/vue-query'
-import { weilaRequest } from '~/api/instances/request'
 
 const props = defineProps<{
   group?: GroupGetallModel['data']['groups'][number]

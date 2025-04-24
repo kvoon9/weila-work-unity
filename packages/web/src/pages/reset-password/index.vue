@@ -3,7 +3,6 @@ import Message from '@arco-design/web-vue/es/message'
 import { useMutation } from '@tanstack/vue-query'
 import md5 from 'md5'
 import { weilaApiUrl } from '~/api'
-import { weilaRequest } from '~/api/instances/request'
 
 definePage({
   meta: {

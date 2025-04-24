@@ -1,9 +1,19 @@
 <script setup lang="ts">
 import type { UnwrapRef } from 'vue'
-import type { RegeoV2 } from '~/shared/types'
+import { Message } from '@arco-design/web-vue'
 import { useQuery } from '@tanstack/vue-query'
 import { ElAmap } from '@vuemap/vue-amap'
 import { shallowRef } from 'vue'
+
+interface RegeoV2 {
+  province: string
+  city: string
+  citycode: string
+  district: string
+  adcode: string
+  township: string
+  Address: string
+}
 
 const props = withDefaults(defineProps<{
   options?: {
@@ -33,17 +43,15 @@ const { coords, isSupported, error: coordsError } = useGeolocation({
   enableHighAccuracy: true,
 })
 
-const { toast } = useToast()
-
 watchEffect(() => {
   if (props.options.center)
     return
 
   if (!isSupported.value)
-    return toast('无法获取当前位置')
+    return Message.error('无法获取当前位置')
 
   if (coordsError.value)
-    return toast({ title: `获取当前位置失败(${coordsError.value.code})`, description: coordsError.value.message })
+    return Message.error(`获取当前位置失败(${coordsError.value.code})`)
 })
 
 function checkCoordsValue(coords: UnwrapRef<ReturnType<typeof useGeolocation>['coords']>) {
@@ -64,14 +72,10 @@ function checkCoordsValue(coords: UnwrapRef<ReturnType<typeof useGeolocation>['c
 const defaultCenter: [number, number] = props.options.center
   ?? [114.057868, 22.543099]
 
-// const defaultCenter: [number, number] = [114.057868, 22.543099]
-
 const center = defineModel<[number, number]>('center', {
   required: false,
   default: null,
 })
-
-$inspect(center)
 
 // defineModel can not reference a variant as default value
 if (!center.value)
@@ -91,8 +95,6 @@ const pickedCenter = computed(() => {
 
   return center.value
 })
-
-const { $v2 } = useNuxtApp()
 
 const { data: regeo, refetch } = useQuery({
   enabled: !!pickedCenter.value,
@@ -165,9 +167,8 @@ function handleMapInit(m: AMap.Map) {
 }
 
 function confirm() {
-  const { toast } = useToast()
   if (!regeo.value) {
-    toast('请选择一个位置')
+    Message.error('请选择一个位置')
     return
   }
 
@@ -181,14 +182,14 @@ function confirm() {
 </script>
 
 <template>
-  <div class="h-full w-full relative">
+  <div class="relative h-full w-full">
     <ElAmap
       v-model:center="center"
       v-model:zoom="zoom"
       @init="handleMapInit"
     />
 
-    <div absolute left-4 top-4 bg-white rounded-lg p2>
+    <div absolute left-4 top-4 rounded-lg bg-white p2>
       <div flex="items-center ~" space-x-2>
         <Icon name="ph:map-pin" />
         <span>
@@ -203,28 +204,20 @@ function confirm() {
       flex="~ col items-center"
     >
       <p
-        flex-1 p4 bg-primary:70 backdrop-blur-2xl text-white rounded-full transition-all
+        flex-1 rounded-full bg-primary:70 p4 text-white backdrop-blur-2xl transition-all
         flex="items-center ~"
       >
-        <span
-          max-w-75vw
-          break-keep truncate
-        >
-
+        <span sm:max-w="75vw" w-fit truncate break-keep>
           {{ address }}
         </span>
       </p>
-      <div
-        mxa
-        bg-primary:70
-        h-15 w-1 backdrop-blur-2xl rounded-b-full
-      />
+      <div mxa h-15 w-1 rounded-b-full bg-primary:70 backdrop-blur-2xl />
     </div>
 
-    <div absolute bottom-20 position-x-center>
-      <textarea v-model="addr" bg-white:40 backdrop-blur-3xl outline-none p2 rounded-lg w-80vw :rows="3" border />
+    <div absolute bottom-10 position-x-center>
+      <textarea v-model="addr" :rows="3" w-80vw border rounded-lg bg-white:40 p2 outline-none backdrop-blur-3xl lg:w-80 />
 
-      <div absolute right-2 bottom-4 flex>
+      <div absolute bottom-4 right-2 flex>
         <button v-if="regeo && addr !== regeo.Address" btn="ghost sm" color-primary @click="addr = regeo.Address">
           重置
         </button>

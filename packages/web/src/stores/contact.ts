@@ -1,7 +1,7 @@
 import type { ContactModel } from '~/api/contact'
 import { objectPick } from '@antfu/utils'
 import { useQuery } from '@tanstack/vue-query'
-import { weilaFetch } from '~/api/instances/fetcher'
+
 import { useAuthStore } from './auth'
 
 export const useContactStore = defineStore('contact', () => {

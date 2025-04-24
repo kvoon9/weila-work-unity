@@ -1,11 +1,12 @@
 import type { LoginModel } from 'generated/mock/weila'
 import { cloneDeep } from 'lodash'
 import { acceptHMRUpdate, defineStore } from 'pinia'
+import { ref as deepRef } from 'vue'
 
 export type Role = '' | '*' | 'admin' | 'user'
 
 export const useUserStore = defineStore('user', () => {
-  const state = ref<LoginModel['data'] | undefined>(undefined)
+  const state = deepRef<LoginModel['data'] | undefined>(undefined)
 
   const role = computed<Role>(() => '*')
   const userInfo = computed(() => cloneDeep(state.value?.user))

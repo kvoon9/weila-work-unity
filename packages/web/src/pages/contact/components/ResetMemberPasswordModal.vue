@@ -4,7 +4,6 @@ import { Message } from '@arco-design/web-vue'
 import { useMutation } from '@tanstack/vue-query'
 import md5 from 'md5'
 import { weilaApiUrl } from '~/api'
-import { weilaRequest } from '~/api/instances/request'
 
 const props = defineProps<{
   member?: MemberGetallModel['data']['members'][number]

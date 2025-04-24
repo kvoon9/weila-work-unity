@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useMyBusiness, useServiceLegal } from '@weila/network'
-import { $v2 } from '~/api/instances/fetcherV2'
 
 const { t } = useI18n()
 

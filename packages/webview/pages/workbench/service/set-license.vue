@@ -2,6 +2,7 @@
 import type { FileUploader } from '#components'
 import { useMutation } from '@tanstack/vue-query'
 import { toTypedSchema } from '@vee-validate/zod'
+import { toFileWrapper } from '@weila/network'
 import { useForm } from 'vee-validate'
 import * as z from 'zod'
 

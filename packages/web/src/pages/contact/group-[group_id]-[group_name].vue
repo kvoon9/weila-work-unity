@@ -3,7 +3,7 @@ import type { GroupMemberModel } from '~/api/contact'
 import { useQuery } from '@tanstack/vue-query'
 import { weilaApiUrl } from '~/api'
 import { TrackType } from '~/api/contact'
-import { weilaFetch } from '~/api/instances/fetcher'
+
 import AddGroupMemberModal from './components/AddGroupMemberModal.vue'
 import DeleteGroupMemberModal from './components/DeleteGroupMemberModal.vue'
 import EditGroupMemberModal from './components/EditGroupMemberModal.vue'

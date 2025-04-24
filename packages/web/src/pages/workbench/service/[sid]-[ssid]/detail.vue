@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { useRouteParams } from '@vueuse/router'
 import { useMyBusiness, useServiceLegal } from '@weila/network'
 import { computed } from 'vue'
 import EditBusinessModal from './components/EditBusinessModal.vue'
+import EditLegalModal from './components/EditLegalModal.vue'
 
 const { t } = useI18n()
 
 const { data: businessData } = useMyBusiness($v2)
 const { data: legalData } = useServiceLegal($v2)
 
-const ssid = useRouteParams('ssid', 0, { transform: Number })
-const sid = useRouteParams('sid', 0, { transform: Number })
+// const ssid = useRouteParams('ssid', 0, { transform: Number })
+// const sid = useRouteParams('sid', 0, { transform: Number })
 
 // 获取服务号信息的简便访问
 const serviceInfo = computed(() => {
@@ -29,8 +29,8 @@ const typeMap: TypeMap = {
   3: '个人',
 }
 
-const isEditBusinessModalOpen = shallowRef(false)
-const isEditLegalModalOpen = shallowRef(false)
+// const isEditBusinessModalOpen = shallowRef(false)
+// const isEditLegalModalOpen = shallowRef(false)
 </script>
 
 <template>
@@ -135,7 +135,7 @@ const isEditLegalModalOpen = shallowRef(false)
         <a-divider />
 
         <!-- 位置信息 -->
-        <div v-if="serviceInfo?.lat && serviceInfo?.lon" class="mt-4 px-4">
+        <div v-if="serviceInfo" class="mt-4 px-4">
           <h3 class="mb-3 flex items-center gap-2 text-lg font-medium">
             <icon-location /> 位置信息
           </h3>
@@ -197,14 +197,7 @@ const isEditLegalModalOpen = shallowRef(false)
               />
             </div>
             <div class="flex justify-end">
-              <TheModal v-model:open="isEditLegalModalOpen" title="编辑资质信息">
-                <a-button type="primary">
-                  编辑资质
-                </a-button>
-                <template #content>
-                  123
-                </template>
-              </TheModal>
+              <EditLegalModal />
             </div>
           </div>
           <a-skeleton v-else animation>

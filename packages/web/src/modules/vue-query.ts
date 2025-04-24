@@ -1,4 +1,4 @@
-// import { weilaRequest } from '~/api/instances/request'
+//
 import type { UserModule } from '~/types'
 // import type { QueryFunction, VueQueryPluginOptions } from '@tanstack/vue-query'
 // import { objectPick } from '@antfu/utils'

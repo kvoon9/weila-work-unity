@@ -63,6 +63,25 @@ export const useServiceLegal = createSharedComposable(($v2: $Fetch) => {
   })
 })
 
+export interface ChangeLegalPayload {
+  legal: {
+    id: number
+    type: number
+    merchant: {
+      business_license: string
+    }
+  }
+}
+
+export type ChangeLegalModel = never
+
+export function useChangeLegal($v2: $Fetch, options?: UseMutationOptions<ChangeLegalModel, DefaultError, ChangeLegalPayload>) {
+  return useMutation<ChangeLegalModel, DefaultError, ChangeLegalPayload>({
+    mutationFn: body => $v2<ChangeLegalModel>('corp/busi/legal/change-legal', { body }),
+    ...options,
+  })
+}
+
 export const useService = createSharedComposable(($v2: $Fetch) => {
   const myBusinessQuery = useMyBusiness($v2)
   const serviceLegalQuery = useServiceLegal($v2)

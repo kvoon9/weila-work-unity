@@ -4,8 +4,6 @@ import { Message } from '@arco-design/web-vue'
 import { useMutation, useQuery } from '@tanstack/vue-query'
 import md5 from 'md5'
 import { weilaApiUrl } from '~/api'
-import { weilaFetch } from '~/api/instances/fetcher'
-import { weilaRequest } from '~/api/instances/request'
 
 const emits = defineEmits(['success'])
 

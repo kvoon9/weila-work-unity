@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import Message from '@arco-design/web-vue/es/message'
 import { useMutation } from '@tanstack/vue-query'
-import { weilaRequest } from '~/api/instances/request'
 
 const emits = defineEmits(['success'])
 const { t } = useI18n()

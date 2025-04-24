@@ -27,7 +27,8 @@
     "eslint-plugin-format": "catalog:",
     "eslint-plugin-unimport": "catalog:",
     "lint-staged": "catalog:",
-    "unbuild": "catalog:"
+    "unbuild": "catalog:",
+    "vite-plugin-dts": "^4.5.3"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"

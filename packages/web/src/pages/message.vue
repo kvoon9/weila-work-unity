@@ -3,7 +3,6 @@ import { useQuery } from '@tanstack/vue-query'
 import { UseImage } from '@vueuse/components'
 import { RouterLink } from 'vue-router'
 import { weilaApiUrl } from '~/api'
-import { weilaFetch } from '~/api/instances/fetcher'
 
 definePage({
   meta: {
