@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import type { ChangeBusinessPayload } from '@weila/network'
 import Message from '@arco-design/web-vue/es/message'
 import { useMutateBusiness, useMyBusiness } from '@weila/network'
-import { shallowRef } from 'vue'
+import { reactive, shallowRef } from 'vue'
 
 const { t } = useI18n()
 
@@ -16,11 +17,19 @@ const { mutateAsync: changeBusiness, isPending: isChangingBusiness } = useMutate
   },
 })
 
-const form = reactive({
+const form = reactive<ChangeBusinessPayload['business']['merchant']>({
   name: businessData.value?.merchant?.name || '',
   phone: businessData.value?.merchant?.phone || '',
   album: businessData.value?.merchant?.album || [],
   intro: businessData.value?.merchant?.intro || '',
+  address: businessData.value?.merchant?.address || '',
+  lon: businessData.value?.merchant?.lon || 0,
+  lat: businessData.value?.merchant?.lat || 0,
+  adcode: businessData.value?.merchant?.adcode || '',
+  // type: businessData.value?.merchant?.type || 0,
+  avatar: businessData.value?.merchant?.avatar || '',
+  citycode: businessData.value?.merchant?.citycode || '',
+  township: businessData.value?.merchant?.township || '',
 })
 
 const isUploadingAlbum = shallowRef(false)
@@ -59,7 +68,16 @@ const isUploadingAlbum = shallowRef(false)
             </a-button>
             <template #content>
               <div h80vh w80vw>
-                <MapPicker />
+                <MapPicker
+                  @update:value="(value) => {
+                    form.lon = value.lon
+                    form.lat = value.lat
+                    form.adcode = value.adcode
+                    form.address = value.Address
+                    form.citycode = value.citycode
+                    form.township = value.township
+                  }"
+                />
               </div>
             </template>
           </TheModal>

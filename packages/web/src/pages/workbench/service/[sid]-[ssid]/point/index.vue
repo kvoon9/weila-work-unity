@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRouteParams } from '@vueuse/router'
 import { useBusinessPointList } from '@weila/network'
-import TheModal from '~/components/TheModal.vue'
+import CreateBusinessPointModal from './components/CreateBusinessPointModal.vue'
 
 const { t } = useI18n()
 
@@ -31,16 +31,7 @@ function handleDel(id: number) {
     </div>
     <div rounded p4 space-y-2 bg-base>
       <div space-x-2>
-        <TheModal title="创建服务点">
-          <a-button type="primary">
-            创建服务点
-          </a-button>
-          <template #content>
-            <div>
-              create
-            </div>
-          </template>
-        </TheModal>
+        <CreateBusinessPointModal />
       </div>
 
       <div>

@@ -216,11 +216,12 @@ export const changeBusinessPointSchema = z.object({
 export type ChangeBusinessPointPayload = z.infer<typeof changeBusinessPointSchema>
 export type ChangeBusinessPointModel = never
 
-export const changeBusinessPoint = createSharedComposable(($v2: $Fetch) => {
+export function changeBusinessPoint($v2: $Fetch, options?: UseMutationOptions<ChangeBusinessPointModel, DefaultError, ChangeBusinessPointPayload>) {
   return useMutation<ChangeBusinessPointModel, DefaultError, ChangeBusinessPointPayload>({
     mutationFn: payload => $v2<ChangeBusinessPointModel>('corp/busi/change-business-point', { body: { point: payload } }),
+    ...options,
   })
-})
+}
 
 export const delBusinessPointSchema = z.object({
   pid: z.number(),
@@ -230,12 +231,12 @@ export type DelBusinessPoint = z.infer<typeof delBusinessPointSchema>
 
 export type DelBusinessPointModel = never
 
-export const delBusinessPoint = createSharedComposable(($v2: $Fetch, options?: UseMutationOptions<DelBusinessPoint, DefaultError, DelBusinessPoint>) => {
+export function delBusinessPoint($v2: $Fetch, options?: UseMutationOptions<DelBusinessPoint, DefaultError, DelBusinessPoint>) {
   return useMutation<DelBusinessPoint, DefaultError, DelBusinessPoint>({
     mutationFn: payload => $v2<DelBusinessPointModel>('corp/busi/del-business-point', { body: payload }),
     ...options,
   })
-})
+}
 
 export const createBusinessPointSchema = z.object({
   sid: z.number().optional(),
@@ -256,11 +257,12 @@ export type CreateBusinessPointPayload = z.infer<typeof createBusinessPointSchem
 
 export type CreateBusinessPointModel = never
 
-export const createBusinessPoint = createSharedComposable(($v2: $Fetch) => {
-  return useMutation<CreateBusinessPointPayload, DefaultError, CreateBusinessPointPayload>({
+export function createBusinessPoint($v2: $Fetch, options?: UseMutationOptions<CreateBusinessPointModel, DefaultError, CreateBusinessPointPayload>) {
+  return useMutation<CreateBusinessPointModel, DefaultError, CreateBusinessPointPayload>({
     mutationFn: payload => $v2<CreateBusinessPointModel>('corp/busi/create-business-point', { body: { point: payload } }),
+    ...options,
   })
-})
+}
 
 export const addBusinessStaffsSchema = z.object({
   sid: z.number(),
