@@ -1,6 +1,6 @@
 import type { UseMutationOptions } from '@tanstack/vue-query'
 import type { Reactive } from 'vue'
-import type { WeilaRequestInstance } from '../base'
+import type { WeilaRequestInstance } from '../types'
 import { toArray } from '@antfu/utils'
 import { useMutation } from '@tanstack/vue-query'
 import { computed, ref as deepRef, reactive } from 'vue'

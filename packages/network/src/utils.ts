@@ -1,39 +1,125 @@
-import md5 from 'md5'
+import type { CreateWeilaApiOptions, WeilaRequestInstance, WeilaRes } from './types'
+import axios from 'axios'
+import { ofetch } from 'ofetch'
+import { noop, WeilaErrorCode, weilaLogoutErrorCodes } from './constant'
 
-export function getMd5Middle8Chars(md5: string) {
-  // 888e0f79573741ac3e1f09a3c9e46968 -> 41ac3e1f
-  return md5.slice(12, 20)
+export function createFetch(opts?: CreateWeilaApiOptions) {
+  const {
+    baseURL = '/v1',
+    onError,
+    onLogout = noop,
+    options = () => ({}),
+  } = opts || {}
+
+  return ofetch.create({
+    baseURL,
+    timeout: 20 * 1000,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    mode: 'cors',
+    onRequest({ options: _options }) {
+      _options.query = {
+        ..._options.query,
+        ...options(),
+      }
+    },
+    onResponse({ response }) {
+      const { errcode, errmsg } = response._data as WeilaRes
+
+      if (errcode === WeilaErrorCode.SUCCESS) {
+        response._data = response._data.data
+      }
+      else if (weilaLogoutErrorCodes.findIndex(i => errcode === i) >= 0) {
+        onLogout()
+      }
+      else {
+        if (onError)
+          onError({ errcode, errmsg })
+        else
+          throw new Error(`${errcode}: ${errmsg}`)
+      }
+    },
+    onRequestError(reqError) {
+      onError?.(reqError.error)
+      console.error('reqError')
+    },
+    onResponseError({ error, response }) {
+      if (error) {
+        onError?.(error)
+        console.error('resError', error)
+      }
+      else {
+        const errcode = response.status
+        const errmsg = response.statusText
+        onError?.({ errcode, errmsg })
+        console.error('resError', errcode, errmsg)
+      }
+    },
+  })
 }
 
-export function getOptionsV1() {
-  const app_id = '102036'
-  const key = 'b3c658bd2e637c65efb134fb381d4a18'
-  const access_token = localStorage.getItem('token') || ''
-  const timestamp = Date.now() || -1
-  const et = Math.floor(timestamp / 1000)
-  const app_sign = md5(`${et}${key}`)
+export function createRequest(opts?: CreateWeilaApiOptions) {
+  const {
+    baseURL = '/v1',
+    onError,
+    onLogout = noop,
+    options = () => ({}),
+  } = opts || {}
 
-  return {
-    'app_id': app_id,
-    'access-token': access_token,
-    'et': String(et),
-    'sign': app_sign,
-  }
-}
+  const request: WeilaRequestInstance = axios.create({
+    baseURL,
+    timeout: 20 * 1000,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
 
-export function getOptionsV2() {
-  const app_id = '102036'
-  const key = 'b3c658bd2e637c65efb134fb381d4a18'
-  const access_token = localStorage.getItem('token') || ''
-  const timestamp = Date.now() || -1
-  const et = Math.floor(timestamp / 1000)
-  const app_sign = md5(`${et}${key}`)
-  const app_sign_v2 = getMd5Middle8Chars(app_sign)
+  request.interceptors.request.use(
+    (config) => {
+      if (config) {
+        config.params = {
+          ...config.params,
+          ...options(),
+        }
+      }
+      return config
+    },
+    (error) => {
+      onError?.(error)
+      console.error('reqError', error)
+    },
+  )
 
-  return {
-    appid: app_id,
-    token: access_token,
-    et: String(et),
-    sign: app_sign_v2,
-  }
+  request.interceptors.response.use(
+    // @ts-expect-error type error
+    (response: AxiosResponse<WeilaRes>) => {
+      const { errcode, code } = response.data
+
+      if (errcode === WeilaErrorCode.SUCCESS || code === 200) {
+        return response.data
+      }
+      else if (
+        weilaLogoutErrorCodes
+          .findIndex(i => errcode === i) >= 0
+      ) {
+        onLogout()
+      }
+      else {
+        const { errcode, errmsg } = response.data
+
+        onError?.({ errcode, errmsg })
+
+        throw new Error(`${errcode} ${errmsg}`)
+      }
+    },
+    (error: Error) => {
+      onError?.(error)
+      console.error('resError', error)
+    },
+  )
+
+  return request
 }
