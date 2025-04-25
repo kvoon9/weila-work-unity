@@ -1,4 +1,4 @@
-import type { AxiosInstance, AxiosRequestConfig } from 'axios'
+import type { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios'
 import axios from 'axios'
 import { ofetch } from 'ofetch'
 
@@ -70,7 +70,8 @@ export function createFetch(opts?: CreateWeilaApiOptions) {
       }
     },
     onRequestError(reqError) {
-      console.error('reqError', reqError)
+      onError?.(reqError.error)
+      console.error('reqError', )
     },
     onResponseError({ error, response }) {
       if (error) {

@@ -24,7 +24,7 @@ const form = reactive<GroupMemberAddPayload>({
   member_ids: [],
 })
 
-const value = ['option1', 'option3', 'option5']
+const value: string[] = []
 
 $inspect(form)
 

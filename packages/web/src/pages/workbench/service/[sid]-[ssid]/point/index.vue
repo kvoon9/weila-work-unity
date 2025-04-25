@@ -1,21 +1,31 @@
 <script setup lang="ts">
+import type { GetBusinessPointListModel } from '@weila/network'
 import { useRouteParams } from '@vueuse/router'
 import { useBusinessPointList } from '@weila/network'
-import CreateBusinessPointModal from './components/CreateBusinessPointModal.vue'
+import CreateBusinessPointModal from '../../components/CreateBusinessPointModal.vue'
+import DelBusinessPointModal from '../../components/DelBusinessPointModal.vue'
+import EditBusinessPointModal from '../../components/EditBusinessPointModal.vue'
 
 const { t } = useI18n()
 
 const sid = useRouteParams('sid', 0, { transform: Number })
-const ssid = useRouteParams('ssid', 0, { transform: Number })
+// const ssid = useRouteParams('ssid', 0, { transform: Number })
 
 const { data } = useBusinessPointList($v2, { sid: sid.value })
 
-function handleEdit(id: number) {
-  console.log('edit', id)
+const currentPoint = shallowRef<GetBusinessPointListModel['points'][number] | null>(null)
+
+const isEditBusinessPointModalOpen = shallowRef<boolean>(false)
+const isDeleteBusinessPointModalOpen = shallowRef<boolean>(false)
+
+function handleEdit(point: GetBusinessPointListModel['points'][number]) {
+  currentPoint.value = point
+  isEditBusinessPointModalOpen.value = true
 }
 
-function handleDel(id: number) {
-  console.log('del', id)
+function handleDel(point: GetBusinessPointListModel['points'][number]) {
+  currentPoint.value = point
+  isDeleteBusinessPointModalOpen.value = true
 }
 </script>
 
@@ -37,12 +47,11 @@ function handleDel(id: number) {
       <div>
         <div v-for="point in data?.points" :key="point.id" relative cursor-pointer p4 hover:bg-neutral-100:20 @click="$router.push(`./point/${point.id}-${point.id}`)">
           {{ point.name }}
-
           <div absolute position-y-center right-4>
-            <a-button type="secondary" size="small" @click.stop="() => handleEdit(point.id)">
+            <a-button type="secondary" size="small" @click.stop="() => handleEdit(point)">
               编辑
             </a-button>
-            <a-button type="secondary" size="small" @click.stop="() => handleDel(point.id)">
+            <a-button type="secondary" size="small" @click.stop="() => handleDel(point)">
               删除
             </a-button>
           </div>
@@ -50,4 +59,6 @@ function handleDel(id: number) {
       </div>
     </div>
   </div>
+  <EditBusinessPointModal v-if="currentPoint" v-model:open="isEditBusinessPointModalOpen" :point="currentPoint" />
+  <DelBusinessPointModal v-if="currentPoint" v-model:open="isDeleteBusinessPointModalOpen" :point="currentPoint" />
 </template>

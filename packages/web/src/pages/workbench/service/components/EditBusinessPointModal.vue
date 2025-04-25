@@ -1,0 +1,88 @@
+<script setup lang="ts">
+import { changeBusinessPoint, GetBusinessPointListModel, useBusinessPointList } from '@weila/network'
+import { ref as deepRef, shallowRef } from 'vue'
+import Message from '@arco-design/web-vue/es/message'
+import FileUploader from '~/components/FileUploader.vue'
+import MapPicker from '~/components/MapPicker.vue'
+
+const props = defineProps<{
+  point: GetBusinessPointListModel['points'][number]
+}>()
+
+const isEditBusinessPointModalOpen = defineModel<boolean>('open', { required: true })
+
+const form = deepRef(props.point)
+
+watchImmediate(() => props.point, () => {
+  form.value = JSON.parse(JSON.stringify(props.point))
+})
+
+const isUploadingAlbum = shallowRef(false)
+const isMapPickerModalOpen = shallowRef(false)
+
+const { mutateAsync, isPending: isChangingBusinessPoint } = changeBusinessPoint($v2, {
+  onSuccess() {
+    isEditBusinessPointModalOpen.value = false
+    Message.success('修改成功')
+    useBusinessPointList($v2, { sid: props.point.sid }).refetch()
+  },
+})
+</script>
+
+<template>
+  <TheModal v-model:open="isEditBusinessPointModalOpen" title="编辑服务点">
+    <template #content>
+      <a-form :model="form">
+        <a-form-item field="name" label="名称">
+          <a-input v-model="form.name" :max-length="50" show-word-limit />
+        </a-form-item>
+        <a-form-item field="phone" label="电话">
+          <a-input v-model="form.phone" :max-length="11" show-word-limit />
+        </a-form-item>
+        <a-form-item field="intro" label="简介">
+          <a-textarea v-model="form.intro" :rows="3" />
+        </a-form-item>
+        <a-form-item field="album" label="业务展示">
+          <FileUploader
+            w-120
+            v-model:is-uploading="isUploadingAlbum"
+            classes="bg-neutral-200 dark:bg-neutral-800"
+            :initial-files="form.album"
+            @update:files="(files: string[]) => form.album = files"
+          />
+        </a-form-item>
+        <a-form-item field="address" label="位置">
+          <TheModal v-model:open="isMapPickerModalOpen" title="选择位置">
+            <a-button>
+              <span max-w-60 truncate>{{ form?.address }}</span>
+              <i mx2 i-carbon-location-filled />
+            </a-button>
+            <template #content>
+              <div h80vh w80vw>
+                <MapPicker
+                  @update:value="(value: any) => {
+                    form.lon = value.lon
+                    form.lat = value.lat
+                    form.adcode = value.adcode
+                    form.address = value.Address
+                    isMapPickerModalOpen = false
+                  }"
+                />
+              </div>
+            </template>
+          </TheModal>
+        </a-form-item>
+      </a-form>
+    </template>
+    <template #footer>
+      <a-button
+        :disabled="isChangingBusinessPoint || isUploadingAlbum"
+        :loading="isChangingBusinessPoint"
+        type="primary"
+        @click="() => mutateAsync({ ...form })"
+      >
+        保存
+      </a-button>
+    </template>
+  </TheModal>
+</template>

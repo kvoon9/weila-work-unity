@@ -23,7 +23,7 @@ enum ServiceState {
 }
 
 const hasBusiness = computed(() => !!myBusiness.value)
-// const hasLicense = computed(() => !!myLegal.value?.legal)
+// const hasLicense = computed(() => !!myLegal.value?.merchant?.business_license)
 const isVerified = computed(() => myLegal.value?.state === 8)
 
 const serviceState = computed(() => {
@@ -49,7 +49,7 @@ const serviceState = computed(() => {
     <div class="grid grid-cols-1 gap-4 px-4 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
       <RouterLink
         to="/workbench/user-track"
-        class="rounded-lg bg-white p-6 shadow-md transition-shadow duration-300 dark:bg-gray-800 hover:shadow-lg"
+        class="rounded-lg bg-white p-6 shadow-md transition-shadow duration-300 dark:bg-neutral-800 hover:shadow-lg"
       >
         <div class="mb-4 flex items-center">
           <i class="i-carbon-map mr-3 text-2xl text-primary-600 dark:text-primary-400" />
@@ -61,21 +61,28 @@ const serviceState = computed(() => {
 
       <button
         :disabled="!myBusiness"
-        class="rounded-lg bg-white p-6 shadow-md transition-shadow duration-300 dark:bg-gray-800 hover:shadow-lg"
-        @click="() => $router.push(`/workbench/service/${myBusiness?.sid}-${myBusiness?.id}`)"
+        class="rounded-lg bg-white p-6 shadow-md transition-shadow duration-300 dark:bg-neutral-800 hover:shadow-lg"
+        @click="() => {
+          if (isVerified)
+            $router.push(`/workbench/service/${myBusiness?.sid}-${myBusiness?.id}`)
+          else
+            $router.push('/workbench/service/set-license')
+        }"
       >
         <div class="mb-4 flex items-center gap3">
           <!-- <a-spin v-if="isFetchingBusiness" /> -->
           <i class="i-carbon-group text-2xl text-primary-600 dark:text-primary-400" />
           <h3 class="text-xl text-gray-900 font-semibold dark:text-gray-100">
             <span>服务号</span>
-            <span
-              v-if="myLegal"
-              class="ml-2 text-sm font-normal"
-            >{{ serviceState }}</span>
+            <span v-if="myLegal" ml-2 text-sm font-normal>{{ serviceState }}</span>
           </h3>
         </div>
       </button>
+      <RouterLink to="/workbench/service/set-license">
+        <a-button type="secondary" size="small">
+          TODO: 设置营业执照
+        </a-button>
+      </RouterLink>
     </div>
   </div>
 </template>

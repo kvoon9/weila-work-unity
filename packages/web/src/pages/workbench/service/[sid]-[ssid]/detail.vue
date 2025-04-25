@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useMyBusiness, useServiceLegal } from '@weila/network'
 import { computed } from 'vue'
-import EditBusinessModal from './components/EditBusinessModal.vue'
-import EditLegalModal from './components/EditLegalModal.vue'
+import EditBusinessModal from '../components/EditBusinessModal.vue'
+import EditLegalModal from '../components/EditLegalModal.vue'
 
 const { t } = useI18n()
 

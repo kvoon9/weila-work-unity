@@ -97,12 +97,7 @@ defineExpose({
 </script>
 
 <template>
-  <div
-    id="root" class="w-full" grid="~ gap4" :grid-cols="limit === 1 ? '1' : '3'"
-    :class="{
-      'w-30': limit === 1,
-    }"
-  >
+  <div id="root" grid="~ gap4 cols-3">
     <div v-for="(file, index) in filelist" :key="index" :class="classes" class="relative aspect-square overflow-hidden rounded-md">
       <img :src="file.url || file.dataUrl" class="file-uploader-image-item h-full w-full object-cover" @click="() => handlePreview(file)">
 
@@ -120,17 +115,13 @@ defineExpose({
 
     <div
       v-if="filelist.length < (limit || 9)"
-      :class="{
-        ...toArray(classes),
-        'min-w-80': limit === 1,
-      }"
+      :class="{ ...toArray(classes) }"
       class="aspect-square flex cursor-pointer items-center justify-center rounded-md bg-neutral-200 dark:bg-neutral-800"
       @click="() => open()"
     >
       <i i-ph-plus size-6 />
     </div>
     <DialogRoot v-model:open="isCropperModalVisible">
-      <DialogTrigger />
       <DialogPortal>
         <DialogOverlay class="bg-blackA9 data-[state=open]:animate-overlayShow fixed inset-0 z-30 backdrop-blur" />
         <DialogContent

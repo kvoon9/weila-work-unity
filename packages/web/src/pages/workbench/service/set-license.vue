@@ -4,36 +4,54 @@ import { useChangeLegal, useServiceLegal } from '@weila/network'
 import { reactive, shallowRef } from 'vue'
 import FileUploader from '~/components/FileUploader.vue'
 
-const isEditLegalModalOpen = shallowRef(false)
+const { t } = useI18n()
 
 const isUploadingFile = shallowRef(false)
 
 const { data: legalData, refetch: refetchLegalData } = useServiceLegal($v2)
 const { mutateAsync: changeLegal, isPending } = useChangeLegal($v2, {
   onSuccess() {
-    isEditLegalModalOpen.value = false
     Message.success('修改成功')
     refetchLegalData()
   },
 })
 
 const form = reactive({
-  business_license: legalData?.value?.merchant?.business_license || '',
+  business_license: '',
 })
+
+watchEffect(() => {
+  if (legalData.value) {
+    form.business_license = legalData.value?.merchant.business_license || ''
+    console.log('form', form)
+  }
+})
+
+function handleSave() {
+  changeLegal({
+    legal: {
+      id: legalData?.value?.id || 0,
+      type: legalData?.value?.type || 0,
+      merchant: {
+        business_license: form.business_license,
+      },
+    },
+  })
+}
 </script>
 
 <template>
-  <TheModal
-    v-model:open="isEditLegalModalOpen"
-    title="编辑资质信息"
-  >
-    <a-button type="primary">
-      编辑资质
-    </a-button>
-    <template #content>
+  <div p4 space-y-4>
+    <a-breadcrumb>
+      <RouterLink to="/workbench">
+        <a-breadcrumb-item>{{ t('menu.workbench') }}</a-breadcrumb-item>
+      </RouterLink>
+      <a-breadcrumb-item>修改认证信息</a-breadcrumb-item>
+    </a-breadcrumb>
+    <div p4 bg-base>
       <a-form :model="form">
         <a-form-item field="business_license" label="营业执照">
-          <div>
+          <div w-80>
             <FileUploader
               v-model:is-uploading="isUploadingFile"
               :limit="1"
@@ -43,25 +61,17 @@ const form = reactive({
             />
           </div>
         </a-form-item>
+        <a-form-item>
+          <a-button
+            :disabled="isPending"
+            :loading="isPending"
+            type="primary"
+            @click="handleSave"
+          >
+            保存
+          </a-button>
+        </a-form-item>
       </a-form>
-    </template>
-    <template #footer>
-      <a-button
-        :disabled="isPending"
-        :loading="isPending"
-        type="primary"
-        @click="() => changeLegal({
-          legal: {
-            id: legalData?.id || 0,
-            type: legalData?.type || 0,
-            merchant: {
-              business_license: form.business_license,
-            },
-          },
-        })"
-      >
-        保存
-      </a-button>
-    </template>
-  </TheModal>
+    </div>
+  </div>
 </template>

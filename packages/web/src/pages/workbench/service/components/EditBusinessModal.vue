@@ -33,6 +33,8 @@ const form = reactive<ChangeBusinessPayload['business']['merchant']>({
 })
 
 const isUploadingAlbum = shallowRef(false)
+
+const isMapPickerModalOpen = shallowRef(false)
 </script>
 
 <template>
@@ -56,15 +58,17 @@ const isUploadingAlbum = shallowRef(false)
         </a-form-item>
         <a-form-item field="phone" label="业务展示">
           <FileUploader
+            w-120
             v-model:is-uploading="isUploadingAlbum"
-            classes="bg-neutral-200 dark:bg-neutral-800" w-full
+            classes="bg-neutral-200 dark:bg-neutral-800" 
             :initial-files="form.album" @update:files="(files) => form.album = files"
           />
         </a-form-item>
         <a-form-item field="address" label="位置">
-          <TheModal title="选择位置">
+          <TheModal v-model:open="isMapPickerModalOpen" title="选择位置">
             <a-button>
-              TODO: {{ businessData?.merchant?.address }}
+               <span max-w-60 truncate>{{ form?.address }}</span>
+               <i mx2 i-carbon-location-filled />
             </a-button>
             <template #content>
               <div h80vh w80vw>
@@ -76,6 +80,8 @@ const isUploadingAlbum = shallowRef(false)
                     form.address = value.Address
                     form.citycode = value.citycode
                     form.township = value.township
+                    isMapPickerModalOpen = false
+                    console.log('value',value)
                   }"
                 />
               </div>

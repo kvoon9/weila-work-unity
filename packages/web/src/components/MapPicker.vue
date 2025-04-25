@@ -215,7 +215,7 @@ function confirm() {
     </div>
 
     <div absolute bottom-10 position-x-center>
-      <textarea v-model="addr" :rows="3" w-80vw border rounded-lg bg-white:40 p2 outline-none backdrop-blur-3xl lg:w-80 />
+      <textarea v-model="addr" :rows="3" dark="bg-neutral-800" w-80vw border rounded-lg bg-white:40 p2 outline-none backdrop-blur-3xl lg:w-80 />
 
       <div absolute bottom-4 right-2 flex>
         <button v-if="regeo && addr !== regeo.Address" btn="ghost sm" color-primary @click="addr = regeo.Address">

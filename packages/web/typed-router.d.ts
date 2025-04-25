@@ -41,6 +41,7 @@ declare module 'vue-router/auto-routes' {
     '/workbench/service/[sid]-[ssid]/point/': RouteRecordInfo<'/workbench/service/[sid]-[ssid]/point/', '/workbench/service/:sid-:ssid/point', { sid: ParamValue<true>, ssid: ParamValue<true> }, { sid: ParamValue<false>, ssid: ParamValue<false> }>,
     '/workbench/service/[sid]-[ssid]/point/[pid]-[ppid]': RouteRecordInfo<'/workbench/service/[sid]-[ssid]/point/[pid]-[ppid]', '/workbench/service/:sid-:ssid/point/:pid-:ppid', { sid: ParamValue<true>, ssid: ParamValue<true>, pid: ParamValue<true>, ppid: ParamValue<true> }, { sid: ParamValue<false>, ssid: ParamValue<false>, pid: ParamValue<false>, ppid: ParamValue<false> }>,
     '/workbench/service/[sid]-[ssid]/staff': RouteRecordInfo<'/workbench/service/[sid]-[ssid]/staff', '/workbench/service/:sid-:ssid/staff', { sid: ParamValue<true>, ssid: ParamValue<true> }, { sid: ParamValue<false>, ssid: ParamValue<false> }>,
+    '/workbench/service/set-license': RouteRecordInfo<'/workbench/service/set-license', '/workbench/service/set-license', Record<never, never>, Record<never, never>>,
     '/workbench/user-track': RouteRecordInfo<'/workbench/user-track', '/workbench/user-track', Record<never, never>, Record<never, never>>,
   }
 }
