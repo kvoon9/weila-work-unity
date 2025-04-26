@@ -58,21 +58,24 @@ const isMapPickerModalOpen = shallowRef(false)
         </a-form-item>
         <a-form-item field="phone" label="业务展示">
           <FileUploader
-            w-120
             v-model:is-uploading="isUploadingAlbum"
-            classes="bg-neutral-200 dark:bg-neutral-800" 
+            w-120
+            classes="bg-neutral-200 dark:bg-neutral-800"
             :initial-files="form.album" @update:files="(files) => form.album = files"
           />
         </a-form-item>
         <a-form-item field="address" label="位置">
           <TheModal v-model:open="isMapPickerModalOpen" title="选择位置">
             <a-button>
-               <span max-w-60 truncate>{{ form?.address }}</span>
-               <i mx2 i-carbon-location-filled />
+              <span max-w-60 truncate>{{ form?.address }}</span>
+              <i i-carbon-location-filled mx2 />
             </a-button>
             <template #content>
               <div h80vh w80vw>
                 <MapPicker
+                  :options="{
+                    center: form.lon && form.lat ? [form.lon, form.lat] : undefined,
+                  }"
                   @update:value="(value) => {
                     form.lon = value.lon
                     form.lat = value.lat
@@ -81,7 +84,7 @@ const isMapPickerModalOpen = shallowRef(false)
                     form.citycode = value.citycode
                     form.township = value.township
                     isMapPickerModalOpen = false
-                    console.log('value',value)
+                    console.log('value', value)
                   }"
                 />
               </div>

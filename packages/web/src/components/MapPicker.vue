@@ -189,9 +189,9 @@ function confirm() {
       @init="handleMapInit"
     />
 
-    <div absolute left-4 top-4 rounded-lg bg-white p2>
+    <div absolute left-4 top-4 rounded-lg bg-white p2 color-black>
       <div flex="items-center ~" space-x-2>
-        <Icon name="ph:map-pin" />
+        <i i-ph-map-pin />
         <span>
           {{ [regeo?.province, regeo?.district, regeo?.township].filter(Boolean).join(' · ') }}
         </span>

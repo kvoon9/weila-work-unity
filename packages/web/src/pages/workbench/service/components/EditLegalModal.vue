@@ -4,6 +4,8 @@ import { useChangeLegal, useServiceLegal } from '@weila/network'
 import { reactive, shallowRef } from 'vue'
 import FileUploader from '~/components/FileUploader.vue'
 
+const router = useRouter()
+
 const isEditLegalModalOpen = shallowRef(false)
 
 const isUploadingFile = shallowRef(false)
@@ -14,6 +16,7 @@ const { mutateAsync: changeLegal, isPending } = useChangeLegal($v2, {
     isEditLegalModalOpen.value = false
     Message.success('修改成功')
     refetchLegalData()
+    router.push('/workbench')
   },
 })
 

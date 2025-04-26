@@ -13,8 +13,10 @@ definePage({
   },
 })
 
-const { data: myBusiness } = useMyBusiness($v2)
-const { data: myLegal } = useServiceLegal($v2)
+const { data: myBusiness, isPending: isFetchingBusiness } = useMyBusiness($v2)
+const { data: myLegal, isPending: isFetchingLegal } = useServiceLegal($v2)
+
+const isFetchingService = computed(() => isFetchingBusiness.value || isFetchingLegal.value)
 
 enum ServiceState {
   Uncreated = '未创建',
@@ -34,6 +36,19 @@ const serviceState = computed(() => {
     return ServiceState.Uncreated
 
   return ServiceState.Unverified
+})
+
+const serviceRoute = computed(() => {
+  if (hasBusiness.value && isVerified.value)
+    return `/workbench/service/${myBusiness.value?.sid}-${myBusiness.value?.id}`
+
+  if (!isVerified.value)
+    return '/workbench/service/set-license'
+
+  if (!hasBusiness.value)
+    return '/workbench/service/create'
+
+  return '/workbench/service/set-license'
 })
 </script>
 
@@ -60,28 +75,30 @@ const serviceState = computed(() => {
       </RouterLink>
 
       <button
-        :disabled="!myBusiness"
+        :disabled="isFetchingService"
         class="rounded-lg bg-white p-6 shadow-md transition-shadow duration-300 dark:bg-neutral-800 hover:shadow-lg"
-        @click="() => {
-          if (isVerified)
-            $router.push(`/workbench/service/${myBusiness?.sid}-${myBusiness?.id}`)
-          else
-            $router.push('/workbench/service/set-license')
-        }"
+        @click="() => $router.push(serviceRoute)"
       >
         <div class="mb-4 flex items-center gap3">
-          <!-- <a-spin v-if="isFetchingBusiness" /> -->
-          <i class="i-carbon-group text-2xl text-primary-600 dark:text-primary-400" />
+          <a-spin v-if="isFetchingService" />
+          <i v-else class="i-carbon-group text-2xl text-primary-600 dark:text-primary-400" />
           <h3 class="text-xl text-gray-900 font-semibold dark:text-gray-100">
             <span>服务号</span>
             <span v-if="myLegal" ml-2 text-sm font-normal>{{ serviceState }}</span>
           </h3>
         </div>
       </button>
-      <RouterLink to="/workbench/service/set-license">
-        <a-button type="secondary" size="small">
-          TODO: 设置营业执照
-        </a-button>
+
+      <RouterLink
+        to="/workbench/service-adt"
+        class="rounded-lg bg-white p-6 shadow-md transition-shadow duration-300 dark:bg-neutral-800 hover:shadow-lg"
+      >
+        <div class="mb-4 flex items-center">
+          <i class="i-carbon-document-view mr-3 text-2xl text-primary-600 dark:text-primary-400" />
+          <h3 class="text-xl text-gray-900 font-semibold dark:text-gray-100">
+            服务号审核
+          </h3>
+        </div>
       </RouterLink>
     </div>
   </div>

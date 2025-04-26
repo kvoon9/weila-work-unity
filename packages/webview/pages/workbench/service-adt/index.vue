@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { adtStateMap, useAuditLegal, useGetLegalList } from '@weila/network'
 import Viewer from 'viewerjs'
 import { shallowRef } from 'vue'
 
@@ -8,7 +9,7 @@ definePageMeta({
 
 appHead.value = '审核认证信息'
 
-const { data, refetch } = useGetLegalList({ state: 0 })
+const { data, refetch } = useGetLegalList($v2, { state: 0 })
 const loading = shallowRef(false)
 const rejectReason = shallowRef('')
 const showRejectDialog = shallowRef(false)
@@ -24,24 +25,19 @@ const typeMap: TypeMap = {
   3: '个人',
 }
 
-// 使用 useAuditLegal 设置审核操作
-const { mutate: auditLegal, isPending: isAuditing } = useAuditLegal({
+const { mutate: auditLegal, isPending: isAuditing } = useAuditLegal($v2, {
   onSuccess: () => {
-    // 审核成功后刷新列表
     refetch()
-    // 重置拒绝理由和对话框
     rejectReason.value = ''
     showRejectDialog.value = false
     currentLegalId.value = null
   },
 })
 
-// 处理通过审核
 function handleApprove(id: number) {
   auditLegal({ id, state: 8 })
 }
 
-// 准备拒绝审核
 function prepareReject(id: number) {
   currentLegalId.value = id
   showRejectDialog.value = true

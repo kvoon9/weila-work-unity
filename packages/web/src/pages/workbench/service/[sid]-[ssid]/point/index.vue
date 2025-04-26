@@ -2,11 +2,13 @@
 import type { GetBusinessPointListModel } from '@weila/network'
 import { useRouteParams } from '@vueuse/router'
 import { useBusinessPointList } from '@weila/network'
+import { useRouter } from 'vue-router'
 import CreateBusinessPointModal from '../../components/CreateBusinessPointModal.vue'
 import DelBusinessPointModal from '../../components/DelBusinessPointModal.vue'
 import EditBusinessPointModal from '../../components/EditBusinessPointModal.vue'
 
 const { t } = useI18n()
+const router = useRouter()
 
 const sid = useRouteParams('sid', 0, { transform: Number })
 // const ssid = useRouteParams('ssid', 0, { transform: Number })
@@ -27,6 +29,27 @@ function handleDel(point: GetBusinessPointListModel['points'][number]) {
   currentPoint.value = point
   isDeleteBusinessPointModalOpen.value = true
 }
+
+function onPointSelect(point: GetBusinessPointListModel['points'][number], _: PointerEvent) {
+  router.push(`./point/${point.id}-${point.id}`)
+}
+
+const tableColumns = [
+  {
+    title: '名称',
+    dataIndex: 'name',
+    width: 150,
+  },
+  {
+    title: '电话',
+    dataIndex: 'phone',
+    width: 150,
+  },
+  {
+    title: '操作',
+    width: 150,
+  },
+]
 </script>
 
 <template>
@@ -44,19 +67,32 @@ function handleDel(point: GetBusinessPointListModel['points'][number]) {
         <CreateBusinessPointModal />
       </div>
 
-      <div>
-        <div v-for="point in data?.points" :key="point.id" relative cursor-pointer p4 hover:bg-neutral-100:20 @click="$router.push(`./point/${point.id}-${point.id}`)">
-          {{ point.name }}
-          <div absolute position-y-center right-4>
-            <a-button type="secondary" size="small" @click.stop="() => handleEdit(point)">
-              编辑
-            </a-button>
-            <a-button type="secondary" size="small" @click.stop="() => handleDel(point)">
-              删除
-            </a-button>
-          </div>
-        </div>
-      </div>
+      <a-table :columns="tableColumns" :data="data?.points || []" @row-click="onPointSelect">
+        <template #columns>
+          <a-table-column title="名称" data-index="name" :width="150">
+            <template #cell="{ record }">
+              {{ record.name }}
+            </template>
+          </a-table-column>
+          <a-table-column title="电话" data-index="phone" :width="150">
+            <template #cell="{ record }">
+              {{ record.phone }}
+            </template>
+          </a-table-column>
+          <a-table-column title="操作" :width="150">
+            <template #cell="{ record }">
+              <div flex gap2>
+                <a-button type="secondary" size="small" @click.stop="() => handleEdit(record)">
+                  编辑
+                </a-button>
+                <a-button type="secondary" size="small" @click.stop="() => handleDel(record)">
+                  删除
+                </a-button>
+              </div>
+            </template>
+          </a-table-column>
+        </template>
+      </a-table>
     </div>
   </div>
   <EditBusinessPointModal v-if="currentPoint" v-model:open="isEditBusinessPointModalOpen" :point="currentPoint" />
