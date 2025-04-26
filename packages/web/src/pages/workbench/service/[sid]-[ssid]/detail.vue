@@ -98,7 +98,9 @@ const typeMap: TypeMap = {
                   <div><icon-phone /> {{ serviceInfo?.phone }}</div>
                   <div><icon-location /> {{ serviceInfo?.address }}</div>
                   <div class="text-sm text-gray-500">
-                    {{ serviceInfo?.adcode }} {{ serviceInfo?.citycode }} {{ serviceInfo?.township }}
+                    <div>区域: {{ serviceInfo?.citycode }} {{ serviceInfo?.adcode }}</div>
+                    <div>街道: {{ serviceInfo?.township || '未知' }}</div>
+                    <div>经纬度: {{ serviceInfo?.lat }}, {{ serviceInfo?.lon }}</div>
                   </div>
                 </a-space>
               </div>
@@ -135,6 +137,7 @@ const typeMap: TypeMap = {
         <a-divider />
 
         <!-- 位置信息 -->
+        <!--
         <div v-if="serviceInfo" class="mt-4 px-4">
           <h3 class="mb-3 flex items-center gap-2 text-lg font-medium">
             <icon-location /> 位置信息
@@ -166,6 +169,7 @@ const typeMap: TypeMap = {
         </div>
 
         <a-divider />
+        -->
 
         <!-- 资质信息 -->
         <div class="mt-4 px-4">
