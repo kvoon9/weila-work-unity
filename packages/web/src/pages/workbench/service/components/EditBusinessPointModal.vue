@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { changeBusinessPoint, GetBusinessPointListModel, useBusinessPointList } from '@weila/network'
-import { ref as deepRef, shallowRef } from 'vue'
+import type { GetBusinessPointListModel } from '@weila/network'
 import Message from '@arco-design/web-vue/es/message'
+import { changeBusinessPoint, useBusinessPointList } from '@weila/network'
+import { ref as deepRef, shallowRef } from 'vue'
 import FileUploader from '~/components/FileUploader.vue'
 import MapPicker from '~/components/MapPicker.vue'
 
@@ -44,8 +45,8 @@ const { mutateAsync, isPending: isChangingBusinessPoint } = changeBusinessPoint(
         </a-form-item>
         <a-form-item field="album" label="业务展示">
           <FileUploader
-            w-120
             v-model:is-uploading="isUploadingAlbum"
+            w-120
             classes="bg-neutral-200 dark:bg-neutral-800"
             :initial-files="form.album"
             @update:files="(files: string[]) => form.album = files"
@@ -55,11 +56,14 @@ const { mutateAsync, isPending: isChangingBusinessPoint } = changeBusinessPoint(
           <TheModal v-model:open="isMapPickerModalOpen" title="选择位置">
             <a-button>
               <span max-w-60 truncate>{{ form?.address }}</span>
-              <i mx2 i-carbon-location-filled />
+              <i i-carbon-location-filled mx2 />
             </a-button>
             <template #content>
               <div h80vh w80vw>
                 <MapPicker
+                  :options="{
+                    center: [form.lon, form.lat],
+                  }"
                   @update:value="(value: any) => {
                     form.lon = value.lon
                     form.lat = value.lat
