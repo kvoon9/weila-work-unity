@@ -1,4 +1,4 @@
-import ImageMin from 'unplugin-imagemin/vite'
+// import ImageMin from 'unplugin-imagemin/vite'
 import { mergeConfig } from 'vite'
 import configArcoResolverPlugin from './plugins/arcoResolver'
 import configCompressPlugin from './plugins/compress'
@@ -25,8 +25,7 @@ export default mergeConfig(
       configCompressPlugin('gzip'),
       configVisualizerPlugin(),
       configArcoResolverPlugin(),
-      // @ts-expect-error type error
-      ImageMin(),
+      // ImageMin(),
       // DistZip({
       //   filename() {
       //     const date = new Date()

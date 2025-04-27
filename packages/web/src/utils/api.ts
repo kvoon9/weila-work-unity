@@ -26,19 +26,19 @@ const options: CreateWeilaApiOptions = {
 }
 
 export const weilaFetch = createWeilaFetchV1({
-  baseURL: 'v1',
+  baseURL: '/v1',
   ...options,
 })
 
 export const $v1 = weilaFetch
 
 export const $v2 = createWeilaFetchV2({
-  baseURL: 'v2',
+  baseURL: '/v2',
   ...options,
 })
 
 export const $weilaPublicRequest = createRequest({
-  baseURL: 'v1',
+  baseURL: '/v1',
   ...options,
   options() {
     return {}
@@ -46,13 +46,13 @@ export const $weilaPublicRequest = createRequest({
 })
 
 export const $weilaRequestV1 = createWeilaRequestV1({
-  baseURL: 'v1',
+  baseURL: '/v1',
   ...options,
 })
 
 export const weilaRequest = $weilaRequestV1
 
 export const $weilaRequestV2 = createWeilaRequestV2({
-  baseURL: 'v2',
+  baseURL: '/v2',
   ...options,
 })
