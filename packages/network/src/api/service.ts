@@ -371,3 +371,32 @@ export const useDelBusinessPointStaff = createSharedComposable(($v2: $Fetch, opt
     ...options,
   })
 })
+
+export const createBusinessSchema = z.object({
+  merchant: z.object({
+    type: z.number(),
+    name: z.string().max(50, '名称最长50个字符'),
+    avatar: z.string(),
+    intro: z.string().max(200, '简介最长200个字符'),
+    phone: z.string().length(11, '手机号必须为11位'),
+    album: z.array(z.string()),
+    citycode: z.string(),
+    adcode: z.string(),
+    lat: z.number(),
+    lon: z.number(),
+    township: z.string(),
+    address: z.string(),
+  }),
+  type: z.number().default(0).optional(),
+})
+
+export type CreateBusinessPayload = z.infer<typeof createBusinessSchema>
+
+export type CreateBusinessModel = never
+
+export function createBusiness($v2: $Fetch, options?: UseMutationOptions<CreateBusinessModel, DefaultError, CreateBusinessPayload>) {
+  return useMutation<CreateBusinessModel, DefaultError, CreateBusinessPayload>({
+    mutationFn: payload => $v2<CreateBusinessModel>('corp/busi/create-business', { body: { business: payload } }),
+    ...options,
+  })
+}

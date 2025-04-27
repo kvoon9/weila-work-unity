@@ -5,7 +5,9 @@ import { useRouteParams } from '@vueuse/router'
 import { createBusinessPoint, useBusinessPointList } from '@weila/network'
 import { reactive, shallowRef } from 'vue'
 import { useI18n } from 'vue-i18n'
+import AvatarUploader from '~/components/AvatarUploader.vue'
 import FileUploader from '~/components/FileUploader.vue'
+import { isRemoteImage } from '~/utils/is'
 
 const sid = useRouteParams('sid', 0, { transform: Number })
 
@@ -33,8 +35,20 @@ const form = reactive<CreateBusinessPointPayload>({
   avatar: '',
 })
 
+const avatarUploaderRef = shallowRef(null)
 const isUploadingAlbum = shallowRef(false)
 const isMapPickerModalOpen = shallowRef(false)
+
+function handleCreate() {
+  // 上传头像
+  // @ts-expect-error type error: `defineExpose` no type declare find
+  const { upload } = avatarUploaderRef.value
+  if (form.avatar && !isRemoteImage(form.avatar)) {
+    return upload().then(() => create(form))
+  }
+
+  return create(form)
+}
 </script>
 
 <template>
@@ -55,6 +69,9 @@ const isMapPickerModalOpen = shallowRef(false)
         </a-form-item>
         <a-form-item label="简介" field="intro">
           <a-textarea v-model="form.intro" :rows="3" />
+        </a-form-item>
+        <a-form-item label="头像" field="avatar">
+          <AvatarUploader ref="avatarUploaderRef" v-model:src="form.avatar" />
         </a-form-item>
         <a-form-item label="业务展示" field="album">
           <FileUploader
@@ -92,7 +109,7 @@ const isMapPickerModalOpen = shallowRef(false)
         :disabled="isCreating"
         :loading="isCreating"
         type="primary"
-        @click="() => create(form)"
+        @click="handleCreate"
       >
         保存
       </a-button>

@@ -2,6 +2,7 @@
 import type { GetBusinessPointListModel } from '@weila/network'
 import { useRouteParams } from '@vueuse/router'
 import { useBusinessPointList } from '@weila/network'
+import { shallowRef } from 'vue'
 import { useRouter } from 'vue-router'
 import CreateBusinessPointModal from '../../components/CreateBusinessPointModal.vue'
 import DelBusinessPointModal from '../../components/DelBusinessPointModal.vue'
@@ -36,6 +37,11 @@ function onPointSelect(point: GetBusinessPointListModel['points'][number], _: Po
 
 const tableColumns = [
   {
+    title: '头像',
+    dataIndex: 'avatar',
+    width: 70,
+  },
+  {
     title: '名称',
     dataIndex: 'name',
     width: 150,
@@ -69,6 +75,11 @@ const tableColumns = [
 
       <a-table :columns="tableColumns" :data="data?.points || []" @row-click="onPointSelect">
         <template #columns>
+          <a-table-column title="头像" data-index="avatar" :width="70">
+            <template #cell="{ record }">
+              <a-avatar :image-url="record.avatar" :style="{ backgroundColor: '#3370ff' }" />
+            </template>
+          </a-table-column>
           <a-table-column title="名称" data-index="name" :width="150">
             <template #cell="{ record }">
               {{ record.name }}

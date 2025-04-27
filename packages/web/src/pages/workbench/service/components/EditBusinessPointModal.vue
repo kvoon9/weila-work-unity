@@ -3,8 +3,10 @@ import type { GetBusinessPointListModel } from '@weila/network'
 import Message from '@arco-design/web-vue/es/message'
 import { changeBusinessPoint, useBusinessPointList } from '@weila/network'
 import { ref as deepRef, shallowRef } from 'vue'
+import AvatarUploader from '~/components/AvatarUploader.vue'
 import FileUploader from '~/components/FileUploader.vue'
 import MapPicker from '~/components/MapPicker.vue'
+import { isRemoteImage } from '~/utils/is'
 
 const props = defineProps<{
   point: GetBusinessPointListModel['points'][number]
@@ -13,6 +15,7 @@ const props = defineProps<{
 const isEditBusinessPointModalOpen = defineModel<boolean>('open', { required: true })
 
 const form = deepRef(props.point)
+const avatarUploaderRef = templateRef('avatarUploaderRef')
 
 watchImmediate(() => props.point, () => {
   form.value = JSON.parse(JSON.stringify(props.point))
@@ -28,6 +31,16 @@ const { mutateAsync, isPending: isChangingBusinessPoint } = changeBusinessPoint(
     useBusinessPointList($v2, { sid: props.point.sid }).refetch()
   },
 })
+
+async function handleSubmit() {
+  // @ts-expect-error type error: `defineExpose` no type declare find
+  const { upload } = avatarUploaderRef.value
+  if (upload && form.value.avatar && !isRemoteImage(form.value.avatar)) {
+    await upload()
+  }
+
+  mutateAsync({ ...form.value })
+}
 </script>
 
 <template>
@@ -39,6 +52,9 @@ const { mutateAsync, isPending: isChangingBusinessPoint } = changeBusinessPoint(
         </a-form-item>
         <a-form-item field="phone" label="电话">
           <a-input v-model="form.phone" :max-length="11" show-word-limit />
+        </a-form-item>
+        <a-form-item field="avatar" label="头像">
+          <AvatarUploader ref="avatarUploaderRef" v-model:src="form.avatar" />
         </a-form-item>
         <a-form-item field="intro" label="简介">
           <a-textarea v-model="form.intro" :rows="3" />
@@ -83,7 +99,7 @@ const { mutateAsync, isPending: isChangingBusinessPoint } = changeBusinessPoint(
         :disabled="isChangingBusinessPoint || isUploadingAlbum"
         :loading="isChangingBusinessPoint"
         type="primary"
-        @click="() => mutateAsync({ ...form })"
+        @click="handleSubmit"
       >
         保存
       </a-button>

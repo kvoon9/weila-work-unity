@@ -33,8 +33,39 @@ const form = reactive<ChangeBusinessPayload['business']['merchant']>({
 })
 
 const isUploadingAlbum = shallowRef(false)
-
+const avatarUploaderRef = templateRef('avatarUploaderRef')
 const isMapPickerModalOpen = shallowRef(false)
+
+// 检查图片是否为远程图片
+function isRemoteImage(url: string) {
+  return url && (url.startsWith('http://') || url.startsWith('https://'))
+}
+
+// 处理提交
+async function handleSubmit() {
+  // 如果头像不是远程图片，需要先上传
+  if (form.avatar && !isRemoteImage(form.avatar)) {
+    // @ts-expect-error type error: `defineExpose` no type declare find
+    const { upload } = avatarUploaderRef.value
+    if (upload) {
+      await upload()
+    }
+  }
+
+  // 确保 businessData 存在
+  if (!businessData.value)
+    return
+
+  changeBusiness({
+    business: {
+      ...businessData.value,
+      merchant: {
+        ...businessData.value.merchant,
+        ...form,
+      },
+    },
+  })
+}
 </script>
 
 <template>
@@ -55,6 +86,9 @@ const isMapPickerModalOpen = shallowRef(false)
         </a-form-item>
         <a-form-item field="intro" label="简介">
           <a-textarea v-model="form.intro" :rows="3" />
+        </a-form-item>
+        <a-form-item field="avatar" label="头像">
+          <AvatarUploader ref="avatarUploaderRef" v-model:src="form.avatar" />
         </a-form-item>
         <a-form-item field="phone" label="业务展示">
           <FileUploader
@@ -97,15 +131,8 @@ const isMapPickerModalOpen = shallowRef(false)
       <a-button
         :disabled="isChangingBusiness"
         :loading="isChangingBusiness"
-        type="primary" @click="() => changeBusiness({
-          business: {
-            ...businessData!,
-            merchant: {
-              ...businessData!.merchant,
-              ...form,
-            },
-          },
-        })"
+        type="primary"
+        @click="handleSubmit"
       >
         保存
       </a-button>

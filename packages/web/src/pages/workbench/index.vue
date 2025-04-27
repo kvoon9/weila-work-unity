@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { useMyBusiness, useServiceLegal } from '@weila/network'
+import { shallowRef } from 'vue'
+import CreateBusinessModal from './service/components/CreateBusinessModal.vue'
 
 const { t } = useI18n()
 
@@ -45,11 +47,13 @@ const serviceRoute = computed(() => {
   if (!isVerified.value)
     return '/workbench/service/set-license'
 
-  if (!hasBusiness.value)
-    return '/workbench/service/create'
+  // if (!hasBusiness.value)
+  //   return '/workbench/service/create'
 
   return '/workbench/service/set-license'
 })
+
+const isCreateBusinessModalOpen = shallowRef(false)
 </script>
 
 <template>
@@ -77,7 +81,14 @@ const serviceRoute = computed(() => {
       <button
         :disabled="isFetchingService"
         class="rounded-lg bg-white p-6 shadow-md transition-shadow duration-300 dark:bg-neutral-800 hover:shadow-lg"
-        @click="() => $router.push(serviceRoute)"
+        @click="() => {
+          if (!hasBusiness) {
+            isCreateBusinessModalOpen = true
+          }
+          else {
+            $router.push(serviceRoute)
+          }
+        }"
       >
         <div class="mb-4 flex items-center gap3">
           <a-spin v-if="isFetchingService" />
@@ -101,5 +112,6 @@ const serviceRoute = computed(() => {
         </div>
       </RouterLink>
     </div>
+    <CreateBusinessModal v-model:open="isCreateBusinessModalOpen" />
   </div>
 </template>
