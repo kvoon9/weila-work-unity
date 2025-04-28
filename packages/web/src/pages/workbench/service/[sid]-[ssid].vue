@@ -2,6 +2,7 @@
 import { objectKeys } from '@antfu/utils'
 import { useRouteParams } from '@vueuse/router'
 import { useMyBusiness } from '@weila/network'
+import { ref as deepRef } from 'vue'
 
 const { data: myBusiness } = useMyBusiness($v2)
 
@@ -18,7 +19,7 @@ const menus = computed<Record<string, string>>(() => {
   }
 })
 
-const selectedKeys = ref<(string | undefined)[]>([])
+const selectedKeys = deepRef<(string | undefined)[]>([])
 
 watch(router.currentRoute, () => {
   selectedKeys.value = [objectKeys(menus.value).find((menu) => {
@@ -29,7 +30,7 @@ watch(router.currentRoute, () => {
 </script>
 
 <template>
-  <div h-full flex>
+  <div h-full flex of-hidden>
     <section h-full w60 shrink-0 border-r-1 p2 dark:border-gray-700 bg-base>
       <a-menu v-model:selected-keys="selectedKeys" auto-open-selected :default-open-keys="[myBusiness?.merchant.name]">
         <a-menu-item v-for="label, path in menus" :key="path" @click="$router.push(path)">
@@ -43,8 +44,8 @@ watch(router.currentRoute, () => {
         </button> -->
       </a-menu>
     </section>
-    <section relative h-full w-full>
-      <RouterView absolute inset-0 of-scroll />
+    <section relative h-full w-full of-scroll>
+      <RouterView absolute inset-0 />
     </section>
   </div>
 </template>

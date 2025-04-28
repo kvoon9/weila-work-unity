@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { objectKeys } from '@antfu/utils'
-import { reactive } from 'vue'
+import { ref as deepRef, reactive, shallowRef } from 'vue'
 import CreateCorpModal from './contact/components/CreateCorpModal.vue'
 
 definePage({
@@ -17,7 +17,7 @@ const corpStore = useCorpStore()
 const { refetch } = corpStore
 const { data: corp, isFetching } = storeToRefs(corpStore)
 
-const isCreateCorpModalVisible = ref(false)
+const isCreateCorpModalVisible = shallowRef(false)
 
 const menus = reactive({
   '/contact/org': 'corp-info',
@@ -26,7 +26,7 @@ const menus = reactive({
   '/contact/member': 'submenu.member-manage',
 } as const)
 
-const selectedKeys = ref<(string | undefined)[]>([])
+const selectedKeys = deepRef<(string | undefined)[]>([])
 
 watch(router.currentRoute, (curRoute) => {
   selectedKeys.value = [objectKeys(menus).find((menu) => {
@@ -38,9 +38,9 @@ watch(router.currentRoute, (curRoute) => {
 </script>
 
 <template>
-  <div h-full flex>
-    <section h-full w60 shrink-0 border-r-1 p2 dark:border-gray-700 bg-base>
-      <a-skeleton v-if="isFetching" animation>
+  <div h-full flex of-hidden>
+    <section h-full w60 shrink-0 border-r-1 dark:border-gray-700 bg-base>
+      <a-skeleton v-if="isFetching" animation m4>
         <a-space direction="vertical" :style="{ width: '100%' }" size="large">
           <a-skeleton-line :rows="4" />
         </a-space>
@@ -59,10 +59,9 @@ watch(router.currentRoute, (curRoute) => {
         </button>
       </a-menu>
     </section>
-    <section h-full w-full>
-      <RouterView h-full w-full />
+    <section relative h-full w-full of-scroll>
+      <RouterView absolute inset-0 />
     </section>
+    <CreateCorpModal v-model:open="isCreateCorpModalVisible" @success="refetch" />
   </div>
-
-  <CreateCorpModal v-model:open="isCreateCorpModalVisible" @success="refetch" />
 </template>

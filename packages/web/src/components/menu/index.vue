@@ -27,6 +27,7 @@
 <script setup lang="ts">
 import type { RouteRecordRaw } from 'vue-router'
 import { isString } from '@antfu/utils'
+import { shallowRef } from 'vue'
 import { routes } from 'vue-router/auto-routes'
 
 const router = useRouter()
@@ -43,7 +44,7 @@ function* traverse(routes: RouteRecordRaw[]): Generator<RouteRecordRaw> {
   }
 }
 
-const menus = ref<{
+const menus = shallowRef<{
   label: string
   path: string
   icon?: string
@@ -80,7 +81,7 @@ const defaultSelectedKeys = computed(() => {
   return [key]
 })
 
-const selectedKeys = ref<string[]>(defaultSelectedKeys.value)
+const selectedKeys = shallowRef<string[]>(defaultSelectedKeys.value)
 
 function goto(path: string) {
   router.push(path)
@@ -92,6 +93,7 @@ function goto(path: string) {
     v-model:selected-keys="selectedKeys"
     :default-selected-keys="defaultSelectedKeys"
     mode="pop"
+    w-60
   >
     <a-menu-item v-for="menu in menus" :key="menu.path" @click="() => goto(menu.path)">
       <template #icon>

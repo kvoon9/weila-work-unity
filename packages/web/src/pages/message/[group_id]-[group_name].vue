@@ -2,6 +2,7 @@
 import type { MessageGetGroupHistoryMessageModel, MessageGetGroupHistoryMessagePayload } from 'generated/mock/weila'
 import type { Reactive } from 'vue'
 import { useInfiniteQuery } from '@tanstack/vue-query'
+import { reactive, shallowRef } from 'vue'
 import { weilaApiUrl } from '~/api'
 
 import MessageFileContent from '~/components/MessageFileContent.vue'
@@ -42,13 +43,13 @@ const messageContainerEl = templateRef('messageContainerEl')
 const { arrivedState } = useScroll(messageContainerEl)
 
 const INIT_ID = 0
-const pageSize = ref(20)
+const pageSize = shallowRef(20)
 
 function getToday() {
   return new Date().toISOString().split('T')[0]
 }
 
-const date = ref(getToday())
+const date = shallowRef(getToday())
 
 const payload: Reactive<MessageGetGroupHistoryMessagePayload> = reactive({
   group_id: Number(route.params.group_id),
@@ -96,50 +97,52 @@ $inspect(data)
 </script>
 
 <template>
-  <main class="absolute inset-0 flex flex-col text-gray-900 bg-base dark:text-gray-100">
+  <div h-full grid="~ rows-[min-content_1fr]">
     <header flex items-center gap4 p-4 dark:bg-dark-300>
       <h1 class="text-2xl font-bold">
         {{ route.params.group_name }}
       </h1>
       <a-date-picker v-model="date" />
     </header>
-
-    <a-empty v-if="!data?.pages.length || !Object.keys(users).length" mt30 h-full />
-    <ul
-      v-else
-      ref="messageContainerEl" relative flex grow-1 flex-col flex-col-reverse of-scroll overflow-y-auto
-      scroll-smooth bg-neutral-1 p-4 space-y-4
-      dark:bg-dark-800
-    >
-      <template v-for="page in data?.pages">
-        <li v-for="message in page" id="message-list" :key="message.msg_id" flex gap1 p-3>
-          <section>
-            <a-avatar>
-              <img alt="avatar" :src="users[message.user_id]?.avatar">
-            </a-avatar>
-          </section>
-          <section>
-            <div color-neutral>
-              <div space-x-2>
-                <span>
-                  {{ users[message.user_id]?.name }}({{ users[message.user_id]?.user_num }})
-                </span>
-                <span>
-                  {{ new Date(message.created * 1000).toLocaleString() }}
-                </span>
+    <div relative of-scroll>
+      <a-empty v-if="!data?.pages.length || !Object.keys(users).length" absolute position-center />
+      <ul
+        v-else
+        ref="messageContainerEl" relative flex grow-1 flex-col flex-col-reverse of-scroll overflow-y-auto
+        scroll-smooth bg-neutral-1 p-4 space-y-4
+        dark:bg-dark-800
+      >
+        <template v-for="page in data?.pages">
+          <li v-for="message in page" id="message-list" :key="message.msg_id" flex gap1 p-3>
+            <section>
+              <a-avatar>
+                <img alt="avatar" :src="users[message.user_id]?.avatar">
+              </a-avatar>
+            </section>
+            <section>
+              <div color-neutral>
+                <div space-x-2>
+                  <span>
+                    {{ users[message.user_id]?.name }}({{ users[message.user_id]?.user_num }})
+                  </span>
+                  <span>
+                    {{ new Date(message.created * 1000).toLocaleString() }}
+                  </span>
+                </div>
               </div>
-            </div>
 
-            <div class="content">
-              <!-- @vue-expect-error type error -->
-              <component :is="messageTypeComponentMap[message.type] || MessageUnsupportedContent" :content="message.content" />
-            </div>
-          </section>
-        </li>
-      </template>
-      <a-back-top target-container="#message-list" absolute :visible-height="0" />
-    </ul>
-  </main>
+              <div class="content">
+                <!-- @vue-expect-error type error -->
+                <component :is="messageTypeComponentMap[message.type] || MessageUnsupportedContent" :content="message.content" />
+              </div>
+            </section>
+          </li>
+        </template>
+
+        <a-back-top target-container="#message-list" absolute :visible-height="0" />
+      </ul>
+    </div>
+  </div>
 </template>
 
 <style scoped>
