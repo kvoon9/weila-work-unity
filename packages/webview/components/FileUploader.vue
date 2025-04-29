@@ -106,7 +106,12 @@ defineExpose({
 
       <Icon :class="uploadStateClassMap[file.state]" :name="uploadStateIconMap[file.state]" size-4 absolute right-2 bottom-2 color-primary rounded-full />
 
-      <button type="button" absolute top-2 right-2 bg-white rounded-full @click="() => filelist.splice(index, 1)">
+      <button
+        type="button" absolute top-2 right-2 bg-white rounded-full @click="() => {
+          filelist.splice(index, 1)
+          emits('update:files', filelist.map(f => f.url || f.dataUrl))
+        }"
+      >
         <Icon name="ph:x" size-4 rounded-full />
       </button>
     </div>

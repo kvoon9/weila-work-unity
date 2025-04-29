@@ -30,6 +30,8 @@ const { files, open } = useFileDialog({
 
 const { mutateAsync: uploadFile, filelist } = useUploadFile($weilaRequestV2)
 
+$inspect(filelist.value)
+
 filelist.value.push(...initialFiles.value.map(toFileWrapper))
 
 const isCropperModalVisible = shallowRef(false)
@@ -83,8 +85,8 @@ const uploadStateClassMap = {
   error: 'color-red',
 }
 
-const viewerVisible = ref(false)
-const currentImage = ref<string>('')
+const viewerVisible = shallowRef(false)
+const currentImage = shallowRef<string>('')
 
 function handlePreview(file: { url?: string, dataUrl?: string }) {
   currentImage.value = file.url || file.dataUrl || ''
@@ -108,7 +110,12 @@ defineExpose({
         ]" absolute bottom-2 right-2 rounded-full color-primary size-4
       />
 
-      <button type="button" absolute right-2 top-2 flex items-center rounded-full bg-white:50 @click="() => filelist.splice(index, 1)">
+      <button
+        type="button" absolute right-2 top-2 flex items-center rounded-full bg-white:50 @click="() => {
+          filelist.splice(index, 1)
+          emits('update:files', filelist.map(f => f.url || f.dataUrl))
+        }"
+      >
         <i i-carbon-close inline-block rounded-full bg-black size-8 />
       </button>
     </div>
