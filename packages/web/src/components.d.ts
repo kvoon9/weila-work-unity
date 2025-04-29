@@ -31,6 +31,7 @@ declare module 'vue' {
     HoverCardRoot: typeof import('radix-vue')['HoverCardRoot']
     HoverCardTrigger: typeof import('radix-vue')['HoverCardTrigger']
     List: typeof import('./components/message-box/list.vue')['default']
+    LoadingMask: typeof import('./components/LoadingMask.vue')['default']
     LoginBanner: typeof import('./components/login-banner/index.vue')['default']
     MapPicker: typeof import('./components/MapPicker.vue')['default']
     Menu: typeof import('./components/menu/index.vue')['default']

@@ -3,6 +3,7 @@ import { objectEntries } from '@antfu/utils'
 import Message from '@arco-design/web-vue/es/message'
 import { useMutation, useQuery } from '@tanstack/vue-query'
 import { UseImage } from '@vueuse/components'
+import { ref as deepRef, shallowRef } from 'vue'
 import { TrackType } from '~/api/contact'
 
 import AddMembersModal from './add-members-modal.vue'
@@ -27,7 +28,7 @@ interface Member {
   avatar: string
 }
 
-const { data: members, refetch } = useQuery<Member[]>({
+const { data: members, refetch, isFetching: isFetchingMembers } = useQuery<Member[]>({
   queryKey: ['members', groupId],
   queryFn: () => weilaFetch('/corp/web/group-member-getall', {
     body: {
@@ -70,7 +71,7 @@ const trackOptions = objectEntries(TrackTypeNameMap)
     value,
   }))
 
-const changeMemberModalVisible = ref(false)
+const changeMemberModalVisible = shallowRef(false)
 
 let changeMemberForm = reactive<ChangeMemberPayload>({
   group_id: groupId,
@@ -99,7 +100,7 @@ interface DeleteMemberPayload {
   member_ids: number[]
 }
 
-const toDeleteMembers = ref<string[]>([])
+const toDeleteMembers = deepRef<string[]>([])
 $inspect(toDeleteMembers)
 
 const deleteMemberForm = computed<DeleteMemberPayload>(() => ({
@@ -107,7 +108,7 @@ const deleteMemberForm = computed<DeleteMemberPayload>(() => ({
   member_ids: toDeleteMembers.value.map(i => Number(i)),
 }))
 
-const deleteMemberModalVisible = ref(false)
+const deleteMemberModalVisible = shallowRef(false)
 const { mutate: deleteMembers } = useMutation({
   mutationFn: (payload: DeleteMemberPayload) => {
     if (!payload.member_ids.length) {
@@ -124,7 +125,7 @@ const { mutate: deleteMembers } = useMutation({
   },
 })
 
-const addMemberModalVisible = ref(false)
+const addMemberModalVisible = shallowRef(false)
 </script>
 
 <template>
@@ -209,12 +210,15 @@ const addMemberModalVisible = ref(false)
     <p color-red>
       This action cannot be undone.
     </p> -->
-    <a-transfer
-      v-model:model-value="toDeleteMembers" :data="members?.map(i => ({
-        value: String(i.user_id),
-        label: i.name,
-        disabled: false,
-      }))" simple mx-auto
-    />
+    <div relative>
+      <LoadingMask :open="isFetchingMembers" />
+      <a-transfer
+        v-model:model-value="toDeleteMembers" :data="members?.map(i => ({
+          value: String(i.user_id),
+          label: i.name,
+          disabled: false,
+        }))" simple mx-auto
+      />
+    </div>
   </a-modal>
 </template>

@@ -15,7 +15,7 @@ const router = useRouter()
 
 const corpStore = useCorpStore()
 const { refetch } = corpStore
-const { data: corp, isFetching } = storeToRefs(corpStore)
+const { data: corp, isSuccess } = storeToRefs(corpStore)
 
 const isCreateCorpModalVisible = shallowRef(false)
 
@@ -39,24 +39,22 @@ watch(router.currentRoute, (curRoute) => {
 
 <template>
   <div h-full flex of-hidden>
-    <section h-full w60 shrink-0 border-r-1 dark:border-gray-700 bg-base>
-      <a-skeleton v-if="isFetching" animation m4>
-        <a-space direction="vertical" :style="{ width: '100%' }" size="large">
-          <a-skeleton-line :rows="4" />
-        </a-space>
-      </a-skeleton>
-      <a-menu v-else v-model:selected-keys="selectedKeys" auto-open-selected :default-open-keys="[corp?.name]">
+    <section relative h-full w60 shrink-0 border-r-1 dark:border-gray-700 bg-base>
+      <LoadingMask :open="!isSuccess" />
+      <a-menu v-model:selected-keys="selectedKeys" auto-open-selected :default-open-keys="[corp?.name]">
+        <button
+          v-if="!corp"
+          hover="bg-primary-300" bg-primary-400 color-white list-btn
+          @click="isCreateCorpModalVisible = true"
+        >
+          {{ t('corp.create.form.title') }}
+        </button>
+
         <template v-if="corp">
           <a-menu-item v-for="label, path in menus" :key="path" @click="router.push(path)">
             {{ path === '/contact/org' ? corp?.name || t(label) : t(label) }}
           </a-menu-item>
         </template>
-        <button
-          v-if="!corp" hover="bg-primary-300" bg-primary color-white list-btn
-          @click="isCreateCorpModalVisible = true"
-        >
-          {{ t('corp.create.form.title') }}
-        </button>
       </a-menu>
     </section>
     <section relative h-full w-full of-scroll>

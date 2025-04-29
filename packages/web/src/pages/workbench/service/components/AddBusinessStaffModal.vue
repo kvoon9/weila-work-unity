@@ -4,6 +4,7 @@ import type { MemberModel } from '~/api/contact'
 import { Message } from '@arco-design/web-vue'
 import { useQuery } from '@tanstack/vue-query'
 import { useAddBusinessStaffs, useBusinessStaffList } from '@weila/network'
+import { ref as deepRef, shallowRef } from 'vue'
 import { weilaApiUrl } from '~/api'
 
 const props = defineProps<{
@@ -11,13 +12,13 @@ const props = defineProps<{
 }>()
 
 const { t } = useI18n()
-const selectedIds = ref<string[]>([])
-const open = ref(false)
-const { data: staffList, refetch: refetchStaffList } = useBusinessStaffList($v2, { sid: props.sid })
+const selectedIds = deepRef<string[]>([])
+const open = shallowRef(false)
+const { data: staffList, refetch: refetchStaffList, isFetching: isFetchingStaffList } = useBusinessStaffList($v2, { sid: props.sid })
 
 const { org_num } = storeToRefs(useCorpStore())
 
-const { data: members } = useQuery<Array<MemberModel>>({
+const { data: members, isFetching: isFetchingMembers } = useQuery<Array<MemberModel>>({
   enabled: computed(() => Boolean(org_num.value)),
   queryKey: [weilaApiUrl('/corp/web/member-getall'), org_num.value],
   queryFn: () => weilaFetch(weilaApiUrl('/corp/web/member-getall'), {
@@ -69,7 +70,8 @@ function handleAddStaffs() {
       添加客服
     </a-button>
     <template #content>
-      <div class="p-4">
+      <div relative p-4>
+        <LoadingMask :open="isFetchingStaffList || isFetchingMembers" />
         <a-transfer
           v-model:model-value="selectedIds"
           simple

@@ -4,6 +4,7 @@ import type { GroupMemberAddPayload, GroupMemberGetallModel } from 'generated/mo
 import type { MemberModel } from '~/api/contact'
 import { Message } from '@arco-design/web-vue'
 import { useMutation, useQuery } from '@tanstack/vue-query'
+import { ref as deepRef, shallowRef } from 'vue'
 import { weilaApiUrl } from '~/api'
 
 const props = defineProps<{
@@ -14,9 +15,9 @@ const emits = defineEmits(['success'])
 
 const { t } = useI18n()
 
-const open = ref(false)
+const open = shallowRef(false)
 
-const selectedIds = ref<string[]>([])
+const selectedIds = deepRef<string[]>([])
 $inspect(selectedIds)
 
 const form = reactive<GroupMemberAddPayload>({
@@ -30,7 +31,7 @@ $inspect(form)
 
 const { org_num } = storeToRefs(useCorpStore())
 
-const { data: members } = useQuery<Array<MemberModel>>({
+const { data: members, isFetching: isFetchingMembers } = useQuery<Array<MemberModel>>({
   enabled: computed(() => Boolean(org_num.value)),
   queryKey: [weilaApiUrl('/corp/web/member-getall'), org_num.value],
   queryFn: () => weilaFetch(weilaApiUrl('/corp/web/member-getall'), {
@@ -40,7 +41,7 @@ const { data: members } = useQuery<Array<MemberModel>>({
   }).then(i => i.members),
 })
 
-const { data: groupMembers, refetch: refetchGroupMembers } = useQuery<GroupMemberGetallModel['data']['members']>({
+const { data: groupMembers, refetch: refetchGroupMembers, isFetching: isFetchingGroupMembers } = useQuery<GroupMemberGetallModel['data']['members']>({
   enabled: computed(() => Boolean(open.value)),
   queryKey: [weilaApiUrl('/corp/web/group-member-getall'), props.groupId],
   queryFn: () => weilaFetch(weilaApiUrl('/corp/web/group-member-getall'), {
@@ -102,10 +103,13 @@ const { mutate, isPending } = useMutation({
           {{ t('button.add-group-member') }}
         </DialogTitle>
 
-        <a-transfer
-          v-model:model-value="selectedIds" simple :title="[t('corp.member'), t('group.member')]" show-search
-          :data="data" :default-value="value"
-        />
+        <div relative p4>
+          <LoadingMask :open="isFetchingGroupMembers || isFetchingMembers" />
+          <a-transfer
+            v-model:model-value="selectedIds" simple :title="[t('corp.member'), t('group.member')]" show-search
+            :data="data" :default-value="value"
+          />
+        </div>
 
         <div class="mt-[25px] flex justify-end">
           <DialogClose as-child>
