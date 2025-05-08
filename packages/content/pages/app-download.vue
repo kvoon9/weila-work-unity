@@ -1,25 +1,23 @@
 <script setup lang="ts">
 import { useQRCode } from '@vueuse/integrations/useQRCode'
-import { AppDownloadLinkType, useAppDownloadLink } from '@weila/network'
+import { useRouteQuery } from '@vueuse/router'
+import { useAppDownloadLink } from '@weila/network'
 import { normalizeURL } from 'ufo'
 
-definePageMeta({
-  layout: 'default',
-  meta: {
-    public: true,
-  },
-})
+enum AppDownloadLinkType {
+  CorpDemo = 'corp-demo',
+  CorpNormal = 'corp-normal',
+  WeilaDemo = 'weila-demo',
+  WeilaNormal = 'weila-normal',
+}
 
 const router = useRouter()
 
-const { data } = useAppDownloadLink($v1, {
-  type: AppDownloadLinkType.CorpNormal,
-})
+const type = useRouteQuery<AppDownloadLinkType>('type', AppDownloadLinkType.WeilaNormal)
+
+const { data } = useAppDownloadLink($v1, computed(() => ({ type: type.value })))
 
 const url = computed(() => normalizeURL(data.value?.url || ''))
-
-$inspect(data)
-
 const qrcode = useQRCode(url)
 </script>
 

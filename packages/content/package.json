@@ -1,0 +1,51 @@
+{
+  "name": "weila-content",
+  "type": "module",
+  "version": "0.0.1",
+  "private": true,
+  "packageManager": "pnpm@9.15.4",
+  "scripts": {
+    "prepare": "nuxt prepare",
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "up": "taze -I major",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "generate": "nuxt prepare && nuxt generate",
+    "generate:zip": "nuxt prepare && nuxt generate && nr zip",
+    "generate:preview": "nr generate:zip && nr preview",
+    "zip": "esno ./scripts/zip.ts"
+  },
+  "dependencies": {
+    "@nuxt/eslint": "catalog:",
+    "@nuxt/icon": "catalog:",
+    "@nuxt/kit": "catalog:",
+    "@tanstack/vue-query": "catalog:",
+    "@tanstack/vue-query-devtools": "catalog:",
+    "@vueuse/integrations": "catalog:",
+    "@vueuse/nuxt": "catalog:",
+    "@vueuse/router": "catalog:",
+    "@weila/network": "workspace:*",
+    "nuxt": "catalog:",
+    "qrcode": "catalog:",
+    "ufo": "catalog:",
+    "vue": "catalog:"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "catalog:",
+    "@iconify-json/ph": "catalog:",
+    "@iconify-json/svg-spinners": "catalog:",
+    "@unocss/core": "catalog:",
+    "@unocss/eslint-plugin": "catalog:",
+    "@unocss/nuxt": "catalog:",
+    "@unocss/preset-web-fonts": "catalog:",
+    "eslint": "catalog:",
+    "eslint-plugin-format": "catalog:",
+    "esno": "catalog:",
+    "typescript": "catalog:",
+    "unocss": "catalog:",
+    "zx": "catalog:"
+  }
+}

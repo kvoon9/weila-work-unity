@@ -146,9 +146,9 @@ function deleteAccount(e: Event, selectedAccount: string) {
       </div>
       <div class="mt-4 text-center text-sm leading-loose">
         下载
-        <NuxtLink to="/app-download" class="underline">
+        <a href="https://demo.weila.hk/weila-content/#/app-download" class="underline">
           安卓 APP
-        </NuxtLink>
+        </a>
       </div>
     </form>
   </div>

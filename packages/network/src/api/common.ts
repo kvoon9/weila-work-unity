@@ -1,10 +1,10 @@
 import type { UseMutationOptions } from '@tanstack/vue-query'
 import type { $Fetch } from 'ofetch'
-import type { Reactive } from 'vue'
+import type { MaybeRef, Reactive } from 'vue'
 import type { WeilaRequestInstance } from '../types'
 import { toArray } from '@antfu/utils'
 import { useMutation, useQuery } from '@tanstack/vue-query'
-import { computed, ref as deepRef, reactive } from 'vue'
+import { computed, ref as deepRef, reactive, unref } from 'vue'
 
 export type UploadFileWarpper = Reactive<{
   id: string
@@ -108,9 +108,9 @@ export interface AppDownloadLinkModel {
   avatar: string
 }
 
-export function useAppDownloadLink(api: $Fetch, body: Reactive<AppDownloadLinkPayload>) {
+export function useAppDownloadLink(api: $Fetch, body: MaybeRef<AppDownloadLinkPayload>) {
   return useQuery({
     queryKey: ['app-download-link', body],
-    queryFn: () => api<AppDownloadLinkModel>('web/app-download', { body }),
+    queryFn: () => api<AppDownloadLinkModel>('web/app-download', { body: unref(body) }),
   })
 }

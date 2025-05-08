@@ -137,10 +137,5 @@
     "vue-router": "catalog:",
     "vue-tsc": "catalog:",
     "zx": "catalog:"
-  },
-  "resolutions": {
-    "bin-wrapper": "npm:bin-wrapper-china",
-    "gifsicle": "5.2.0",
-    "rollup": "^4.28.1"
   }
 }

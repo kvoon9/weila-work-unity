@@ -121,11 +121,11 @@ onMounted(async () => {
             {{ t('login.form.register') }}
           </a-button>
         </router-link>
-        <router-link to="/android-download">
+        <a href="https://demo.weila.hk/weila-content/#/app-download">
           <a-button type="text" long class="login-form-register-btn">
             安卓 APP 下载
           </a-button>
-        </router-link>
+        </a>
       </a-space>
     </a-form>
   </div>
