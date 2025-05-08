@@ -1,8 +1,9 @@
 import type { UseMutationOptions } from '@tanstack/vue-query'
+import type { $Fetch } from 'ofetch'
 import type { Reactive } from 'vue'
 import type { WeilaRequestInstance } from '../types'
 import { toArray } from '@antfu/utils'
-import { useMutation } from '@tanstack/vue-query'
+import { useMutation, useQuery } from '@tanstack/vue-query'
 import { computed, ref as deepRef, reactive } from 'vue'
 
 export type UploadFileWarpper = Reactive<{
@@ -81,4 +82,35 @@ export function useUploadFile(request: WeilaRequestInstance, options?: Omit<UseM
       ...options,
     }),
   }
+}
+
+/**
+ * @description 应用下载链接类型
+ *
+ * corp-demo 企业测试版
+ * corp-normal 企业正式版
+ * weila-demo 微喇个人版测试版
+ * weila-normal 微喇个人正式版
+ */
+export enum AppDownloadLinkType {
+  CorpDemo = 'corp-demo',
+  CorpNormal = 'corp-normal',
+  WeilaDemo = 'weila-demo',
+  WeilaNormal = 'weila-normal',
+}
+
+export interface AppDownloadLinkPayload {
+  type: AppDownloadLinkType
+}
+
+export interface AppDownloadLinkModel {
+  url: string
+  avatar: string
+}
+
+export function useAppDownloadLink(api: $Fetch, body: Reactive<AppDownloadLinkPayload>) {
+  return useQuery({
+    queryKey: ['app-download-link', body],
+    queryFn: () => api<AppDownloadLinkModel>('web/app-download', { body }),
+  })
 }
