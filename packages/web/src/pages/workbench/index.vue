@@ -100,7 +100,7 @@ const isCreateBusinessModalOpen = shallowRef(false)
         </div>
       </button>
 
-      <RouterLink
+      <!-- <RouterLink
         to="/workbench/service-adt"
         class="rounded-lg bg-white p-6 shadow-md transition-shadow duration-300 dark:bg-neutral-800 hover:shadow-lg"
       >
@@ -110,7 +110,7 @@ const isCreateBusinessModalOpen = shallowRef(false)
             服务号审核
           </h3>
         </div>
-      </RouterLink>
+      </RouterLink> -->
     </div>
     <CreateBusinessModal v-model:open="isCreateBusinessModalOpen" />
   </div>
