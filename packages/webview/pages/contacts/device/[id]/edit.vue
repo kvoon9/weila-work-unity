@@ -50,7 +50,7 @@ const [name, nameAttrs] = defineField('name')
 const [job_num, job_numAttrs] = defineField('job_num')
 const [dept_id, dept_idAttrs] = defineField('dept_id')
 // const [phone, phoneAttrs] = defineField('phone')
-const [tts, ttsAttrs] = defineField('tts')
+const [_tts, _ttsAttrs] = defineField('tts')
 const [loc_share, loc_shareAttrs] = defineField('loc_share')
 const [track, trackAttrs] = defineField('track')
 
@@ -140,7 +140,7 @@ const { mutate: deleteDevice, isPending: isDeleting } = useMutation({
       </select>
       <span text-red>{{ errors.track }}</span>
 
-      <FormItemCheckBox v-model:model-value="tts" label="TTS" name="tts" :attrs="ttsAttrs" />
+      <!-- <FormItemCheckBox v-model:model-value="tts" label="TTS" name="tts" :attrs="ttsAttrs" /> -->
 
       <FormItemCheckBox v-model:model-value="loc_share" label="位置共享" name="loc_share" :attrs="loc_shareAttrs" />
 

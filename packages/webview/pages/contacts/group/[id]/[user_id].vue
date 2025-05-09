@@ -90,14 +90,14 @@ const { mutate: deleteMember, isPending: isDeleting } = useMutation({
             </span>
           </span>
         </div>
-        <div flex items-center class="border-b pb-2">
+        <!-- <div flex items-center class="border-b pb-2">
           <span w-24 flex-shrink-0 font-medium text-gray-600>tts</span>
           <span class="flex-1 min-w-0">
             <span class="px-2 py-0.5 rounded-full text-xs" :class="member.tts ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'">
               {{ member.tts ? '开启' : '关闭' }}
             </span>
           </span>
-        </div>
+        </div> -->
         <div flex items-center class="border-b pb-2">
           <span w-24 flex-shrink-0 font-medium text-gray-600>创建时间</span>
           <span class="flex-1 min-w-0">{{ new Date(member.created * 1000).toLocaleDateString() }}</span>

@@ -46,7 +46,7 @@ const [dept_id, dept_idAttrs] = defineField('dept_id')
 const [sex, sexAttrs] = defineField('sex')
 const [avatar, avatarAttrs] = defineField('avatar')
 const [phone, phoneAttrs] = defineField('phone')
-const [tts, ttsAttrs] = defineField('tts')
+const [tts, _ttsAttrs] = defineField('tts')
 const [loc_share, loc_shareAttrs] = defineField('loc_share')
 
 $inspect(avatar)
@@ -147,7 +147,7 @@ const onSubmit = handleSubmit((values) => {
       <input v-bind="phoneAttrs" v-model="phone" input type="text" name="phone">
       <span text-red>{{ errors.phone }}</span>
 
-      <FormItemCheckBox v-model:model-value="tts" label="TTS" name="tts" :attrs="ttsAttrs" />
+      <!-- <FormItemCheckBox v-model:model-value="tts" label="TTS" name="tts" :attrs="ttsAttrs" /> -->
 
       <FormItemCheckBox v-model:model-value="loc_share" label="位置共享" name="loc_share" :attrs="loc_shareAttrs" />
 
