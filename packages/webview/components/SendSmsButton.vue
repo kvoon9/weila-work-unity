@@ -54,7 +54,9 @@ const { mutate: sendSMS, isPending } = useMutation({
 <template>
   <button
     btn-primary
-    :loading="isPending" :disabled="state === 'countdown'" min-w-30 :class="classes" type="button"
+    :loading="isPending" :disabled="state === 'countdown'"
+    :class="classes" type="button"
+    text-sm
     @click="() => sendSMS(opts)"
   >
     {{ state === 'idle' ? '获取短信验证码' : countdown }}

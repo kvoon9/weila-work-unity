@@ -102,16 +102,17 @@ function onVerifyImgCodeError() {
       <span text-red>{{ errors.phone }}</span>
 
       <label label for="img_verify_code">图形验证码</label>
-      <div flex space-x-2>
-        <input v-bind="imgVerifyCodeAttrs" v-model="imgVerifyCode" w-40 input type="text" name="img_verify_code">
+      <div grid="~ cols-[1fr_auto] gap1 items-end">
+        <input v-bind="imgVerifyCodeAttrs" v-model="imgVerifyCode" input type="text" name="img_verify_code">
         <VerifyImg ref="verifyImg" shrink-0 rounded />
       </div>
       <span text-red>{{ errors.img_verify_code }}</span>
 
       <label label for="verify_code">短信验证码</label>
-      <div class="flex space-x-2">
-        <input v-bind="verifyCodeAttrs" v-model="verifyCode" w-40 input type="text" name="verify_code">
+      <div grid="~ cols-[1fr_auto] gap1">
+        <input v-bind="verifyCodeAttrs" v-model="verifyCode" input type="text" name="verify_code">
         <SendSmsButton
+          break-keep px1
           :opts="{
             phone: phone ? String(phone) : '',
             verify_code: imgVerifyCode || '',

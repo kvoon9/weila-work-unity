@@ -78,7 +78,7 @@ function onVerifyImgCodeError() {
 </script>
 
 <template>
-  <div class="mx-auto grid w-[350px] gap-6 p-4 rounded-md shadow-sm">
+  <div class="mxa grid w-[350px] gap-6 p-4 rounded-md shadow-sm">
     <div class="grid gap-2 text-center">
       <h1 class="text-3xl font-bold">
         注册
@@ -87,22 +87,23 @@ function onVerifyImgCodeError() {
         验证手机号以注册账号
       </p>
     </div>
-    <form flex flex-col space-y-2 @submit="onSubmit">
+    <form mxa w-full flex flex-col @submit="onSubmit">
       <label label for="phone">电话号码</label>
       <input v-model="phone" input type="text" name="phone">
       <span text-red>{{ errors.phone }}</span>
 
       <label label for="img_verify_code">图形验证码</label>
-      <div flex space-x-2>
-        <input v-model="imgVerifyCode" input w-40 type="text" name="img_verify_code">
+      <div grid="~ cols-[1fr_auto] gap1 items-center">
+        <input v-model="imgVerifyCode" input type="text" name="img_verify_code">
         <VerifyImg ref="verifyImg" shrink-0 rounded />
       </div>
       <span text-red>{{ errors.img_verify_code }}</span>
 
       <label label for="verify_code">短信验证码</label>
-      <div class="flex space-x-2">
-        <input v-model="verifyCode" w-40 input type="text" name="verify_code">
+      <div grid="~ cols-[1fr_1fr] gap1 items-end">
+        <input v-model="verifyCode" input type="text" name="verify_code">
         <SendSmsButton
+          px1
           :opts="{
             phone: phone || '',
             verify_code: imgVerifyCode || '',
