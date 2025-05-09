@@ -83,7 +83,7 @@ function handleCreate() {
         </a-form-item>
         <a-form-item label="位置" field="address">
           <TheModal v-model:open="isMapPickerModalOpen" title="选择位置">
-            <a-button @click="isMapPickerModalOpen = true">
+            <a-button>
               <span max-w-60 truncate>{{ form?.address || '选择位置' }}</span>
               <i i-carbon-location-filled mx2 />
             </a-button>
