@@ -289,7 +289,7 @@ const { mutate: addMembers, isPending: isAddingMembers } = useMutation({
       <div flex items-center space-x-3>
         <div relative>
           <img :src="member.avatar || ''" :alt="member.name" class="w-12 h-12 rounded-full">
-          <div
+          <!-- <div
             text-xs absolute bottom--1 h-fit position-x-center break-keep
             btn-outline bg-white px1 space-x-0.5
             bg-op-65
@@ -297,7 +297,7 @@ const { mutate: addMembers, isPending: isAddingMembers } = useMutation({
           >
             <div class="size-1.5 rounded-full " :class="member.online ? 'bg-primary' : 'bg-neutral-500'" />
             <span>{{ member.online ? '在线' : '离线' }}</span>
-          </div>
+          </div> -->
         </div>
         <div>
           <div space-x-2 flex="~ items-center">
