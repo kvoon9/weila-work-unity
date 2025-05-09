@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import type { ValidatedError } from '@arco-design/web-vue'
 import type { MemberCreatePayload } from 'generated/mock/weila'
 import { Message } from '@arco-design/web-vue'
 import { useMutation, useQuery } from '@tanstack/vue-query'
 import md5 from 'md5'
+import { shallowRef } from 'vue'
 import { weilaApiUrl } from '~/api'
 
 const emits = defineEmits(['success'])
@@ -12,10 +14,10 @@ const { themeColor } = useAppStore()
 const corpStore = useCorpStore()
 const formRef = templateRef('formRef')
 
-const org_num = ref(0)
+const org_num = shallowRef(0)
 corpStore.$subscribe((_, { data }) => data ? org_num.value = data.num : void 0, { immediate: true })
 
-const open = ref(false)
+const open = shallowRef(false)
 
 const { data: depts } = useQuery<Array<{ id: number, name: string }>>({
   enabled: computed(() => Boolean(org_num.value)),
@@ -66,7 +68,7 @@ const { mutate: createMember, isPending } = useMutation({
 })
 
 function handleSubmit() {
-  return formRef.value?.validate(async (errors) => {
+  return formRef.value?.validate(async (errors: ValidatedError) => {
     if (errors)
       return
 
@@ -112,7 +114,7 @@ function handleSubmit() {
             <a-input v-model="form.name" :max-length="20" show-word-limit />
           </a-form-item>
           <a-form-item field="dept_id" :label="t('member.form.dept.label')">
-            <a-select allow-search :empty="t('no-data')" @change="(value) => form.dept_id = Number(value)">
+            <a-select allow-search :empty="t('no-data')" @change="(value: string) => form.dept_id = Number(value)">
               <a-option v-for="{ name, id }, key in depts" :key :value="id" :label="name" />
             </a-select>
           </a-form-item>
@@ -147,12 +149,12 @@ function handleSubmit() {
           <a-form-item field="avatar" :label="t('member.form.avatar.label')" :validate-trigger="['change', 'blur']">
             <AvatarUploader ref="avatarUploaderRef" v-model:src="form.avatar" />
           </a-form-item>
-          <a-form-item field="tts" label="TTS" :validate-trigger="['change', 'blur']">
+          <!-- <a-form-item field="tts" label="TTS" :validate-trigger="['change', 'blur']">
             <a-switch
               v-model="form.tts" :checked-value="1" :unchecked-value="0" :checked-color="themeColor"
               unchecked-color="#ddd"
             />
-          </a-form-item>
+          </a-form-item> -->
           <a-form-item
             field="loc_share" :label="t('member.form.loc_share.label')"
             :validate-trigger="['change', 'blur']"

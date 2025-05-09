@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { GroupMemberModel } from '~/api/contact'
 import { useQuery } from '@tanstack/vue-query'
+import { shallowRef } from 'vue'
 import { weilaApiUrl } from '~/api'
 import { TrackType } from '~/api/contact'
 
@@ -24,8 +25,8 @@ const { data: members, refetch } = useQuery<Array<GroupMemberModel>>({
 
 $inspect(members)
 
-const isEditModalVisible = ref(false)
-const selectedMember = ref<GroupMemberModel | undefined>(undefined)
+const isEditModalVisible = shallowRef(false)
+const selectedMember = shallowRef<GroupMemberModel | undefined>(undefined)
 
 function onSelect(member: GroupMemberModel, e: PointerEvent) {
   const whitelistEl = ['.arco-switch', '.arco-btn']
@@ -109,7 +110,7 @@ function onSelect(member: GroupMemberModel, e: PointerEvent) {
               </a-tag>
             </template>
           </a-table-column>
-          <a-table-column title="TTS">
+          <!-- <a-table-column title="TTS">
             <template #cell="{ record: { tts } }">
               <a-tag v-if="tts" color="green">
                 {{ t('open') }}
@@ -118,7 +119,7 @@ function onSelect(member: GroupMemberModel, e: PointerEvent) {
                 {{ t('close') }}
               </a-tag>
             </template>
-          </a-table-column>
+          </a-table-column> -->
           <a-table-column :title="t('track')">
             <template #cell="{ record: { track } }">
               <a-tag>

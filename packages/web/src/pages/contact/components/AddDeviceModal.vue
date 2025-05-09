@@ -129,7 +129,7 @@ async function handleSubmit({ values, errors }: any) {
             <a-input v-model="form.phone" :max-length="12" show-word-limit />
           </a-form-item>
           <a-form-item field="dept_id" :label="t('member.form.dept.label')">
-            <a-select allow-search :empty="t('no-data')" @change="(value) => form.dept_id = Number(value)">
+            <a-select allow-search :empty="t('no-data')" @change="(value: string) => form.dept_id = Number(value)">
               <a-option v-for="{ name, id }, key in depts" :key :value="id" :label="name" />
             </a-select>
           </a-form-item>
@@ -147,12 +147,12 @@ async function handleSubmit({ values, errors }: any) {
           <a-form-item field="avatar" :label="t('member.form.avatar.label')" :validate-trigger="['change', 'blur']">
             <AvatarUploader ref="avatarUploaderRef" v-model:src="form.avatar" />
           </a-form-item>
-          <a-form-item field="tts" label="TTS" :validate-trigger="['change', 'blur']">
+          <!-- <a-form-item field="tts" label="TTS" :validate-trigger="['change', 'blur']">
             <a-switch
               v-model="form.tts" :checked-value="1" :unchecked-value="0" :checked-color="themeColor"
               unchecked-color="#ddd"
             />
-          </a-form-item>
+          </a-form-item> -->
           <a-form-item
             field="loc_share" :label="t('member.form.loc_share.label')"
             :validate-trigger="['change', 'blur']"

@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import type { ValidatedError } from '@arco-design/web-vue'
 import type { MemberChangePayload, MemberGetallModel } from 'generated/mock/weila'
 import { objectPick } from '@antfu/utils'
 import { Message } from '@arco-design/web-vue'
 import { useMutation, useQuery } from '@tanstack/vue-query'
+import { shallowRef } from 'vue'
 import { weilaApiUrl } from '~/api'
 import { TrackType } from '~/api/contact'
 
@@ -18,7 +20,7 @@ const corpStore = useCorpStore()
 const formRef = templateRef('formRef')
 const avatarUploaderRef = templateRef('avatarUploaderRef')
 
-const org_num = ref(0)
+const org_num = shallowRef(0)
 corpStore.$subscribe((_, { data }) => data ? org_num.value = data.num : void 0, { immediate: true })
 
 const open = defineModel('open', { default: false })
@@ -91,7 +93,7 @@ const { mutate: createMember, isPending } = useMutation({
 })
 
 function handleSubmit() {
-  return formRef.value?.validate(async (errors) => {
+  return formRef.value?.validate(async (errors: ValidatedError) => {
     if (errors)
       return
 
@@ -140,7 +142,7 @@ function handleSubmit() {
           <a-form-item field="dept_id" :label="t('member.form.dept.label')">
             <a-select
               :default-value="form.dept_id" allow-search :empty="t('no-data')"
-              @change="(value) => form.dept_id = Number(value)"
+              @change="(value: string) => form.dept_id = Number(value)"
             >
               <a-option v-for="{ name, id }, key in depts" :key :value="id" :label="name" />
             </a-select>
@@ -170,12 +172,12 @@ function handleSubmit() {
           >
             <a-input v-model="form.job_num" :max-length="12" show-word-limit />
           </a-form-item>
-          <a-form-item field="tts" label="TTS" :validate-trigger="['change', 'blur']">
+          <!-- <a-form-item field="tts" label="TTS" :validate-trigger="['change', 'blur']">
             <a-switch
               v-model="form.tts" :checked-value="1" :unchecked-value="0" :checked-color="themeColor"
               unchecked-color="#ddd"
             />
-          </a-form-item>
+          </a-form-item> -->
           <a-form-item
             field="loc_share" :label="t('member.form.loc_share.label')"
             :validate-trigger="['change', 'blur']"

@@ -2,6 +2,7 @@
 import type { MemberGetallModel } from 'generated/mock/weila'
 import { objectEntries } from '@antfu/utils'
 import { useMutation, useQuery } from '@tanstack/vue-query'
+import { shallowRef } from 'vue'
 import { weilaApiUrl } from '~/api'
 import { TrackType } from '~/api/contact'
 
@@ -41,7 +42,7 @@ const url = computed(() => {
     : weilaApiUrl('/corp/web/member-getall')
 })
 
-const filterInput = ref('')
+const filterInput = shallowRef('')
 
 const { data: _members, refetch } = useQuery({
   enabled: computed(() => Boolean(corp.value)),
@@ -95,12 +96,12 @@ const cols = computed(() => {
 
 $inspect(cols)
 
-const selectedMember = ref<MemberGetallModel['data']['members'][number] | undefined>(undefined)
+const selectedMember = shallowRef<MemberGetallModel['data']['members'][number] | undefined>(undefined)
 
-const isEditMemberModalVisible = ref(false)
-const isEditDeviceModalVisible = ref(false)
-const isResetPasswordModalVisible = ref(false)
-const isDeleteMemberModalVisible = ref(false)
+const isEditMemberModalVisible = shallowRef(false)
+const isEditDeviceModalVisible = shallowRef(false)
+const isResetPasswordModalVisible = shallowRef(false)
+const isDeleteMemberModalVisible = shallowRef(false)
 
 function onSelect(member: MemberGetallModel['data']['members'][number], _: PointerEvent) {
   selectedMember.value = member
@@ -197,7 +198,7 @@ function toggleMemberState(targetId: number, state: 0 | 1) {
                 text: t('user-type.owner'),
                 value: '2',
               }],
-              filter: (value, record) => Number(record.type) === Number(value),
+              filter: (value: any, record: any) => Number(record.type) === Number(value),
               multiple: false,
             }" :width="80"
           >
@@ -240,7 +241,7 @@ function toggleMemberState(targetId: number, state: 0 | 1) {
                 text: dept.name,
                 value: String(dept.id),
               })) || [],
-              filter: (value, record) => Number(record.dept_id) === Number(value),
+              filter: (value: any, record: any) => Number(record.dept_id) === Number(value),
               multiple: false,
             }"
           >
@@ -258,7 +259,7 @@ function toggleMemberState(targetId: number, state: 0 | 1) {
               {{ phone }}
             </template>
           </a-table-column>
-          <a-table-column :title="t('TTS')" :width="60">
+          <!-- <a-table-column :title="t('TTS')" :width="60">
             <template #cell="{ record: { tts } }">
               <a-tag v-if="tts" color="green">
                 {{ t('open') }}
@@ -267,7 +268,7 @@ function toggleMemberState(targetId: number, state: 0 | 1) {
                 {{ t('close') }}
               </a-tag>
             </template>
-          </a-table-column>
+          </a-table-column> -->
           <a-table-column :title="t('track')" :width="60">
             <template #cell="{ record: { track } }">
               <a-tag>
