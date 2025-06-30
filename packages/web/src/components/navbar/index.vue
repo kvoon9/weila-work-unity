@@ -2,8 +2,7 @@
 import { useQuery } from '@tanstack/vue-query'
 import { UseImage } from '@vueuse/components'
 import { createReusableTemplate, useFullscreen, useToggle } from '@vueuse/core'
-import { computed, inject } from 'vue'
-
+import { computed, inject, shallowRef } from 'vue'
 import Menu from '~/components/menu/index.vue'
 import { isDark } from '~/shared/states'
 import { useAuthStore } from '~/stores/auth'
@@ -29,7 +28,7 @@ const toggleDrawerMenu = inject('toggleDrawerMenu') as () => void
 //   locale.value = newLocale
 // }
 
-const hoverState = ref(false)
+const hoverState = shallowRef(false)
 interface User {
   id: number
   num: string
@@ -45,8 +44,8 @@ const { data: user, refetch } = useQuery({
   queryFn: () => weilaFetch<{ user: User }>('/corp/web/user-selfinfo').then(({ user }) => user),
 })
 
-const resetPasswordModalVisible = ref(false)
-const bindingPhoneModalVisible = ref(false)
+const resetPasswordModalVisible = shallowRef(false)
+const bindingPhoneModalVisible = shallowRef(false)
 
 function tryLogout() {
   logout()

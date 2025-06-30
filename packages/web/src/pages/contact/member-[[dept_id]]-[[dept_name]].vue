@@ -128,14 +128,6 @@ function toggleMemberState(targetId: number, state: 0 | 1) {
 
 <template>
   <div w-full p4 space-y-4>
-    <a-breadcrumb>
-      <RouterLink to="/contact/member">
-        <a-breadcrumb-item>{{ t('submenu.member-manage') }}</a-breadcrumb-item>
-      </RouterLink>
-      <a-breadcrumb-item v-if="route.params.dept_id">
-        {{ route.params.dept_name }}
-      </a-breadcrumb-item>
-    </a-breadcrumb>
     <div w-full rounded p4 space-y-4 bg-base>
       <section flex items-center space-x-2>
         <CreateMemberModal @success="refetch">

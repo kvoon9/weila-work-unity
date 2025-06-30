@@ -57,6 +57,7 @@ declare module 'vue' {
     ToolbarLink: typeof import('radix-vue')['ToolbarLink']
     ToolbarRoot: typeof import('radix-vue')['ToolbarRoot']
     ToolbarSeparator: typeof import('radix-vue')['ToolbarSeparator']
+    TreeMenu: typeof import('./components/TreeMenu.vue')['default']
     VerifyImg: typeof import('./components/VerifyImg.vue')['default']
   }
 }

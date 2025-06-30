@@ -43,9 +43,6 @@ function onSelect(group: GroupModel, e: PointerEvent) {
 
 <template>
   <div w-full p4 space-y-4>
-    <a-breadcrumb>
-      <a-breadcrumb-item>{{ t('submenu.group-manage') }}</a-breadcrumb-item>
-    </a-breadcrumb>
     <div w-full rounded p4 space-y-4 bg-base>
       <section space-x-2>
         <CreateGroupModal @success="refetch">

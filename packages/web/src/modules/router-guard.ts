@@ -12,6 +12,7 @@ export const install: UserModule = ({ router }) => {
     }
     else {
       // Proceed to the requested route
+      console.log('to', to)
       next()
     }
   })

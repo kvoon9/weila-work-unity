@@ -8,7 +8,7 @@ import NavBar from '~/components/navbar/index.vue'
       <NavBar />
     </div>
     <div flex of-hidden>
-      <Menu shrink-0 />
+      <TreeMenu shrink-0 border-r />
       <div flex-1 of-auto>
         <router-view />
       </div>

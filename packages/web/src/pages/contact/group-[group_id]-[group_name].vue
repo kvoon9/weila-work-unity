@@ -43,14 +43,6 @@ function onSelect(member: GroupMemberModel, e: PointerEvent) {
 
 <template>
   <div w-full p4 space-y-4>
-    <a-breadcrumb>
-      <RouterLink to="/contact/group">
-        <a-breadcrumb-item>{{ t('submenu.group-manage') }}</a-breadcrumb-item>
-      </RouterLink>
-      <a-breadcrumb-item v-if="route.params.group_name">
-        {{ route.params.group_name }}
-      </a-breadcrumb-item>
-    </a-breadcrumb>
     <div w-full rounded p4 space-y-4 bg-base>
       <section space-x-2>
         <AddGroupMemberModal :group-id="Number(route.params.group_id)" @success="refetch">

@@ -1,5 +1,10 @@
 <script setup lang="ts">
+import { shallowRef } from 'vue'
 import EditCorpModal from './components/EditCorpModal.vue'
+
+definePage({
+  alias: ['/'],
+})
 
 const { t } = useI18n()
 
@@ -7,7 +12,7 @@ const corpStore = useCorpStore()
 const { refetch } = corpStore
 const { data: corp } = storeToRefs(corpStore)
 
-const isEditCorpModalVisible = ref(false)
+const isEditCorpModalVisible = shallowRef(false)
 </script>
 
 <template>

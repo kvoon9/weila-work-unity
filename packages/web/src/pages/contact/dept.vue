@@ -44,10 +44,6 @@ function onSelect(dept: DeptModel, e: PointerEvent) {
 
 <template>
   <div w-full p4 space-y-4>
-    <a-breadcrumb>
-      <a-breadcrumb-item>{{ t('submenu.dept-manage') }}</a-breadcrumb-item>
-      <!-- <a-breadcrumb-item>{{ t('member-list') }}</a-breadcrumb-item> -->
-    </a-breadcrumb>
     <div w-full rounded p4 space-y-4 bg-base>
       <section space-x-2>
         <CreateDeptModal @success="refetch">
