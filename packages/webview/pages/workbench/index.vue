@@ -42,14 +42,14 @@ const serviceRoute = computed(() => {
         </div>
         <Icon v-if="isGetServicePending" name="svg-spinners:bars-rotate-fade" mxa />
       </button>
-      <!-- <div text-center bg-neutral-100 rounded-md p4>
+      <div text-center bg-neutral-100 rounded-md p4>
         <Icon mxa size-8 name="ph:chat-centered-dots" mode="svg" />
         历史消息
-      </div> -->
-      <!-- <NuxtLink to="./workbench/service-adt" text-center bg-neutral-100 rounded-md p4>
+      </div>
+      <NuxtLink to="./workbench/service-adt" text-center bg-neutral-100 rounded-md p4>
         <Icon mxa size-8 name="ph:chat-centered-dots" mode="svg" />
         服务号审核
-      </NuxtLink> -->
+      </NuxtLink>
     </div>
   </div>
 </template>

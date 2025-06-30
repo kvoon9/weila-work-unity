@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { CreateBusinessPayload } from '@weila/network'
 import Message from '@arco-design/web-vue/es/message'
-import { createBusiness, useService } from '@weila/network'
+import { createBusiness, useMyBusiness, useServiceLegal } from '@weila/network'
 import { reactive, shallowRef } from 'vue'
 import { useI18n } from 'vue-i18n'
 import AvatarUploader from '~/components/AvatarUploader.vue'
@@ -13,7 +13,8 @@ const { mutateAsync: create, isPending: isCreating } = createBusiness($v2, {
   onSuccess() {
     isCreateBusinessModalOpen.value = false
     Message.success('创建成功')
-    useService($v2).refetch()
+    // useMyBusiness($v2).refetch()
+    // useServiceLegal($v2).refetch()
   },
 })
 
@@ -46,6 +47,7 @@ function handleCreate() {
   // @ts-expect-error type error: `defineExpose` no type declare find
   const { upload } = avatarUploaderRef.value
   if (form.merchant.avatar && !isRemoteImage(form.merchant.avatar)) {
+    console.log('form', form)
     return upload().then(() => create(form))
   }
 

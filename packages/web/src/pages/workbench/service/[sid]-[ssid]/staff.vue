@@ -2,6 +2,7 @@
 import type { GetBusinessStaffListModel } from '@weila/network'
 import { useRouteParams } from '@vueuse/router'
 import { useBusinessStaffList } from '@weila/network'
+import { shallowRef } from 'vue'
 import AddBusinessStaffModal from '../components/AddBusinessStaffModal.vue'
 import DelBusinessStaffModal from '../components/DelBusinessStaffModal.vue'
 
