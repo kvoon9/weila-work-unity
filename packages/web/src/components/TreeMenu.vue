@@ -19,18 +19,20 @@ const { data: corp } = storeToRefs(corpStore)
       :style="{ width: '200px', height: '100%' }"
       :default-open-keys="['contact']"
       :default-selected-keys="['/contact/org']"
-      show-collapse-button
       @menu-item-click="goTo"
       @sub-menu-click="goTo"
     >
       <a-trigger v-if="corp" position="bl" auto-fit-position :unmount-on-close="false" :popup-translate="[5, 5]" trigger="click">
         <div cursor-pointer text-neutral-500 px4 py2 hover:bg-neutral-200:50 rounded border mb4 mt2 flex items-center justify-between>
-          <div>
-            <div font-bold>
-              {{ corp.name }}
-            </div>
-            <div text-sm>
-              {{ corp.num }}
+          <div flex gap-2 items-center>
+            <img :src="corp.avatar" :alt="corp.name" rounded-full size-10>
+            <div>
+              <div font-bold truncate>
+                {{ corp.name }}
+              </div>
+              <div text-sm>
+                {{ corp.num }}
+              </div>
             </div>
           </div>
           <IconRight />
