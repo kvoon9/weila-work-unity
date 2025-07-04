@@ -1,11 +1,15 @@
 <script setup lang="ts">
-const router = useRouter()
+import { ref as deepRef } from 'vue'
 
-function goTo(path: string, _rest: string[] | undefined) {
+const router = useRouter()
+const selectedKeys = deepRef<string[]>([])
+
+function goTo(path: string, _rest?: string[] | undefined) {
   const isChild = _rest === undefined
   if (!isChild)
     return
 
+  selectedKeys.value = [path]
   router.push(path)
 }
 
@@ -24,6 +28,7 @@ const defaultSelectedKeys = [
 <template>
   <div>
     <a-menu
+      v-model:selected-keys="selectedKeys"
       :style="{ width: '200px', height: '100%' }"
       auto-open
       :default-open-keys="['contact']"
@@ -31,8 +36,8 @@ const defaultSelectedKeys = [
       @menu-item-click="goTo"
       @sub-menu-click="goTo"
     >
-      <a-trigger v-if="corp" position="bl" auto-fit-position :unmount-on-close="false" :popup-translate="[5, 5]" trigger="click">
-        <div cursor-pointer text-neutral-500 px4 py2 hover:bg-neutral-200:50 rounded border mb4 mt2 flex items-center justify-between>
+      <a-trigger v-if="corp" position="bl" auto-fit-position :unmount-on-close="false" :popup-translate="[5, 5]" trigger="hover">
+        <div cursor-pointer text-neutral-500 px4 py2 hover:bg-neutral-200:50 rounded border mb4 mt2 flex items-center justify-between @click="goTo('/contact/org')">
           <div flex gap-2 items-center>
             <img :src="corp.avatar" :alt="corp.name" rounded-full size-10>
             <div>
@@ -73,6 +78,17 @@ const defaultSelectedKeys = [
         </a-menu-item>
         <a-menu-item key="/contact/group">
           群组管理
+        </a-menu-item>
+      </a-sub-menu>
+      <a-sub-menu key="/contact">
+        <template #icon>
+          <IconApps />
+        </template>
+        <template #title>
+          工作台
+        </template>
+        <a-menu-item key="/workbench/user-track">
+          轨迹
         </a-menu-item>
       </a-sub-menu>
     </a-menu>

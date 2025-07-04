@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/vue-query'
 import { ElAmap } from '@vuemap/vue-amap'
 import { ElAmapLoca, ElAmapLocaLine } from '@vuemap/vue-amap-loca'
 import { nanoid } from 'nanoid'
-import { shallowRef } from 'vue'
+import { ref as deepRef, shallowRef } from 'vue'
 import { weilaApiUrl } from '~/api'
 
 const { t } = useI18n()
@@ -16,13 +16,13 @@ const selectedDate = shallowRef('')
 
 const contactStore = useContactStore()
 const { data: contact } = storeToRefs(contactStore)
-const { data: tracks } = useQuery({
+const { data: tracks } = useQuery<UserTrackModel[]>({
   enabled: computed(() => Boolean(selectedUserId.value) && Boolean(selectedDate.value)),
   refetchOnWindowFocus: false,
   queryKey: ['user track', selectedUserId, selectedDate],
-  queryFn: ({ queryKey }) => weilaFetch<{ tracks: UserTrackModel[] }>('/corp/web/location-get-track', {
+  queryFn: ({ queryKey }) => weilaFetch('/corp/web/location-get-track', {
     body: { user_id: queryKey[1], date: queryKey[2] },
-  }).then(i => i.tracks.sort((a, b) => b.created - a.created)),
+  }).then((i: any) => i.tracks.sort((a: any, b: any) => b.created - a.created)),
 })
 
 watchDebounced(tracks, (val) => {
@@ -55,10 +55,10 @@ const trackFeatureCollection = computed<GeoJSON.FeatureCollection<GeoJSON.LineSt
 
 $inspect(trackFeatureCollection)
 
-const trackVisible = ref(true)
-const drawerVisible = ref(false)
-const zoom = ref(12)
-const center = ref([121.59996, 31.197646])
+const trackVisible = shallowRef(true)
+const drawerVisible = shallowRef(false)
+const zoom = shallowRef(12)
+const center = shallowRef([121.59996, 31.197646])
 const map = shallowRef<AMap.Map | null>(null)
 const markers = shallowRef<AMap.Marker[]>([])
 const infoWindow = shallowRef<AMap.InfoWindow | undefined>(undefined)
@@ -107,12 +107,12 @@ const { data: regeoInfo } = useQuery({
     if (!pos)
       throw new Error('No position')
 
-    return weilaFetch<{ regeo: RegeoModel }>(weilaApiUrl('/corp/web/location-get-regeo'), {
+    return weilaFetch(weilaApiUrl('/corp/web/location-get-regeo'), {
       body: {
         longitude: pos?.getLng(),
         latitude: pos?.getLat(),
       },
-    }).then(i => i.regeo)
+    }).then((i: any) => i.regeo as RegeoModel)
   },
 })
 
@@ -143,7 +143,7 @@ watch(regeoInfo, (info?: RegeoModel) => {
   })
 })
 
-const layerStyle = ref({
+const layerStyle = deepRef({
   color: '#41ab5d',
   lineWidth: 2,
   dashArray: [10, 0, 10, 0],
