@@ -38,7 +38,7 @@ const form = reactive<MemberCreatePayload>({
   sex: 0,
   avatar: '',
   phone: '',
-  tts: 0,
+  tts: 1,
   loc_share: 0,
   job_num: '',
 })
