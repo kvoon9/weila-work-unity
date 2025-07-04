@@ -31,7 +31,10 @@ function openEdit(dept: DeptModel) {
   isEditDeptModalVisible.value = true
 }
 
+const enableSelect = false
 function onSelect(dept: DeptModel, e: PointerEvent) {
+  if (!enableSelect)
+    return
   const whitelistEl = ['.arco-btn']
   // @ts-expect-error type error: no closest attr
   if (whitelistEl.find(className => e.target?.closest(className))) {

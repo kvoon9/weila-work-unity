@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { CreateBusinessPayload } from '@weila/network'
 import Message from '@arco-design/web-vue/es/message'
-import { createBusiness, useMyBusiness, useServiceLegal } from '@weila/network'
+import { createBusiness } from '@weila/network'
 import { reactive, shallowRef } from 'vue'
 import { useI18n } from 'vue-i18n'
 import AvatarUploader from '~/components/AvatarUploader.vue'

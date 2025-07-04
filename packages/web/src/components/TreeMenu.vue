@@ -11,14 +11,23 @@ function goTo(path: string, _rest: string[] | undefined) {
 
 const corpStore = useCorpStore()
 const { data: corp } = storeToRefs(corpStore)
+const route = useRoute()
+
+const defaultSelectedKeys = [
+  '/contact/org',
+  '/contact/member',
+  '/contact/group',
+  '/contact/dept',
+].filter(i => route.path.startsWith(i))
 </script>
 
 <template>
   <div>
     <a-menu
       :style="{ width: '200px', height: '100%' }"
+      auto-open
       :default-open-keys="['contact']"
-      :default-selected-keys="['/contact/org']"
+      :default-selected-keys
       @menu-item-click="goTo"
       @sub-menu-click="goTo"
     >
@@ -49,7 +58,7 @@ const { data: corp } = storeToRefs(corpStore)
         </template>
         主页
       </a-menu-item>
-      <a-sub-menu key="contact">
+      <a-sub-menu key="/contact">
         <template #icon>
           <IconApps />
         </template>

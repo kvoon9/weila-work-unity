@@ -1,6 +1,8 @@
 node_modules
+**/node_modules
 *.log
 dist
+**/dist
 .output
 .nuxt
 .env
