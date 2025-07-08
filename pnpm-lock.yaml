@@ -607,9 +607,6 @@ importers:
       '@vueuse/core':
         specifier: 'catalog:'
         version: 13.1.0(vue@3.5.13(typescript@5.8.3))
-      bumpp:
-        specifier: 'catalog:'
-        version: 10.1.0(magicast@0.3.5)
       rollup:
         specifier: 'catalog:'
         version: 4.40.0

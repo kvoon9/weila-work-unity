@@ -222,14 +222,6 @@ watch(markers, (val, oldVal) => {
 </script>
 
 <template>
-  <div p4>
-    <a-breadcrumb>
-      <RouterLink to="/workbench">
-        <a-breadcrumb-item>{{ t('menu.workbench') }}</a-breadcrumb-item>
-      </RouterLink>
-      <a-breadcrumb-item>{{ t('user-track') }}</a-breadcrumb-item>
-    </a-breadcrumb>
-  </div>
   <div flex gap2 p4 bg-base>
     <!-- @vue-expect-error type error -->
     <a-tree-select

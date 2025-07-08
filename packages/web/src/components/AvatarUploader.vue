@@ -13,7 +13,7 @@ const src = defineModel('src', { default: '' })
 const { t } = useI18n()
 
 const compressedFile = shallowRef<Blob | null>(null)
-const isCropperModalVisible = ref(false)
+const isCropperModalVisible = shallowRef(false)
 
 const isSupported = shallowRef(true)
 const { files, open, onChange } = useFileDialog({
@@ -37,7 +37,7 @@ function upload() {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
-    onUploadProgress: (progressEvent) => {
+    onUploadProgress: (progressEvent: any) => {
       if (progressEvent.total) {
         const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total)
         emits('uploading', percent)

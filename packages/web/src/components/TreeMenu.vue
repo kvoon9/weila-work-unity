@@ -80,7 +80,7 @@ const defaultSelectedKeys = [
           群组管理
         </a-menu-item>
       </a-sub-menu>
-      <a-sub-menu key="/contact">
+      <a-sub-menu key="/workbench">
         <template #icon>
           <IconApps />
         </template>

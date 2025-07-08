@@ -25,6 +25,7 @@ declare module 'vue-router/auto-routes' {
     '/contact/group-[group_id]-[group_name]': RouteRecordInfo<'/contact/group-[group_id]-[group_name]', '/contact/group-:group_id-:group_name', { group_id: ParamValue<true>, group_name: ParamValue<true> }, { group_id: ParamValue<false>, group_name: ParamValue<false> }>,
     '/contact/member-[[dept_id]]-[[dept_name]]': RouteRecordInfo<'/contact/member-[[dept_id]]-[[dept_name]]', '/contact/member-:dept_id?-:dept_name?', { dept_id?: ParamValueZeroOrOne<true>, dept_name?: ParamValueZeroOrOne<true> }, { dept_id?: ParamValueZeroOrOne<false>, dept_name?: ParamValueZeroOrOne<false> }>,
     '/contact/org': RouteRecordInfo<'/contact/org', '/contact/org', Record<never, never>, Record<never, never>>,
+    '/create-org': RouteRecordInfo<'/create-org', '/create-org', Record<never, never>, Record<never, never>>,
     '/login/': RouteRecordInfo<'/login/', '/login', Record<never, never>, Record<never, never>>,
     '/message': RouteRecordInfo<'/message', '/message', Record<never, never>, Record<never, never>>,
     '/message/[group_id]-[group_name]': RouteRecordInfo<'/message/[group_id]-[group_name]', '/message/:group_id-:group_name', { group_id: ParamValue<true>, group_name: ParamValue<true> }, { group_id: ParamValue<false>, group_name: ParamValue<false> }>,

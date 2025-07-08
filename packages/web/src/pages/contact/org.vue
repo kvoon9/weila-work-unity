@@ -8,11 +8,17 @@ definePage({
 
 const { t } = useI18n()
 
+const router = useRouter()
 const corpStore = useCorpStore()
-const { refetch } = corpStore
+const { refetch, isSuccess } = corpStore
 const { data: corp } = storeToRefs(corpStore)
 
 const isEditCorpModalVisible = shallowRef(false)
+
+watchEffect(() => {
+  if (isSuccess && !corp.value)
+    router.push('/create-org')
+})
 </script>
 
 <template>
