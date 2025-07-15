@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useQuery } from '@tanstack/vue-query'
-import { useSound } from '@vueuse/sound'
-import { weilaApiUrl } from '~/api'
+import { useQuery } from '@tanstack/vue-query';
+import { useSound } from '@vueuse/sound';
+import { weilaApiUrl } from '~/api';
 
-import { useSpeakerIcon } from '~/composition/useSpeakerIcon'
+import { useSpeakerIcon } from '~/composables/useSpeakerIcon';
 
 const props = defineProps<{
   content: {
