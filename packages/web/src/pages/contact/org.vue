@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { shallowRef } from 'vue'
+import { useMyLegal } from '~/composables/useMyLegal'
 import EditCorpModal from './components/EditCorpModal.vue'
 
 definePage({
@@ -12,6 +13,8 @@ const router = useRouter()
 const corpStore = useCorpStore()
 const { refetch, isSuccess } = corpStore
 const { data: corp } = storeToRefs(corpStore)
+
+const { data } = useMyLegal()
 
 const isEditCorpModalVisible = shallowRef(false)
 
@@ -49,21 +52,28 @@ watchEffect(() => {
                 </div>
               </h1>
               <div space-x-2>
-                <a-tag>
+                <a-tag color="orangered" v-if="data?.state === 8">
                   <template #icon>
                     <icon-check-circle-fill />
                   </template>
-                  已认证
+                  {{ data.category === 0 ? '企业' : '个人' }}认证
                 </a-tag>
+                <a-tag v-else-if="data?.state === 9">
+                  认证未通过
+                </a-tag>
+                <a-tag v-else>
+                  未认证
+                </a-tag>
+
                 <a-tag>
                   标准版
                 </a-tag>
               </div>
             </div>
           </div>
-          <a-button type="primary">
-            企业认证
-          </a-button>
+            <a-button type="primary" @click="$router.push('/contact/legal')">
+              认证
+            </a-button>
         </header>
       </div>
       <div grid="~ cols-3 gap-2" my4>

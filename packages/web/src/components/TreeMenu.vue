@@ -3,6 +3,7 @@ import { ref as deepRef } from 'vue'
 
 const router = useRouter()
 const selectedKeys = deepRef<string[]>([])
+const { data: legal } = useMyLegal()
 
 function goTo(path: string, _rest?: string[] | undefined) {
   const isChild = _rest === undefined
@@ -44,16 +45,22 @@ const defaultSelectedKeys = [
               <div font-bold truncate>
                 {{ corp.name }}
               </div>
-              <div text-sm>
-                {{ corp.num }}
-              </div>
+              <a-tag color="orangered" v-if="legal?.state === 8">
+                <template #icon>
+                  <icon-check-circle-fill />
+                </template>
+                已认证
+              </a-tag>
+              <a-tag v-else>
+                 未认证
+              </a-tag>
             </div>
           </div>
           <IconRight />
         </div>
         <template #content>
           <div bg-white border p4 rounded-lg>
-            升级套餐
+            To-dos
           </div>
         </template>
       </a-trigger>

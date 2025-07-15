@@ -36,5 +36,9 @@
   },
   "lint-staged": {
     "*": "eslint --fix"
+  },
+  "dependencies": {
+    "valibot": "^1.1.0",
+    "zod-arco-rules": "^0.1.0"
   }
 }

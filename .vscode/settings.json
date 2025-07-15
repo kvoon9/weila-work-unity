@@ -48,5 +48,8 @@
     "pcss",
     "postcss"
   ],
-  "autoHide.mode": "auto"
+  "autoHide.mode": "auto",
+  "cSpell.words": [
+    "Weila"
+  ]
 }
