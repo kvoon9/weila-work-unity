@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import type { Legal } from '~/types/api'
 import { ref as deepRef } from 'vue'
 
 const router = useRouter()
 const selectedKeys = deepRef<string[]>([])
-const { data: legal } = useMyLegal()
+const { data: legal } = useWeilaFetch<Legal>('corp/legal/get-legal')
 
 function goTo(path: string, _rest?: string[] | undefined) {
   const isChild = _rest === undefined
@@ -45,14 +46,14 @@ const defaultSelectedKeys = [
               <div font-bold truncate>
                 {{ corp.name }}
               </div>
-              <a-tag color="orangered" v-if="legal?.state === 8">
+              <a-tag v-if="legal?.state === 8" color="orangered">
                 <template #icon>
                   <icon-check-circle-fill />
                 </template>
                 已认证
               </a-tag>
               <a-tag v-else>
-                 未认证
+                未认证
               </a-tag>
             </div>
           </div>

@@ -35,6 +35,7 @@
     "@turf/helpers": "catalog:",
     "@turf/turf": "catalog:",
     "@unocss/reset": "catalog:",
+    "@valibot/i18n": "catalog:",
     "@videojs-player/vue": "catalog:",
     "@vueuse/components": "catalog:",
     "@vueuse/core": "catalog:",
@@ -56,12 +57,14 @@
     "qrcode": "catalog:",
     "radix-vue": "catalog:",
     "ufo": "catalog:",
+    "valibot": "catalog:",
     "video.js": "catalog:",
     "viewerjs": "catalog:",
     "vue": "catalog:",
     "vue-echarts": "catalog:",
     "vue-i18n": "catalog:",
-    "zod": "catalog:"
+    "zod": "catalog:",
+    "zod-arco-rules": "catalog:"
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:",

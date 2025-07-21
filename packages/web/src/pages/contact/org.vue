@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import type { Legal } from '~/types/api'
 import { shallowRef } from 'vue'
-import { useMyLegal } from '~/composables/useMyLegal'
 import EditCorpModal from './components/EditCorpModal.vue'
 
 definePage({
@@ -14,7 +14,7 @@ const corpStore = useCorpStore()
 const { refetch, isSuccess } = corpStore
 const { data: corp } = storeToRefs(corpStore)
 
-const { data } = useMyLegal()
+const { data } = useWeilaFetch<Legal>('corp/legal/get-legal')
 
 const isEditCorpModalVisible = shallowRef(false)
 
@@ -52,7 +52,7 @@ watchEffect(() => {
                 </div>
               </h1>
               <div space-x-2>
-                <a-tag color="orangered" v-if="data?.state === 8">
+                <a-tag v-if="data?.state === 8" color="orangered">
                   <template #icon>
                     <icon-check-circle-fill />
                   </template>
@@ -71,9 +71,9 @@ watchEffect(() => {
               </div>
             </div>
           </div>
-            <a-button type="primary" @click="$router.push('/contact/legal')">
-              认证
-            </a-button>
+          <a-button type="primary" @click="$router.push('/contact/legal')">
+            认证
+          </a-button>
         </header>
       </div>
       <div grid="~ cols-3 gap-2" my4>

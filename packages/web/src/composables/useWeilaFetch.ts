@@ -6,16 +6,18 @@ export function useWeilaFetch<T>(
   url: string,
   options?: {
     body?: MaybeRefOrGetter<RequestInit['body'] | Record<string, any>>
+    method?: string
   },
 ) {
-  const { body } = options || {}
+  const { body, method = 'POST' } = options || {}
 
   const weilaApi = useWeilaApi()
 
   const res = useQuery<T>({
-    queryKey: [url, body],
+    queryKey: [url, body, method],
     queryFn: () => weilaApi.value.v2.fetch(url, {
       body: toValue(body),
+      method,
     }),
     refetchOnWindowFocus: false,
   })

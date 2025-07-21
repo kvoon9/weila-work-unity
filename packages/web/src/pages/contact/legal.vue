@@ -1,46 +1,28 @@
 <script setup lang="ts">
+import type { Legal } from '~/types/api'
 import { clearUndefined } from '@antfu/utils'
 import { Message } from '@arco-design/web-vue'
 import * as v from 'valibot'
-import { useForm } from '~/composables/useForm'
-import { useMyLegal } from '~/composables/useMyLegal'
+import { useForm } from 'zod-arco-rules/valibot'
 
 const weilaApi = useWeilaApi()
-const { data, isFetched, refetch } = useMyLegal()
 
-interface Form {
-  id?: number
-  category: number
-  identify: string
-  identify_card_front: string
-  identify_card_reverse: string
-  business_license: string
-}
+const { data, isFetched, refetch } = useWeilaFetch<Legal>('corp/legal/get-legal')
 
-const { form, rules, handleSubmit } = useForm<Form>({
-  id: { value: undefined },
-  category: {
-    value: 0,
-  },
-  identify: {
-    value: '',
-    rule: v.pipe(v.string(), v.length(18)),
-  },
-  identify_card_front: {
-    value: '',
-  }, // img
-  identify_card_reverse: {
-    value: '',
-  }, // img
-  business_license: {
-    value: '',
-  }, // img
-}, {
-  defaultSource: data,
-})
+const { form, rules, handleSubmit } = useForm(
+  v.object({
+    id: v.number(),
+    category: v.number(),
+    identify: v.pipe(v.string(), v.length(18)),
+    identify_card_front: v.string(),
+    identify_card_reverse: v.string(),
+    business_license: v.string(),
+  }),
+)
 
 const submit = handleSubmit(async (value) => {
-  await weilaApi.value.v2.fetch(`corp/legal/${data.value ? 'change' : 'add'}-${form.value.category === 0 ? 'corp' : 'user'}-legal`, {
+  const url = `corp/legal/${data.value ? 'change' : 'add'}-${form.value.category === 0 ? 'corp' : 'user'}-legal`
+  await weilaApi.value.v2.fetch(url, {
     body: value,
   })
 

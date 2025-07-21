@@ -19,6 +19,9 @@
     "lint:fix": "eslint --fix .",
     "lint-staged": "npx lint-staged"
   },
+  "dependencies": {
+    "valibot": "catalog:"
+  },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:",
     "@tanstack/eslint-plugin-query": "catalog:",
@@ -36,9 +39,5 @@
   },
   "lint-staged": {
     "*": "eslint --fix"
-  },
-  "dependencies": {
-    "valibot": "^1.1.0",
-    "zod-arco-rules": "^0.1.0"
   }
 }
