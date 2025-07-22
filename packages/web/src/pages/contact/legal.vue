@@ -22,19 +22,42 @@ const { stop } = watch(data, (value) => {
 
 const { form: userForm, rules: userRules, handleSubmit: handleUserSubmit } = useForm(v.object({
   id: v.optional(v.number(), () => (data.value as UserLegal)?.id ?? undefined),
-  name: v.optional(v.string(), () => (data.value as UserLegal)?.name ?? ''),
-  identify: v.optional(v.pipe(v.string(), v.length(18)), () => (data.value as UserLegal)?.identify ?? ''),
-  identify_card_front: v.optional(v.string(), () => (data.value as UserLegal)?.identify_card_front ?? ''),
-  identify_card_reverse: v.optional(v.string(), () => (data.value as UserLegal)?.identify_card_reverse ?? ''),
+  name: v.optional(v.pipe(
+    v.string(),
+    v.minLength(2, '姓名至少需要2个字符'),
+    v.maxLength(50, '姓名不能超过50个字符'),
+  ), () => (data.value as UserLegal)?.name ?? ''),
+  identify: v.optional(v.pipe(
+    v.string(),
+    v.length(18, '身份证号码必须为18位'),
+  ), () => (data.value as UserLegal)?.identify ?? ''),
+  identify_card_front: v.optional(v.pipe(
+    v.string(),
+    v.minLength(1, '请上传身份证正面照片'),
+  ), () => (data.value as UserLegal)?.identify_card_front ?? ''),
+  identify_card_reverse: v.optional(v.pipe(
+    v.string(),
+    v.minLength(1, '请上传身份证反面照片'),
+  ), () => (data.value as UserLegal)?.identify_card_reverse ?? ''),
 }), {
   watch: [category, data],
 })
 
 const { form: corpForm, rules: corpRules, handleSubmit: handleCorpSubmit } = useForm(v.object({
   id: v.optional(v.number(), () => (data.value as CorpLegal)?.id ?? undefined),
-  name: v.optional(v.string(), () => (data.value as CorpLegal)?.name ?? ''),
-  identify: v.optional(v.pipe(v.string(), v.length(18)), () => (data.value as CorpLegal)?.identify ?? ''),
-  business_license: v.optional(v.string(), () => (data.value as CorpLegal)?.business_license ?? ''),
+  name: v.optional(v.pipe(
+    v.string(),
+    v.minLength(4, '企业名称至少需要4个字符'),
+    v.maxLength(100, '企业名称不能超过100个字符'),
+  ), () => (data.value as CorpLegal)?.name ?? ''),
+  identify: v.optional(v.pipe(
+    v.string(),
+    v.length(18, '统一社会信用代码必须为18位'),
+  ), () => (data.value as CorpLegal)?.identify ?? ''),
+  business_license: v.optional(v.pipe(
+    v.string(),
+    v.minLength(1, '请上传营业执照照片'),
+  ), () => (data.value as CorpLegal)?.business_license ?? ''),
 }), {
   watch: [category, data],
 })
@@ -138,118 +161,117 @@ async function uploadFile(option: any) {
         </a-radio>
       </a-radio-group>
     </div>
+    <div p8>
+      <a-form
+        v-if="category === 1"
+        p4
+        :model="userForm"
+        :rules="userRules"
+        border-b
+        @submit="submitUser"
+      >
+        <a-form-item label="姓名" field="name">
+          <a-input
+            v-model="userForm.name"
+            placeholder="请输入姓名"
+            allow-clear
+            style="width: 450px"
+          />
+        </a-form-item>
 
-    <a-form
-      v-if="category === 1"
-      p4
-      :model="userForm"
-      :rules="userRules"
-      layout="vertical"
-      border-b
-      @submit="submitUser"
-    >
-      <a-form-item label="姓名" field="name">
-        <a-input
-          v-model="userForm.name"
-          placeholder="请输入姓名"
-          allow-clear
-          style="width: 450px"
-        />
-      </a-form-item>
+        <a-form-item label="证件号码" field="identify">
+          <a-input
+            v-model="userForm.identify"
+            :max-length="18"
+            show-word-limit
+            placeholder="请输入 18 位统一社会信用代码或身份证号"
+            allow-clear
+            style="width: 450px"
+          />
+        </a-form-item>
 
-      <a-form-item label="证件号码" field="identify">
-        <a-input
-          v-model="userForm.identify"
-          :max-length="18"
-          show-word-limit
-          placeholder="请输入 18 位统一社会信用代码或身份证号"
-          allow-clear
-          style="width: 450px"
-        />
-      </a-form-item>
+        <a-form-item label="身份证正面" field="identify_card_front">
+          <a-upload
+            :multiple="false"
+            :limit="1"
+            :file-list="clearUndefined([{ url: userForm.identify_card_front }])"
+            list-type="picture-card"
+            image-preview
+            :custom-request="(options: any) => uploadFile(options).then(url => {
+              userForm.identify_card_front = url
+            })"
+          />
+        </a-form-item>
 
-      <a-form-item label="身份证正面" field="identify_card_front">
-        <a-upload
-          :multiple="false"
-          :limit="1"
-          :file-list="clearUndefined([{ url: userForm.identify_card_front }])"
-          list-type="picture-card"
-          image-preview
-          :custom-request="(options: any) => uploadFile(options).then(url => {
-            userForm.identify_card_front = url
-          })"
-        />
-      </a-form-item>
+        <a-form-item label="身份证反面" field="identify_card_reverse">
+          <a-upload
+            :multiple="false"
+            :file-list="clearUndefined([{ url: userForm.identify_card_reverse }])"
+            :limit="1"
+            list-type="picture-card"
+            image-preview
+            :custom-request="(options: any) => uploadFile(options).then(url => {
+              userForm.identify_card_reverse = url
+            })"
+          />
+        </a-form-item>
 
-      <a-form-item label="身份证反面" field="identify_card_reverse">
-        <a-upload
-          :multiple="false"
-          :file-list="clearUndefined([{ url: userForm.identify_card_reverse }])"
-          :limit="1"
-          list-type="picture-card"
-          image-preview
-          :custom-request="(options: any) => uploadFile(options).then(url => {
-            userForm.identify_card_reverse = url
-          })"
-        />
-      </a-form-item>
+        <!-- 提交按钮 -->
+        <a-form-item>
+          <a-button mla type="primary" size="large" html-type="submit">
+            更新认证信息
+          </a-button>
+        </a-form-item>
+      </a-form>
 
-      <!-- 提交按钮 -->
-      <a-form-item>
-        <a-button mla type="primary" size="large" html-type="submit">
-          更新认证信息
-        </a-button>
-      </a-form-item>
-    </a-form>
+      <a-form
+        v-if="category === 0"
+        p4
+        :model="corpForm"
+        :rules="corpRules"
+        border-b
+        @submit="submitCorp"
+      >
+        <a-form-item label="企业名称" field="name">
+          <a-input
+            v-model="corpForm.name"
+            placeholder="请输入企业名称"
+            allow-clear
+            style="width: 450px"
+          />
+        </a-form-item>
 
-    <a-form
-      v-if="category === 0"
-      p4
-      :model="corpForm"
-      :rules="corpRules"
-      layout="vertical"
-      border-b
-      @submit="submitCorp"
-    >
-      <a-form-item label="企业名称" field="name">
-        <a-input
-          v-model="corpForm.name"
-          placeholder="请输入企业名称"
-          allow-clear
-          style="width: 450px"
-        />
-      </a-form-item>
+        <a-form-item label="证件号码" field="identify">
+          <a-input
+            v-model="corpForm.identify"
+            :max-length="18"
+            show-word-limit
+            placeholder="请输入营业执照代码"
+            allow-clear
+            style="width: 450px"
+          />
+        </a-form-item>
 
-      <a-form-item label="证件号码" field="identify">
-        <a-input
-          v-model="corpForm.identify"
-          :max-length="18"
-          show-word-limit
-          placeholder="请输入营业执照代码"
-          allow-clear
-          style="width: 450px"
-        />
-      </a-form-item>
+        <a-form-item label="营业执照" field="business_license">
+          <a-upload
+            :multiple="false"
+            :file-list="clearUndefined([{ url: corpForm.business_license }])"
+            :limit="1"
+            list-type="picture-card"
+            image-preview
+            :custom-request="(options: any) => uploadFile(options).then(url => {
+              corpForm.business_license = url
+            })"
+          />
+        </a-form-item>
 
-      <a-form-item label="营业执照" field="business_license">
-        <a-upload
-          :multiple="false"
-          :file-list="clearUndefined([{ url: corpForm.business_license }])"
-          :limit="1"
-          list-type="picture-card"
-          image-preview
-          :custom-request="(options: any) => uploadFile(options).then(url => {
-            corpForm.business_license = url
-          })"
-        />
-      </a-form-item>
-
-      <!-- 提交按钮 -->
-      <a-form-item>
-        <a-button mla type="primary" size="large" html-type="submit">
-          更新认证信息
-        </a-button>
-      </a-form-item>
-    </a-form>
+        <!-- 提交按钮 -->
+        <a-form-item>
+          <a-button type="primary" size="large" html-type="submit">
+            更新认证信息
+          </a-button>
+        </a-form-item>
+      </a-form>
+    </div>
   </div>
 </template>
