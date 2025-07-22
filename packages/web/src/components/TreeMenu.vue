@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { RouteRecordNormalized } from 'vue-router'
 import type { Legal } from '~/types/api'
-import { ref as deepRef } from 'vue'
 
 const router = useRouter()
 
@@ -16,30 +15,34 @@ interface Menu {
   }
 }
 
-const menu = deepRef<Menu>({
-  contact: { name: '通讯录', submenu: [] },
-  workbench: { name: '工作台', submenu: [] },
+const menu = computed<Menu>(() => {
+  const data = {
+    contact: { name: '通讯录', submenu: [] },
+    workbench: { name: '工作台', submenu: [] },
+  }
+  const routeList = router.getRoutes().filter((i: any) => i?.meta?.name)
+
+  const routeRootRE = /^\/([\w-]+)(\/[\w-]+)*\/?$/
+
+  for (const route of routeList) {
+    const matches = route.path.match(routeRootRE)
+    if (!matches)
+      continue
+
+    const rootKey = matches[1] as keyof Menu
+    if (!rootKey)
+      continue
+
+    // @ts-expect-error type error
+    const menuItem = data?.[rootKey]
+    if (!menuItem)
+      continue
+
+    menuItem.submenu.push(route)
+  }
+
+  return data
 })
-
-const routeList = router.getRoutes().filter((i: any) => i?.meta?.name)
-
-const routeRootRE = /^\/([\w-]+)(\/[\w-]+)*\/?$/
-
-for (const route of routeList) {
-  const matches = route.path.match(routeRootRE)
-  if (!matches)
-    continue
-
-  const rootKey = matches[1] as keyof Menu
-  if (!rootKey)
-    continue
-
-  const menuItem = menu.value?.[rootKey]
-  if (!menuItem)
-    continue
-
-  menuItem.submenu.push(route)
-}
 
 function goTo(path: string) {
   router.push(path)
