@@ -1,27 +1,56 @@
 <script setup lang="ts">
-import type { Legal } from '~/types/api'
+import type { CorpLegal, Legal, UserLegal } from '~/types/api'
 import { clearUndefined } from '@antfu/utils'
 import { Message } from '@arco-design/web-vue'
 import * as v from 'valibot'
+import { shallowRef } from 'vue'
 import { useForm } from 'zod-arco-rules/valibot'
 
 const weilaApi = useWeilaApi()
 
 const { data, isFetched, refetch } = useWeilaFetch<Legal>('corp/legal/get-legal')
 
-const { form, rules, handleSubmit } = useForm(
-  v.object({
-    id: v.number(),
-    category: v.number(),
-    identify: v.pipe(v.string(), v.length(18)),
-    identify_card_front: v.string(),
-    identify_card_reverse: v.string(),
-    business_license: v.string(),
-  }),
-)
+// const isVerified = computed(() => data.value?.state === 8)
 
-const submit = handleSubmit(async (value) => {
-  const url = `corp/legal/${data.value ? 'change' : 'add'}-${form.value.category === 0 ? 'corp' : 'user'}-legal`
+const category = shallowRef(data.value?.category)
+const { stop } = watch(data, (value) => {
+  if (value) {
+    category.value = value.category
+    stop()
+  }
+})
+
+const { form: userForm, rules: userRules, handleSubmit: handleUserSubmit } = useForm(v.object({
+  id: v.optional(v.number(), () => (data.value as UserLegal)?.id ?? undefined),
+  name: v.optional(v.string(), () => (data.value as UserLegal)?.name ?? ''),
+  identify: v.optional(v.pipe(v.string(), v.length(18)), () => (data.value as UserLegal)?.identify ?? ''),
+  identify_card_front: v.optional(v.string(), () => (data.value as UserLegal)?.identify_card_front ?? ''),
+  identify_card_reverse: v.optional(v.string(), () => (data.value as UserLegal)?.identify_card_reverse ?? ''),
+}), {
+  watch: [category, data],
+})
+
+const { form: corpForm, rules: corpRules, handleSubmit: handleCorpSubmit } = useForm(v.object({
+  id: v.optional(v.number(), () => (data.value as CorpLegal)?.id ?? undefined),
+  name: v.optional(v.string(), () => (data.value as CorpLegal)?.name ?? ''),
+  identify: v.optional(v.pipe(v.string(), v.length(18)), () => (data.value as CorpLegal)?.identify ?? ''),
+  business_license: v.optional(v.string(), () => (data.value as CorpLegal)?.business_license ?? ''),
+}), {
+  watch: [category, data],
+})
+
+const submitUser = handleUserSubmit(async (value) => {
+  const url = `corp/legal/${data.value ? 'change' : 'add'}-user-legal`
+  await weilaApi.value.v2.fetch(url, {
+    body: value,
+  })
+
+  Message.success('修改成功')
+  refetch()
+})
+
+const submitCorp = handleCorpSubmit(async (value) => {
+  const url = `corp/legal/${data.value ? 'change' : 'add'}-corp-legal`
   await weilaApi.value.v2.fetch(url, {
     body: value,
   })
@@ -84,7 +113,14 @@ async function uploadFile(option: any) {
             value: data.category === 0 ? '企业' : '个人',
           },
           {
-
+            label: '机构名称',
+            value: data.name,
+          },
+          {
+            label: '证件号码',
+            value: data.identify,
+          },
+          {
             label: '更新时间',
             value: data.updated,
           },
@@ -92,85 +128,118 @@ async function uploadFile(option: any) {
       />
     </div>
 
+    <div p4 border-b>
+      <a-radio-group v-model="category" type="button">
+        <a-radio :value="0">
+          企业认证
+        </a-radio>
+        <a-radio v-if="data?.category !== 0" :value="1">
+          个人认证
+        </a-radio>
+      </a-radio-group>
+    </div>
+
     <a-form
+      v-if="category === 1"
       p4
-      :model="form"
-      :rules="rules"
+      :model="userForm"
+      :rules="userRules"
       layout="vertical"
       border-b
-      @submit="submit"
+      @submit="submitUser"
     >
-      <a-form-item label="认证类别" field="category">
-        <a-radio-group v-model="form.category" type="button">
-          <a-radio :value="0">
-            企业认证
-          </a-radio>
-          <a-radio v-if="!data || data.category === 1 || data.state !== 8" :value="1">
-            个人认证
-          </a-radio>
-        </a-radio-group>
-      </a-form-item>
-
-      <a-form-item
-        label="证件号码"
-        field="identify"
-        :rules="rules.identify"
-      >
+      <a-form-item label="姓名" field="name">
         <a-input
-          v-model="form.identify"
-          :max-length="18"
-          show-word-limit
-          :placeholder="form.category === 0 ? '请输入营业执照代码' : '请输入 18 位统一社会信用代码或身份证号'"
+          v-model="userForm.name"
+          placeholder="请输入姓名"
           allow-clear
           style="width: 450px"
         />
       </a-form-item>
 
-      <a-form-item
-        v-if="form.category === 1"
-        label="身份证正面" field="identify_card_front"
-      >
+      <a-form-item label="证件号码" field="identify">
+        <a-input
+          v-model="userForm.identify"
+          :max-length="18"
+          show-word-limit
+          placeholder="请输入 18 位统一社会信用代码或身份证号"
+          allow-clear
+          style="width: 450px"
+        />
+      </a-form-item>
+
+      <a-form-item label="身份证正面" field="identify_card_front">
         <a-upload
           :multiple="false"
           :limit="1"
-          :file-list="clearUndefined([{ url: form.identify_card_front }])"
+          :file-list="clearUndefined([{ url: userForm.identify_card_front }])"
           list-type="picture-card"
           image-preview
           :custom-request="(options: any) => uploadFile(options).then(url => {
-            form.identify_card_front = url
+            userForm.identify_card_front = url
           })"
         />
       </a-form-item>
 
-      <a-form-item
-        v-if="form.category === 1"
-        label="身份证反面" field="identify_card_reverse"
-      >
+      <a-form-item label="身份证反面" field="identify_card_reverse">
         <a-upload
           :multiple="false"
-          :file-list="clearUndefined([{ url: form.identify_card_reverse }])"
+          :file-list="clearUndefined([{ url: userForm.identify_card_reverse }])"
           :limit="1"
           list-type="picture-card"
           image-preview
           :custom-request="(options: any) => uploadFile(options).then(url => {
-            form.identify_card_reverse = url
+            userForm.identify_card_reverse = url
           })"
         />
       </a-form-item>
 
-      <a-form-item
-        v-if="form.category === 0"
-        label="营业执照"
-        field="business_license"
-      >
+      <!-- 提交按钮 -->
+      <a-form-item>
+        <a-button mla type="primary" size="large" html-type="submit">
+          更新认证信息
+        </a-button>
+      </a-form-item>
+    </a-form>
+
+    <a-form
+      v-if="category === 0"
+      p4
+      :model="corpForm"
+      :rules="corpRules"
+      layout="vertical"
+      border-b
+      @submit="submitCorp"
+    >
+      <a-form-item label="企业名称" field="name">
+        <a-input
+          v-model="corpForm.name"
+          placeholder="请输入企业名称"
+          allow-clear
+          style="width: 450px"
+        />
+      </a-form-item>
+
+      <a-form-item label="证件号码" field="identify">
+        <a-input
+          v-model="corpForm.identify"
+          :max-length="18"
+          show-word-limit
+          placeholder="请输入营业执照代码"
+          allow-clear
+          style="width: 450px"
+        />
+      </a-form-item>
+
+      <a-form-item label="营业执照" field="business_license">
         <a-upload
           :multiple="false"
-          :file-list="clearUndefined([{ url: form.business_license }])"
+          :file-list="clearUndefined([{ url: corpForm.business_license }])"
           :limit="1"
           list-type="picture-card"
           image-preview
           :custom-request="(options: any) => uploadFile(options).then(url => {
-            form.business_license = url
+            corpForm.business_license = url
           })"
         />
       </a-form-item>
