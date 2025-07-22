@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { CorpLegal, Legal, UserLegal } from '~/types/api'
-import { clearUndefined } from '@antfu/utils'
 import { Message } from '@arco-design/web-vue'
 import * as v from 'valibot'
 import { shallowRef } from 'vue'
@@ -12,7 +11,7 @@ const { data, isFetched, refetch } = useWeilaFetch<Legal>('corp/legal/get-legal'
 
 // const isVerified = computed(() => data.value?.state === 8)
 
-const category = shallowRef(data.value?.category)
+const category = shallowRef(data.value?.category || 0)
 const { stop } = watch(data, (value) => {
   if (value) {
     category.value = value.category
@@ -138,9 +137,8 @@ async function uploadFile(option: any) {
       </a-steps>
     </div>
 
-    <div p4 border-b>
+    <div v-if="data" p4 border-b>
       <a-descriptions
-        v-if="data"
         :title="data.category === 0 ? '企业认证' : '个人认证'" size="large"
         bordered
         :data="[
@@ -215,7 +213,8 @@ async function uploadFile(option: any) {
           <a-upload
             :multiple="false"
             :limit="1"
-            :file-list="clearUndefined([{ url: userForm.identify_card_front }])"
+            :file-list="[{ url: userForm.identify_card_front }].filter(i => i.url)"
+            :default-file-list="[]"
             list-type="picture-card"
             image-preview
             :custom-request="(options: any) => uploadFile(options).then(url => {
@@ -227,7 +226,8 @@ async function uploadFile(option: any) {
         <a-form-item label="身份证反面" field="identify_card_reverse">
           <a-upload
             :multiple="false"
-            :file-list="clearUndefined([{ url: userForm.identify_card_reverse }])"
+            :file-list="[{ url: userForm.identify_card_reverse }].filter(i => i.url)"
+            :default-file-list="[]"
             :limit="1"
             list-type="picture-card"
             image-preview
@@ -276,7 +276,8 @@ async function uploadFile(option: any) {
         <a-form-item label="营业执照" field="business_license">
           <a-upload
             :multiple="false"
-            :file-list="clearUndefined([{ url: corpForm.business_license }])"
+            :default-file-list="[]"
+            :file-list="[{ url: corpForm.business_license }].filter(i => i.url)"
             :limit="1"
             list-type="picture-card"
             image-preview
