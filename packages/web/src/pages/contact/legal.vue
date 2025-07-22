@@ -172,12 +172,12 @@ async function uploadFile(option: any) {
       />
     </div>
 
-    <div p4 border-b>
+    <div v-if="data?.category !== 0" p4 border-b>
       <a-radio-group v-model="category" type="button">
         <a-radio :value="0">
           企业认证
         </a-radio>
-        <a-radio v-if="data?.category !== 0" :value="1">
+        <a-radio :value="1">
           个人认证
         </a-radio>
       </a-radio-group>
