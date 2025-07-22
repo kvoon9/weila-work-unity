@@ -15,6 +15,9 @@ import ResetPasswordModal from './components/ResetMemberPasswordModal.vue'
 
 definePage({
   alias: 'member',
+  meta: {
+    name: '成员管理',
+  },
 })
 
 const { data: corp, org_num } = storeToRefs(useCorpStore())

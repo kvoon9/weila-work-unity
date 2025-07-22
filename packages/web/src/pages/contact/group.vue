@@ -2,11 +2,17 @@
 import type { GroupGetallModel } from 'generated/mock/weila'
 import type { GroupModel } from '~/api/contact'
 import { useQuery } from '@tanstack/vue-query'
-import { ref } from 'vue'
+import { ref as deepRef } from 'vue'
 
 import CreateGroupModal from './components/CreateGroupModal.vue'
 import DeleteGroupModal from './components/DeleteGroupModal.vue'
 import EditGroupModal from './components/EditGroupModal.vue'
+
+definePage({
+  meta: {
+    name: '群组管理',
+  },
+})
 
 const { t } = useI18n()
 
@@ -24,9 +30,9 @@ const { data: groups, refetch } = useQuery<GroupGetallModel['data']['groups']>({
 
 $inspect(groups)
 
-const selectedGroup = ref<GroupGetallModel['data']['groups'][number] | undefined>(undefined)
+const selectedGroup = deepRef<GroupGetallModel['data']['groups'][number] | undefined>(undefined)
 
-const checkedGroupIds = ref<number[]>([])
+const checkedGroupIds = deepRef<number[]>([])
 
 $inspect(checkedGroupIds)
 

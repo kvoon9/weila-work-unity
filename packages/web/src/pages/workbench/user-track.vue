@@ -9,6 +9,12 @@ import { nanoid } from 'nanoid'
 import { ref as deepRef, shallowRef } from 'vue'
 import { weilaApiUrl } from '~/api'
 
+definePage({
+  meta: {
+    name: '轨迹',
+  },
+})
+
 const { t } = useI18n()
 
 const selectedUserId = shallowRef()

@@ -1,10 +1,47 @@
 <script setup lang="ts">
+import type { RouteRecordNormalized } from 'vue-router'
 import type { Legal } from '~/types/api'
 import { ref as deepRef } from 'vue'
 
 const router = useRouter()
 const selectedKeys = deepRef<string[]>([])
+const route = useRoute()
+
+const corpStore = useCorpStore()
+const { data: corp } = storeToRefs(corpStore)
 const { data: legal } = useWeilaFetch<Legal>('corp/legal/get-legal')
+
+interface Menu {
+  [key: string]: {
+    name: string
+    submenu: RouteRecordNormalized[]
+  }
+}
+
+const menu = deepRef<Menu>({
+  contact: { name: '通讯录', submenu: [] },
+  workbench: { name: '工作台', submenu: [] },
+})
+
+const routeList = router.getRoutes().filter((i: any) => i?.meta?.name)
+
+const routeRootRE = /^\/([\w-]+)(\/[\w-]+)*\/?$/
+
+for (const route of routeList) {
+  const matches = route.path.match(routeRootRE)
+  if (!matches)
+    continue
+
+  const rootKey = matches[1] as keyof Menu
+  if (!rootKey)
+    continue
+
+  const menuItem = menu.value?.[rootKey]
+  if (!menuItem)
+    continue
+
+  menuItem.submenu.push(route)
+}
 
 function goTo(path: string, _rest?: string[] | undefined) {
   const isChild = _rest === undefined
@@ -14,10 +51,6 @@ function goTo(path: string, _rest?: string[] | undefined) {
   selectedKeys.value = [path]
   router.push(path)
 }
-
-const corpStore = useCorpStore()
-const { data: corp } = storeToRefs(corpStore)
-const route = useRoute()
 
 const defaultSelectedKeys = [
   '/contact/org',
@@ -33,7 +66,6 @@ const defaultSelectedKeys = [
       v-model:selected-keys="selectedKeys"
       :style="{ width: '200px', height: '100%' }"
       auto-open
-      :default-open-keys="['contact']"
       :default-selected-keys
       @menu-item-click="goTo"
       @sub-menu-click="goTo"
@@ -66,37 +98,14 @@ const defaultSelectedKeys = [
         </template>
       </a-trigger>
       <a-menu-item key="/contact/org">
-        <template #icon>
-          <IconHome />
-        </template>
         主页
       </a-menu-item>
-      <a-sub-menu key="/contact">
-        <template #icon>
-          <IconApps />
-        </template>
+      <a-sub-menu v-for="{ name, submenu } in menu" :key="name">
         <template #title>
-          通讯录
+          {{ name }}
         </template>
-        <a-menu-item key="/contact/member">
-          成员管理
-        </a-menu-item>
-        <a-menu-item key="/contact/dept">
-          部门管理
-        </a-menu-item>
-        <a-menu-item key="/contact/group">
-          群组管理
-        </a-menu-item>
-      </a-sub-menu>
-      <a-sub-menu key="/workbench">
-        <template #icon>
-          <IconApps />
-        </template>
-        <template #title>
-          工作台
-        </template>
-        <a-menu-item key="/workbench/user-track">
-          轨迹
+        <a-menu-item v-for="i in submenu" :key="i.path">
+          {{ i.meta.name }}
         </a-menu-item>
       </a-sub-menu>
     </a-menu>

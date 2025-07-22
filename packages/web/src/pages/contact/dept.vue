@@ -7,6 +7,12 @@ import CreateDeptModal from './components/CreateDeptModal.vue'
 import DeleteDeptModal from './components/DeleteDeptModal.vue'
 import EditDeptModal from './components/EditDeptModal.vue'
 
+definePage({
+  meta: {
+    name: '部门管理',
+  },
+})
+
 const router = useRouter()
 
 const { t } = useI18n()
