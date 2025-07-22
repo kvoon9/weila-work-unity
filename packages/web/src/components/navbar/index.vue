@@ -1,10 +1,9 @@
 <script lang="ts" setup>
 import { useQuery } from '@tanstack/vue-query'
 import { UseImage } from '@vueuse/components'
-import { createReusableTemplate, useFullscreen, useToggle } from '@vueuse/core'
+import { createReusableTemplate, useFullscreen } from '@vueuse/core'
 import { computed, inject, shallowRef } from 'vue'
 import Menu from '~/components/menu/index.vue'
-import { isDark } from '~/shared/states'
 import { useAuthStore } from '~/stores/auth'
 import { version } from '../../../package.json'
 import BindingPhone from '../BindingPhone.vue'
@@ -15,7 +14,7 @@ const appStore = useAppStore()
 const { logout } = useAuthStore()
 const { isFullscreen, toggle: toggleFullScreen } = useFullscreen()
 const topMenu = computed(() => appStore.topMenu && appStore.menu)
-const toggleTheme = useToggle(isDark)
+// const toggleTheme = useToggle(isDark)
 
 const [DefineTemplate, ReuseTemplate] = createReusableTemplate()
 
@@ -102,12 +101,12 @@ function tryLogout() {
       </li> -->
 
       <li>
-        <a-button class="nav-btn" type="outline" shape="circle" @click="toggleTheme()">
+        <!-- <a-button class="nav-btn" type="outline" shape="circle" @click="toggleTheme()">
           <template #icon>
             <icon-moon-fill v-if="!isDark" />
             <icon-sun-fill v-else />
           </template>
-        </a-button>
+        </a-button> -->
       </li>
       <li>
         <a-tooltip

@@ -13,7 +13,7 @@ export function $inspect(...args: MaybeRefOrGetter[]) {
   const type: 'init' | 'update' = 'update'
 
   if (import.meta.env.DEV) {
-    watch(args, (cur) => {
+    watchImmediate(args, (cur) => {
       logFn(type, ...cur.map((arg) => {
         return isFunction(arg) ? arg() : unref(arg)
       }))

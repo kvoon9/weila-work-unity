@@ -10,6 +10,7 @@ definePage({
 const { t } = useI18n()
 
 const router = useRouter()
+
 const corpStore = useCorpStore()
 const { refetch, isSuccess } = corpStore
 const { data: corp } = storeToRefs(corpStore)
@@ -89,6 +90,8 @@ watchEffect(() => {
       </div>
     </div>
   </div>
+
+  <CreateCorpModal />
 
   <EditCorpModal v-model:open="isEditCorpModalVisible" :avatar="corp?.avatar" :name="corp?.name" @success="refetch" />
 </template>

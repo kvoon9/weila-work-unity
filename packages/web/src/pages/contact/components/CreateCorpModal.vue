@@ -9,8 +9,18 @@ const { t } = useI18n()
 
 const avatarUploaderRef = templateRef('avatarUploaderRef')
 
-const open = defineModel('open', { default: false })
+const corpStore = useCorpStore()
+const { isSuccess, refetch } = corpStore
+const { data: corp } = storeToRefs(corpStore)
 
+const open = computed(() => {
+  if (isSuccess && !corp.value)
+    return true
+  else
+    return false
+})
+
+$inspect(open)
 interface Payload {
   name: string
   avatar: string
@@ -30,14 +40,14 @@ const { mutate, isPending } = useMutation({
   ),
   onSuccess: () => {
     formRef.value?.resetFields()
-    open.value = false
     Message.success(t('message.success'))
+    refetch()
     emits('success')
   },
 })
 
 function handleSubmit() {
-  return formRef.value?.validate(async (errors) => {
+  return formRef.value?.validate(async (errors: any) => {
     if (errors)
       return
 
@@ -57,7 +67,7 @@ function handleSubmit() {
 </script>
 
 <template>
-  <DialogRoot v-model:open="open">
+  <DialogRoot :open="false">
     <DialogTrigger>
       <slot />
     </DialogTrigger>
@@ -93,12 +103,12 @@ function handleSubmit() {
             {{ t('button.submit') }}
           </a-button>
         </div>
-        <DialogClose
+        <!-- <DialogClose
           class="text-grass11 absolute right-[10px] top-[10px] h-[25px] w-[25px] inline-flex appearance-none items-center justify-center rounded-full hover:bg-gray2 focus:shadow-[0_0_0_2px] focus:shadow-gray7 focus:outline-none"
           aria-label="Close"
         >
           <i i-carbon-close />
-        </DialogClose>
+        </DialogClose> -->
       </DialogContent>
     </DialogPortal>
   </DialogRoot>

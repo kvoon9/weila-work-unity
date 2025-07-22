@@ -4,7 +4,6 @@ import { ref as deepRef, reactive, shallowRef } from 'vue'
 import CreateCorpModal from './contact/components/CreateCorpModal.vue'
 
 definePage({
-  // alias: ['/'],
   meta: {
     menu: { label: 'menu.contact', order: 1, icon: 'icon-user-group' },
   },

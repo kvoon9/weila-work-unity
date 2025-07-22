@@ -5,12 +5,13 @@ export const et = computed(() => Math.floor(timestamp.value / 1000))
  * Theme
  */
 
-export const isDark = useDark()
+// export const isDark = useDark()
 // https://arco.design/vue/docs/dark
 watchEffect(() => {
-  isDark.value
-    ? document.body.setAttribute('arco-theme', 'dark')
-    : document.body.removeAttribute('arco-theme')
+  document.body.removeAttribute('arco-theme')
+  // isDark.value
+  //   ? document.body.setAttribute('arco-theme', 'dark')
+  //   : document.body.removeAttribute('arco-theme')
 })
 
 const emojiIdMap = Object.fromEntries(

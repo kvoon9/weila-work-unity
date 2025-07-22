@@ -41,7 +41,7 @@ const { mutate, isPending, data } = useMutation({
     if (!data)
       throw new Error('no data')
 
-    router.push('/contact')
+    router.push('/contact/org')
   },
 })
 
