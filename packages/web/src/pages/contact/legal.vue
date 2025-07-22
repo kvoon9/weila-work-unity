@@ -117,6 +117,27 @@ async function uploadFile(option: any) {
     </div>
   </a-skeleton>
   <div v-else>
+    <div p8 border-b>
+      <a-steps
+        :current="(() => {
+          if (!data)
+            return 1
+
+          if (data.state === 0)
+            return 2
+
+          if (data.state === 8 || data.state === 9)
+            return 3
+        })()"
+        w-300
+      >
+        <a-step title="填写信息" description="完善认证信息并提交" />
+        <a-step title="等待审核" description="我们将在1-3个工作日内完成审核" />
+        <a-step v-if="data?.state === 9" title="认证失败" description="审核未通过，请重新提交审核" />
+        <a-step v-else title="认证完成" description="审核通过，认证成功" />
+      </a-steps>
+    </div>
+
     <div p4 border-b>
       <a-descriptions
         v-if="data"
@@ -161,7 +182,7 @@ async function uploadFile(option: any) {
         </a-radio>
       </a-radio-group>
     </div>
-    <div p8>
+    <div>
       <a-form
         v-if="category === 1"
         p4
