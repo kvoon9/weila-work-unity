@@ -5,6 +5,7 @@ import md5 from 'md5'
 import * as v from 'valibot'
 import { shallowRef } from 'vue'
 import { useForm } from 'zod-arco-rules/valibot'
+import { SendVerifySmsBody } from '~/api/verify-sms'
 import { accountHistoryRecord } from '~/shared/const'
 
 definePage({
@@ -32,13 +33,7 @@ const { form: smsLoginForm, rules: smsLoginRules, handleSubmit: handleSmsLogin }
 
 const { data, refetch: refreshImageCode } = useWeilaFetch<{ id: string, image: string }>('common/get-image-verifycode')
 
-const { mutate: sendSmsVerifyCode } = useWeilaMutation<any, {
-  phone: string
-  countrycode: string
-  verify_id: string
-  verify_answer: string
-  smstype: 'work-regist' | 'work-login'
-}>('common/send-sms-verifycode')
+const { mutate: sendSmsVerifyCode } = useWeilaMutation<never, SendVerifySmsBody>('common/send-sms-verifycode')
 
 const imageCodeModalVisible = shallowRef(false)
 const imageCode = shallowRef('')
@@ -110,7 +105,7 @@ function handleImageCodeConfirm() {
       imageCodeModalVisible.value = false
       imageCode.value = ''
       Message.success('短信发送成功')
-      // 这里可以添加倒计时等逻辑
+      // 这里可以账号密码添加倒计时等逻辑
     },
   })
 }

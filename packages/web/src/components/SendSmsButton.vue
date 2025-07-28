@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SendVerifySmsModel } from '~/api/verify-sms'
+import type { SendVerifySmsBody } from '~/api/verify-sms'
 import Message from '@arco-design/web-vue/es/message'
 import { useMutation } from '@tanstack/vue-query'
 import { sendVerifySms } from '~/api/verify-sms'
@@ -7,7 +7,7 @@ import { timestamp } from '~/shared/states'
 
 const props = defineProps<{
   classes?: string | string[]
-  opts: SendVerifySmsModel
+  opts: SendVerifySmsBody
 }>()
 
 const emits = defineEmits(['success', 'error'])

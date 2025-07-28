@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import Message from '@arco-design/web-vue/es/message'
-import { useMutation } from '@tanstack/vue-query'
-import md5 from 'md5'
-import { weilaApiUrl } from '~/api'
+import * as v from 'valibot'
+import { Message } from '@arco-design/web-vue'
+import { shallowRef } from 'vue'
+import { useForm } from 'zod-arco-rules/valibot'
+import { SendVerifySmsBody } from '~/api/verify-sms'
 
 definePage({
   meta: {
@@ -14,100 +15,192 @@ definePage({
 const { t } = useI18n()
 const router = useRouter()
 
-interface Model {
+const { form, rules, handleSubmit } = useForm(v.object({
+  phone: v.string(),
+  country_code: v.optional(v.string(), '86'),
+  verifycode: v.string(),
+  password: v.string()
+}))
+
+const { data, refetch: refreshImageCode } = useWeilaFetch<{ id: string, image: string }>('common/get-image-verifycode')
+
+const { mutate: sendSmsVerifyCode } = useWeilaMutation<never, SendVerifySmsBody>('common/send-sms-verifycode')
+
+const imageCodeModalVisible = shallowRef(false)
+const imageCode = shallowRef('')
+
+let currentPhoneInfo: {
   phone: string
-  country_code: '86'
-  verify_code: string
-  verify_img_code: string
-  password: string
+  countrycode: string
+} | null = null
+
+const { mutate: resetPassword, isPending: isSubmiting } = useWeilaMutation('/corp/auth/reset-password')
+
+const submit = handleSubmit((values) => {
+  resetPassword(values)
+})
+
+function handleSendSmsCode() {
+  if (!form.value.phone) {
+    Message.warning('请输入手机号')
+    return
+  }
+
+  currentPhoneInfo = {
+    phone: form.value.phone,
+    countrycode: form.value.country_code || '86',
+  }
+
+  if (data.value) {
+    imageCodeModalVisible.value = true
+    imageCode.value = ''
+  }
 }
 
-const verifyImg = templateRef('verifyImg')
+function handleImageCodeConfirm() {
+  if (!data.value?.id) {
+    Message.error('图形验证码异常')
+    return
+  }
 
-const form = reactive<Model>({
-  phone: '',
-  password: '',
-  country_code: '86',
-  verify_code: '',
-  verify_img_code: '',
-})
+  if (!imageCode.value.trim()) {
+    Message.warning('请输入图形验证码')
+    return
+  }
 
-const { mutate: submit, isPending: isSubmiting } = useMutation({
-  mutationFn: async (data: Model) => {
-    return await weilaRequest.post(weilaApiUrl('/corp/web/reset-password'), {
-      ...data,
-      password: md5(data.password),
-    })
-  },
-  onSuccess() {
-    Message.success(t('message.success'))
-  },
-  onError(error) {
-    Message.error(error.message || 'Request Error')
+  if (!currentPhoneInfo) {
+    Message.error('获取手机号失败，请重试')
+    return
+  }
 
-    verifyImg.value?.refetch()
-  },
-})
+  sendSmsVerifyCode({
+    phone: currentPhoneInfo.phone,
+    countrycode: currentPhoneInfo.countrycode,
+    verify_id: data.value.id,
+    verify_answer: imageCode.value.trim(),
+    smstype: 'work-reset-password',
+  }, {
+    onSuccess: () => {
+      imageCodeModalVisible.value = false
+      imageCode.value = ''
+      Message.success('短信发送成功')
+    },
+  })
+}
+
+function handleImageCodeCancel() {
+  imageCodeModalVisible.value = false
+  imageCode.value = ''
+}
 </script>
 
 <template>
-  <div p2>
-    <h2 class="mb-6 text-2xl font-bold">
+  <div class="reset-password-form-wrapper">
+    <div class="reset-password-form-title" mb-4>
       {{ t('reset-password-form.title') }}
-    </h2>
+    </div>
 
-    <a-form :model="form" layout="vertical" @submit="() => submit(form)">
-      <a-form-item
-        :label="t('phone-number')" field="phone"
-        :rules="[{ required: true, message: t('binding-phone-form.err-msg.phone-number') }]"
-        :validate-trigger="['blur', 'change']"
-      >
-        <a-input v-model="form.phone" :max-length="12" show-word-limit />
-      </a-form-item>
-
-      <a-form-item
-        :label="t('verify-image-code')" field="verify_img_code"
-        :rules="[{ required: true, message: t('binding-phone-form.err-msg.verify-image-code') }]"
-        :validate-trigger="['blur', 'change']"
-      >
-        <div class="flex items-center">
-          <a-input v-model="form.verify_img_code" class="mr-2 flex-grow" />
-          <VerifyImg ref="verifyImg" class="flex-shrink-0" />
-        </div>
-      </a-form-item>
-
-      <a-form-item
-        :label="t('sms-code')" field="verify_code"
-        :rules="[{ required: true, message: t('binding-phone-form.err-msg.verify-code') }]"
-        :validate-trigger="['blur', 'change']"
-      >
-        <div class="flex items-center">
-          <a-input v-model="form.verify_code" :max-length="20" show-word-limit class="mr-2 flex-grow" />
-          <SendSmsButton
-            classes="flex-shrink-0" :opts="{
-              phone: form.phone,
-              verify_code: form.verify_img_code,
-              country_code: '86',
-              sms_type: 'reset-password',
-            }" @error="() => verifyImg?.refetch()"
+    <a-form :model="form" :rules layout="vertical" @submit="submit">
+      <a-form-item field="phone" hide-label>
+        <a-input-group>
+          <a-select v-model="form.country_code" style="width: 90px" placeholder="区号">
+            <a-option value="86">
+              +86
+            </a-option>
+            <a-option value="852">
+              +852
+            </a-option>
+            <a-option value="853">
+              +853
+            </a-option>
+            <a-option value="886">
+              +886
+            </a-option>
+          </a-select>
+          <a-input
+            v-model="form.phone"
+            placeholder="请输入手机号"
+            allow-clear
           />
-        </div>
+        </a-input-group>
       </a-form-item>
 
-      <a-form-item
-        :label="t('password')" field="password"
-        :rules="[{ required: true, message: t('binding-phone-form.err-msg.password') }]"
-        :validate-trigger="['blur', 'change']"
-      >
-        <a-input-password v-model="form.password" />
+      <a-form-item field="verifycode" hide-label>
+        <a-input
+          v-model="form.verifycode"
+          placeholder="请输入验证码"
+          allow-clear
+        >
+          <template #suffix>
+            <a-button
+              type="text"
+              :loading="false"
+              :disabled="!form.phone"
+              @click="handleSendSmsCode"
+            >
+              获取短信验证码
+            </a-button>
+          </template>
+        </a-input>
       </a-form-item>
 
-      <a-button type="primary" html-type="submit" :loading="isSubmiting" class="w-full">
+      <a-form-item field="password" hide-label>
+        <a-input-password
+          v-model="form.password"
+          placeholder="请设置新密码"
+          allow-clear
+        />
+      </a-form-item>
+
+      <a-button type="primary" html-type="submit" :loading="isSubmiting" long>
         {{ t('button.submit') }}
       </a-button>
-      <a-button mt2 color-gray-3 type="text" @click="() => router.go(-1)">
+      <a-button type="text" @click="() => router.go(-1)" long mt-4>
         {{ t('button.login') }}
       </a-button>
     </a-form>
+
+    <a-modal
+      v-model:visible="imageCodeModalVisible"
+      title="图形验证"
+      :footer="false"
+      @cancel="handleImageCodeCancel"
+    >
+      <div space-y-8>
+        <div flex gap2>
+          <a-input
+            v-model="imageCode"
+            placeholder="请输入图形验证码"
+            allow-clear
+            :max-length="6"
+          />
+          <img v-if="data?.image" :src="data.image" alt="验证码" @click="() => refreshImageCode()">
+        </div>
+        <div flex gap4>
+          <div flex-1 />
+          <a-button @click="handleImageCodeCancel">
+            取消
+          </a-button>
+          <a-button type="primary" @click="handleImageCodeConfirm">
+            确认
+          </a-button>
+        </div>
+      </div>
+    </a-modal>
   </div>
 </template>
+
+<style lang="less" scoped>
+.reset-password-form {
+  &-wrapper {
+    width: 320px;
+  }
+
+  &-title {
+    color: var(--color-text-1);
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 32px;
+  }
+}
+</style>
