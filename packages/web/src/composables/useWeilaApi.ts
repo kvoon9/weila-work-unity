@@ -3,19 +3,11 @@ import { WeilaApi } from '@wl/network'
 import { shallowRef } from 'vue'
 
 export function useWeilaApi() {
-  // const { start, finish } = useLoadingIndicator()
   const weilaApi = shallowRef(new WeilaApi(
     '102036',
     'b3c658bd2e637c65efb134fb381d4a18',
     {
-      enableRequest: true,
       baseURL: 'v1',
-      // onStart() {
-      //   start()
-      // },
-      // onDone() {
-      //   finish()
-      // },
       onError(error: any) {
         if (error instanceof Error) {
           Message.error(error.message)
@@ -30,9 +22,9 @@ export function useWeilaApi() {
           }
         }
       },
-      onLogout() {
+      onAuthError() {
         const router = useRouter()
-        weilaApi.value.clear()
+        localStorage.clear()
         router.push('/login')
       },
     },

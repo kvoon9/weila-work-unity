@@ -1,11 +1,12 @@
 import type { UserModule } from './types'
+import * as v from 'valibot'
 import { setupLayouts } from 'virtual:generated-layouts'
 import { createWebHashHistory } from 'vue-router'
 import { routes } from 'vue-router/auto-routes'
 import globalComponents from '~/components'
 import App from './App.vue'
-import directive from './directive'
 import { setup } from './setup'
+import '@valibot/i18n/zh-CN'
 
 // Styles are imported via arco-plugin. See config/plugin/arcoStyleImport.ts in the directory for details
 // 样式通过 arco-plugin 插件导入。详见目录文件 config/plugin/arcoStyleImport.ts
@@ -38,6 +39,9 @@ setup(
 
     // @ts-expect-error type error
     app.use(globalComponents)
-    app.use(directive)
   },
 )
+
+v.setGlobalConfig({
+  lang: 'zh-CN',
+})

@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import type { OnSubmitParams } from '~/types'
-import { objectKeys } from '@antfu/utils'
-import { Message } from '@arco-design/web-vue'
-import { useMutation, useQueryClient } from '@tanstack/vue-query'
-import { useAuthStore } from '~/stores/auth'
+import { useQueryClient } from '@tanstack/vue-query'
+import md5 from 'md5'
+import * as v from 'valibot'
+import { useForm } from 'zod-arco-rules/valibot'
+import { useWeilaMutation } from '~/composables/useWeilaMutation'
+import { accountHistoryRecord } from '~/shared/const'
 
 definePage({
   meta: {
@@ -15,51 +16,35 @@ definePage({
 const { t } = useI18n()
 const router = useRouter()
 const qc = useQueryClient()
-const authStore = useAuthStore()
-const { login } = authStore
-const { accountHistoryRecord } = storeToRefs(authStore)
 
-interface Form {
-  account: string
-  password: string
-}
-
-const form = reactive<Form>({
-  account: '',
-  password: '',
-})
+const { form, rules, handleSubmit } = useForm(v.object({
+  account: v.string(),
+  password: v.string(),
+}))
 
 const [isRememberPassword, toggleRememberPassword] = useToggle(false)
 
-const { mutate, isPending, data } = useMutation({
-  mutationFn: (params: Form) => login(params, { remember: isRememberPassword.value }),
-  onSuccess(data) {
-    Message.success({
-      content: t('login.form.successMsg'),
-    })
-
-    if (!data)
-      throw new Error('no data')
-
-    router.push('/contact/org')
-  },
+const { mutate, isPending } = useWeilaMutation<{ access_token: string }>('/corp/auth/login', {
+  onSuccess,
 })
 
-$inspect(data)
+function onSuccess(res: any) {
+  localStorage.setItem('token', res.access_token)
+  accountHistoryRecord.value.set(form.value.account, form.value.password)
 
-function handleSubmit({ values, errors }: OnSubmitParams<Form>) {
-  if (errors && objectKeys(errors).length)
-    return
-
-  mutate(values)
+  router.push('/contact/org').catch(console.error)
 }
+
+const submit = handleSubmit((values: any) => {
+  mutate({ ...values, password: md5(values.password) })
+})
 
 onMounted(async () => {
   const form = document.querySelector('form')
   form?.setAttribute('autocomplete', 'on')
 
   await qc.invalidateQueries()
-  await qc.clear()
+  qc.clear()
 })
 </script>
 
@@ -68,11 +53,8 @@ onMounted(async () => {
     <div class="login-form-title" mb-4>
       {{ t('login.form.title') }}
     </div>
-    <a-form :model="form" class="login-form" layout="vertical" @submit="handleSubmit">
-      <a-form-item
-        field="account" :rules="[{ required: true, message: t('login.form.userName.errMsg') }]"
-        :validate-trigger="['change', 'blur']" hide-label
-      >
+    <a-form :model="form" :rules class="login-form" layout="vertical" @submit="submit">
+      <a-form-item field="account" hide-label>
         <a-auto-complete
           v-model="form.account" :data="Array.from(accountHistoryRecord.keys())"
           :placeholder="t('login.form.userName.placeholder')" allow-clear relative
@@ -87,10 +69,7 @@ onMounted(async () => {
           </template>
         </a-auto-complete>
       </a-form-item>
-      <a-form-item
-        field="password" :rules="[{ required: true, message: t('login.form.password.errMsg') }]"
-        :validate-trigger="['change', 'blur']" hide-label
-      >
+      <a-form-item field="password" hide-label>
         <a-input-password
           v-model="form.password"
           :input-attrs="{ password: 'password', autocomplete: 'current-password' }"

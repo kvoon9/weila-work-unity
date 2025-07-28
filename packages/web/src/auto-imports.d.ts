@@ -316,6 +316,7 @@ declare global {
   const useWebWorkerFn: typeof import('@vueuse/core')['useWebWorkerFn']
   const useWeilaApi: typeof import('./composables/useWeilaApi')['useWeilaApi']
   const useWeilaFetch: typeof import('./composables/useWeilaFetch')['useWeilaFetch']
+  const useWeilaMutation: typeof import('./composables/useWeilaMutation')['useWeilaMutation']
   const useWindowFocus: typeof import('@vueuse/core')['useWindowFocus']
   const useWindowScroll: typeof import('@vueuse/core')['useWindowScroll']
   const useWindowSize: typeof import('@vueuse/core')['useWindowSize']
@@ -666,6 +667,7 @@ declare module 'vue' {
     readonly useWebWorkerFn: UnwrapRef<typeof import('@vueuse/core')['useWebWorkerFn']>
     readonly useWeilaApi: UnwrapRef<typeof import('./composables/useWeilaApi')['useWeilaApi']>
     readonly useWeilaFetch: UnwrapRef<typeof import('./composables/useWeilaFetch')['useWeilaFetch']>
+    readonly useWeilaMutation: UnwrapRef<typeof import('./composables/useWeilaMutation')['useWeilaMutation']>
     readonly useWindowFocus: UnwrapRef<typeof import('@vueuse/core')['useWindowFocus']>
     readonly useWindowScroll: UnwrapRef<typeof import('@vueuse/core')['useWindowScroll']>
     readonly useWindowSize: UnwrapRef<typeof import('@vueuse/core')['useWindowSize']>
