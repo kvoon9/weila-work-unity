@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { DeptModel } from '~/api/contact'
-import Message from '@arco-design/web-vue/es/message'
-import { useMutation } from '@tanstack/vue-query'
-import { weilaApiUrl } from '~/api'
+import type { DeptModel } from '~/api/contact';
+import Message from '@arco-design/web-vue/es/message';
+import * as v from 'valibot';
+import { useForm } from 'zod-arco-rules/valibot';
 
 const props = defineProps<{
   dept?: DeptModel
@@ -12,58 +12,34 @@ const emits = defineEmits(['success'])
 
 const { t } = useI18n()
 
-const { data: corp } = storeToRefs(useCorpStore())
 const contactStore = useContactStore()
 
 const open = defineModel('open', { default: false })
 
-const form = reactive({
-  name: '',
+const { form, rules, handleSubmit } = useForm(v.object({
+  name: v.string(),
+}))
+
+const { mutate, isPending } = useWeilaMutation('corp/address/change-dept', {
+  onSuccess() {
+    open.value = false
+    Message.success(t('message.success'))
+    contactStore.refetch()
+    emits('success')
+  },
 })
 
 watch(open, (val) => {
   if (val)
-    form.name = props.dept?.name || ''
+    form.value.name = props.dept?.name || ''
 })
 
-const formRef = templateRef('formRef')
-
-interface Payload {
-  name: string
-  org_num: number
-  dept_id: number
-}
-
-const { mutate, isPending } = useMutation({
-  mutationFn: (payload: Payload) => weilaRequest.post(
-    weilaApiUrl('/corp/web/dept-change'),
-    payload,
-  ),
-  onSuccess: () => {
-    formRef.value?.resetFields()
-    open.value = false
-    Message.success(t('message.success'))
-    contactStore.refetch()
-  },
-})
-
-function handleSubmit() {
-  return formRef.value?.validate((errors) => {
-    if (errors)
-      return
-
-    mutate({
-      ...form,
-      dept_id: props.dept!.id,
-      org_num: corp.value!.num,
-    }, {
-      onSuccess: () => {
-        formRef.value?.resetFields()
-        emits('success')
-      },
-    })
+const submit = handleSubmit((values: any) => {
+  mutate({
+    ...values,
+    dept_id: props.dept!.id,
   })
-}
+})
 </script>
 
 <template>
@@ -81,25 +57,15 @@ function handleSubmit() {
           {{ t('dept.edit') }}
         </DialogTitle>
 
-        <a-form ref="formRef" :model="form" @submit="handleSubmit">
-          <a-form-item field="name" :label="t('org-form.name.label')" :rules="[{ required: true }]">
+        <a-form :rules :model="form" @submit="submit">
+          <a-form-item field="name" :label="t('org-form.name.label')">
             <a-input v-model="form.name" :max-length="20" show-word-limit />
           </a-form-item>
-        </a-form>
 
-        <div class="mt-[25px] flex justify-end">
-          <a-button type="text" @click="() => formRef?.resetFields()">
-            {{ t('button.reset') }}
-          </a-button>
-          <DialogClose as-child>
-            <a-button>
-              {{ t('button.cancel') }}
-            </a-button>
-          </DialogClose>
-          <a-button type="primary" :loading="isPending" @click="(e) => formRef?.handleSubmit(e)">
+          <a-button type="primary" mla w-fit :loading="isPending" html-type="submit">
             {{ t('button.submit') }}
           </a-button>
-        </div>
+        </a-form>
         <DialogClose
           class="text-grass11 absolute right-[10px] top-[10px] h-[25px] w-[25px] inline-flex appearance-none items-center justify-center rounded-full hover:bg-gray2 focus:shadow-[0_0_0_2px] focus:shadow-gray7 focus:outline-none"
           aria-label="Close"

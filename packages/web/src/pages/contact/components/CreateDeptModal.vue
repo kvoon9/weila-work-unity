@@ -1,31 +1,23 @@
 <script setup lang="ts">
-import type { CreateDeptPayload } from '~/api/contact'
 import Message from '@arco-design/web-vue/es/message'
-import { useMutation } from '@tanstack/vue-query'
-import { weilaApiUrl } from '~/api'
+import * as v from 'valibot'
+import { shallowRef } from 'vue'
+import { useForm } from 'zod-arco-rules/valibot'
 
 const emits = defineEmits(['success'])
 
 const { t } = useI18n()
 
-const { data: corp } = storeToRefs(useCorpStore())
 const contactStore = useContactStore()
 
-const open = ref(false)
+const open = shallowRef(false)
 
-const form = reactive({
-  name: '',
-})
+const { form, rules, handleSubmit } = useForm(v.object({
+  name: v.string(),
+}))
 
-const formRef = templateRef('formRef')
-
-const { mutate, isPending } = useMutation({
-  mutationFn: (payload: CreateDeptPayload) => weilaRequest.post(
-    weilaApiUrl('/corp/web/dept-create'),
-    payload,
-  ),
-  onSuccess: () => {
-    formRef.value?.resetFields()
+const { mutate, isPending } = useWeilaMutation('corp/address/create-dept', {
+  onSuccess() {
     open.value = false
     Message.success(t('message.success'))
     contactStore.refetch()
@@ -33,21 +25,9 @@ const { mutate, isPending } = useMutation({
   },
 })
 
-function handleSubmit() {
-  return formRef.value?.validate((errors) => {
-    if (errors)
-      return
-
-    mutate({
-      ...form,
-      org_num: corp.value!.num,
-    }, {
-      onSuccess: () => {
-        formRef.value?.resetFields()
-      },
-    })
-  })
-}
+const submit = handleSubmit((values: any) => {
+  mutate(values)
+})
 </script>
 
 <template>
@@ -66,25 +46,16 @@ function handleSubmit() {
           {{ t('dept.create') }}
         </DialogTitle>
 
-        <a-form ref="formRef" :model="form" @submit="handleSubmit">
-          <a-form-item field="name" :label="t('org-form.name.label')" :rules="[{ required: true }]">
+        <a-form :rules :model="form" @submit="submit">
+          <a-form-item field="name" :label="t('org-form.name.label')">
             <a-input v-model="form.name" :max-length="20" show-word-limit />
           </a-form-item>
-        </a-form>
 
-        <div class="mt-[25px] flex justify-end">
-          <a-button type="text" @click="() => formRef?.resetFields()">
-            {{ t('button.reset') }}
-          </a-button>
-          <DialogClose as-child>
-            <a-button>
-              {{ t('button.cancel') }}
-            </a-button>
-          </DialogClose>
-          <a-button type="primary" :loading="isPending" @click="(e) => formRef?.handleSubmit(e)">
+          <a-button type="primary" mla w-fit :loading="isPending" html-type="submit">
             {{ t('button.submit') }}
           </a-button>
-        </div>
+        </a-form>
+
         <DialogClose
           class="text-grass11 absolute right-[10px] top-[10px] h-[25px] w-[25px] inline-flex appearance-none items-center justify-center rounded-full hover:bg-gray2 focus:shadow-[0_0_0_2px] focus:shadow-gray7 focus:outline-none"
           aria-label="Close"

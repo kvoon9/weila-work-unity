@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import type { DeptModel } from '~/api/contact'
-import Message from '@arco-design/web-vue/es/message'
-import { useMutation } from '@tanstack/vue-query'
-import { weilaApiUrl } from '~/api'
+import type { DeptModel } from '~/api/contact';
+import Message from '@arco-design/web-vue/es/message';
+import { shallowRef } from 'vue';
 
-const props = defineProps<{
+defineProps<{
   dept?: DeptModel
 }>()
 
@@ -12,36 +11,15 @@ const emits = defineEmits(['success'])
 
 const { t } = useI18n()
 
-const { data: corp } = storeToRefs(useCorpStore())
+const contactStore = useContactStore()
 
-const open = ref(false)
+const open = shallowRef(false)
 
-const form = reactive({
-  name: '',
-})
-
-watch(() => props.dept, (dept) => {
-  if (dept) {
-    form.name = dept.name
-  }
-}, { immediate: true })
-
-// interface Payload {
-//   org_num: number
-//   dept_id: number
-// }
-
-const { mutate, isPending } = useMutation({
-  mutationFn: () => weilaRequest.post(
-    weilaApiUrl('/corp/web/dept-delete'),
-    {
-      org_num: corp.value!.num,
-      dept_id: props.dept?.id,
-    },
-  ),
-  onSuccess: () => {
+const { mutate, isPending } = useWeilaMutation('corp/address/delete-dept', {
+  onSuccess() {
     open.value = false
     Message.success(t('message.success'))
+    contactStore.refetch()
     emits('success')
   },
 })
@@ -72,7 +50,7 @@ const { mutate, isPending } = useMutation({
               {{ t('button.cancel') }}
             </a-button>
           </DialogClose>
-          <a-button type="primary" :loading="isPending" @click="(e) => mutate()">
+          <a-button type="primary" :loading="isPending" @click="() => mutate({ dept_id: dept?.id })">
             {{ t('button.submit') }}
           </a-button>
         </div>

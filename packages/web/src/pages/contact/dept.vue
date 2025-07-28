@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import type { DeptModel } from '~/api/contact'
-import { useQuery } from '@tanstack/vue-query'
-import { weilaApiUrl } from '~/api'
 
 import CreateDeptModal from './components/CreateDeptModal.vue'
 import DeleteDeptModal from './components/DeleteDeptModal.vue'
@@ -16,18 +14,8 @@ definePage({
 const router = useRouter()
 
 const { t } = useI18n()
-const { data: corp } = storeToRefs(useCorpStore())
-const { data, refetch } = useQuery<Array<DeptModel>>({
-  enabled: computed(() => Boolean(corp.value?.num)),
-  queryKey: [weilaApiUrl('/corp/web/dept-getall'), corp],
-  queryFn: () => weilaFetch(weilaApiUrl('/corp/web/dept-getall'), {
-    body: {
-      org_num: corp.value!.num,
-    },
-  }).then(i => i.depts.sort((a: DeptModel, b: DeptModel) => a.id - b.id)),
-})
 
-$inspect(data)
+const { data, refetch } = useWeilaFetch('corp/address/get-all-dept')
 
 const isEditDeptModalVisible = ref(false)
 const selectedDept = ref<DeptModel | undefined>(undefined)

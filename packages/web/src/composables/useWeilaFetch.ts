@@ -4,8 +4,8 @@ import { useQuery } from '@tanstack/vue-query'
 import { useWeilaApi } from './useWeilaApi'
 
 export function useWeilaFetch<T>(
-  url: string,
-  options?: UseQueryOptions<T> & {
+  url: MaybeRefOrGetter<string>,
+  options?:  UseQueryOptions<T> & {
     body?: MaybeRefOrGetter<RequestInit['body'] | Record<string, any>>
     method?: string
   },
@@ -16,7 +16,7 @@ export function useWeilaFetch<T>(
 
   const res = useQuery<T>({
     queryKey: [url, body, method],
-    queryFn: () => weilaApi.value.v2.fetch(url, {
+    queryFn: () => weilaApi.value.v2.fetch(toValue(url), {
       body: toValue(body),
       method,
     }),
@@ -27,7 +27,7 @@ export function useWeilaFetch<T>(
   const { refetch } = res
 
   if (body && (isRef(body) || isFunction(body))) {
-    watch(body, () => {
+    watch([body, url], () => {
       refetch()
     }, { deep: true })
   }
