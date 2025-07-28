@@ -14,9 +14,10 @@ definePage({
 
 const { t } = useI18n()
 
-const { form, rules, handleSubmit: handleRegister } = useForm(v.object({
+const { form, rules, handleSubmit } = useForm(v.object({
   phone: v.string(),
-  verify_answer: v.string(),
+  country_code: v.optional(v.string(), '86'),
+  verifycode: v.string(),
   password: v.string(),
 }))
 
@@ -30,7 +31,7 @@ const { mutate: sendSmsVerifyCode } = useWeilaMutation<any, {
   smstype: 'work-regist' | 'work-login'
 }>('common/send-sms-verifycode')
 
-const { mutate } = useWeilaMutation<{
+const { mutate: regist } = useWeilaMutation<{
   user_name: string
   country_code: string
   password: string
@@ -91,11 +92,11 @@ function handleImageCodeCancel() {
   imageCode.value = ''
 }
 
-const register = handleRegister((values: any) => {
-  mutate({
-    phone: values.phone,
-    country_code: values.country_code,
-    verify_code: values.verify_code,
+const submit = handleSubmit((values: any) => {
+  regist({
+    user_name: values.phone,
+    country_code: values.country_code || '86',
+    verifycode: values.verifycode,
     password: md5(values.password),
   })
 })
@@ -103,14 +104,11 @@ const register = handleRegister((values: any) => {
 
 <template>
   <div class="login-form-wrapper">
-    <div class="login-form-title">
+    <div class="login-form-title" mb4>
       {{ t('register.form.title') }}
     </div>
-    <a-form :model="form" :rules class="login-form" layout="vertical" @submit="handleRegister">
-      <a-form-item
-        field="phone" :rules="[{ required: true, message: t('register.form.phone.errMsg') }]"
-        :validate-trigger="['change', 'blur']" hide-label
-      >
+    <a-form :model="form" :rules class="login-form" layout="vertical" @submit="submit">
+      <a-form-item field="phone" hide-label>
         <a-input
           v-model="form.phone" :max-length="20" :placeholder="t('register.form.phone.placeholder')" allow-clear
           show-word-limit w-320px
@@ -123,18 +121,22 @@ const register = handleRegister((values: any) => {
         </a-input>
       </a-form-item>
 
-      <a-form-item field="verify_answer" hide-label>
-        <a-input
-          v-model="form.verify_answer" :placeholder="t('register.form.verifyCode.placeholder')" allow-clear mr4
-          w-auto
-        />
-        <!-- TODO: button -->
+      <a-form-item field="verifycode" hide-label>
+        <a-input v-model="form.verifycode" :placeholder="t('register.form.verifyCode.placeholder')" allow-clear mr4 w-auto>
+          <template #suffix>
+            <a-button
+              type="text"
+              :loading="false"
+              :disabled="!form.phone"
+              @click="handleSendSmsCode"
+            >
+              获取短信验证码
+            </a-button>
+          </template>
+        </a-input>
       </a-form-item>
 
-      <a-form-item
-        field="password" :rules="[{ required: true, message: t('register.form.password.errMsg') }]"
-        :validate-trigger="['change', 'blur']" hide-label
-      >
+      <a-form-item field="password" hide-label>
         <a-input-password v-model="form.password" :placeholder="t('login.form.password.placeholder')" allow-clear>
           <template #prefix>
             <icon-lock />
@@ -154,6 +156,34 @@ const register = handleRegister((values: any) => {
         </router-link>
       </a-space>
     </a-form>
+
+    <a-modal
+      v-model:visible="imageCodeModalVisible"
+      title="图形验证"
+      :footer="false"
+      @cancel="handleImageCodeCancel"
+    >
+      <div space-y-8>
+        <div flex gap2>
+          <a-input
+            v-model="imageCode"
+            placeholder="请输入图形验证码"
+            allow-clear
+            :max-length="6"
+          />
+          <img v-if="data?.image" :src="data.image" alt="验证码" @click="() => refreshImageCode()">
+        </div>
+        <div flex gap4>
+          <div flex-1 />
+          <a-button @click="handleImageCodeCancel">
+            取消
+          </a-button>
+          <a-button type="primary" @click="handleImageCodeConfirm">
+            确认
+          </a-button>
+        </div>
+      </div>
+    </a-modal>
   </div>
 </template>
 
