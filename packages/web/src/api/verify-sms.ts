@@ -1,10 +1,13 @@
 export interface SendVerifySmsModel {
   phone: string
-  country_code: '86'
-  sms_type: 'regist' | 'bind-phone' | 'reset-password' | 'add-device'
-  verify_code: string
+  countrycode: '86'
+  smstype: 'work-regist'
+  // smstype: 'regist' | 'bind-phone' | 'reset-password' | 'add-device'
+  verify_id: string
+  verify_answer: string
 }
 
-export async function sendVerifySms(params: SendVerifySmsModel) {
-  return await $weilaPublicRequest.post('/corp/web/send-sms-verifycode', params)
+export async function sendVerifySms(body: SendVerifySmsModel) {
+  const weilaApi = useWeilaApi()
+  return await weilaApi.value.v2.fetch('/corp/web/send-sms-verifycode', { body })
 }

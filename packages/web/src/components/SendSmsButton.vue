@@ -14,7 +14,7 @@ const emits = defineEmits(['success', 'error'])
 
 const { t } = useI18n()
 
-const lastSendTime = useLocalStorage(`lst-${props.opts.sms_type}`, -1)
+const lastSendTime = useLocalStorage(`lst-${props.opts.smstype}`, -1)
 const countdown = computed(() => 60 - (Math.floor((timestamp.value / 1000) - (lastSendTime.value / 1000))))
 const state = computed<'idle' | 'countdown'>(() => countdown.value <= 0 ? 'idle' : 'countdown')
 

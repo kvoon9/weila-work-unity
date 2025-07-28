@@ -1,12 +1,9 @@
 <script lang="ts" setup>
-import type { OnSubmitParams } from '~/types'
-import { objectKeys } from '@antfu/utils'
-import Message from '@arco-design/web-vue/es/message'
-import { useMutation } from '@tanstack/vue-query'
+import { Message } from '@arco-design/web-vue'
 import md5 from 'md5'
+import * as v from 'valibot'
 import { shallowRef } from 'vue'
-
-import { useAuthStore } from '~/stores/auth'
+import { useForm } from 'zod-arco-rules/valibot'
 
 definePage({
   meta: {
@@ -15,74 +12,93 @@ definePage({
   },
 })
 
-const { login } = useAuthStore()
-
 const { t } = useI18n()
-const errorMessage = shallowRef('')
 
-const verifyImg = templateRef('verifyImg')
+const { form, rules, handleSubmit: handleRegister } = useForm(v.object({
+  phone: v.string(),
+  verify_answer: v.string(),
+  password: v.string(),
+}))
 
-const account = shallowRef('')
-const router = useRouter()
+const { data, refetch: refreshImageCode } = useWeilaFetch<{ id: string, image: string }>('common/get-image-verifycode')
 
-interface Form {
+const { mutate: sendSmsVerifyCode } = useWeilaMutation<any, {
   phone: string
-  verify_code: string
-  img_verify_code: string
+  countrycode: string
+  verify_id: string
+  verify_answer: string
+  smstype: 'work-regist' | 'work-login'
+}>('common/send-sms-verifycode')
+
+const { mutate } = useWeilaMutation<{
+  user_name: string
+  country_code: string
   password: string
+}>('/corp/web/regist', {
+  onSuccess() {
+
+  },
+})
+
+const imageCodeModalVisible = shallowRef(false)
+const imageCode = shallowRef('')
+
+function handleSendSmsCode() {
+  if (!form.value.phone) {
+    Message.warning('请输入手机号')
+    return
+  }
+
+  if (data.value) {
+    imageCodeModalVisible.value = true
+    imageCode.value = ''
+  }
 }
 
-const form = reactive<Form>({
-  phone: '',
-  verify_code: '',
-  img_verify_code: '',
-  password: '',
-})
-
-const { mutate: register } = useMutation({
-  async mutationFn(params: Omit<Form, 'img_verify_code'>) {
-    const { data } = await weilaRequest.post<{
-      user_name: string
-      country_code: string
-      password: string // temp password
-    }>('/corp/web/regist', params)
-
-    if (!data)
-      throw new Error('Request Error')
-
-    account.value = data.user_name
-    return data
-  },
-  onSuccess(data) {
-    Message.success({
-      content: t('register.form.successMsg'),
-    })
-    // isCopyModalVisible.value = true
-    login({
-      account: data.user_name,
-      password: data.password,
-    })
-      .then(() => {
-        router.push('/contact')
-      })
-  },
-})
-
-function handleSubmit({ values, errors }: OnSubmitParams<Omit<Form, 'img_verify_code'>>) {
-  if (errors && objectKeys(errors).length)
+function handleImageCodeConfirm() {
+  if (!data.value?.id) {
+    Message.error('图形验证码异常')
     return
+  }
 
-  register({
-    phone: values.phone,
-    verify_code: values.verify_code,
-    password: md5(values.password),
+  if (!imageCode.value.trim()) {
+    Message.warning('请输入图形验证码')
+    return
+  }
+
+  if (!form.value.phone) {
+    Message.error('获取手机号失败，请重试')
+    return
+  }
+
+  sendSmsVerifyCode({
+    phone: form.value.phone,
+    countrycode: '86',
+    verify_id: data.value.id,
+    verify_answer: imageCode.value.trim(),
+    smstype: 'work-regist',
+  }, {
+    onSuccess: () => {
+      imageCodeModalVisible.value = false
+      imageCode.value = ''
+      Message.success('短信发送成功')
+    },
   })
 }
 
-function onVerifyImgCodeError() {
-  verifyImg.value?.refetch()
-  form.img_verify_code = ''
+function handleImageCodeCancel() {
+  imageCodeModalVisible.value = false
+  imageCode.value = ''
 }
+
+const register = handleRegister((values: any) => {
+  mutate({
+    phone: values.phone,
+    country_code: values.country_code,
+    verify_code: values.verify_code,
+    password: md5(values.password),
+  })
+})
 </script>
 
 <template>
@@ -90,11 +106,7 @@ function onVerifyImgCodeError() {
     <div class="login-form-title">
       {{ t('register.form.title') }}
     </div>
-    <div class="login-form-error-msg">
-      {{ errorMessage }}
-    </div>
-    <!-- @vue-expect-error type error -->
-    <a-form :model="form" class="login-form" layout="vertical" @submit="handleSubmit">
+    <a-form :model="form" :rules class="login-form" layout="vertical" @submit="handleRegister">
       <a-form-item
         field="phone" :rules="[{ required: true, message: t('register.form.phone.errMsg') }]"
         :validate-trigger="['change', 'blur']" hide-label
@@ -111,34 +123,12 @@ function onVerifyImgCodeError() {
         </a-input>
       </a-form-item>
 
-      <a-form-item
-        field="img_verify_code"
-        :rules="[{ required: true, message: t('register.form.imgVerifyCode.errMsg') }]"
-        :validate-trigger="['change', 'blur']" hide-label
-      >
+      <a-form-item field="verify_answer" hide-label>
         <a-input
-          v-model="form.img_verify_code" :placeholder="t('register.form.imgVerifyCode.placeholder')" allow-clear
-          mr4 w50
-        />
-        <VerifyImg ref="verifyImg" />
-      </a-form-item>
-
-      <a-form-item
-        field="verify_code" :rules="[{ required: true, message: t('register.form.verifyCode.errMsg') }]"
-        :validate-trigger="['change', 'blur']" hide-label
-      >
-        <a-input
-          v-model="form.verify_code" :placeholder="t('register.form.verifyCode.placeholder')" allow-clear mr4
+          v-model="form.verify_answer" :placeholder="t('register.form.verifyCode.placeholder')" allow-clear mr4
           w-auto
         />
-        <SendSmsButton
-          :opts="{
-            phone: form.phone,
-            verify_code: form.img_verify_code,
-            sms_type: 'regist',
-            country_code: '86',
-          }" @error="onVerifyImgCodeError"
-        />
+        <!-- TODO: button -->
       </a-form-item>
 
       <a-form-item

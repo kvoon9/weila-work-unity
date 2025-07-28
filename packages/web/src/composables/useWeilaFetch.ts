@@ -1,10 +1,11 @@
+import type { UseQueryOptions } from '@tanstack/vue-query'
 import { isFunction } from '@antfu/utils'
 import { useQuery } from '@tanstack/vue-query'
 import { useWeilaApi } from './useWeilaApi'
 
 export function useWeilaFetch<T>(
   url: string,
-  options?: {
+  options?: UseQueryOptions<T> & {
     body?: MaybeRefOrGetter<RequestInit['body'] | Record<string, any>>
     method?: string
   },
@@ -20,6 +21,7 @@ export function useWeilaFetch<T>(
       method,
     }),
     refetchOnWindowFocus: false,
+    ...options,
   })
 
   const { refetch } = res
