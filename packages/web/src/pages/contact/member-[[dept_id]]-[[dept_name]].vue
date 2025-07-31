@@ -297,6 +297,8 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
               </a-tag>
             </template>
           </a-table-column>
+
+          <a-table-column title="群数量" data-index="group_count" :width="100" />
           <a-table-column :title="t('controls')">
             <template #cell="{ record: { type } }">
               <div flex gap2>
