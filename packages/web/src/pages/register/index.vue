@@ -1,10 +1,10 @@
 <script lang="ts" setup>
+import type { SendVerifySmsBody } from '~/api/verify-sms'
 import { Message } from '@arco-design/web-vue'
 import md5 from 'md5'
 import * as v from 'valibot'
 import { shallowRef } from 'vue'
 import { useForm } from 'zod-arco-rules/valibot'
-import { SendVerifySmsBody } from '~/api/verify-sms'
 
 definePage({
   meta: {

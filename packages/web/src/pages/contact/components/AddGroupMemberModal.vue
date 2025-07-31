@@ -1,27 +1,8 @@
 <script setup lang="ts">
-import type { TransferItem } from '@arco-design/web-vue/es/transfer/interface'
-import { Message } from '@arco-design/web-vue'
-import { ref as deepRef, shallowRef } from 'vue'
-
-interface Member {
-  user_id: number
-  user_num: string
-  job_num: string
-  sex: number
-  name: string
-  avatar: string
-  is_admin: number
-  dept_id: number
-  phone: string
-  country_code: string
-  state: number
-  type: number
-  tts: number
-  loc_share: number
-  track: number
-  group_count: number
-  created: number
-}
+import type { TransferItem } from '@arco-design/web-vue/es/transfer/interface';
+import type { Member } from '~/types/api';
+import { Message } from '@arco-design/web-vue';
+import { ref as deepRef, shallowRef } from 'vue';
 
 const props = defineProps<{
   groupId: number

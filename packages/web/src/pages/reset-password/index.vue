@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import * as v from 'valibot'
+import type { SendVerifySmsBody } from '~/api/verify-sms'
 import { Message } from '@arco-design/web-vue'
+import * as v from 'valibot'
 import { shallowRef } from 'vue'
 import { useForm } from 'zod-arco-rules/valibot'
-import { SendVerifySmsBody } from '~/api/verify-sms'
 
 definePage({
   meta: {
@@ -19,7 +19,7 @@ const { form, rules, handleSubmit } = useForm(v.object({
   phone: v.string(),
   country_code: v.optional(v.string(), '86'),
   verifycode: v.string(),
-  password: v.string()
+  password: v.string(),
 }))
 
 const { data, refetch: refreshImageCode } = useWeilaFetch<{ id: string, image: string }>('common/get-image-verifycode')
@@ -155,7 +155,7 @@ function handleImageCodeCancel() {
       <a-button type="primary" html-type="submit" :loading="isSubmiting" long>
         {{ t('button.submit') }}
       </a-button>
-      <a-button type="text" @click="() => router.go(-1)" long mt-4>
+      <a-button type="text" long mt-4 @click="() => router.go(-1)">
         {{ t('button.login') }}
       </a-button>
     </a-form>
