@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { MemberGetallModel } from 'generated/mock/weila';
+import type { Member } from '~/types/api';
 import Message from '@arco-design/web-vue/es/message';
 import { useQueryClient } from '@tanstack/vue-query';
 
 defineProps<{
-  member?: MemberGetallModel['data']['members'][number]
+  member?: Member
 }>()
 
 const { t } = useI18n()

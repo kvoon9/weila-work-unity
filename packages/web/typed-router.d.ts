@@ -21,6 +21,7 @@ declare module 'vue-router/auto-routes' {
     '/[...catch]': RouteRecordInfo<'/[...catch]', '/:catch(.*)', { catch: ParamValue<true> }, { catch: ParamValue<false> }>,
     '/contact': RouteRecordInfo<'/contact', '/contact', Record<never, never>, Record<never, never>>,
     '/contact/dept': RouteRecordInfo<'/contact/dept', '/contact/dept', Record<never, never>, Record<never, never>>,
+    '/contact/dept-[dept_id]-[dept_name]': RouteRecordInfo<'/contact/dept-[dept_id]-[dept_name]', '/contact/dept-:dept_id-:dept_name', { dept_id: ParamValue<true>, dept_name: ParamValue<true> }, { dept_id: ParamValue<false>, dept_name: ParamValue<false> }>,
     '/contact/group': RouteRecordInfo<'/contact/group', '/contact/group', Record<never, never>, Record<never, never>>,
     '/contact/group-[group_id]-[group_name]': RouteRecordInfo<'/contact/group-[group_id]-[group_name]', '/contact/group-:group_id-:group_name', { group_id: ParamValue<true>, group_name: ParamValue<true> }, { group_id: ParamValue<false>, group_name: ParamValue<false> }>,
     '/contact/legal': RouteRecordInfo<'/contact/legal', '/contact/legal', Record<never, never>, Record<never, never>>,

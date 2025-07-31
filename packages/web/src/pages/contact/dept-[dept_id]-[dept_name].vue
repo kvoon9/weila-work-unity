@@ -2,24 +2,25 @@
 import type { Member } from '~/types/api'
 import { shallowRef } from 'vue'
 
-definePage({
-  alias: 'member',
-  meta: {
-    name: '成员管理',
+const curPage = shallowRef(0)
+const pageSize = shallowRef(10)
+
+const route = useRoute('/contact/dept-[dept_id]-[dept_name]')
+const { data, refetch } = useWeilaFetch<{
+  count: number
+  members: Member[]
+}>(
+  () => `corp/address/get-dept-member-list?page=${curPage.value}&size=${pageSize.value}`,
+  {
+    body: () => ({
+      dept_id: Number(route.params.dept_id),
+    }),
   },
-})
+)
 
 const { t } = useI18n()
 
 const filterInput = shallowRef('')
-
-const curPage = shallowRef(0)
-const pageSize = shallowRef(10)
-
-const { data, refetch } = useWeilaFetch<{
-  count: number
-  members: Member[]
-}>(() => `corp/address/get-member-list?page=${curPage.value}&size=${pageSize.value}`)
 
 const members = computed(() => {
   if (!data.value?.members)

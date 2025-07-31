@@ -61,13 +61,13 @@ const submit = handleSubmit(async (values) => {
         </DialogTitle>
 
         <a-form :rules :model="form" auto-label-width @submit="submit">
-          <a-form-item field="name" :label="t('org-form.name.label')" :rules="[{ required: true }]">
+          <a-form-item field="name" :label="t('org-form.name.label')">
             <a-input v-model="form.name" :max-length="20" show-word-limit />
           </a-form-item>
-          <a-form-item field="avatar" :label="t('avatar')" :rules="[{}]">
+          <a-form-item field="avatar" :label="t('avatar')">
             <AvatarUploader ref="avatarUploaderRef" v-model:src="form.avatar" />
           </a-form-item>
-          <a-form-item field="burst_mode" :label="t('burst-mode')" :rules="[{ required: true }]">
+          <a-form-item field="burst_mode" :label="t('burst-mode')">
             <a-radio-group v-model="form.burst_mode" direction="vertical">
               <a-radio :value="0">
                 {{ t('burst-mode-0') }}

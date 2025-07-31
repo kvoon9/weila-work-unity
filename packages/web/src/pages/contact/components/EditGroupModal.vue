@@ -2,6 +2,9 @@
 import type { GroupGetallModel } from 'generated/mock/weila'
 import Message from '@arco-design/web-vue/es/message'
 import { useMutation } from '@tanstack/vue-query'
+import * as v from 'valibot'
+import { shallowRef } from 'vue'
+import { useForm } from 'zod-arco-rules/valibot'
 
 const props = defineProps<{
   group?: GroupGetallModel['data']['groups'][number]
@@ -10,33 +13,18 @@ const emits = defineEmits(['success'])
 
 const { t } = useI18n()
 
-const corpStore = useCorpStore()
-const { org_num } = storeToRefs(corpStore)
-
-const open = ref(false)
+const open = shallowRef(false)
 
 const avatarUploaderRef = templateRef('avatarUploaderRef')
 
-const form = reactive({
-  org_num: org_num.value,
-
-  avatar: props.group?.avatar,
-  group_id: props.group?.id,
-
-  name: props.group?.name,
-  burst_mode: props.group?.burst_mode,
+const { form, rules, handleSubmit, reset } = useForm(v.object({
+  name: v.optional(v.string(), () => props.group?.name),
+  burst_mode: v.optional(v.number(), () => props.group?.burst_mode),
+  group_id: v.optional(v.number(), () => props.group?.id),
+  avatar: v.optional(v.string(), () => props.group?.avatar),
+}), {
+  watch: [() => props.group],
 })
-
-watchImmediate(() => props.group, (group) => {
-  if (group) {
-    form.name = group.name
-    form.burst_mode = group.burst_mode
-    form.group_id = group.id
-    form.avatar = group.avatar
-  }
-})
-
-const formRef = templateRef('formRef')
 
 const { mutate, isPending } = useMutation({
   mutationFn: (payload: any) => weilaRequest.post(
@@ -44,35 +32,22 @@ const { mutate, isPending } = useMutation({
     payload,
   ),
   onSuccess: () => {
-    formRef.value?.resetFields()
     open.value = false
     Message.success(t('message.success'))
     emits('success')
+    reset()
   },
 })
 
-function handleSubmit() {
-  return formRef.value?.validate(async (errors) => {
-    if (errors)
-      return
+const submit = handleSubmit(async (values) => {
+  // @ts-expect-error type error: `defineExpose` no type declare find
+  const { upload } = avatarUploaderRef.value
+  if (form.value.avatar && !isRemoteImage(form.value.avatar)) {
+    await upload()
+  }
 
-    // @ts-expect-error type error: `defineExpose` no type declare find
-    const { upload } = avatarUploaderRef.value
-    if (form.avatar && !isRemoteImage(form.avatar)) {
-      await upload()
-    }
-
-    mutate({
-      ...form,
-      burst_mode: form.burst_mode,
-      avatar: form.avatar,
-    }, {
-      onSuccess: () => {
-        formRef.value?.resetFields()
-      },
-    })
-  })
-}
+  mutate(values)
+})
 </script>
 
 <template>
@@ -91,14 +66,14 @@ function handleSubmit() {
           {{ t('button.edit-group') }}
         </DialogTitle>
 
-        <a-form ref="formRef" :model="form" auto-label-width @submit="handleSubmit">
-          <a-form-item field="name" :label="t('org-form.name.label')" :rules="[{ required: true }]">
+        <a-form :rules :model="form" auto-label-width @submit="submit">
+          <a-form-item field="name" :label="t('org-form.name.label')">
             <a-input v-model="form.name" :max-length="20" show-word-limit />
           </a-form-item>
-          <a-form-item field="avatar" :label="t('avatar')" :rules="[{}]">
+          <a-form-item field="avatar" :label="t('avatar')">
             <AvatarUploader ref="avatarUploaderRef" v-model:src="form.avatar" />
           </a-form-item>
-          <a-form-item field="burst_mode" :label="t('burst-mode')" :rules="[{ required: true }]">
+          <a-form-item field="burst_mode" :label="t('burst-mode')">
             <a-radio-group v-model="form.burst_mode" direction="vertical">
               <a-radio :value="0">
                 {{ t('burst-mode-0') }}
@@ -111,7 +86,7 @@ function handleSubmit() {
               </a-radio>
             </a-radio-group>
           </a-form-item>
-          <!-- <a-form-item field="shutup" :label="t('shutup')" :rules="[{ required: true }]">
+          <!-- <a-form-item field="shutup" :label="t('shutup')" >
             <a-radio-group v-model="form.shutup" direction="vertical">
               <a-radio :value="0">
                 {{ t('shutup-disable') }}
@@ -121,21 +96,12 @@ function handleSubmit() {
               </a-radio>
             </a-radio-group>
           </a-form-item> -->
-        </a-form>
-
-        <div class="mt-[25px] flex justify-end">
-          <a-button type="text" @click="() => formRef?.resetFields()">
-            {{ t('button.reset') }}
-          </a-button>
-          <DialogClose as-child>
-            <a-button>
-              {{ t('button.cancel') }}
+          <a-form-item>
+            <a-button mla type="primary" :loading="isPending" html-type="submit">
+              {{ t('button.submit') }}
             </a-button>
-          </DialogClose>
-          <a-button type="primary" :loading="isPending" @click="(e) => formRef?.handleSubmit(e)">
-            {{ t('button.submit') }}
-          </a-button>
-        </div>
+          </a-form-item>
+        </a-form>
         <DialogClose
           class="text-grass11 absolute right-[10px] top-[10px] h-[25px] w-[25px] inline-flex appearance-none items-center justify-center rounded-full hover:bg-gray2 focus:shadow-[0_0_0_2px] focus:shadow-gray7 focus:outline-none"
           aria-label="Close"

@@ -1,19 +1,20 @@
 <script setup lang="ts">
-import type { MemberGetallModel } from 'generated/mock/weila'
+import type { Member } from '~/types/api'
 import { Message } from '@arco-design/web-vue'
 import { useMutation } from '@tanstack/vue-query'
 import md5 from 'md5'
+import { shallowRef } from 'vue'
 import { weilaApiUrl } from '~/api'
 
 const props = defineProps<{
-  member?: MemberGetallModel['data']['members'][number]
+  member?: Member
 }>()
 
 const { t } = useI18n()
 const corpStore = useCorpStore()
 const formRef = templateRef('formRef')
 
-const org_num = ref(0)
+const org_num = shallowRef(0)
 corpStore.$subscribe((_, { data }) => data ? org_num.value = data.num : void 0, { immediate: true })
 
 const open = defineModel('open', { default: false })

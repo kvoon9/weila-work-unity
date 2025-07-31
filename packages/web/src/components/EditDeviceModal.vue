@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { ValidatedError } from '@arco-design/web-vue'
-import type { MemberChangePayload, MemberGetallModel } from 'generated/mock/weila'
+import type { MemberChangePayload } from 'generated/mock/weila'
+import type { Member } from '~/types/api'
 import { objectPick } from '@antfu/utils'
 import { Message } from '@arco-design/web-vue'
 import { useMutation, useQuery } from '@tanstack/vue-query'
@@ -9,7 +10,7 @@ import { weilaApiUrl } from '~/api'
 import { TrackType } from '~/api/contact'
 
 const props = defineProps<{
-  member?: MemberGetallModel['data']['members'][number]
+  member?: Member
 }>()
 
 const emits = defineEmits(['success'])
