@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { GroupGetallModel } from 'generated/mock/weila'
 import type { GroupModel } from '~/api/contact'
-import { useQuery } from '@tanstack/vue-query'
+// import { useQuery } from '@tanstack/vue-query'
 import { ref as deepRef } from 'vue'
 
 import CreateGroupModal from './components/CreateGroupModal.vue'
@@ -16,17 +16,19 @@ definePage({
 
 const { t } = useI18n()
 
-const corpStore = useCorpStore()
-const { data: corp } = storeToRefs(corpStore)
+// const corpStore = useCorpStore()
+// const { data: corp } = storeToRefs(corpStore)
 const router = useRouter()
 
-const { data: groups, refetch } = useQuery<GroupGetallModel['data']['groups']>({
-  enabled: computed(() => typeof corp.value?.num === 'number'),
-  queryKey: ['/group-getall', 'groups', corp],
-  queryFn: () => weilaFetch('/corp/web/group-getall', {
-    body: { org_num: String(corp.value!.num) },
-  }).then(i => i.groups.sort((a: any, b: any) => b.id - a.id)),
-})
+// const { data: groups, refetch } = useQuery<GroupGetallModel['data']['groups']>({
+//   enabled: computed(() => typeof corp.value?.num === 'number'),
+//   queryKey: ['/group-getall', 'groups', corp],
+//   queryFn: () => weilaFetch('/corp/web/group-getall', {
+//     body: { org_num: String(corp.value!.num) },
+//   }).then(i => i.groups.sort((a: any, b: any) => b.id - a.id)),
+// })
+
+const { data: groups, refetch } = useWeilaFetch('corp/group/get-group-list')
 
 $inspect(groups)
 

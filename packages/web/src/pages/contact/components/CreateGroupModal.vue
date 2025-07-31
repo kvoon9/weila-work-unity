@@ -1,68 +1,47 @@
 <script setup lang="ts">
-import type { GroupCreatePayload } from 'generated/mock/weila'
 import Message from '@arco-design/web-vue/es/message'
-import { useMutation } from '@tanstack/vue-query'
-import { weilaApiUrl } from '~/api'
-
-const emits = defineEmits(['success'])
+import { useQueryClient } from '@tanstack/vue-query'
+import * as v from 'valibot'
+import { shallowRef } from 'vue'
+import { useForm } from 'zod-arco-rules/valibot'
 
 const { t } = useI18n()
 
-const corpStore = useCorpStore()
-const { org_num } = storeToRefs(corpStore)
+const open = shallowRef(false)
 
-const open = ref(false)
+const queryClient = useQueryClient()
 
 const avatarUploaderRef = templateRef('avatarUploaderRef')
 
 // type BurstMode = 0 | 1 | 2
 
-const form = reactive<GroupCreatePayload>({
-  name: '',
-  burst_mode: 0,
-  org_num: 0,
-  avatar: '',
-})
+const { form, rules, handleSubmit, reset } = useForm(v.object({
+  name: v.string(),
+  burst_mode: v.optional(v.number(), 0),
+  avatar: v.optional(v.string(), ''),
+}))
 
-watchImmediate(org_num, val => val ? form.org_num = val : void 0)
-
-const formRef = templateRef('formRef')
-
-const { mutate, isPending } = useMutation({
-  mutationFn: (payload: GroupCreatePayload) => weilaRequest.post(
-    weilaApiUrl('/corp/web/group-create'),
-    payload,
-  ),
-  onSuccess: () => {
-    formRef.value?.resetFields()
+const { mutate, isPending } = useWeilaMutation('corp/group/create-group', {
+  onSuccess() {
+    reset()
     open.value = false
     Message.success(t('message.success'))
-    emits('success')
+    queryClient.invalidateQueries({ queryKey: ['corp/group/get-group-list'] })
   },
 })
 
-function handleSubmit() {
-  return formRef.value?.validate(async (errors) => {
-    if (errors)
-      return
+watchEffect(() => {
+  if (open.value)
+    reset()
+})
 
+const submit = handleSubmit(async (values) => {
+  if (form.value.avatar && !isRemoteImage(form.value.avatar))
     // @ts-expect-error type error: `defineExpose` no type declare find
-    const { upload } = avatarUploaderRef.value
-    if (form.avatar && !isRemoteImage(form.avatar)) {
-      await upload()
-    }
+    await avatarUploaderRef.value.upload()
 
-    mutate({
-      ...form,
-      burst_mode: form.burst_mode,
-      avatar: form.avatar,
-    }, {
-      onSuccess: () => {
-        formRef.value?.resetFields()
-      },
-    })
-  })
-}
+  mutate(values)
+})
 </script>
 
 <template>
@@ -81,7 +60,7 @@ function handleSubmit() {
           {{ t('button.create-group') }}
         </DialogTitle>
 
-        <a-form ref="formRef" :model="form" auto-label-width @submit="handleSubmit">
+        <a-form :rules :model="form" auto-label-width @submit="submit">
           <a-form-item field="name" :label="t('org-form.name.label')" :rules="[{ required: true }]">
             <a-input v-model="form.name" :max-length="20" show-word-limit />
           </a-form-item>
@@ -101,21 +80,13 @@ function handleSubmit() {
               </a-radio>
             </a-radio-group>
           </a-form-item>
-        </a-form>
 
-        <div class="mt-[25px] flex justify-end">
-          <a-button type="text" @click="() => formRef?.resetFields()">
-            {{ t('button.reset') }}
-          </a-button>
-          <DialogClose as-child>
-            <a-button>
-              {{ t('button.cancel') }}
+          <a-form-item>
+            <a-button mla html-type="submit" type="primary" :loading="isPending">
+              {{ t('button.submit') }}
             </a-button>
-          </DialogClose>
-          <a-button type="primary" :loading="isPending" @click="(e) => formRef?.handleSubmit(e)">
-            {{ t('button.submit') }}
-          </a-button>
-        </div>
+          </a-form-item>
+        </a-form>
         <DialogClose
           class="text-grass11 absolute right-[10px] top-[10px] h-[25px] w-[25px] inline-flex appearance-none items-center justify-center rounded-full hover:bg-gray2 focus:shadow-[0_0_0_2px] focus:shadow-gray7 focus:outline-none"
           aria-label="Close"
