@@ -310,9 +310,9 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
                     >
                       {{ t('button.edit') }}
                     </a-doption>
-                    <a-doption v-if="type !== 1" @click="isResetPasswordModalVisible = true">
+                    <!-- <a-doption v-if="type !== 1" @click="isResetPasswordModalVisible = true">
                       {{ t('reset-password.button') }}
-                    </a-doption>
+                    </a-doption> -->
                     <a-doption @click="isDeleteMemberModalVisible = true">
                       {{ t('button.delete') }}
                     </a-doption>
