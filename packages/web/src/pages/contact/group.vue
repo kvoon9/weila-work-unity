@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import type { GroupGetallModel } from 'generated/mock/weila'
 import type { GroupModel } from '~/api/contact'
-// import { useQuery } from '@tanstack/vue-query'
-import { ref as deepRef } from 'vue'
+import { ref as deepRef, shallowRef } from 'vue'
 
 import CreateGroupModal from './components/CreateGroupModal.vue'
 import DeleteGroupModal from './components/DeleteGroupModal.vue'
@@ -16,21 +15,12 @@ definePage({
 
 const { t } = useI18n()
 
-// const corpStore = useCorpStore()
-// const { data: corp } = storeToRefs(corpStore)
 const router = useRouter()
 
-// const { data: groups, refetch } = useQuery<GroupGetallModel['data']['groups']>({
-//   enabled: computed(() => typeof corp.value?.num === 'number'),
-//   queryKey: ['/group-getall', 'groups', corp],
-//   queryFn: () => weilaFetch('/corp/web/group-getall', {
-//     body: { org_num: String(corp.value!.num) },
-//   }).then(i => i.groups.sort((a: any, b: any) => b.id - a.id)),
-// })
+const curPage = shallowRef(0)
+const pageSize = shallowRef(10)
 
-const { data: groups, refetch } = useWeilaFetch('corp/group/get-group-list')
-
-$inspect(groups)
+const { data, refetch } = useWeilaFetch(() => `corp/group/get-group-list?page=${curPage.value}&size=${pageSize.value}`)
 
 const selectedGroup = deepRef<GroupGetallModel['data']['groups'][number] | undefined>(undefined)
 
@@ -61,7 +51,10 @@ function onSelect(group: GroupModel, e: PointerEvent) {
       </section>
       <!-- @vue-expect-error type error -->
       <a-table
-        :data="groups" size="medium" :column-resizable="true" :scroll="{
+        :pagination="{
+          total: data?.count || 0,
+        }"
+        :data="data?.groups" size="medium" :column-resizable="true" :scroll="{
           x: 1000,
           y: 600,
         }" :scrollbar="true" @row-click="(...args) => onSelect(...args)"
