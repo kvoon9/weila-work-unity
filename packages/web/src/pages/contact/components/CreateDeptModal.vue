@@ -1,14 +1,11 @@
 <script setup lang="ts">
 import Message from '@arco-design/web-vue/es/message'
+import { useQueryClient } from '@tanstack/vue-query'
 import * as v from 'valibot'
 import { shallowRef } from 'vue'
 import { useForm } from 'zod-arco-rules/valibot'
 
-const emits = defineEmits(['success'])
-
 const { t } = useI18n()
-
-const contactStore = useContactStore()
 
 const open = shallowRef(false)
 
@@ -16,12 +13,13 @@ const { form, rules, handleSubmit } = useForm(v.object({
   name: v.string(),
 }))
 
+const qc = useQueryClient()
+
 const { mutate, isPending } = useWeilaMutation('corp/address/create-dept', {
   onSuccess() {
     open.value = false
     Message.success(t('message.success'))
-    contactStore.refetch()
-    emits('success')
+    qc.invalidateQueries({ queryKey: ['corp/address/get-all-dept'] })
   },
 })
 

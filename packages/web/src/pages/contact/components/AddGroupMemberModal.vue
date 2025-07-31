@@ -1,11 +1,27 @@
 <script setup lang="ts">
 import type { TransferItem } from '@arco-design/web-vue/es/transfer/interface'
-import type { GroupMemberAddPayload, GroupMemberGetallModel } from 'generated/mock/weila'
-import type { MemberModel } from '~/api/contact'
 import { Message } from '@arco-design/web-vue'
-import { useMutation, useQuery } from '@tanstack/vue-query'
 import { ref as deepRef, shallowRef } from 'vue'
-import { weilaApiUrl } from '~/api'
+
+interface Member {
+  user_id: number
+  user_num: string
+  job_num: string
+  sex: number
+  name: string
+  avatar: string
+  is_admin: number
+  dept_id: number
+  phone: string
+  country_code: string
+  state: number
+  type: number
+  tts: number
+  loc_share: number
+  track: number
+  group_count: number
+  created: number
+}
 
 const props = defineProps<{
   groupId: number
@@ -20,61 +36,38 @@ const open = shallowRef(false)
 const selectedIds = deepRef<string[]>([])
 $inspect(selectedIds)
 
-const form = reactive<GroupMemberAddPayload>({
-  group_id: props.groupId,
-  member_ids: [],
-})
-
 const value: string[] = []
 
-$inspect(form)
+const { data: groupMembers, refetch: refetchGroupMembers, isFetching: isFetchingGroupMember } = useWeilaFetch<Member[]>(
+  () => `corp/group/get-group-all-member`,
+  {
+    body: () => ({
+      group_id: Number(props.groupId),
+    }),
+  },
+)
 
-const { org_num } = storeToRefs(useCorpStore())
-
-const { data: members, isFetching: isFetchingMembers } = useQuery<Array<MemberModel>>({
-  enabled: computed(() => Boolean(org_num.value)),
-  queryKey: [weilaApiUrl('/corp/web/member-getall'), org_num.value],
-  queryFn: () => weilaFetch(weilaApiUrl('/corp/web/member-getall'), {
-    body: {
-      org_num: org_num.value,
-    },
-  }).then(i => i.members),
-})
-
-const { data: groupMembers, refetch: refetchGroupMembers, isFetching: isFetchingGroupMembers } = useQuery<GroupMemberGetallModel['data']['members']>({
-  enabled: computed(() => Boolean(open.value)),
-  queryKey: [weilaApiUrl('/corp/web/group-member-getall'), props.groupId],
-  queryFn: () => weilaFetch(weilaApiUrl('/corp/web/group-member-getall'), {
-    body: {
-      group_id: props.groupId,
-    },
-  }).then(i => i.members),
-})
+const { data: memberListData, isFetching: isFetchingMemberList } = useWeilaFetch<{
+  count: number
+  members: Member[]
+}>('corp/address/get-member-list')
 
 watch(open, (val) => {
-  if (!val)
-    return
-
-  refetchGroupMembers().then(() => {
-    selectedIds.value = groupMembers.value?.map(i => String(i.user_id)) || []
-  })
+  if (val) {
+    refetchGroupMembers()
+    selectedIds.value = []
+  }
 })
 
-const data = computed(() => members.value?.map((member): TransferItem => {
-  return {
+const data = computed(() => memberListData.value?.members
+  .filter(member => !groupMembers.value?.find(i => i.user_id === member.user_id))
+  .map((member): TransferItem => ({
     label: `${member.name}(${member.user_num})`,
     value: String(member.user_id),
     disabled: false,
-  }
-}) || [])
+  })) || [])
 
-const { mutate, isPending } = useMutation({
-  mutationFn: () => {
-    return $weilaRequestV1.post('/corp/web/group-member-add', {
-      group_id: Number(props.groupId),
-      member_ids: selectedIds.value,
-    })
-  },
+const { mutate, isPending } = useWeilaMutation('corp/group/add-group-members', {
   onSuccess() {
     Message.success(t('message.success'))
     open.value = false
@@ -104,7 +97,7 @@ const { mutate, isPending } = useMutation({
         </DialogTitle>
 
         <div relative p4>
-          <LoadingMask :open="isFetchingGroupMembers || isFetchingMembers" />
+          <LoadingMask :open="isFetchingGroupMember || isFetchingMemberList" />
           <a-transfer
             v-model:model-value="selectedIds" simple :title="[t('corp.member'), t('group.member')]" show-search
             :data="data" :default-value="value"
@@ -117,7 +110,12 @@ const { mutate, isPending } = useMutation({
               {{ t('button.cancel') }}
             </a-button>
           </DialogClose>
-          <a-button type="primary" :disabled="!selectedIds?.length" :loading="isPending" @click="() => mutate()">
+          <a-button
+            type="primary" :disabled="!selectedIds?.length" :loading="isPending" @click="() => mutate({
+              group_id: Number(props.groupId),
+              user_ids: selectedIds.map(Number),
+            })"
+          >
             {{ t('button.submit') }}
           </a-button>
         </div>

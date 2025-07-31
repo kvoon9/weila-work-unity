@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { DeptModel } from '~/api/contact'
+import { shallowRef } from 'vue'
 
 import CreateDeptModal from './components/CreateDeptModal.vue'
 import DeleteDeptModal from './components/DeleteDeptModal.vue'
@@ -17,8 +18,8 @@ const { t } = useI18n()
 
 const { data, refetch } = useWeilaFetch('corp/address/get-all-dept')
 
-const isEditDeptModalVisible = ref(false)
-const selectedDept = ref<DeptModel | undefined>(undefined)
+const isEditDeptModalVisible = shallowRef(false)
+const selectedDept = shallowRef<DeptModel | undefined>(undefined)
 
 function openEdit(dept: DeptModel) {
   selectedDept.value = dept

@@ -24,7 +24,8 @@ export function useWeilaApi() {
       },
       onAuthError() {
         const router = useRouter()
-        localStorage.clear()
+        localStorage.setItem('token', '')
+        // localStorage.clear()
         router.push('/login')
       },
     },

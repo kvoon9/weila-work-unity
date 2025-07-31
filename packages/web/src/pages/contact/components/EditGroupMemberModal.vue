@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import type { GroupMemberModel } from '~/api/contact'
-import Message from '@arco-design/web-vue/es/message'
-import { useMutation } from '@tanstack/vue-query'
+import type { GroupMemberModel } from '~/api/contact';
+import Message from '@arco-design/web-vue/es/message';
+import { useMutation } from '@tanstack/vue-query';
+import { shallowRef } from 'vue';
 
 const props = defineProps<{
   groupId: number
@@ -13,7 +14,7 @@ const { themeColor } = useAppStore()
 
 const { t } = useI18n()
 
-const open = ref(false)
+const open = shallowRef(false)
 
 interface Payload {
   group_id: number

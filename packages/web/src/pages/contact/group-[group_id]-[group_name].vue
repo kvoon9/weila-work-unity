@@ -1,29 +1,23 @@
 <script setup lang="ts">
 import type { GroupMemberModel } from '~/api/contact'
-import { useQuery } from '@tanstack/vue-query'
 import { shallowRef } from 'vue'
-import { weilaApiUrl } from '~/api'
 import { TrackType } from '~/api/contact'
 
 import AddGroupMemberModal from './components/AddGroupMemberModal.vue'
 import DeleteGroupMemberModal from './components/DeleteGroupMemberModal.vue'
 import EditGroupMemberModal from './components/EditGroupMemberModal.vue'
 
-const { data: corp } = storeToRefs(useCorpStore())
 const { t } = useI18n()
 const route = useRoute('/contact/group-[group_id]-[group_name]')
 
-const { data: members, refetch } = useQuery<Array<GroupMemberModel>>({
-  enabled: computed(() => Boolean(corp.value)),
-  queryKey: [weilaApiUrl('/corp/web/group-member-getall'), route.params.group_id],
-  queryFn: () => weilaFetch(weilaApiUrl('/corp/web/group-member-getall'), {
-    body: {
-      group_id: route.params.group_id,
-    },
-  }).then(i => i.members),
-})
+const curPage = shallowRef(0)
+const pageSize = shallowRef(10)
 
-$inspect(members)
+const { data, refetch } = useWeilaFetch(() => `corp/group/get-group-member-list?page=${curPage.value}&size=${pageSize.value}`, {
+  body: () => ({
+    group_id: Number(route.params.group_id),
+  }),
+})
 
 const isEditModalVisible = shallowRef(false)
 const selectedMember = shallowRef<GroupMemberModel | undefined>(undefined)
@@ -37,7 +31,6 @@ function onSelect(member: GroupMemberModel, e: PointerEvent) {
   }
 
   isEditModalVisible.value = true
-  // router.push(`/contact/member-${member.dept_id}-${member.user_id}`)
 }
 </script>
 
@@ -53,7 +46,11 @@ function onSelect(member: GroupMemberModel, e: PointerEvent) {
       </section>
       <!-- @vue-expect-error type error when arco's row-click -->
       <a-table
-        :columns="cols" :data="members" size="medium" :column-resizable="true" :scroll="{
+        :columns="cols"
+        :pagination="{
+          total: data?.count || 0,
+        }"
+        :data="data?.members" size="medium" :column-resizable="true" :scroll="{
           x: 1000,
           y: 600,
         }" :scrollbar="true" @row-click="(...args) => onSelect(...args)"

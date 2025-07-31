@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { DeptModel } from '~/api/contact';
 import Message from '@arco-design/web-vue/es/message';
+import { useQueryClient } from '@tanstack/vue-query';
 import { shallowRef } from 'vue';
 
 defineProps<{
@@ -11,15 +12,14 @@ const emits = defineEmits(['success'])
 
 const { t } = useI18n()
 
-const contactStore = useContactStore()
-
 const open = shallowRef(false)
 
+const qc = useQueryClient()
 const { mutate, isPending } = useWeilaMutation('corp/address/delete-dept', {
   onSuccess() {
     open.value = false
     Message.success(t('message.success'))
-    contactStore.refetch()
+    qc.invalidateQueries({ queryKey: ['corp/address/get-all-dept'] })
     emits('success')
   },
 })

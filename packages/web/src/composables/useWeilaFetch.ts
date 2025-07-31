@@ -6,12 +6,13 @@ import { useWeilaApi } from './useWeilaApi'
 
 export function useWeilaFetch<T>(
   url: MaybeRefOrGetter<string>,
-  options?: UseQueryOptions<T> & {
+  options?: {
     body?: MaybeRefOrGetter<RequestInit['body'] | Record<string, any>>
     method?: string
   },
+  tanstackOptions?: UseQueryOptions<T>,
 ) {
-  const { body, method = 'POST' } = options || {}
+  const { body, method = 'POST' } = toValue(options) || {}
 
   const weilaApi = useWeilaApi()
 
@@ -22,7 +23,7 @@ export function useWeilaFetch<T>(
       method,
     }),
     refetchOnWindowFocus: false,
-    ...options,
+    ...tanstackOptions,
   })
 
   const { refetch } = res

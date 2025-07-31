@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import type { DeptModel } from '~/api/contact';
-import Message from '@arco-design/web-vue/es/message';
-import * as v from 'valibot';
-import { useForm } from 'zod-arco-rules/valibot';
+import type { DeptModel } from '~/api/contact'
+import Message from '@arco-design/web-vue/es/message'
+import { useQueryClient } from '@tanstack/vue-query'
+import * as v from 'valibot'
+import { useForm } from 'zod-arco-rules/valibot'
 
 const props = defineProps<{
   dept?: DeptModel
@@ -12,19 +13,19 @@ const emits = defineEmits(['success'])
 
 const { t } = useI18n()
 
-const contactStore = useContactStore()
-
 const open = defineModel('open', { default: false })
 
 const { form, rules, handleSubmit } = useForm(v.object({
   name: v.string(),
 }))
 
+const qc = useQueryClient()
+
 const { mutate, isPending } = useWeilaMutation('corp/address/change-dept', {
   onSuccess() {
     open.value = false
     Message.success(t('message.success'))
-    contactStore.refetch()
+    qc.invalidateQueries({ queryKey: ['corp/address/get-all-dept'] })
     emits('success')
   },
 })
