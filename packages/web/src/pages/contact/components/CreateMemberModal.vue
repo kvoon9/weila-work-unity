@@ -1,90 +1,57 @@
 <script setup lang="ts">
-import type { ValidatedError } from '@arco-design/web-vue'
-import type { MemberCreatePayload } from 'generated/mock/weila'
-import { Message } from '@arco-design/web-vue'
-import { useMutation, useQuery } from '@tanstack/vue-query'
-import md5 from 'md5'
+import Message from '@arco-design/web-vue/es/message'
+import { useQueryClient } from '@tanstack/vue-query'
+import * as v from 'valibot'
 import { shallowRef } from 'vue'
-import { weilaApiUrl } from '~/api'
-
-const emits = defineEmits(['success'])
+import { useForm } from 'zod-arco-rules/valibot'
 
 const { t } = useI18n()
 const { themeColor } = useAppStore()
 const corpStore = useCorpStore()
-const formRef = templateRef('formRef')
 
 const org_num = shallowRef(0)
 corpStore.$subscribe((_, { data }) => data ? org_num.value = data.num : void 0, { immediate: true })
 
+const avatarUploaderRef = useTemplateRef('avatarUploaderRef')
+
 const open = shallowRef(false)
 
-const { data: depts } = useQuery<Array<{ id: number, name: string }>>({
-  enabled: computed(() => Boolean(org_num.value)),
-  queryKey: [weilaApiUrl('/corp/web/dept-getall'), org_num],
-  queryFn: () => weilaFetch(weilaApiUrl('/corp/web/dept-getall'), {
-    body: {
-      org_num: org_num.value,
-    },
-  }).then(i => i.depts),
-})
-const avatarUploaderRef = templateRef('avatarUploaderRef')
+const { data: depts } = useWeilaFetch('corp/address/get-all-dept')
 
-const form = reactive<MemberCreatePayload>({
-  org_num: corpStore.data?.num || 0,
-  name: '',
-  password: '',
-  dept_id: 0,
-  sex: 0,
-  avatar: '',
-  phone: '',
-  tts: 1,
-  loc_share: 0,
-  job_num: '',
-})
+const { form, rules, handleSubmit, reset } = useForm(v.object({
+  name: v.pipe(v.string(), v.maxLength(20)),
+  job_num: v.optional(v.string(), ''),
+  dept_id: v.optional(v.number(), 0),
+  sex: v.optional(v.number(), 0),
+  avatar: v.optional(v.string(), ''),
+  phone: v.string(),
+  is_admin: v.optional(v.number(), 0),
+  loc_share: v.optional(v.number(), 0),
+  track: v.optional(v.number(), 0),
+}))
 
-$inspect(form)
-
-corpStore.$subscribe((_, state) => {
-  if (state.data)
-    form.org_num = state.data.num
-}, { immediate: true })
-
-const { mutate: createMember, isPending } = useMutation({
-  mutationFn: (payload: MemberCreatePayload) => {
-    return weilaRequest.post('/corp/web/member-create', {
-      ...payload,
-      password: md5(payload.password),
-      tts: payload.tts ? 1 : 0,
-      loc_share: payload.loc_share ? 1 : 0,
-    })
-  },
+const { mutate } = useWeilaMutation<{
+  id: number
+  name: string
+  user_count: number
+}[]>('corp/address/create-member', {
   onSuccess() {
-    // createMemberModalVisible.value = false
     Message.success(t('message.success'))
     open.value = false
-    emits('success')
+    useQueryClient().invalidateQueries({ queryKey: ['corp/address/get-all-member'] })
+    reset()
   },
 })
 
-function handleSubmit() {
-  return formRef.value?.validate(async (errors: ValidatedError) => {
-    if (errors)
-      return
+const submit = handleSubmit(async (values) => {
+  // @ts-expect-error type error: `defineExpose` no type declare find
+  const { upload } = avatarUploaderRef.value
+  if (form.value.avatar && !isRemoteImage(form.value.avatar)) {
+    await upload()
+  }
 
-    // @ts-expect-error type error: `defineExpose` no type declare find
-    const { upload } = avatarUploaderRef.value
-    if (form.avatar && !isRemoteImage(form.avatar)) {
-      await upload()
-    }
-
-    createMember(form, {
-      onSuccess: () => {
-        formRef.value?.resetFields()
-      },
-    })
-  })
-}
+  mutate(values)
+})
 </script>
 
 <template>
@@ -106,10 +73,9 @@ function handleSubmit() {
         <DialogTitle class="m0 text-center text-lg font-semibold leading-loose">
           {{ t('create-member') }}
         </DialogTitle>
-        <a-form ref="formRef" :model="form" @submit="handleSubmit">
+        <a-form :rules :model="form" @submit="submit">
           <a-form-item
-            field="name" :label="t('member.form.name.label')" :rules="[{ required: true }]"
-            :validate-trigger="['change', 'blur']"
+            field="name" :label="t('member.form.name.label')"
           >
             <a-input v-model="form.name" :max-length="20" show-word-limit />
           </a-form-item>
@@ -119,24 +85,14 @@ function handleSubmit() {
             </a-select>
           </a-form-item>
           <a-form-item
-            field="job_num" :label="t('member.form.job-num.label')" :rules="[{ required: false }]"
-            :validate-trigger="['change', 'blur']"
+            field="job_num" :label="t('member.form.job-num.label')"
           >
             <a-input v-model="form.job_num" :max-length="12" show-word-limit />
           </a-form-item>
-          <a-form-item
-            field="phone" :label="t('member.form.phone.label')" :rules="[{ required: false }]"
-            :validate-trigger="['change', 'blur']"
-          >
+          <a-form-item field="phone" :label="t('member.form.phone.label')">
             <a-input v-model="form.phone" :max-length="12" show-word-limit />
           </a-form-item>
-          <a-form-item
-            field="password" :label="t('member.form.password.label')" :rules="[{ required: true }]"
-            :validate-trigger="['change', 'blur']"
-          >
-            <a-input-password v-model="form.password" />
-          </a-form-item>
-          <a-form-item field="sex" :label="t('member.form.gender.label')" :validate-trigger="['change', 'blur']">
+          <a-form-item field="sex" :label="t('member.form.gender.label')">
             <a-radio-group v-model="form.sex">
               <a-radio :value="0">
                 {{ t('male') }}
@@ -146,8 +102,14 @@ function handleSubmit() {
               </a-radio>
             </a-radio-group>
           </a-form-item>
-          <a-form-item field="avatar" :label="t('member.form.avatar.label')" :validate-trigger="['change', 'blur']">
+          <a-form-item field="avatar" :label="t('member.form.avatar.label')">
             <AvatarUploader ref="avatarUploaderRef" v-model:src="form.avatar" />
+          </a-form-item>
+          <a-form-item field="is_admin" label="管理员">
+            <a-switch
+              v-model="form.is_admin" :checked-value="1" :unchecked-value="0" :checked-color="themeColor"
+              unchecked-color="#ddd"
+            />
           </a-form-item>
           <!-- <a-form-item field="tts" label="TTS" :validate-trigger="['change', 'blur']">
             <a-switch
@@ -157,28 +119,18 @@ function handleSubmit() {
           </a-form-item> -->
           <a-form-item
             field="loc_share" :label="t('member.form.loc_share.label')"
-            :validate-trigger="['change', 'blur']"
           >
             <a-switch
               v-model="form.loc_share" :checked-value="1" :unchecked-value="0" :checked-color="themeColor"
               unchecked-color="#ddd"
             />
           </a-form-item>
-        </a-form>
-
-        <div class="mt-[25px] flex justify-end">
-          <a-button type="text" @click="() => formRef?.resetFields()">
-            {{ t('button.reset') }}
-          </a-button>
-          <DialogClose as-child>
-            <a-button>
-              {{ t('button.cancel') }}
+          <a-form-item>
+            <a-button html-type="submit" type="primary" size="large" mla>
+              {{ t('button.create') }}
             </a-button>
-          </DialogClose>
-          <a-button type="primary" :loading="isPending" @click="(e) => formRef?.handleSubmit(e)">
-            {{ t('button.submit') }}
-          </a-button>
-        </div>
+          </a-form-item>
+        </a-form>
         <DialogClose
           class="text-grass11 absolute right-[10px] top-[10px] h-[25px] w-[25px] inline-flex appearance-none items-center justify-center rounded-full hover:bg-gray2 focus:shadow-[0_0_0_2px] focus:shadow-gray7 focus:outline-none"
           aria-label="Close"

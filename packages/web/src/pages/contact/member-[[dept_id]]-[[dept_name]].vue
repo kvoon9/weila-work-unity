@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import type { MemberGetallModel } from 'generated/mock/weila'
 import { objectEntries } from '@antfu/utils'
-import { useMutation, useQuery } from '@tanstack/vue-query'
 import { shallowRef } from 'vue'
-import { weilaApiUrl } from '~/api'
 import { TrackType } from '~/api/contact'
 
 import AddDeviceModal from './components/AddDeviceModal.vue'
@@ -20,10 +18,8 @@ definePage({
   },
 })
 
-const { data: corp, org_num } = storeToRefs(useCorpStore())
 const { t } = useI18n()
 const { themeColor } = useAppStore()
-const route = useRoute('/contact/member-[[dept_id]]-[[dept_name]]')
 
 const memberIdxTitleMap: Partial<Record<keyof MemberGetallModel['data']['members'][number], string>> = {
   name: 'name',
@@ -39,56 +35,58 @@ const memberIdxTitleMap: Partial<Record<keyof MemberGetallModel['data']['members
   dept_name: 'dept.name',
 }
 
-const url = computed(() => {
-  return route.params.dept_id
-    ? weilaApiUrl('/corp/web/dept-member-getall')
-    : weilaApiUrl('/corp/web/member-getall')
-})
-
 const filterInput = shallowRef('')
 
-const { data: _members, refetch } = useQuery({
-  enabled: computed(() => Boolean(corp.value)),
-  queryKey: [url, corp, route.params.dept_id],
-  queryFn: () => weilaFetch<MemberGetallModel['data']>(url.value, {
-    body: {
-      org_num: corp.value!.num,
-      dept_id: route.params.dept_id,
-    },
-  }).then(i => i.members.sort((a, b) => {
-    return a.dept_id - b.dept_id
-  }),
-  ),
-})
+const curPage = shallowRef(0)
+const pageSize = shallowRef(10)
+
+const { data, refetch } = useWeilaFetch<{
+  count: number
+  members: {
+    user_id: number
+    user_num: string
+    job_num: string
+    sex: number
+    name: string
+    avatar: string
+    is_admin: number
+    dept_id: number
+    phone: string
+    country_code: string
+    state: number
+    type: number
+    tts: number
+    loc_share: number
+    track: number
+    group_count: number
+    created: number
+  }[]
+}>(() => `corp/address/get-member-list?page=${curPage.value}&size=${pageSize.value}`)
 
 const members = computed(() => {
-  if (!_members.value)
+  if (!data.value?.members)
     return []
 
   if (!filterInput.value)
-    return _members.value
+    return data.value.members
 
   const searchTerm = filterInput.value.toLowerCase()
 
-  return _members.value.filter(member =>
-    member.name.toLowerCase().includes(searchTerm)
-    || member.phone.toLowerCase().includes(searchTerm)
-    || member.user_num.toLowerCase().includes(searchTerm)
-    || member.job_num.toLowerCase().includes(searchTerm),
-  )
+  return data.value.members
+    .filter(member =>
+      member.name.toLowerCase().includes(searchTerm)
+      || member.phone.toLowerCase().includes(searchTerm)
+      || member.user_num.toLowerCase().includes(searchTerm)
+      || member.job_num.toLowerCase().includes(searchTerm),
+    )
+    .sort((a, b) => a.dept_id - b.dept_id)
 })
 
-const { data: depts } = useQuery<Array<{ id: number, name: string }>>({
-  enabled: computed(() => Boolean(org_num.value)),
-  queryKey: [weilaApiUrl('/corp/web/dept-getall'), org_num],
-  queryFn: () => weilaFetch(weilaApiUrl('/corp/web/dept-getall'), {
-    body: {
-      org_num: org_num.value,
-    },
-  }).then(i => i.depts),
-})
-
-// const selectedDepts = ref('')
+const { data: depts } = useWeilaFetch<{
+  id: number
+  name: string
+  user_count: number
+}[]>('corp/address/get-all-dept')
 
 const cols = computed(() => {
   const first = members.value?.[0]
@@ -110,21 +108,19 @@ function onSelect(member: MemberGetallModel['data']['members'][number], _: Point
   selectedMember.value = member
 }
 
-const { mutateAsync: changeMemberState } = useMutation({
-  mutationFn: (payload: { member_id: number, state: 0 | 1 }) => weilaRequest.post(weilaApiUrl('/corp/web/member-change-state'), {
-    org_num: corp.value!.num,
-    ...payload,
-  }),
-})
+const { mutateAsync: changeMemberState } = useWeilaMutation<{ state: 0 | 1 }, {
+  user_id: number
+  state: 0 | 1
+}>('corp/address/change-member-state')
 
-function toggleMemberState(targetId: number, state: 0 | 1) {
+async function toggleMemberState(targetId: number, state: 0 | 1) {
   const newState = state ? 0 : 1
   return changeMemberState({
-    member_id: targetId,
+    user_id: targetId,
     state: newState,
   })
     // NOTE: arco switch need a boolean return
-    .then(({ data }) => data.state === newState)
+    .then(({ state }) => state === newState)
     .catch(() => false)
 }
 </script>
@@ -157,10 +153,20 @@ function toggleMemberState(targetId: number, state: 0 | 1) {
       </section>
       <!-- @vue-expect-error type error when arco's row-click -->
       <a-table
-        :columns="cols" :data="members" :column-resizable="true" :scroll="{
+        :columns="cols"
+        :data="members"
+        :pagination="{
+          pageSize,
+          total: data?.count || 0,
+        }"
+        :column-resizable="true"
+        :scroll="{
           x: 700,
           y: 600,
-        }" :scrollbar="true" @row-click="(...args) => onSelect(...args)"
+        }"
+        :scrollbar="true"
+        @page-change="(page) => curPage = page"
+        @row-click="(...args) => onSelect(...args)"
       >
         <template #columns>
           <a-table-column :title="t('member.state')" :width="90">
@@ -231,17 +237,10 @@ function toggleMemberState(targetId: number, state: 0 | 1) {
             </template>
           </a-table-column>
           <a-table-column
-            :title="t('dept.name')" :width="100" data-index="dept_name" :filterable="{
-              filters: depts?.map((dept) => ({
-                text: dept.name,
-                value: String(dept.id),
-              })) || [],
-              filter: (value: any, record: any) => Number(record.dept_id) === Number(value),
-              multiple: false,
-            }"
+            :title="t('dept.name')" :width="100" data-index="dept_id"
           >
-            <template #cell="{ record: { dept_name } }">
-              {{ dept_name }}
+            <template #cell="{ record: { dept_id } }">
+              {{ depts?.find(d => d.id === dept_id)?.name || '' }}
             </template>
           </a-table-column>
           <a-table-column :title="t('created')" :width="120">
