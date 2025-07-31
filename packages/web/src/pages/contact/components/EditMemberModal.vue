@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import Message from '@arco-design/web-vue/es/message';
-import * as v from 'valibot';
+import Message from '@arco-design/web-vue/es/message'
+import { useQueryClient } from '@tanstack/vue-query'
+import * as v from 'valibot'
 
-import { useForm } from 'zod-arco-rules/valibot';
-import { TrackType } from '~/api/contact';
+import { useForm } from 'zod-arco-rules/valibot'
+import { TrackType } from '~/api/contact'
 
 const props = defineProps<{
   member?: {
@@ -56,11 +57,14 @@ const { data: depts } = useWeilaFetch<{
   user_count: number
 }[]>('corp/address/get-all-dept')
 
+const qc = useQueryClient()
+
 const { mutate: createMember } = useWeilaMutation('corp/address/change-member', {
   onSuccess() {
     reset()
     open.value = false
     Message.success(t('success'))
+    qc.invalidateQueries({ queryKey: ['corp/address/get-member-list'] })
   },
 })
 

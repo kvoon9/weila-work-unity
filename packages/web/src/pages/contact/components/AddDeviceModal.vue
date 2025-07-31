@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Message } from '@arco-design/web-vue'
-import { useMutation, useQuery } from '@tanstack/vue-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
 import { weilaApiUrl } from '~/api'
 import { TrackType } from '~/api/contact'
 
@@ -27,8 +27,7 @@ const { data: depts } = useQuery<Array<{ id: number, name: string }>>({
 })
 
 interface Payload {
-  org_num: number
-  verify_code: string
+  verifycode: string
   // verifyImgCode: string
   name: string
   dept_id: number
@@ -41,8 +40,7 @@ interface Payload {
 }
 
 const form = reactive<Payload>({
-  org_num: 0,
-  verify_code: '',
+  verifycode: '',
   name: '',
   dept_id: 0,
   sex: 0,
@@ -53,21 +51,22 @@ const form = reactive<Payload>({
   track: TrackType.Close,
 })
 
-watchImmediate(org_num, (val) => {
-  if (val)
-    form.org_num = val
-})
-
 $inspect(form)
 
+const weilaApi = useWeilaApi()
+
+const qc = useQueryClient()
+
 const { mutate } = useMutation({
-  mutationFn: (payload: Payload) => weilaRequest.post('/corp/web/member-add-device', {
-    ...payload,
-    track: Number(payload.track),
+  mutationFn: (payload: Payload) => weilaApi.value.v2.fetch('/corp/address/add-device', {
+    body: {
+      ...payload,
+      track: Number(payload.track),
+    },
   }),
   onSuccess() {
     Message.success(t('message.success'))
-    // refetchContact()
+    qc.invalidateQueries({ queryKey: ['corp/address/get-member-list'] })
     emits('success')
     open.value = false
   },
@@ -116,10 +115,10 @@ async function handleSubmit({ values, errors }: any) {
             <a-input v-model="form.name" :max-length="20" show-word-limit />
           </a-form-item>
           <a-form-item
-            field="verify_code" :label="t('verify-code')" :rules="[{ required: true }]"
+            field="verifycode" :label="t('verify-code')" :rules="[{ required: true }]"
             :validate-trigger="['change', 'blur']"
           >
-            <a-input v-model="form.verify_code" :max-length="20" show-word-limit />
+            <a-input v-model="form.verifycode" :max-length="20" show-word-limit />
           </a-form-item>
           <a-form-item
             :label="t('phone-number')" field="phone"
