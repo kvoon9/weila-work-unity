@@ -1,33 +1,26 @@
 <script setup lang="ts">
-import type { MemberGetallModel } from 'generated/mock/weila'
-import Message from '@arco-design/web-vue/es/message'
-import { useMutation } from '@tanstack/vue-query'
-import { weilaApiUrl } from '~/api'
+import type { MemberGetallModel } from 'generated/mock/weila';
+import Message from '@arco-design/web-vue/es/message';
+import { useQueryClient } from '@tanstack/vue-query';
 
-const props = defineProps<{
+defineProps<{
   member?: MemberGetallModel['data']['members'][number]
 }>()
-
-const emits = defineEmits(['success'])
 
 const { t } = useI18n()
 
 const open = defineModel('open', { default: false })
 
-const { org_num } = storeToRefs(useCorpStore())
+const qc = useQueryClient()
 
-const { mutate, isPending } = useMutation({
-  mutationFn: () => weilaRequest.post(
-    weilaApiUrl('/corp/web/member-delete'),
-    {
-      org_num: org_num.value,
-      member_id: props.member?.user_id,
-    },
-  ),
+const { mutate, isPending } = useWeilaMutation<never, {
+  user_id: number
+}>('corp/address/delete-member', {
   onSuccess: () => {
     open.value = false
     Message.success(t('message.success'))
-    emits('success')
+
+    qc.invalidateQueries({ queryKey: ['corp/address/get-member-list'] })
   },
 })
 </script>
@@ -57,7 +50,7 @@ const { mutate, isPending } = useMutation({
               {{ t('button.cancel') }}
             </a-button>
           </DialogClose>
-          <a-button type="primary" :loading="isPending" @click="(e) => mutate()">
+          <a-button type="primary" :loading="isPending" @click="(e) => mutate({ user_id: member!.user_id })">
             {{ t('button.submit') }}
           </a-button>
         </div>

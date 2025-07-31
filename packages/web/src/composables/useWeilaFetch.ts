@@ -1,6 +1,7 @@
 import type { UseQueryOptions } from '@tanstack/vue-query'
 import { isFunction } from '@antfu/utils'
 import { useQuery } from '@tanstack/vue-query'
+import { parseURL } from 'ufo'
 import { useWeilaApi } from './useWeilaApi'
 
 export function useWeilaFetch<T>(
@@ -15,7 +16,7 @@ export function useWeilaFetch<T>(
   const weilaApi = useWeilaApi()
 
   const res = useQuery<T>({
-    queryKey: [url, body, method],
+    queryKey: [() => parseURL(toValue(url)).pathname, body, method],
     queryFn: () => weilaApi.value.v2.fetch(toValue(url), {
       body: toValue(body),
       method,

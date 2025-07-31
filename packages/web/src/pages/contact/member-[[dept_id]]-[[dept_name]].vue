@@ -21,7 +21,7 @@ definePage({
 const { t } = useI18n()
 const { themeColor } = useAppStore()
 
-const memberIdxTitleMap: Partial<Record<keyof MemberGetallModel['data']['members'][number], string>> = {
+const memberIdxTitleMap: Partial<Record<string, string>> = {
   name: 'name',
   sex: 'gender',
   avatar: 'avatar',
@@ -33,6 +33,7 @@ const memberIdxTitleMap: Partial<Record<keyof MemberGetallModel['data']['members
   created: 'created',
   online: 'state.online',
   dept_name: 'dept.name',
+  is_admin: 'admin',
 }
 
 const filterInput = shallowRef('')
@@ -185,6 +186,14 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
                   {{ t('member-state.paused') }}
                 </template>
               </a-switch>
+            </template>
+          </a-table-column>
+
+          <a-table-column title="管理员" :width="80">
+            <template #cell="{ record: { is_admin } }">
+              <a-tag v-if="is_admin" color="orange">
+                管理员
+              </a-tag>
             </template>
           </a-table-column>
           <a-table-column

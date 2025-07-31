@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Message from '@arco-design/web-vue/es/message';
 import * as v from 'valibot';
 
 import { useForm } from 'zod-arco-rules/valibot';
@@ -35,6 +36,7 @@ const open = defineModel('open', { default: false })
 $inspect(() => props.member)
 
 const { form, rules, handleSubmit, reset } = useForm(v.object({
+  user_id: v.optional(v.number(), () => props.member?.user_id),
   name: v.optional(v.pipe(v.string(), v.maxLength(20)), () => props.member?.name),
   job_num: v.optional(v.string(), () => props.member?.job_num),
   dept_id: v.optional(v.number(), () => props.member?.dept_id),
@@ -58,6 +60,7 @@ const { mutate: createMember } = useWeilaMutation('corp/address/change-member', 
   onSuccess() {
     reset()
     open.value = false
+    Message.success(t('success'))
   },
 })
 
@@ -138,6 +141,12 @@ const submit = handleSubmit(async (values) => {
           >
             <a-switch
               v-model="form.loc_share" :checked-value="1" :unchecked-value="0" :checked-color="themeColor"
+              unchecked-color="#ddd"
+            />
+          </a-form-item>
+          <a-form-item field="is_admin" label="管理员">
+            <a-switch
+              v-model="form.is_admin" :checked-value="1" :unchecked-value="0" :checked-color="themeColor"
               unchecked-color="#ddd"
             />
           </a-form-item>

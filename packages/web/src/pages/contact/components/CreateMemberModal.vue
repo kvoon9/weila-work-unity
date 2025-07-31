@@ -1,17 +1,10 @@
 <script setup lang="ts">
-import type { MemberChangePayload, MemberGetallModel } from 'generated/mock/weila'
-import { Message } from '@arco-design/web-vue'
-import { useMutation, useQuery } from '@tanstack/vue-query'
+import Message from '@arco-design/web-vue/es/message'
+import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import * as v from 'valibot'
 import { useForm } from 'zod-arco-rules/valibot'
 import { weilaApiUrl } from '~/api'
 import { TrackType } from '~/api/contact'
-
-const props = defineProps<{
-  member?: MemberGetallModel['data']['members'][number]
-}>()
-
-const emits = defineEmits(['success'])
 
 const { t } = useI18n()
 const { themeColor } = useAppStore()
@@ -37,61 +30,28 @@ const { form, rules, handleSubmit, reset } = useForm(v.object({
   dept_id: v.optional(v.number(), 0),
   sex: v.optional(v.number(), 0),
   avatar: v.optional(v.string(), ''),
-  phone: v.optional(v.string(), ''),
-  tts: v.optional(v.number(), 0),
+  phone: v.string(),
+  is_admin: v.optional(v.number(), 0),
   loc_share: v.optional(v.number(), 0),
   track: v.optional(v.number(), 0),
-  org_num: v.number(),
-  member_id: v.number(),
 }))
 
-watch(open, (val) => {
-  if (!val || !props?.member)
-    return
+const qc = useQueryClient()
 
-  form.value = {
-    name: props.member.name || '',
-    job_num: String(props.member.job_num) || '',
-    dept_id: props.member.dept_id || 0,
-    sex: props.member.sex || 0,
-    avatar: props.member.avatar || '',
-    phone: props.member.phone || '',
-    tts: props.member.tts || 0,
-    loc_share: props.member.loc_share || 0,
-    track: props.member.track || 0,
-    org_num: org_num.value || 0,
-    member_id: props.member.user_id || 0,
-  }
-}, { immediate: true })
-
-corpStore.$subscribe((_, state) => {
-  if (state.data)
-    form.value.org_num = state.data.num
-}, { immediate: true })
-
-const { mutate: createMember, isPending } = useMutation({
-  mutationFn: (payload: MemberChangePayload) => {
-    return weilaRequest.post(weilaApiUrl('/corp/web/member-change'), {
-      ...payload,
-      tts: payload.tts ? 1 : 0,
-      loc_share: payload.loc_share ? 1 : 0,
-    })
-  },
+const { mutate: createMember } = useWeilaMutation('corp/address/create-member', {
   onSuccess() {
-    // createMemberModalVisible.value = false
-    Message.success(t('message.success'))
-    open.value = false
+    qc.invalidateQueries({ queryKey: ['corp/address/get-member-list'] })
     reset()
-    emits('success')
+    Message.success(t('success'))
+    open.value = false
   },
 })
 
 const submit = handleSubmit(async (values: any) => {
   // @ts-expect-error type error: `defineExpose` no type declare find
   const { upload } = avatarUploaderRef.value
-  if (form.value.avatar && !isRemoteImage(form.value.avatar)) {
+  if (form.value.avatar && !isRemoteImage(form.value.avatar))
     await upload()
-  }
 
   createMember(values)
 })
@@ -114,12 +74,10 @@ const submit = handleSubmit(async (values: any) => {
         }"
       >
         <DialogTitle class="m0 text-center text-lg font-semibold leading-loose">
-          {{ t('edit-member') }}
+          {{ t('create-member') }}
         </DialogTitle>
         <a-form :rules :model="form" @submit="submit">
-          <a-form-item
-            field="name" :label="t('member.form.name.label')"
-          >
+          <a-form-item field="name" :label="t('member.form.name.label')">
             <a-input v-model="form.name" :max-length="20" show-word-limit />
           </a-form-item>
           <a-form-item field="dept_id" :label="t('member.form.dept.label')">
@@ -130,14 +88,10 @@ const submit = handleSubmit(async (values: any) => {
               <a-option v-for="{ name, id }, key in depts" :key :value="id" :label="name" />
             </a-select>
           </a-form-item>
-          <a-form-item
-            field="job_num" :label="t('member.form.job-num.label')"
-          >
+          <a-form-item field="job_num" :label="t('member.form.job-num.label')">
             <a-input v-model="form.job_num" :max-length="12" show-word-limit />
           </a-form-item>
-          <a-form-item
-            field="phone" :label="t('member.form.phone.label')"
-          >
+          <a-form-item field="phone" :label="t('member.form.phone.label')">
             <a-input v-model="form.phone" :max-length="12" show-word-limit />
           </a-form-item>
           <a-form-item field="sex" :label="t('member.form.gender.label')">
@@ -162,10 +116,11 @@ const submit = handleSubmit(async (values: any) => {
           <a-form-item
             field="loc_share" :label="t('member.form.loc_share.label')"
           >
-            <a-switch
-              v-model="form.loc_share" :checked-value="1" :unchecked-value="0" :checked-color="themeColor"
-              unchecked-color="#ddd"
-            />
+            <a-switch v-model="form.loc_share" :checked-value="1" :unchecked-value="0" :checked-color="themeColor" unchecked-color="#ddd" />
+          </a-form-item>
+
+          <a-form-item field="is_admin" label="管理员">
+            <a-switch v-model="form.is_admin" :checked-value="1" :unchecked-value="0" :checked-color="themeColor" unchecked-color="#ddd" />
           </a-form-item>
           <a-form-item
             field="track" :label="t('change-member.form.track.label')"
@@ -187,7 +142,7 @@ const submit = handleSubmit(async (values: any) => {
           </a-form-item>
 
           <a-form-item>
-            <a-button mla type="primary" :loading="isPending" html-type="submit">
+            <a-button mla type="primary" html-type="submit">
               {{ t('button.submit') }}
             </a-button>
           </a-form-item>
