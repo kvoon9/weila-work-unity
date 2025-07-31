@@ -5,7 +5,7 @@ import { useWeilaApi } from './useWeilaApi'
 
 export function useWeilaFetch<T>(
   url: MaybeRefOrGetter<string>,
-  options?:  UseQueryOptions<T> & {
+  options?: UseQueryOptions<T> & {
     body?: MaybeRefOrGetter<RequestInit['body'] | Record<string, any>>
     method?: string
   },

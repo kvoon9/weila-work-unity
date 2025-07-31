@@ -1,11 +1,11 @@
 <script lang="ts" setup>
+import type { SendVerifySmsBody } from '~/api/verify-sms'
 import { Message } from '@arco-design/web-vue'
 import { useQueryClient } from '@tanstack/vue-query'
 import md5 from 'md5'
 import * as v from 'valibot'
 import { shallowRef } from 'vue'
 import { useForm } from 'zod-arco-rules/valibot'
-import { SendVerifySmsBody } from '~/api/verify-sms'
 import { accountHistoryRecord } from '~/shared/const'
 
 definePage({
@@ -18,7 +18,7 @@ definePage({
 const { t } = useI18n()
 const router = useRouter()
 const qc = useQueryClient()
-const activeTab = shallowRef('password')
+const activeTab = shallowRef<'password' | 'sms'>('password')
 
 const { form: loginForm, rules: loginRules, handleSubmit: handleLogin } = useForm(v.object({
   account: v.string(),
@@ -31,7 +31,15 @@ const { form: smsLoginForm, rules: smsLoginRules, handleSubmit: handleSmsLogin }
   verifycode: v.string(),
 }))
 
-const { data, refetch: refreshImageCode } = useWeilaFetch<{ id: string, image: string }>('common/get-image-verifycode')
+$inspect(activeTab)
+
+const { data, refetch: refreshImageCode } = useWeilaFetch<{ id: string, image: string }>(
+  'common/get-image-verifycode',
+  // @ts-expect-error type error
+  {
+    enabled: () => activeTab.value === 'sms',
+  },
+)
 
 const { mutate: sendSmsVerifyCode } = useWeilaMutation<never, SendVerifySmsBody>('common/send-sms-verifycode')
 
@@ -137,7 +145,7 @@ onMounted(async () => {
     <div class="login-form-title" mb-4>
       {{ t('login.form.title') }}
     </div>
-    <a-tabs v-model="activeTab">
+    <a-tabs v-model:active-key="activeTab">
       <a-tab-pane key="password" title="密码登录">
         <a-form :model="loginForm" :rules="loginRules" class="login-form" layout="vertical" @submit="login">
           <a-form-item field="account" hide-label>

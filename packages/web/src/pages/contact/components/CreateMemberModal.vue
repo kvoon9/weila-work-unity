@@ -1,22 +1,35 @@
 <script setup lang="ts">
-import Message from '@arco-design/web-vue/es/message'
-import { useQueryClient } from '@tanstack/vue-query'
+import type { MemberChangePayload, MemberGetallModel } from 'generated/mock/weila'
+import { Message } from '@arco-design/web-vue'
+import { useMutation, useQuery } from '@tanstack/vue-query'
 import * as v from 'valibot'
-import { shallowRef } from 'vue'
 import { useForm } from 'zod-arco-rules/valibot'
+import { weilaApiUrl } from '~/api'
+import { TrackType } from '~/api/contact'
+
+const props = defineProps<{
+  member?: MemberGetallModel['data']['members'][number]
+}>()
+
+const emits = defineEmits(['success'])
 
 const { t } = useI18n()
 const { themeColor } = useAppStore()
 const corpStore = useCorpStore()
+const { org_num } = storeToRefs(corpStore)
+const avatarUploaderRef = templateRef('avatarUploaderRef')
 
-const org_num = shallowRef(0)
-corpStore.$subscribe((_, { data }) => data ? org_num.value = data.num : void 0, { immediate: true })
+const open = defineModel('open', { default: false })
 
-const avatarUploaderRef = useTemplateRef('avatarUploaderRef')
-
-const open = shallowRef(false)
-
-const { data: depts } = useWeilaFetch('corp/address/get-all-dept')
+const { data: depts } = useQuery<Array<{ id: number, name: string }>>({
+  enabled: computed(() => Boolean(org_num.value)),
+  queryKey: [weilaApiUrl('/corp/web/dept-getall'), org_num],
+  queryFn: () => weilaFetch(weilaApiUrl('/corp/web/dept-getall'), {
+    body: {
+      org_num: org_num.value,
+    },
+  }).then(i => i.depts),
+})
 
 const { form, rules, handleSubmit, reset } = useForm(v.object({
   name: v.pipe(v.string(), v.maxLength(20)),
@@ -24,33 +37,63 @@ const { form, rules, handleSubmit, reset } = useForm(v.object({
   dept_id: v.optional(v.number(), 0),
   sex: v.optional(v.number(), 0),
   avatar: v.optional(v.string(), ''),
-  phone: v.string(),
-  is_admin: v.optional(v.number(), 0),
+  phone: v.optional(v.string(), ''),
+  tts: v.optional(v.number(), 0),
   loc_share: v.optional(v.number(), 0),
   track: v.optional(v.number(), 0),
+  org_num: v.number(),
+  member_id: v.number(),
 }))
 
-const { mutate } = useWeilaMutation<{
-  id: number
-  name: string
-  user_count: number
-}[]>('corp/address/create-member', {
+watch(open, (val) => {
+  if (!val || !props?.member)
+    return
+
+  form.value = {
+    name: props.member.name || '',
+    job_num: String(props.member.job_num) || '',
+    dept_id: props.member.dept_id || 0,
+    sex: props.member.sex || 0,
+    avatar: props.member.avatar || '',
+    phone: props.member.phone || '',
+    tts: props.member.tts || 0,
+    loc_share: props.member.loc_share || 0,
+    track: props.member.track || 0,
+    org_num: org_num.value || 0,
+    member_id: props.member.user_id || 0,
+  }
+}, { immediate: true })
+
+corpStore.$subscribe((_, state) => {
+  if (state.data)
+    form.value.org_num = state.data.num
+}, { immediate: true })
+
+const { mutate: createMember, isPending } = useMutation({
+  mutationFn: (payload: MemberChangePayload) => {
+    return weilaRequest.post(weilaApiUrl('/corp/web/member-change'), {
+      ...payload,
+      tts: payload.tts ? 1 : 0,
+      loc_share: payload.loc_share ? 1 : 0,
+    })
+  },
   onSuccess() {
+    // createMemberModalVisible.value = false
     Message.success(t('message.success'))
     open.value = false
-    useQueryClient().invalidateQueries({ queryKey: ['corp/address/get-all-member'] })
     reset()
+    emits('success')
   },
 })
 
-const submit = handleSubmit(async (values) => {
+const submit = handleSubmit(async (values: any) => {
   // @ts-expect-error type error: `defineExpose` no type declare find
   const { upload } = avatarUploaderRef.value
   if (form.value.avatar && !isRemoteImage(form.value.avatar)) {
     await upload()
   }
 
-  mutate(values)
+  createMember(values)
 })
 </script>
 
@@ -71,7 +114,7 @@ const submit = handleSubmit(async (values) => {
         }"
       >
         <DialogTitle class="m0 text-center text-lg font-semibold leading-loose">
-          {{ t('create-member') }}
+          {{ t('edit-member') }}
         </DialogTitle>
         <a-form :rules :model="form" @submit="submit">
           <a-form-item
@@ -80,7 +123,10 @@ const submit = handleSubmit(async (values) => {
             <a-input v-model="form.name" :max-length="20" show-word-limit />
           </a-form-item>
           <a-form-item field="dept_id" :label="t('member.form.dept.label')">
-            <a-select allow-search :empty="t('no-data')" @change="(value: string) => form.dept_id = Number(value)">
+            <a-select
+              allow-search :empty="t('no-data')"
+              @change="(value: string) => form.dept_id = Number(value)"
+            >
               <a-option v-for="{ name, id }, key in depts" :key :value="id" :label="name" />
             </a-select>
           </a-form-item>
@@ -89,7 +135,9 @@ const submit = handleSubmit(async (values) => {
           >
             <a-input v-model="form.job_num" :max-length="12" show-word-limit />
           </a-form-item>
-          <a-form-item field="phone" :label="t('member.form.phone.label')">
+          <a-form-item
+            field="phone" :label="t('member.form.phone.label')"
+          >
             <a-input v-model="form.phone" :max-length="12" show-word-limit />
           </a-form-item>
           <a-form-item field="sex" :label="t('member.form.gender.label')">
@@ -105,13 +153,7 @@ const submit = handleSubmit(async (values) => {
           <a-form-item field="avatar" :label="t('member.form.avatar.label')">
             <AvatarUploader ref="avatarUploaderRef" v-model:src="form.avatar" />
           </a-form-item>
-          <a-form-item field="is_admin" label="管理员">
-            <a-switch
-              v-model="form.is_admin" :checked-value="1" :unchecked-value="0" :checked-color="themeColor"
-              unchecked-color="#ddd"
-            />
-          </a-form-item>
-          <!-- <a-form-item field="tts" label="TTS" :validate-trigger="['change', 'blur']">
+          <!-- <a-form-item field="tts" label="TTS">
             <a-switch
               v-model="form.tts" :checked-value="1" :unchecked-value="0" :checked-color="themeColor"
               unchecked-color="#ddd"
@@ -125,9 +167,28 @@ const submit = handleSubmit(async (values) => {
               unchecked-color="#ddd"
             />
           </a-form-item>
+          <a-form-item
+            field="track" :label="t('change-member.form.track.label')"
+          >
+            <a-radio-group v-model="form.track" type="button">
+              <a-radio :value="TrackType.Close">
+                {{ t('track-type.close') }}
+              </a-radio>
+              <a-radio :value="TrackType.High">
+                {{ t('track-type.high') }}
+              </a-radio>
+              <a-radio :value="TrackType.Medium">
+                {{ t('track-type.medium') }}
+              </a-radio>
+              <a-radio :value="TrackType.Low">
+                {{ t('track-type.low') }}
+              </a-radio>
+            </a-radio-group>
+          </a-form-item>
+
           <a-form-item>
-            <a-button html-type="submit" type="primary" size="large" mla>
-              {{ t('button.create') }}
+            <a-button mla type="primary" :loading="isPending" html-type="submit">
+              {{ t('button.submit') }}
             </a-button>
           </a-form-item>
         </a-form>
