@@ -64,9 +64,9 @@ const { mutate } = useWeilaMutation<never, {
 <template>
   <div w-full p4 space-y-4>
     <div w-full rounded p4 space-y-4 bg-base>
-      <section space-x-2>
+      <section space-x-2 flex items-center>
         <AddDeptMemberModal :dept-id="Number(route.params.dept_id)" @success="refetch">
-          <a-button>
+          <a-button type="primary">
             <i i-ph-plus inline-block /> 添加成员
           </a-button>
         </AddDeptMemberModal>
