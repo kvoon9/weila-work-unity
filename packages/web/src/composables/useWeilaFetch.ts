@@ -2,6 +2,7 @@ import type { UseQueryOptions } from '@tanstack/vue-query'
 import { isFunction } from '@antfu/utils'
 import { useQuery } from '@tanstack/vue-query'
 import { parseURL } from 'ufo'
+import { computed, isRef, toValue, watch } from 'vue'
 import { useWeilaApi } from './useWeilaApi'
 
 export function useWeilaFetch<T>(
@@ -9,10 +10,11 @@ export function useWeilaFetch<T>(
   options?: {
     body?: MaybeRefOrGetter<RequestInit['body'] | Record<string, any>>
     method?: string
+    pick?: string[]
   },
   tanstackOptions?: Omit<UseQueryOptions<T>, 'queryKey'>,
 ) {
-  const { body, method = 'POST' } = toValue(options) || {}
+  const { body, method = 'POST', pick } = toValue(options) || {}
 
   const weilaApi = useWeilaApi()
 
@@ -34,5 +36,22 @@ export function useWeilaFetch<T>(
     }, { deep: true })
   }
 
-  return res
+  return {
+    ...res,
+    data: computed(() => {
+      if (!res.data.value)
+        return res.data.value
+
+      if (!pick || pick.length === 0)
+        return res.data.value
+
+      if (pick.length === 1)
+        return res.data.value[pick[0] as keyof T]
+
+      return pick.reduce((obj, key) => {
+        obj[key] = res.data.value?.[key as keyof T]
+        return obj
+      }, {} as any)
+    }) as ComputedRef<T>,
+  }
 }

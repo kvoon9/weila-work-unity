@@ -22,16 +22,18 @@ const selectedDate = shallowRef('')
 
 const contactStore = useContactStore()
 const { data: contact } = storeToRefs(contactStore)
-const { data: tracks } = useQuery<UserTrackModel[]>({
-  enabled: computed(() => Boolean(selectedUserId.value) && Boolean(selectedDate.value)),
-  refetchOnWindowFocus: false,
-  queryKey: ['user track', selectedUserId, selectedDate],
-  queryFn: ({ queryKey }) => weilaFetch('/corp/web/location-get-track', {
-    body: { user_id: queryKey[1], date: queryKey[2] },
-  }).then((i: any) => i.tracks.sort((a: any, b: any) => b.created - a.created)),
+
+const { data: tracks } = useWeilaFetch<UserTrackModel[]>('corp/loc/get-track', {
+  body: () => ({
+    user_id: selectedUserId.value,
+    date: selectedDate.value,
+  }),
+  pick: ['tracks'],
+}, {
+  enabled: () => Boolean(selectedUserId.value && selectedDate.value),
 })
 
-watchDebounced(tracks, (val) => {
+watchDebounced(() => tracks.value, (val) => {
   if (!val?.length)
     Message.info(t('no-data'))
 }, {
