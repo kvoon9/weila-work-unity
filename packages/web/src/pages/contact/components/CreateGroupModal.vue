@@ -9,7 +9,7 @@ const { t } = useI18n()
 
 const open = shallowRef(false)
 
-const queryClient = useQueryClient()
+const qc = useQueryClient()
 
 const avatarUploaderRef = templateRef('avatarUploaderRef')
 
@@ -26,7 +26,7 @@ const { mutate, isPending } = useWeilaMutation('corp/group/create-group', {
     reset()
     open.value = false
     Message.success(t('message.success'))
-    queryClient.invalidateQueries({ queryKey: ['corp/group/get-group-list'] })
+    qc.invalidateQueries({ queryKey: ['corp/group/get-group-list'] })
   },
 })
 
