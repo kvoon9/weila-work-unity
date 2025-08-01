@@ -46,7 +46,7 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
       :columns="cols"
       :data="members"
       :pagination="{
-        pageSize,
+        pageSize: 10,
         total: count || 0,
       }"
       :column-resizable="true"
