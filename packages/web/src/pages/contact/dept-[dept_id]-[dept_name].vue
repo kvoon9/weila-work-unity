@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import type { Member } from '~/types/api'
+import Message from '@arco-design/web-vue/es/message'
+import { useQueryClient } from '@tanstack/vue-query'
 import { shallowRef } from 'vue'
 
 const curPage = shallowRef(0)
@@ -40,22 +42,34 @@ const members = computed(() => {
     )
     .sort((a, b) => a.dept_id - b.dept_id)
 })
+
+const isEditMemberModalOpen = shallowRef(false)
+const isEditDeviceModalOpen = shallowRef(false)
+// const isResetPasswordModalVisible = shallowRef(false)
+const isDeleteMemberModalOpen = shallowRef(false)
+
+const qc = useQueryClient()
+const { mutate } = useWeilaMutation<never, {
+  dept_id: number
+  user_id: number
+}>('corp/address/delete-dept-member', {
+  onSuccess() {
+    isDeleteMemberModalOpen.value = false
+    qc.invalidateQueries({ queryKey: ['corp/address/get-dept-member-list'] })
+    Message.success(t('message.success'))
+  },
+})
 </script>
 
 <template>
   <div w-full p4 space-y-4>
     <div w-full rounded p4 space-y-4 bg-base>
-      <section flex items-center space-x-2>
-        <CreateMemberModal @success="refetch">
-          <a-button type="primary">
-            <i i-ph-plus inline-block /> {{ t('button.create-member') }}
+      <section space-x-2>
+        <AddDeptMemberModal :dept-id="Number(route.params.dept_id)" @success="refetch">
+          <a-button>
+            <i i-ph-plus inline-block /> 添加成员
           </a-button>
-        </CreateMemberModal>
-        <AddDeviceModal @success="refetch">
-          <a-button type="primary">
-            <i i-ph-plus inline-block /> {{ t('button.add-device') }}
-          </a-button>
-        </AddDeviceModal>
+        </AddDeptMemberModal>
         <a-input
           v-model="filterInput" :max-length="20" show-word-limit
           :placeholder="`${t('name')}/${t('job-number')}/${t('weila-number')}/${t('phone-number')}`" allow-clear
@@ -68,7 +82,43 @@ const members = computed(() => {
           </a-option>
         </a-select> -->
       </section>
-      <MemberTable :members :count="data?.count || 0" />
+      <MemberTable :members :count="data?.count || 0">
+        <template #actions="{ record }">
+          <a-doption
+            @click="record.type === 1
+              ? isEditDeviceModalOpen = true
+              : isEditMemberModalOpen = true"
+          >
+            {{ t('button.edit') }}
+          </a-doption>
+          <!-- <a-doption v-if="type !== 1" @click="isResetPasswordModalVisible = true">
+              {{ t('reset-password.button') }}
+            </a-doption> -->
+          <a-doption @click="isDeleteMemberModalOpen = true">
+            {{ t('button.delete') }}
+          </a-doption>
+        </template>
+        <template #bottom="{ selected }">
+          <EditMemberModal v-model:open="isEditMemberModalOpen" :member="selected" />
+          <EditDeviceModal v-model:open="isEditDeviceModalOpen" :member="selected" />
+          <!-- <ResetPasswordModal v-model:open="isResetPasswordModalVisible" :member="selected" /> -->
+          <TheModal v-model:open="isDeleteMemberModalOpen" :title="t('delete.modal.title')">
+            <template #content>
+              {{ t('delete.modal.hint') }} {{ t('delete.modal.content') }}
+            </template>
+            <template #footer>
+              <a-button
+                type="primary" @click="mutate({
+                  dept_id: Number(route.params.dept_id),
+                  user_id: selected!.user_id,
+                })"
+              >
+                {{ t('button.submit') }}
+              </a-button>
+            </template>
+          </TheModal>
+        </template>
+      </MemberTable>
     </div>
   </div>
 </template>

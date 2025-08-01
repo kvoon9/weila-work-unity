@@ -8,7 +8,9 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AddDeptMemberModal: typeof import('./components/AddDeptMemberModal.vue')['default']
     AddDeviceModal: typeof import('./components/AddDeviceModal.vue')['default']
+    AddGroupMemberModal: typeof import('./components/AddGroupMemberModal.vue')['default']
     AvatarUploader: typeof import('./components/AvatarUploader.vue')['default']
     BindingPhone: typeof import('./components/BindingPhone.vue')['default']
     Block: typeof import('./components/global-setting/block.vue')['default']

@@ -16,7 +16,16 @@ const router = useRouter()
 
 const { t } = useI18n()
 
-const { data, refetch } = useWeilaFetch('corp/address/get-all-dept')
+interface Dept {
+  id: number
+  name: string
+  user_count: number
+}
+
+const { data, refetch } = useWeilaFetch<{
+  count: number
+  dept: Dept
+}>('corp/address/get-dept-list')
 
 const isEditDeptModalVisible = shallowRef(false)
 const selectedDept = shallowRef<DeptModel | undefined>(undefined)
@@ -52,7 +61,7 @@ function onSelect(dept: DeptModel, e: PointerEvent) {
 
       <!-- @vue-expect-error type error when arco's row-click -->
       <a-table
-        :data="data" size="medium" :column-resizable="true" :scroll="{
+        :data="data.depts" size="medium" :column-resizable="true" :scroll="{
           x: 1000,
           y: 600,
         }" :scrollbar="true" :columns="[{ title: t('name'), dataIndex: 'name' }]"

@@ -39,6 +39,11 @@ const members = computed(() => {
     )
     .sort((a, b) => a.dept_id - b.dept_id)
 })
+
+const isEditMemberModalVisible = shallowRef(false)
+const isEditDeviceModalVisible = shallowRef(false)
+// const isResetPasswordModalVisible = shallowRef(false)
+const isDeleteMemberModalVisible = shallowRef(false)
 </script>
 
 <template>
@@ -67,7 +72,29 @@ const members = computed(() => {
           </a-option>
         </a-select> -->
       </section>
-      <MemberTable :members :count="data?.count || 0" />
+      <MemberTable :members :count="data?.count || 0">
+        <template #actions="{ record }">
+          <a-doption
+            @click="record.type === 1
+              ? isEditDeviceModalVisible = true
+              : isEditMemberModalVisible = true"
+          >
+            {{ t('button.edit') }}
+          </a-doption>
+          <!-- <a-doption v-if="type !== 1" @click="isResetPasswordModalVisible = true">
+              {{ t('reset-password.button') }}
+            </a-doption> -->
+          <a-doption @click="isDeleteMemberModalVisible = true">
+            {{ t('button.delete') }}
+          </a-doption>
+        </template>
+        <template #bottom="{ selected }">
+          <EditMemberModal v-model:open="isEditMemberModalVisible" :member="selected" />
+          <EditDeviceModal v-model:open="isEditDeviceModalVisible" :member="selected" />
+          <!-- <ResetPasswordModal v-model:open="isResetPasswordModalVisible" :member="selected" /> -->
+          <DeleteMemberModal v-model:open="isDeleteMemberModalVisible" :member="selected" />
+        </template>
+      </MemberTable>
     </div>
   </div>
 </template>

@@ -1,11 +1,7 @@
 <script setup lang="ts">
-import type { Member } from '~/types/api'
-import { shallowRef } from 'vue'
-import { TrackType } from '~/api/contact'
-import DeleteMemberModal from './DeleteMemberModal.vue'
-import EditDeviceModal from './EditDeviceModal.vue'
-import EditMemberModal from './EditMemberModal.vue'
-import ResetPasswordModal from './ResetMemberPasswordModal.vue'
+import type { Member } from '~/types/api';
+import { shallowRef } from 'vue';
+import { TrackType } from '~/api/contact';
 
 defineProps<{
   members: Member[]
@@ -15,15 +11,10 @@ defineProps<{
 const { t } = useI18n()
 const { themeColor } = useAppStore()
 
-const selectedMember = shallowRef<Member | undefined>(undefined)
+const selected = shallowRef<Member | undefined>(undefined)
 function onSelect(member: Member, _: PointerEvent) {
-  selectedMember.value = member
+  selected.value = member
 }
-
-const isEditMemberModalVisible = shallowRef(false)
-const isEditDeviceModalVisible = shallowRef(false)
-const isResetPasswordModalVisible = shallowRef(false)
-const isDeleteMemberModalVisible = shallowRef(false)
 
 const { data: depts } = useWeilaFetch<{
   id: number
@@ -198,24 +189,12 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
 
         <a-table-column title="群数量" data-index="group_count" :width="100" />
         <a-table-column :title="t('controls')">
-          <template #cell="{ record: { type } }">
+          <template #cell="{ record }">
             <div flex gap2>
               <a-dropdown :popup-max-height="false">
                 <a-button>{{ t('controls') }}<icon-down /></a-button>
                 <template #content>
-                  <a-doption
-                    @click="type === 1
-                      ? isEditDeviceModalVisible = true
-                      : isEditMemberModalVisible = true"
-                  >
-                    {{ t('button.edit') }}
-                  </a-doption>
-                  <!-- <a-doption v-if="type !== 1" @click="isResetPasswordModalVisible = true">
-                      {{ t('reset-password.button') }}
-                    </a-doption> -->
-                  <a-doption @click="isDeleteMemberModalVisible = true">
-                    {{ t('button.delete') }}
-                  </a-doption>
+                  <slot name="actions" v-bind="{ record, selected }" />
                 </template>
               </a-dropdown>
             </div>
@@ -224,9 +203,6 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
       </template>
     </a-table>
 
-    <EditMemberModal v-model:open="isEditMemberModalVisible" :member="selectedMember" />
-    <EditDeviceModal v-model:open="isEditDeviceModalVisible" :member="selectedMember" />
-    <ResetPasswordModal v-model:open="isResetPasswordModalVisible" :member="selectedMember" />
-    <DeleteMemberModal v-model:open="isDeleteMemberModalVisible" :member="selectedMember" />
+    <slot name="bottom" v-bind="{ selected }" />
   </div>
 </template>

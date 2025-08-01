@@ -135,11 +135,11 @@ const submit = handleSubmit(async (values) => {
             <AvatarUploader ref="avatarUploaderRef" v-model:src="form.avatar" />
           </a-form-item>
           <!-- <a-form-item field="tts" label="TTS" >
-            <a-switch
-              v-model="form.tts" :checked-value="1" :unchecked-value="0" :checked-color="themeColor"
-              unchecked-color="#ddd"
-            />
-          </a-form-item> -->
+          <a-switch
+            v-model="form.tts" :checked-value="1" :unchecked-value="0" :checked-color="themeColor"
+            unchecked-color="#ddd"
+          />
+        </a-form-item> -->
           <a-form-item
             field="loc_share" :label="t('member.form.loc_share.label')"
           >
