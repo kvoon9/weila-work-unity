@@ -35,7 +35,7 @@ $inspect(activeTab)
 
 const { data, refetch: refreshImageCode } = useWeilaFetch<{ id: string, image: string }>(
   'common/get-image-verifycode',
-  // @ts-expect-error type error
+  {},
   {
     enabled: () => activeTab.value === 'sms',
   },

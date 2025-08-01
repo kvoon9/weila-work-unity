@@ -10,7 +10,7 @@ export function useWeilaFetch<T>(
     body?: MaybeRefOrGetter<RequestInit['body'] | Record<string, any>>
     method?: string
   },
-  tanstackOptions?: UseQueryOptions<T>,
+  tanstackOptions?: Omit<UseQueryOptions<T>, 'queryKey'>,
 ) {
   const { body, method = 'POST' } = toValue(options) || {}
 
