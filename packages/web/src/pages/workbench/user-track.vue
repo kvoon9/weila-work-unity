@@ -30,7 +30,7 @@ const { data: tracks } = useWeilaFetch<UserTrackModel[]>('corp/loc/get-track', {
   }),
   pick: ['tracks'],
 }, {
-  enabled: () => Boolean(selectedUserId.value && selectedDate.value),
+  enabled: () => Boolean(selectedUserId.value && selectedDate.value !== ''),
 })
 
 watchDebounced(() => tracks.value, (val) => {
