@@ -35,6 +35,7 @@ declare module 'vue-router/auto-routes' {
     '/redirect/': RouteRecordInfo<'/redirect/', '/redirect', Record<never, never>, Record<never, never>>,
     '/register/': RouteRecordInfo<'/register/', '/register', Record<never, never>, Record<never, never>>,
     '/reset-password/': RouteRecordInfo<'/reset-password/', '/reset-password', Record<never, never>, Record<never, never>>,
+    '/test': RouteRecordInfo<'/test', '/test', Record<never, never>, Record<never, never>>,
     '/workbench/': RouteRecordInfo<'/workbench/', '/workbench', Record<never, never>, Record<never, never>>,
     '/workbench/service/[sid]-[ssid]': RouteRecordInfo<'/workbench/service/[sid]-[ssid]', '/workbench/service/:sid-:ssid', { sid: ParamValue<true>, ssid: ParamValue<true> }, { sid: ParamValue<false>, ssid: ParamValue<false> }>,
     '/workbench/service/[sid]-[ssid]/': RouteRecordInfo<'/workbench/service/[sid]-[ssid]/', '/workbench/service/:sid-:ssid', { sid: ParamValue<true>, ssid: ParamValue<true> }, { sid: ParamValue<false>, ssid: ParamValue<false> }>,
