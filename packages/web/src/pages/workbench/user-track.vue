@@ -8,6 +8,9 @@ import { ElAmapLoca, ElAmapLocaLine } from '@vuemap/vue-amap-loca'
 import { nanoid } from 'nanoid'
 import { ref as deepRef, shallowRef } from 'vue'
 import { weilaApiUrl } from '~/api'
+import { TreeNodeData } from '~/types'
+import { DeptGetallModel } from 'generated/mock/weila'
+import { Member } from '~/types/api'
 
 definePage({
   meta: {
@@ -17,20 +20,17 @@ definePage({
 
 const { t } = useI18n()
 
-const selectedUserId = shallowRef()
+const selectedUserKeys = shallowRef('')
 const selectedDate = shallowRef('')
-
-const contactStore = useContactStore()
-const { data: contact } = storeToRefs(contactStore)
 
 const { data: tracks } = useWeilaFetch<UserTrackModel[]>('corp/loc/get-track', {
   body: () => ({
-    user_id: selectedUserId.value,
+    user_id: Number(selectedUserKeys.value.replace('member-', '')),
     date: selectedDate.value,
   }),
   pick: ['tracks'],
 }, {
-  enabled: () => Boolean(selectedUserId.value && selectedDate.value !== ''),
+  enabled: () => Boolean(selectedUserKeys.value && selectedDate.value !== ''),
 })
 
 watchDebounced(() => tracks.value, (val) => {
@@ -40,12 +40,44 @@ watchDebounced(() => tracks.value, (val) => {
   debounce: 500,
 })
 
-const data = computed(() => {
-  return [
-    ...(contact.value?.depts || []),
-    ...(contact.value?.members || []),
-  ]
+const { data: depts } = useWeilaFetch<DeptGetallModel['data']['depts']>('/corp/address/get-all-dept')
+const treeData = deepRef<TreeNodeData[]>([])
+watchEffect(() => {
+  treeData.value = depts.value?.map((dept) => {
+    return {
+      title: dept.name,
+      key: `dept-${dept.id}`,
+      selectable: false,
+    }
+  })
 })
+async function loadMore(nodeData: TreeNodeData) {
+  const dept_id = Number(nodeData.key.replace('dept-', ''))
+  const weilaApi = useWeilaApi()
+
+  const members = await weilaApi.value.v2.fetch<Member[]>('corp/address/get-dept-all-member', {
+    body: {
+      dept_id,
+    },
+  })
+
+  if (!members.length) {
+    Message.warning('无数据')
+    return
+  }
+
+  nodeData.children = members.map((member) => {
+    return {
+      key: `member-${member.user_id}`,
+      title: member.name,
+      isLeaf: true,
+      selectable: true
+    }
+  })
+
+  if (nodeData.children.some(i => i.checkable))
+    nodeData.checkable = true
+}
 
 const trackFeatureCollection = computed<GeoJSON.FeatureCollection<GeoJSON.LineString>>(() => ({
   type: 'FeatureCollection',
@@ -172,7 +204,7 @@ watch(tracks, (val) => {
         position: [longitude, latitude],
         extData: {
           id: nanoid(),
-          userId: selectedUserId.value,
+          userId: selectedUserKeys.value,
           created,
           longitude,
           latitude,
@@ -231,13 +263,13 @@ watch(markers, (val, oldVal) => {
 
 <template>
   <div flex gap2 p4 bg-base>
-    <!-- @vue-expect-error type error -->
     <a-tree-select
-      v-model="selectedUserId" :data="data" :field-names="{
-        key: 'id',
-        title: 'name',
-        children: 'members',
-      }" :placeholder="t('hint.please-select')" :block-node="true" :selectable="(node) => 'user_id' in node" max-w-60
+      v-model="selectedUserKeys"
+      :data="treeData" 
+      :loadMore
+      :placeholder="t('hint.please-select')" 
+      :block-node="true" 
+      max-w-60
       grow-1
     />
     <a-date-picker v-model="selectedDate" max-w-40 grow-1 />
