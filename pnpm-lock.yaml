@@ -36,6 +36,9 @@ catalogs:
     '@intlify/eslint-plugin-vue-i18n':
       specifier: ^4.0.1
       version: 4.0.1
+    '@kvoon/utils':
+      specifier: latest
+      version: 0.1.0
     '@modyfi/vite-plugin-yaml':
       specifier: ^1.1.1
       version: 1.1.1
@@ -178,7 +181,7 @@ catalogs:
       specifier: ^2.1.3
       version: 2.1.3
     '@wl/network':
-      specifier: https://pkg.pr.new/kvoon3/wl-network/@weila/network@9e18454
+      specifier: https://pkg.pr.new/kvoon3/wl-network/@weila/network@6319a58f51b689ef90e0cebf528ad0d956752294
       version: 0.0.3
     apipost-mock-gen:
       specifier: ^0.1.5
@@ -777,6 +780,9 @@ importers:
       '@intlify/eslint-plugin-vue-i18n':
         specifier: 'catalog:'
         version: 4.0.1(eslint@9.25.0(jiti@2.4.2))(jsonc-eslint-parser@2.4.0)(vue-eslint-parser@10.1.1(eslint@9.25.0(jiti@2.4.2)))(yaml-eslint-parser@1.3.0)
+      '@kvoon/utils':
+        specifier: 'catalog:'
+        version: 0.1.0
       '@modyfi/vite-plugin-yaml':
         specifier: 'catalog:'
         version: 1.1.1(rollup@4.40.0)(vite@6.3.2(@types/node@22.14.1)(jiti@2.4.2)(less@4.3.0)(terser@5.37.0)(tsx@4.19.3)(yaml@2.7.1))
@@ -830,7 +836,7 @@ importers:
         version: link:../network
       '@wl/network':
         specifier: 'catalog:'
-        version: '@weila/network@https://pkg.pr.new/kvoon3/wl-network/@weila/network@9e18454(@netlify/blobs@8.2.0)(axios@1.8.4)(crypto-js@4.2.0)(db0@0.3.2(better-sqlite3@11.10.0))(ioredis@5.6.1)(md5@2.3.0)(ofetch@1.4.1)'
+        version: '@weila/network@https://pkg.pr.new/kvoon3/wl-network/@weila/network@6319a58f51b689ef90e0cebf528ad0d956752294(@netlify/blobs@8.2.0)(axios@1.8.4)(crypto-js@4.2.0)(db0@0.3.2(better-sqlite3@11.10.0))(ioredis@5.6.1)(md5@2.3.0)(ofetch@1.4.1)'
       apipost-mock-gen:
         specifier: 'catalog:'
         version: 0.1.5
@@ -2630,6 +2636,9 @@ packages:
 
   '@jsdevtools/ono@7.1.3':
     resolution: {integrity: sha512-4JQNk+3mVzK3xh2rqd6RB4J46qUR19azEHBneZyTZM+c456qOrbbM/5xcR8huNCCcbVt7+UmizG6GuUvPvKUYg==}
+
+  '@kvoon/utils@0.1.0':
+    resolution: {integrity: sha512-8BCRzsaDqoObQ2rXnYMeL8nph3WNUXFuOfEWQpQ69og3/3PbarPL0uDSzwMErhWivzkWNI48jUwjcV7nSG1W3Q==}
 
   '@kwsites/file-exists@1.1.1':
     resolution: {integrity: sha512-m9/5YGR18lIwxSFDwfE3oA7bWuq9kdau6ugN4H2rJeyhFQZcG9AgSHkQtSD15a8WvTgfz9aikZMrKPHvbpqFiw==}
@@ -4826,8 +4835,8 @@ packages:
   '@webassemblyjs/wast-printer@1.14.1':
     resolution: {integrity: sha512-kPSSXE6De1XOR820C90RIo2ogvZG+c3KiHzqUoO/F34Y2shGzesfqv7o57xrxovZJH/MetF5UjroJ/R/3isoiw==}
 
-  '@weila/network@https://pkg.pr.new/kvoon3/wl-network/@weila/network@9e18454':
-    resolution: {tarball: https://pkg.pr.new/kvoon3/wl-network/@weila/network@9e18454}
+  '@weila/network@https://pkg.pr.new/kvoon3/wl-network/@weila/network@6319a58f51b689ef90e0cebf528ad0d956752294':
+    resolution: {tarball: https://pkg.pr.new/kvoon3/wl-network/@weila/network@6319a58f51b689ef90e0cebf528ad0d956752294}
     version: 0.0.3
     peerDependencies:
       axios: ^1.10.0
@@ -12615,6 +12624,8 @@ snapshots:
 
   '@jsdevtools/ono@7.1.3': {}
 
+  '@kvoon/utils@0.1.0': {}
+
   '@kwsites/file-exists@1.1.1':
     dependencies:
       debug: 4.4.0
@@ -16240,10 +16251,11 @@ snapshots:
       '@webassemblyjs/ast': 1.14.1
       '@xtuc/long': 4.2.2
 
-  '@weila/network@https://pkg.pr.new/kvoon3/wl-network/@weila/network@9e18454(@netlify/blobs@8.2.0)(axios@1.8.4)(crypto-js@4.2.0)(db0@0.3.2(better-sqlite3@11.10.0))(ioredis@5.6.1)(md5@2.3.0)(ofetch@1.4.1)':
+  '@weila/network@https://pkg.pr.new/kvoon3/wl-network/@weila/network@6319a58f51b689ef90e0cebf528ad0d956752294(@netlify/blobs@8.2.0)(axios@1.8.4)(crypto-js@4.2.0)(db0@0.3.2(better-sqlite3@11.10.0))(ioredis@5.6.1)(md5@2.3.0)(ofetch@1.4.1)':
     dependencies:
       axios: 1.8.4(debug@4.4.0)
       crypto-js: 4.2.0
+      hookable: 5.5.3
       md5: 2.3.0
       ofetch: 1.4.1
       unstorage: 1.16.1(@netlify/blobs@8.2.0)(db0@0.3.2(better-sqlite3@11.10.0))(ioredis@5.6.1)
@@ -20316,7 +20328,7 @@ snapshots:
       unenv: 2.0.0-rc.15
       unimport: 5.0.1
       unplugin-utils: 0.2.4
-      unstorage: 1.15.0(@netlify/blobs@8.2.0)(db0@0.3.2(better-sqlite3@11.10.0))(ioredis@5.6.1)
+      unstorage: 1.16.1(@netlify/blobs@8.2.0)(db0@0.3.2(better-sqlite3@11.10.0))(ioredis@5.6.1)
       untyped: 2.0.0
       unwasm: 0.3.9
       youch: 4.1.0-beta.7

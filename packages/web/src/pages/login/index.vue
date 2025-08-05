@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import type { SendVerifySmsBody } from '~/api/verify-sms'
 import { Message } from '@arco-design/web-vue'
-import { useQueryClient } from '@tanstack/vue-query'
 import md5 from 'md5'
 import * as v from 'valibot'
 import { shallowRef } from 'vue'
@@ -17,7 +16,6 @@ definePage({
 
 const { t } = useI18n()
 const router = useRouter()
-const qc = useQueryClient()
 const activeTab = shallowRef<'password' | 'sms'>('password')
 
 const { form: loginForm, rules: loginRules, handleSubmit: handleLogin } = useForm(v.object({
@@ -41,7 +39,7 @@ const { data, refetch: refreshImageCode } = useWeilaFetch<{ id: string, image: s
   },
 )
 
-const { mutate: sendSmsVerifyCode } = useWeilaMutation<never, SendVerifySmsBody>('common/send-sms-verifycode')
+const { mutateAsync: sendSmsVerifyCode } = useWeilaMutation<never, SendVerifySmsBody>('common/send-sms-verifycode')
 
 const imageCodeModalVisible = shallowRef(false)
 const imageCode = shallowRef('')
@@ -53,11 +51,11 @@ let currentPhoneInfo: {
 
 const [isRememberPassword, toggleRememberPassword] = useToggle(false)
 
-const { mutate: passwordMutate, isPending: passwordPending } = useWeilaMutation<{ access_token: string }>('/corp/auth/login', {
+const { mutateAsync: passwordMutate, isPending: passwordPending } = useWeilaMutation<{ access_token: string }>('/corp/auth/login', {
   onSuccess,
 })
 
-const { mutate: smsMutate, isPending: smsPending } = useWeilaMutation<{ access_token: string }>('/corp/auth/login-by-sms', {
+const { mutateAsync: smsMutate, isPending: smsPending } = useWeilaMutation<{ access_token: string }>('/corp/auth/login-by-sms', {
   onSuccess,
 })
 
@@ -134,9 +132,6 @@ const loginBySms = handleSmsLogin((values: any) => {
 onMounted(async () => {
   const form = document.querySelector('form')
   form?.setAttribute('autocomplete', 'on')
-
-  await qc.invalidateQueries()
-  qc.clear()
 })
 </script>
 
