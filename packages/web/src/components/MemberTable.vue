@@ -114,6 +114,13 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
             {{ online ? t('online') : t('offline') }}
           </template>
         </a-table-column>
+        <a-table-column title="群数量" :width="80">
+          <template #cell="{ record: { grp_cnt, grp_lmt } }">
+            <a-tag :color="grp_cnt >= grp_lmt ? 'magenta' : 'gray'">
+            {{ grp_cnt }} / {{ grp_lmt }}
+            </a-tag>
+          </template>
+        </a-table-column>
         <a-table-column :title="t('avatar')" :width="70">
           <template #cell="{ record: { avatar } }">
             <a-avatar :image-url="avatar" :style="{ backgroundColor: '#3370ff' }" />
