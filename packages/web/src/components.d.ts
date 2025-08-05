@@ -16,6 +16,7 @@ declare module 'vue' {
     Block: typeof import('./components/global-setting/block.vue')['default']
     Breadcrumb: typeof import('./components/breadcrumb/index.vue')['default']
     Chart: typeof import('./components/chart/index.vue')['default']
+    ContactSelectTree: typeof import('./components/ContactSelectTree.vue')['default']
     ContactTree: typeof import('./components/ContactTree.vue')['default']
     CreateMemberModal: typeof import('./components/CreateMemberModal.vue')['default']
     DeleteMemberModal: typeof import('./components/DeleteMemberModal.vue')['default']

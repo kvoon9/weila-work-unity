@@ -57,7 +57,7 @@ const { mutate, isPending } = useWeilaMutation<never, {
         </DialogTitle>
 
         <div relative p4 min-w-100 max-h-60vh of-y-auto>
-          <ContactTree v-model:checked-keys="checkedKeys"
+          <ContactSelectTree v-model:checked-keys="checkedKeys"
           :uncheckable-ids="deptMembers.map(i => i.user_id)"
           />
         </div>
