@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import type { TransferItem } from '@arco-design/web-vue/es/transfer/interface'
+import type { DeptGetallModel } from 'generated/mock/weila'
+import type { TreeNodeData } from '~/types'
 import type { Member } from '~/types/api'
-import { Message } from '@arco-design/web-vue'
+import Message from '@arco-design/web-vue/es/message'
 import { useQueryClient } from '@tanstack/vue-query'
 import { ref as deepRef, shallowRef } from 'vue'
 
@@ -9,45 +10,62 @@ const props = defineProps<{
   deptId: number
 }>()
 
+const qc = useQueryClient()
 const { t } = useI18n()
 
 const open = shallowRef(false)
 
-const selectedIds = deepRef<string[]>([])
-$inspect(selectedIds)
-
-const value: string[] = []
-
-const { data: deptMembers, refetch: refetchDeptMembers, isFetching: isFetchingGroupMember } = useWeilaFetch<Member[]>(
-  () => `corp/address/get-dept-all-member`,
-  {
-    body: () => ({
-      dept_id: Number(props.deptId),
-    }),
-  },
-)
-
-const { data: memberListData, isFetching: isFetchingMemberList } = useWeilaFetch<{
-  count: number
-  members: Member[]
-}>('corp/address/get-member-list')
-
-watch(open, (val) => {
-  if (val) {
-    refetchDeptMembers()
-    selectedIds.value = []
-  }
+const { data: deptMembers, refetch } = useWeilaFetch<Member[]>('corp/address/get-dept-all-member', {
+  body: { dept_id: props.deptId },
 })
 
-const data = computed(() => memberListData.value?.members
-  .filter(member => !deptMembers.value?.find(i => i.user_id === member.user_id))
-  .map((member): TransferItem => ({
-    label: `${member.name}(${member.user_num})`,
-    value: String(member.user_id),
-    disabled: false,
-  })) || [])
+watchEffect(() => open.value && refetch())
 
-const qc = useQueryClient()
+const { data: depts } = useWeilaFetch<DeptGetallModel['data']['depts']>('/corp/address/get-all-dept')
+
+const treeData = deepRef<TreeNodeData[]>([])
+const checkedKeys = deepRef<string[]>([])
+const checkedMemberKeys = computed(() => checkedKeys.value.filter(i => i.startsWith('member-')))
+$inspect(checkedKeys)
+
+watchEffect(() => {
+  treeData.value = depts.value?.map((dept) => {
+    return {
+      title: dept.name,
+      key: `dept-${dept.id}`,
+      checkable: false,
+    }
+  })
+})
+
+async function loadMore(nodeData: TreeNodeData) {
+  const dept_id = Number(nodeData.key.replace('dept-', ''))
+  const weilaApi = useWeilaApi()
+
+  const members = await weilaApi.value.v2.fetch<Member[]>('corp/address/get-dept-all-member', {
+    body: {
+      dept_id,
+    },
+  })
+
+  if (!members.length) {
+    Message.warning('无数据')
+    return
+  }
+
+  nodeData.children = members.map((member) => {
+    return {
+      key: `member-${member.user_id}`,
+      title: member.name,
+      isLeaf: true,
+      selectable: !deptMembers.value?.some(i => i.user_id === member.user_id),
+      checkable: !deptMembers.value?.some(i => i.user_id === member.user_id),
+    }
+  })
+
+  if (nodeData.children.some(i => i.checkable))
+    nodeData.checkable = true
+}
 
 const { mutate, isPending } = useWeilaMutation<never, {
   dept_id: number
@@ -81,11 +99,13 @@ const { mutate, isPending } = useWeilaMutation<never, {
           {{ t('button.add-group-member') }}
         </DialogTitle>
 
-        <div relative p4>
-          <LoadingMask :open="isFetchingGroupMember || isFetchingMemberList" />
-          <a-transfer
-            v-model:model-value="selectedIds" simple :title="[t('corp.member'), t('group.member')]" show-search
-            :data="data" :default-value="value"
+        <div relative p4 min-w-100 max-h-60vh of-y-auto>
+          <a-tree
+            v-model:checked-keys="checkedKeys"
+            :data="treeData"
+            :load-more="loadMore"
+            checkable
+            @select="console.log"
           />
         </div>
 
@@ -96,9 +116,11 @@ const { mutate, isPending } = useWeilaMutation<never, {
             </a-button>
           </DialogClose>
           <a-button
-            type="primary" :disabled="!selectedIds?.length" :loading="isPending" @click="() => mutate({
+            type="primary" :disabled="!checkedMemberKeys?.length" :loading="isPending" @click="() => mutate({
               dept_id: Number(props.deptId),
-              user_ids: selectedIds.map(Number),
+              user_ids: checkedKeys.filter((key) => key.startsWith('member')).map((key) => {
+                return Number(key.replace('member-', ''))
+              }),
             })"
           >
             {{ t('button.submit') }}
