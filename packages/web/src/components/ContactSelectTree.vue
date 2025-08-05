@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import type { DeptGetallModel } from 'generated/mock/weila';
-import type { Member } from '~/types/api';
-import Message from '@arco-design/web-vue/es/message';
-import { ref as deepRef } from 'vue';
-import { TreeNodeData } from '~/types';
+import type { DeptGetallModel } from 'generated/mock/weila'
+import type { TreeNodeData } from '~/types'
+import type { Member } from '~/types/api'
+import Message from '@arco-design/web-vue/es/message'
+import { ref as deepRef } from 'vue'
 
 const props = withDefaults(defineProps<{
   uncheckableIds?: number[]
+  isItemEnable?: (item: Member) => boolean
 }>(), {
-  uncheckableIds: () => []
+  uncheckableIds: () => [],
 })
 
 const { data: depts } = useWeilaFetch<DeptGetallModel['data']['depts']>('/corp/address/get-all-dept')
@@ -46,10 +47,10 @@ async function loadMore(nodeData: TreeNodeData) {
   nodeData.children = members.map((member) => {
     return {
       key: `member-${member.user_id}`,
-      title: member.name,
+      title: `${member.name}`,
       isLeaf: true,
-      selectable: !props.uncheckableIds.some(id => id === member.user_id),
-      checkable: !props.uncheckableIds.some(id => id === member.user_id),
+      selectable: !props.uncheckableIds.includes(member.user_id) && props.isItemEnable?.(member),
+      checkable: !props.uncheckableIds.includes(member.user_id) && props.isItemEnable?.(member),
     }
   })
 
@@ -64,5 +65,6 @@ async function loadMore(nodeData: TreeNodeData) {
     :data="treeData"
     :load-more="loadMore"
     checkable
-  />
+  >
+  </a-tree>
 </template>

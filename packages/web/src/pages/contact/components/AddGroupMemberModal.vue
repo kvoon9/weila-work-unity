@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { Member } from '~/types/api';
 import { Message } from '@arco-design/web-vue';
-import { ref as deepRef, shallowRef } from 'vue';
 import { useQueryClient } from '@tanstack/vue-query';
+import { ref as deepRef, shallowRef } from 'vue';
 
 const props = defineProps<{
   groupId: number
@@ -52,8 +52,12 @@ const { mutate, isPending } = useWeilaMutation('corp/group/add-group-members', {
         </DialogTitle>
 
         <div relative p4 min-w-100 max-h-60vh of-y-auto>
-          <ContactSelectTree v-model:checked-keys="checkedKeys"
-          :uncheckable-ids="groupMembers.map(i => i.user_id)"
+          <ContactSelectTree
+            v-model:checked-keys="checkedKeys"
+            :uncheckable-ids="groupMembers.map(i => i.user_id)"
+            :is-item-enable="(member) => {
+              return member.grp_cnt < member.grp_lmt
+            }"
           />
         </div>
 

@@ -55,4 +55,6 @@ export interface Member {
   track: number
   group_count: number
   created: number
+  grp_cnt: number
+  grp_lmt: number
 }
