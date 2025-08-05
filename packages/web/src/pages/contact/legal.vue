@@ -23,12 +23,12 @@ const { form: userForm, rules: userRules, handleSubmit: handleUserSubmit } = use
   id: v.optional(v.number(), () => (data.value as UserLegal)?.id ?? undefined),
   name: v.optional(v.pipe(
     v.string(),
-    v.minLength(2, '姓名至少需要2个字符'),
-    v.maxLength(50, '姓名不能超过50个字符'),
+    v.minLength(2, '姓名至少需要 2 个字符'),
+    v.maxLength(50, '姓名不能超过 50 个字符'),
   ), () => (data.value as UserLegal)?.name ?? ''),
   identify: v.optional(v.pipe(
     v.string(),
-    v.length(18, '身份证号码必须为18位'),
+    v.length(18, '身份证号码必须为 18 位'),
   ), () => (data.value as UserLegal)?.identify ?? ''),
   identify_card_front: v.optional(v.pipe(
     v.string(),
@@ -46,12 +46,12 @@ const { form: corpForm, rules: corpRules, handleSubmit: handleCorpSubmit } = use
   id: v.optional(v.number(), () => (data.value as CorpLegal)?.id ?? undefined),
   name: v.optional(v.pipe(
     v.string(),
-    v.minLength(4, '企业名称至少需要4个字符'),
-    v.maxLength(100, '企业名称不能超过100个字符'),
+    v.minLength(2, '企业名称至少需要 2 个字符'),
+    v.maxLength(100, '企业名称不能超过 100 个字符'),
   ), () => (data.value as CorpLegal)?.name ?? ''),
   identify: v.optional(v.pipe(
     v.string(),
-    v.length(18, '统一社会信用代码必须为18位'),
+    v.length(18, '统一社会信用代码必须为 18 位'),
   ), () => (data.value as CorpLegal)?.identify ?? ''),
   business_license: v.optional(v.pipe(
     v.string(),
@@ -203,7 +203,7 @@ async function uploadFile(option: any) {
             v-model="userForm.identify"
             :max-length="18"
             show-word-limit
-            placeholder="请输入 18 位统一社会信用代码或身份证号"
+            placeholder="请输入 18 位身份证号"
             allow-clear
             style="width: 450px"
           />
@@ -267,7 +267,7 @@ async function uploadFile(option: any) {
             v-model="corpForm.identify"
             :max-length="18"
             show-word-limit
-            placeholder="请输入营业执照代码"
+            placeholder="请输入 18 位统一社会信用代码"
             allow-clear
             style="width: 450px"
           />

@@ -141,7 +141,7 @@ onMounted(async () => {
       {{ t('login.form.title') }}
     </div>
     <a-tabs v-model:active-key="activeTab">
-      <a-tab-pane key="password" title="密码登录">
+      <a-tab-pane key="password" title="账号密码登录">
         <a-form :model="loginForm" :rules="loginRules" class="login-form" layout="vertical" @submit="login">
           <a-form-item field="account" hide-label>
             <a-auto-complete
@@ -187,7 +187,7 @@ onMounted(async () => {
           </a-space>
         </a-form>
       </a-tab-pane>
-      <a-tab-pane key="sms" title="短信登录">
+      <a-tab-pane key="sms" title="手机号登录">
         <a-form :model="smsLoginForm" :rules="smsLoginRules" class="login-form" layout="vertical" @submit="loginBySms">
           <a-form-item field="phone" hide-label>
             <a-input-group>
@@ -220,6 +220,7 @@ onMounted(async () => {
             >
               <template #suffix>
                 <a-button
+                  my1.5
                   type="text"
                   :loading="false"
                   :disabled="!smsLoginForm.phone"
