@@ -2,8 +2,6 @@
 import type { Member } from '~/types/api';
 import { Message } from '@arco-design/web-vue';
 import { ref as deepRef, shallowRef } from 'vue';
-import { GroupModel } from '~/api/contact';
-import { TreeNodeData } from '~/types';
 import { useQueryClient } from '@tanstack/vue-query';
 
 const props = defineProps<{
@@ -11,66 +9,18 @@ const props = defineProps<{
 }>()
 
 const qc = useQueryClient()
-
 const { t } = useI18n()
-
 
 const open = shallowRef(false)
 
+const checkedKeys = deepRef<string[]>([])
+const checkedMemberKeys = computed(() => checkedKeys.value.filter(i => i.startsWith('member-')))
 
-const { data: groupMembers, refetch: refetchGroupMembers  } = useWeilaFetch<Member[]>('corp/group/get-group-all-member', {
+const { data: groupMembers, refetch } = useWeilaFetch<Member[]>('corp/group/get-group-all-member', {
   body: { group_id: props.groupId },
 })
 
-watchEffect(() => open.value && refetchGroupMembers())
-
-const { data: groups } = useWeilaFetch<GroupModel[]>('corp/group/get-group-list', {
-  pick: ['groups']
-})
-
-const treeData = deepRef<TreeNodeData[]>([])
-const checkedKeys = deepRef<string[]>([])
-const checkedMemberKeys = computed(() => checkedKeys.value.filter(i => i.startsWith('member-')))
-$inspect(checkedKeys)
-
-watchEffect(() => {
-  treeData.value = groups.value?.map((i) => {
-    return {
-      title: i.name,
-      key: `group-${i.id}`,
-      checkable: false,
-    }
-  })
-})
-
-async function loadMore(nodeData: TreeNodeData) {
-  const group_id = Number(nodeData.key.replace('group-', ''))
-  const weilaApi = useWeilaApi()
-
-  const members = await weilaApi.value.v2.fetch<Member[]>('corp/group/get-group-all-member', {
-    body: {
-      group_id,
-    },
-  })
-
-  if (!members.length) {
-    Message.warning('无数据')
-    return
-  }
-
-  nodeData.children = members.map((member) => {
-    return {
-      key: `member-${member.user_id}`,
-      title: member.name,
-      isLeaf: true,
-      selectable: !groupMembers.value?.some(i => i.user_id === member.user_id),
-      checkable: !groupMembers.value?.some(i => i.user_id === member.user_id),
-    }
-  })
-
-  if (nodeData.children.some(i => i.checkable))
-    nodeData.checkable = true
-}
+watchEffect(() => open.value && refetch())
 
 const { mutate, isPending } = useWeilaMutation('corp/group/add-group-members', {
   onSuccess() {
@@ -102,12 +52,8 @@ const { mutate, isPending } = useWeilaMutation('corp/group/add-group-members', {
         </DialogTitle>
 
         <div relative p4 min-w-100 max-h-60vh of-y-auto>
-          <a-tree
-            v-model:checked-keys="checkedKeys"
-            :data="treeData"
-            :load-more="loadMore"
-            checkable
-            @select="console.log"
+          <ContactTree v-model:checked-keys="checkedKeys"
+          :uncheckable-ids="groupMembers.map(i => i.user_id)"
           />
         </div>
 

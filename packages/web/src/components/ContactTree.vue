@@ -3,31 +3,29 @@ import type { DeptGetallModel } from 'generated/mock/weila';
 import type { Member } from '~/types/api';
 import Message from '@arco-design/web-vue/es/message';
 import { ref as deepRef } from 'vue';
+import { TreeNodeData } from '~/types';
 
-const emits = defineEmits<{
-  (e: 'select', selectedKeys: string[], data: { selected?: boolean, selectedNodes: TreeNodeData[], node?: TreeNodeData, e?: Event }): void
-}>()
+const props = withDefaults(defineProps<{
+  uncheckableIds?: number[]
+}>(), {
+  uncheckableIds: () => []
+})
 
 const { data: depts } = useWeilaFetch<DeptGetallModel['data']['depts']>('/corp/address/get-all-dept')
 
-interface TreeNodeData {
-  title: string
-  key: string
-  selectable?: boolean
-  isLeaf?: boolean
-  children?: TreeNodeData[]
-}
-
 const treeData = deepRef<TreeNodeData[]>([])
-
 watchEffect(() => {
   treeData.value = depts.value?.map((dept) => {
     return {
       title: dept.name,
       key: `dept-${dept.id}`,
-      selectable: false,
+      checkable: false,
     }
   })
+})
+const checkedKeys = defineModel<string[]>('checkedKeys', {
+  required: false,
+  default: [],
 })
 
 async function loadMore(nodeData: TreeNodeData) {
@@ -50,15 +48,21 @@ async function loadMore(nodeData: TreeNodeData) {
       key: `member-${member.user_id}`,
       title: member.name,
       isLeaf: true,
+      selectable: !props.uncheckableIds.some(id => id === member.user_id),
+      checkable: !props.uncheckableIds.some(id => id === member.user_id),
     }
   })
+
+  if (nodeData.children.some(i => i.checkable))
+    nodeData.checkable = true
 }
 </script>
 
 <template>
   <a-tree
+    v-model:checked-keys="checkedKeys"
     :data="treeData"
     :load-more="loadMore"
-    @select="(arg1: any, arg2: any) => emits('select', arg1, arg2)"
+    checkable
   />
 </template>
