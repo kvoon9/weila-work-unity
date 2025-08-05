@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import type { SendVerifySmsBody } from '~/api/verify-sms'
-import Message from '@arco-design/web-vue/es/message'
-import { useMutation } from '@tanstack/vue-query'
-import { sendVerifySms } from '~/api/verify-sms'
-import { timestamp } from '~/shared/states'
+import type { SendVerifySmsBody } from '~/api/verify-sms';
+import Message from '@arco-design/web-vue/es/message';
+import { timestamp } from '~/shared/states';
 
 const props = defineProps<{
   classes?: string | string[]
@@ -14,12 +12,13 @@ const emits = defineEmits(['success', 'error'])
 
 const { t } = useI18n()
 
+$inspect(() => props.opts)
+
 const lastSendTime = useLocalStorage(`lst-${props.opts.smstype}`, -1)
 const countdown = computed(() => 60 - (Math.floor((timestamp.value / 1000) - (lastSendTime.value / 1000))))
 const state = computed<'idle' | 'countdown'>(() => countdown.value <= 0 ? 'idle' : 'countdown')
 
-const { mutate: sendSMS, isPending } = useMutation({
-  mutationFn: sendVerifySms,
+const { mutate: sendSMS, isPending } = useWeilaMutation<SendVerifySmsBody>('common/send-sms-verifycode', {
   onSuccess() {
     Message.success({
       content: t('sendSMS.success.hint'),
@@ -30,6 +29,7 @@ const { mutate: sendSMS, isPending } = useMutation({
   onError() {
     emits('error')
   },
+
 })
 </script>
 

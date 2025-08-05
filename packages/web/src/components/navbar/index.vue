@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { useQuery } from '@tanstack/vue-query'
 import { UseImage } from '@vueuse/components'
 import { createReusableTemplate, useFullscreen } from '@vueuse/core'
 import { computed, inject, shallowRef } from 'vue'
@@ -28,20 +27,28 @@ const toggleDrawerMenu = inject('toggleDrawerMenu') as () => void
 // }
 
 const hoverState = shallowRef(false)
-interface User {
-  id: number
-  num: string
+
+interface SelfInfo {
+  user_id: number
+  user_num: string
+  job_num: string
   sex: number
   name: string
-  bind_phone: string
-  country_code: string
   avatar: string
+  is_admin: number
+  dept_id: number
+  phone: string
+  country_code: string
+  state: number
+  type: number
+  tts: number
+  loc_share: number
+  track: number
+  group_count: number
+  created: number
 }
 
-const { data: user, refetch } = useQuery({
-  queryKey: ['user'],
-  queryFn: () => weilaFetch<{ user: User }>('/corp/web/user-selfinfo').then(({ user }) => user),
-})
+const { data: selfInfo } = useWeilaFetch<SelfInfo>('corp/user/get-selfinfo')
 
 const resetPasswordModalVisible = shallowRef(false)
 const bindingPhoneModalVisible = shallowRef(false)
@@ -55,17 +62,17 @@ function tryLogout() {
   <DefineTemplate>
     <div inline-block size-10>
       <UseImage
-        v-if="user?.avatar" :src="user.avatar" alt="upload avatar"
+        v-if="selfInfo?.avatar" :src="selfInfo.avatar" alt="upload avatar"
         class="mb-2 of-hidden rounded-full object-cover"
       >
         <template #loading>
           <div class="animate-pulse rounded-full bg-gray-200 size-10" />
         </template>
         <template #error>
-          <i i-carbon-user-avatar-filled class="block rounded-full size-10" :src="user?.avatar" alt="Avatar" />
+          <i i-carbon-user-avatar-filled class="block rounded-full size-10" :src="selfInfo?.avatar" alt="Avatar" />
         </template>
       </UseImage>
-      <i v-else i-carbon-user-avatar-filled size-10 class="block rounded-full" :src="user?.avatar" alt="Avatar" />
+      <i v-else i-carbon-user-avatar-filled size-10 class="block rounded-full" :src="selfInfo?.avatar" alt="Avatar" />
       <!-- <a-avatar :image-url="avatar?.replace(/^https?:/, '')"  :style="{ backgroundColor: '#3370ff' }" :image-url="user?.avatar" /> -->
     </div>
   </DefineTemplate>
@@ -139,16 +146,16 @@ function tryLogout() {
               <div class="flex flex-col gap-[7px]">
                 <ReuseTemplate class="mx-auto" />
                 <div class="flex-col gap-[15px] text-center">
-                  <div v-if="user" class="flex flex-col gap-2">
+                  <div v-if="selfInfo" class="flex flex-col gap-2">
                     <div class="text-lg text-primary font-semibold">
-                      {{ user.name }}
+                      {{ selfInfo.name }}
                     </div>
                     <div class="text-secondary text-sm">
-                      {{ t('weila-number') }}: {{ user.num }}
+                      {{ t('weila-number') }}: {{ selfInfo.user_num }}
                     </div>
                     <div class="flex items-center gap-2">
                       <a-tag color="blue">
-                        +{{ user.country_code }} {{ user.bind_phone }}
+                        +{{ selfInfo.country_code }} {{ selfInfo.phone }}
                       </a-tag>
                     </div>
                   </div>
@@ -175,7 +182,7 @@ function tryLogout() {
   </div>
 
   <ResetSelfPasswordModal v-model:open="resetPasswordModalVisible" />
-  <BindingPhone v-model:open="bindingPhoneModalVisible" @success="refetch" />
+  <BindingPhone v-model:open="bindingPhoneModalVisible" />
 </template>
 
 <style scoped lang="less">

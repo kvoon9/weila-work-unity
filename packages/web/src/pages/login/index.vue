@@ -62,11 +62,11 @@ const { mutate: smsMutate, isPending: smsPending } = useWeilaMutation<{ access_t
 })
 
 function onSuccess(res: any) {
+  router.push('/contact/org').catch(console.error)
   localStorage.setItem('token', res.access_token)
   if (activeTab.value === 'password') {
     accountHistoryRecord.value.set(loginForm.value.account, loginForm.value.password)
   }
-  router.push('/contact/org').catch(console.error)
 }
 
 function handleSendSmsCode() {
@@ -270,7 +270,7 @@ onMounted(async () => {
             allow-clear
             :max-length="6"
           />
-          <img v-if="data?.image" :src="data.image" alt="验证码" @click="() => refreshImageCode()">
+          <img v-if="data?.image" :src="data.image" alt="验证码" min-w-30 @click="() => refreshImageCode()">
         </div>
         <div flex gap4>
           <div flex-1 />

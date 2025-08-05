@@ -1,48 +1,30 @@
 <script setup lang="ts">
+import { objectEntries } from '@antfu/utils'
 import Message from '@arco-design/web-vue/es/message'
-import { useMutation } from '@tanstack/vue-query'
 import md5 from 'md5'
+import * as v from 'valibot'
+import { useForm } from 'zod-arco-rules/valibot'
 
 const { t } = useI18n()
 
 const contactStore = useContactStore()
 
-interface Payload {
-  old_password: string
-  new_password: string
-}
+const { form, handleSubmit, rules, reset } = useForm(v.object({
+  old_password: v.string(),
+  new_password: v.string(),
+}))
 
-const form = reactive({
-  old_password: '',
-  new_password: '',
-})
-
-const formRef = templateRef('formRef')
-
-const { mutate, isPending } = useMutation({
-  mutationFn: (payload: Payload) => weilaRequest.post('/corp/web/dept-create', payload),
-  onSuccess: () => {
-    formRef.value?.resetFields()
+const { mutate, isPending } = useWeilaMutation('corp/user/change-password', {
+  onSuccess() {
     Message.success(t('message.success'))
     contactStore.refetch()
+    reset()
   },
 })
 
-function handleSubmit() {
-  return formRef.value?.validate((errors) => {
-    if (errors)
-      return
-
-    mutate({
-      old_password: md5(form.old_password),
-      new_password: md5(form.new_password),
-    }, {
-      onSuccess: () => {
-        formRef.value?.resetFields()
-      },
-    })
-  })
-}
+const submit = handleSubmit((values) => {
+  mutate(Object.fromEntries(objectEntries(values).map(([key, value]) => [key, md5(value)])))
+})
 </script>
 
 <template>
@@ -60,32 +42,21 @@ function handleSubmit() {
           {{ t('button.reset-password') }}
         </DialogTitle>
 
-        <a-form ref="formRef" :model="form" @submit="handleSubmit">
-          <a-form-item field="old_password" :label="t('old-password')" :rules="[{ required: true }]">
+        <a-form :model="form" :rules @submit="submit">
+          <a-form-item field="old_password" :label="t('old-password')">
             <a-input v-model="form.old_password" :max-length="20" show-word-limit type="password" />
           </a-form-item>
-          <a-form-item field="new_password" :label="t('new-password')" :rules="[{ required: true }]">
+          <a-form-item field="new_password" :label="t('new-password')">
             <a-input v-model="form.new_password" :max-length="20" show-word-limit type="password" />
+          </a-form-item>
+          <a-form-item>
+            <a-button mla type="primary" :loading="isPending" html-type="submit">
+              {{ t('button.submit') }}
+            </a-button>
           </a-form-item>
         </a-form>
 
-        <div class="mt-[25px] flex justify-end">
-          <a-button type="text" @click="() => formRef?.resetFields()">
-            {{ t('button.reset') }}
-          </a-button>
-          <DialogClose as-child>
-            <a-button>
-              {{ t('button.cancel') }}
-            </a-button>
-          </DialogClose>
-          <a-button type="primary" :loading="isPending" @click="(e) => formRef?.handleSubmit(e)">
-            {{ t('button.submit') }}
-          </a-button>
-        </div>
-        <DialogClose
-          class="text-grass11 absolute right-[10px] top-[10px] h-[25px] w-[25px] inline-flex appearance-none items-center justify-center rounded-full hover:bg-gray2 focus:shadow-[0_0_0_2px] focus:shadow-gray7 focus:outline-none"
-          aria-label="Close"
-        >
+        <DialogClose class="text-grass11 absolute right-[10px] top-[10px] h-[25px] w-[25px] inline-flex appearance-none items-center justify-center rounded-full hover:bg-gray2 focus:shadow-[0_0_0_2px] focus:shadow-gray7 focus:outline-none" aria-label="Close">
           <i i-carbon-close />
         </DialogClose>
       </DialogContent>

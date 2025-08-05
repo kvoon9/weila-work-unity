@@ -1,136 +1,114 @@
 <script setup lang="ts">
 import Message from '@arco-design/web-vue/es/message'
-import { useMutation } from '@tanstack/vue-query'
+import { useQueryClient } from '@tanstack/vue-query'
+import * as v from 'valibot'
+import { shallowRef } from 'vue'
+import { useForm } from 'zod-arco-rules/valibot'
 
-const emits = defineEmits(['success'])
 const { t } = useI18n()
 
-interface BindingPhonePayload {
-  phone: string
-  password: string
-  verify_code: string
-  verify_img_code: string
-}
+const open = defineModel('open', { default: false })
 
-const verifyImg = templateRef('verifyImg')
+const { form, rules, handleSubmit, reset } = useForm(v.object({
+  phone: v.string(),
+  country_code: v.optional(v.string(), '86'),
+  verifycode: v.string(),
+}))
 
-const formRef = templateRef('formRef')
-const form = reactive<BindingPhonePayload>({
-  phone: '',
-  password: '',
-  verify_code: '',
-  verify_img_code: '',
-})
+watchEffect(() => open.value && reset())
 
-const { mutate, isPending } = useMutation({
-  mutationFn: (data: BindingPhonePayload) => $weilaRequestV1.post('/corp/web/user-bind-phone', data),
+const qc = useQueryClient()
+
+const { mutate } = useWeilaMutation('corp/user/bind-phone', {
   onSuccess() {
-    Message.success('Success')
-  },
-  onError(error) {
-    Message.error(error.message || 'Request Error')
-
-    verifyImg.value?.refetch()
+    open.value = false
+    Message.success(t('success'))
+    reset()
+    qc.invalidateQueries({ queryKey: ['corp/user/get-selfinfo'] })
   },
 })
 
-function handleSubmit() {
-  return formRef.value?.validate((errors) => {
-    if (errors)
-      return
+const submit = handleSubmit((values: any) => {
+  mutate(values)
+})
 
-    mutate(form, {
-      onSuccess: () => {
-        formRef.value?.resetFields()
-        emits('success')
-      },
-    })
-  })
-}
+const verifyImageAnswer = shallowRef('')
+const { data: verifyImageData, refetch: refreshImageCode } = useWeilaFetch<{ id: string, image: string }>(
+  'common/get-image-verifycode',
+  {},
+  {
+    enabled: open,
+  },
+)
 </script>
 
 <template>
-  <DialogRoot>
-    <DialogTrigger>
-      <slot />
-    </DialogTrigger>
-    <DialogPortal>
-      <DialogOverlay class="data-[state=open]:animate-overlayShow fixed inset-0 z-100 bg-black:60" />
-      <DialogContent
-        bg-base
-        class="fixed left-[50%] top-[50%] z-[100] max-h-[85vh] max-w-[450px] w-[90vw] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] data-[state=open]:animate-ease-in bg-base focus:outline-none"
-      >
-        <DialogTitle class="m0 text-center text-lg font-semibold leading-loose">
-          {{ t('binding-phone-form.title') }}
-        </DialogTitle>
+  <a-modal v-model:visible="open" :footer="false">
+    <template #title>
+      <div>{{ t('binding-phone-form.title') }}</div>
+    </template>
 
-        <a-form ref="formRef" :model="form" layout="vertical" @submit="handleSubmit">
-          <a-form-item
-            :label="t('phone-number')" field="phone"
-            :rules="[{ required: true, message: t('binding-phone-form.err-msg.phone-number') }]"
-            :validate-trigger="['blur', 'change']"
-          >
-            <a-input v-model="form.phone" :max-length="12" show-word-limit />
-          </a-form-item>
+    <a-form mxa w-fit :model="form" :rules layout="vertical" @submit="submit">
+      <a-form-item field="phone" hide-label>
+        <a-input-group>
+          <a-select v-model="form.country_code" style="width: 100px" placeholder="区号">
+            <a-option value="86">
+              +86
+            </a-option>
+            <a-option value="852">
+              +852
+            </a-option>
+            <a-option value="853">
+              +853
+            </a-option>
+            <a-option value="886">
+              +886
+            </a-option>
+          </a-select>
+          <a-input
+            v-model="form.phone"
+            placeholder="请输入手机号"
+            allow-clear
+          />
+        </a-input-group>
+      </a-form-item>
 
-          <a-form-item
-            :label="t('verify-image-code')" field="verify_img_code"
-            :rules="[{ required: true, message: t('binding-phone-form.err-msg.verify-image-code') }]"
-            :validate-trigger="['blur', 'change']"
-          >
-            <div class="flex items-center">
-              <a-input v-model="form.verify_img_code" class="mr-2 flex-grow" />
-              <VerifyImg ref="verifyImg" class="flex-shrink-0" />
-            </div>
-          </a-form-item>
-
-          <a-form-item
-            :label="t('sms-code')" field="verify_code"
-            :rules="[{ required: true, message: t('binding-phone-form.err-msg.verify-code') }]"
-            :validate-trigger="['blur', 'change']"
-          >
-            <div class="flex items-center">
-              <a-input v-model="form.verify_code" :max-length="20" show-word-limit class="mr-2 flex-grow" />
-              <SendSmsButton
-                :opts="{
-                  phone: form.phone,
-                  verify_code: form.verify_code,
-                  country_code: '86',
-                  sms_type: 'bind-phone',
-                }" @error="() => verifyImg?.refetch()"
-              />
-            </div>
-          </a-form-item>
-
-          <a-form-item
-            :label="t('password')" field="password"
-            :rules="[{ required: true, message: t('binding-phone-form.err-msg.password') }]"
-            :validate-trigger="['blur', 'change']"
-          >
-            <a-input-password v-model="form.password" />
-          </a-form-item>
-        </a-form>
-
-        <div class="mt-[25px] flex justify-end">
-          <a-button type="text" @click="() => formRef?.resetFields()">
-            {{ t('button.reset') }}
-          </a-button>
-          <DialogClose as-child>
-            <a-button>
-              {{ t('button.cancel') }}
-            </a-button>
-          </DialogClose>
-          <a-button type="primary" :loading="isPending" @click="(e) => formRef?.handleSubmit(e)">
-            {{ t('button.submit') }}
-          </a-button>
+      <a-form-item field="country_code">
+        <div flex gap2>
+          <a-input
+            v-model="verifyImageAnswer"
+            placeholder="请输入图形验证码"
+            allow-clear
+            :max-length="6"
+          />
+          <img v-if="verifyImageData?.image" :src="verifyImageData.image" alt="验证码" min-w-30 @click="() => refreshImageCode()">
         </div>
-        <DialogClose
-          class="text-grass11 absolute right-[10px] top-[10px] h-[25px] w-[25px] inline-flex appearance-none items-center justify-center rounded-full hover:bg-gray2 focus:shadow-[0_0_0_2px] focus:shadow-gray7 focus:outline-none"
-          aria-label="Close"
-        >
-          <i i-carbon-close />
-        </DialogClose>
-      </DialogContent>
-    </DialogPortal>
-  </DialogRoot>
+      </a-form-item>
+
+      <a-form-item field="verifycode">
+        <div flex gap2>
+          <a-input
+            v-model="form.verifycode"
+            placeholder="短信验证码"
+            allow-clear
+          />
+          <SendSmsButton
+            :opts="{
+              phone: form.phone,
+              countrycode: form.country_code || '86',
+              verify_id: verifyImageData?.id || '',
+              verify_answer: verifyImageAnswer,
+              smstype: 'work-bind-phone',
+            }"
+          />
+        </div>
+      </a-form-item>
+
+      <a-form-item>
+        <a-button mla type="primary" html-type="submit">
+          {{ t('button.submit') }}
+        </a-button>
+      </a-form-item>
+    </a-form>
+  </a-modal>
 </template>
