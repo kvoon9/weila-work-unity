@@ -30,10 +30,12 @@ function upload() {
   if (!compressedFile.value)
     return
 
+  const weilaApi = useWeilaApi()
+
   const formData = new FormData()
   formData.append('file', compressedFile.value)
 
-  return $weilaRequestV1.post<{ url: string }>('/corp/web/avatar-upload', formData, {
+  return weilaApi.value.v2.request.post< string >('common/upload-file', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
@@ -44,14 +46,7 @@ function upload() {
       }
     },
   })
-    .then(({ data, errmsg, errcode }) => {
-      if (data?.url) {
-        return src.value = data.url
-      }
-      else {
-        throw new Error(`${errcode} ${errmsg}`)
-      }
-    })
+    .then((url) => src.value = url)
     .catch((error) => {
       Message.error((error as Error)?.message || String(error))
     })
