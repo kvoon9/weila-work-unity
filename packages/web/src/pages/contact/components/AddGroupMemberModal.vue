@@ -22,8 +22,7 @@ const { data: groupMembers, refetch: refetchGroupMembers  } = useWeilaFetch<Memb
   body: { group_id: props.groupId },
 })
 
-watchEffect(() => open.value && refetchGroupMembers)
-
+watchEffect(() => open.value && refetchGroupMembers())
 
 const { data: groups } = useWeilaFetch<GroupModel[]>('corp/group/get-group-list', {
   pick: ['groups']
