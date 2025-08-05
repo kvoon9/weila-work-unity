@@ -7,8 +7,6 @@ import { useForm } from 'zod-arco-rules/valibot'
 
 const { t } = useI18n()
 
-const contactStore = useContactStore()
-
 const { form, handleSubmit, rules, reset } = useForm(v.object({
   old_password: v.string(),
   new_password: v.string(),
@@ -17,7 +15,6 @@ const { form, handleSubmit, rules, reset } = useForm(v.object({
 const { mutate, isPending } = useWeilaMutation('corp/user/change-password', {
   onSuccess() {
     Message.success(t('message.success'))
-    contactStore.refetch()
     reset()
   },
 })
