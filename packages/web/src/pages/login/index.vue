@@ -60,11 +60,11 @@ const { mutateAsync: smsMutate, isPending: smsPending } = useWeilaMutation<{ acc
 })
 
 function onSuccess(res: any) {
-  router.push('/contact/org').catch(console.error)
   localStorage.setItem('token', res.access_token)
   if (activeTab.value === 'password') {
     accountHistoryRecord.value.set(loginForm.value.account, loginForm.value.password)
   }
+  router.push('/contact/org').catch(console.error)
 }
 
 function handleSendSmsCode() {
