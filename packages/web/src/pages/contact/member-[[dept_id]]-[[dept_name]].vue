@@ -74,11 +74,7 @@ const isDeleteMemberModalVisible = shallowRef(false)
       </section>
       <MemberTable :members :count="data?.count || 0">
         <template #actions="{ record }">
-          <a-doption
-            @click="record.type === 1
-              ? isEditDeviceModalVisible = true
-              : isEditMemberModalVisible = true"
-          >
+          <a-doption v-if="record.type === 0" @click="isEditMemberModalVisible = true">
             {{ t('button.edit') }}
           </a-doption>
           <!-- <a-doption v-if="type !== 1" @click="isResetPasswordModalVisible = true">

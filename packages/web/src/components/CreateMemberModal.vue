@@ -1,27 +1,18 @@
 <script setup lang="ts">
 import Message from '@arco-design/web-vue/es/message'
-import { useQuery, useQueryClient } from '@tanstack/vue-query'
+import { useQueryClient } from '@tanstack/vue-query'
 import * as v from 'valibot'
 import { useForm } from 'zod-arco-rules/valibot'
-import { weilaApiUrl } from '~/api'
 import { TrackType } from '~/api/contact'
 
 const { t } = useI18n()
 const { themeColor } = useAppStore()
-const corpStore = useCorpStore()
-const { org_num } = storeToRefs(corpStore)
 const avatarUploaderRef = templateRef('avatarUploaderRef')
 
 const open = defineModel('open', { default: false })
 
-const { data: depts } = useQuery<Array<{ id: number, name: string }>>({
-  enabled: computed(() => Boolean(org_num.value)),
-  queryKey: [weilaApiUrl('/corp/web/dept-getall'), org_num],
-  queryFn: () => weilaFetch(weilaApiUrl('/corp/web/dept-getall'), {
-    body: {
-      org_num: org_num.value,
-    },
-  }).then(i => i.depts),
+const { data: depts } = useWeilaFetch('corp/address/get-dept-list', {
+  pick: ['depts']
 })
 
 const { form, rules, handleSubmit, reset } = useForm(v.object({
@@ -67,7 +58,7 @@ const submit = handleSubmit(async (values: any) => {
       <DialogContent
         bg-base
         class="fixed left-[50%] top-[50%] z-[100] max-h-[85vh] max-w-[450px] w-[90vw] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] data-[state=open]:animate-ease-in bg-base focus:outline-none"
-        @interact-outside="event => {
+        @interact-outside="(event: any) => {
           const target = event.target as HTMLElement;
           console.log(target)
           if (target?.closest('.arco-select-option')) return event.preventDefault()

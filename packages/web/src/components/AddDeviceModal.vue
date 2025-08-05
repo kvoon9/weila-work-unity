@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { Message } from '@arco-design/web-vue'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
-import { weilaApiUrl } from '~/api'
+import { useQueryClient } from '@tanstack/vue-query'
+import * as v from 'valibot'
+import { useForm } from 'zod-arco-rules/valibot'
 import { TrackType } from '~/api/contact'
-
-const emits = defineEmits(['success'])
 
 const { t } = useI18n()
 const { themeColor } = useAppStore()
@@ -12,80 +11,45 @@ const formRef = templateRef('formRef')
 
 const open = defineModel('open', { default: false })
 
-const corpStore = useCorpStore()
-const { org_num } = storeToRefs(corpStore)
 const avatarUploaderRef = templateRef('avatarUploaderRef')
 
-const { data: depts } = useQuery<Array<{ id: number, name: string }>>({
-  enabled: computed(() => Boolean(org_num.value)),
-  queryKey: [weilaApiUrl('/corp/web/dept-getall'), org_num],
-  queryFn: () => weilaFetch(weilaApiUrl('/corp/web/dept-getall'), {
-    body: {
-      org_num: org_num.value,
-    },
-  }).then(i => i.depts),
+const { data: depts } = useWeilaFetch('corp/address/get-dept-list', {
+  pick: ['depts'],
 })
 
-interface Payload {
-  verifycode: string
-  // verifyImgCode: string
-  name: string
-  dept_id: number
-  sex: number
-  avatar: string
-  phone: string
-  tts: number
-  loc_share: number
-  track: TrackType
-}
-
-const form = reactive<Payload>({
-  verifycode: '',
-  name: '',
-  dept_id: 0,
-  sex: 0,
-  avatar: '',
-  phone: '',
-  tts: 0,
-  loc_share: 0,
-  track: TrackType.Close,
-})
+const { form, rules, handleSubmit, reset } = useForm(v.object({
+  verifycode: v.string(),
+  name: v.pipe(v.string(), v.maxLength(20)),
+  job_num: v.optional(v.string(), ''),
+  dept_id: v.optional(v.number(), 0),
+  sex: v.optional(v.number(), 0),
+  avatar: v.optional(v.string(), ''),
+  phone: v.optional(v.string(), ''),
+  loc_share: v.optional(v.number(), 0),
+  track: v.optional(v.number(), 0),
+}))
 
 $inspect(form)
 
-const weilaApi = useWeilaApi()
-
 const qc = useQueryClient()
 
-const { mutate } = useMutation({
-  mutationFn: (payload: Payload) => weilaApi.value.v2.fetch('/corp/address/add-device', {
-    body: {
-      ...payload,
-      track: Number(payload.track),
-    },
-  }),
+const { mutate } = useWeilaMutation('corp/address/add-device', {
   onSuccess() {
     Message.success(t('message.success'))
     qc.invalidateQueries({ queryKey: ['corp/address/get-member-list'] })
-    emits('success')
     open.value = false
-  },
-  onError() {
+    reset()
   },
 })
 
-async function handleSubmit({ values, errors }: any) {
-  if (errors)
-    return
-
+const submit = handleSubmit(async (values: any) => {
   // @ts-expect-error type error: `defineExpose` no type declare find
   const { upload } = avatarUploaderRef.value
-  if (form.avatar && !isRemoteImage(form.avatar)) {
+  if (form.value.avatar && !isRemoteImage(form.value.avatar))
     await upload()
-  }
 
   mutate(values)
-}
+})
 </script>
 
 <template>
@@ -98,7 +62,7 @@ async function handleSubmit({ values, errors }: any) {
       <DialogContent
         bg-base
         class="fixed left-[50%] top-[50%] z-[100] max-h-[85vh] max-w-[450px] w-[90vw] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] data-[state=open]:animate-ease-in bg-base focus:outline-none"
-        @interact-outside="event => {
+        @interact-outside="(event: any) => {
           const target = event.target as HTMLElement;
           console.log(target)
           if (target?.closest('.arco-select-option')) return event.preventDefault()
@@ -107,24 +71,16 @@ async function handleSubmit({ values, errors }: any) {
         <DialogTitle class="m0 text-center text-lg font-semibold leading-loose">
           {{ t('add-device') }}
         </DialogTitle>
-        <a-form ref="formRef" :model="form" auto-label-width @submit="handleSubmit">
+        <a-form ref="formRef" :model="form" :rules auto-label-width @submit="submit">
           <a-form-item
-            field="name" :label="t('name')" :rules="[{ required: true }]"
-            :validate-trigger="['change', 'blur']"
+            field="name" :label="t('name')"
           >
             <a-input v-model="form.name" :max-length="20" show-word-limit />
           </a-form-item>
-          <a-form-item
-            field="verifycode" :label="t('verify-code')" :rules="[{ required: true }]"
-            :validate-trigger="['change', 'blur']"
-          >
+          <a-form-item field="verifycode" :label="t('verify-code')">
             <a-input v-model="form.verifycode" :max-length="20" show-word-limit />
           </a-form-item>
-          <a-form-item
-            :label="t('phone-number')" field="phone"
-            :rules="[{ required: false, message: t('binding-phone-form.err-msg.phone-number') }]"
-            :validate-trigger="['blur', 'change']"
-          >
+          <a-form-item :label="t('phone-number')" field="phone">
             <a-input v-model="form.phone" :max-length="12" show-word-limit />
           </a-form-item>
           <a-form-item field="dept_id" :label="t('member.form.dept.label')">
@@ -133,7 +89,7 @@ async function handleSubmit({ values, errors }: any) {
             </a-select>
           </a-form-item>
 
-          <a-form-item field="sex" :label="t('gender')" :validate-trigger="['change', 'blur']">
+          <a-form-item field="sex" :label="t('gender')">
             <a-radio-group v-model="form.sex">
               <a-radio :value="0">
                 {{ t('male') }}
@@ -143,10 +99,10 @@ async function handleSubmit({ values, errors }: any) {
               </a-radio>
             </a-radio-group>
           </a-form-item>
-          <a-form-item field="avatar" :label="t('member.form.avatar.label')" :validate-trigger="['change', 'blur']">
+          <a-form-item field="avatar" :label="t('member.form.avatar.label')">
             <AvatarUploader ref="avatarUploaderRef" v-model:src="form.avatar" />
           </a-form-item>
-          <!-- <a-form-item field="tts" label="TTS" :validate-trigger="['change', 'blur']">
+          <!-- <a-form-item field="tts" label="TTS" >
             <a-switch
               v-model="form.tts" :checked-value="1" :unchecked-value="0" :checked-color="themeColor"
               unchecked-color="#ddd"
@@ -154,17 +110,13 @@ async function handleSubmit({ values, errors }: any) {
           </a-form-item> -->
           <a-form-item
             field="loc_share" :label="t('member.form.loc_share.label')"
-            :validate-trigger="['change', 'blur']"
           >
             <a-switch
               v-model="form.loc_share" :checked-value="1" :unchecked-value="0" :checked-color="themeColor"
               unchecked-color="#ddd"
             />
           </a-form-item>
-          <a-form-item
-            field="track" :label="t('change-member.form.track.label')"
-            :validate-trigger="['change', 'blur']"
-          >
+          <a-form-item field="track" :label="t('change-member.form.track.label')">
             <a-radio-group v-model="form.track" type="button" :default-value="String(form.track)">
               <a-radio default-checked :value="TrackType.Close">
                 {{ t('track-type.close') }}

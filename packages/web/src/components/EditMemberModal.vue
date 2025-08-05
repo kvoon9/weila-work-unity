@@ -1,31 +1,14 @@
 <script setup lang="ts">
+import type { Member } from '~/types/api'
 import Message from '@arco-design/web-vue/es/message'
 import { useQueryClient } from '@tanstack/vue-query'
-import * as v from 'valibot'
 
+import * as v from 'valibot'
 import { useForm } from 'zod-arco-rules/valibot'
 import { TrackType } from '~/api/contact'
 
 const props = defineProps<{
-  member?: {
-    user_id: number
-    user_num: string
-    job_num: string
-    sex: number
-    name: string
-    avatar: string
-    is_admin: number
-    dept_id: number
-    phone: string
-    country_code: string
-    state: number
-    type: number
-    tts: number
-    loc_share: number
-    track: number
-    group_count: number
-    created: number
-  }
+  member?: Member
 }>()
 
 const { t } = useI18n()
@@ -88,7 +71,7 @@ const submit = handleSubmit(async (values) => {
       <DialogContent
         bg-base
         class="fixed left-[50%] top-[50%] z-[100] max-h-[85vh] max-w-[450px] w-[90vw] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] data-[state=open]:animate-ease-in bg-base focus:outline-none"
-        @interact-outside="event => {
+        @interact-outside="(event: any) => {
           const target = event.target as HTMLElement;
           console.log(target)
           if (target?.closest('.arco-select-option')) return event.preventDefault()
