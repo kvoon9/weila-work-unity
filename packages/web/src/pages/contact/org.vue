@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import type { Corp } from '~/types'
 import type { Legal } from '~/types/api'
 import { shallowRef } from 'vue'
+import CreateCorpModal from './components/CreateCorpModal.vue'
 import EditCorpModal from './components/EditCorpModal.vue'
 
 definePage({
@@ -11,16 +13,14 @@ const { t } = useI18n()
 
 const router = useRouter()
 
-const corpStore = useCorpStore()
-const { refetch, isSuccess } = corpStore
-const { data: corp } = storeToRefs(corpStore)
+const { data: corp, isSuccess } = useWeilaFetch<Corp>('corp/org/get-my-org')
 
 const { data } = useWeilaFetch<Legal>('corp/legal/get-legal')
 
 const isEditCorpModalVisible = shallowRef(false)
 
 watchEffect(() => {
-  if (isSuccess && !corp.value)
+  if (isSuccess.value && !corp.value)
     router.push('/create-org')
 })
 </script>
@@ -93,5 +93,5 @@ watchEffect(() => {
 
   <CreateCorpModal />
 
-  <EditCorpModal v-model:open="isEditCorpModalVisible" :avatar="corp?.avatar" :name="corp?.name" @success="refetch" />
+  <EditCorpModal v-model:open="isEditCorpModalVisible" :avatar="corp?.avatar" :name="corp?.name" />
 </template>

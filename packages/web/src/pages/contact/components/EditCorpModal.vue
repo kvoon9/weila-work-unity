@@ -1,76 +1,49 @@
 <script setup lang="ts">
-import Message from '@arco-design/web-vue/es/message'
-import { useMutation } from '@tanstack/vue-query'
-import { weilaApiUrl } from '~/api'
+import Message from '@arco-design/web-vue/es/message';
+import { useQueryClient } from '@tanstack/vue-query';
+import * as v from 'valibot';
+import { useForm } from 'zod-arco-rules/valibot';
 
 const props = defineProps<{
   name?: string
   avatar?: string
 }>()
 
-const emits = defineEmits(['success'])
-
 const { t } = useI18n()
-
-const { org_num } = storeToRefs(useCorpStore())
 
 const avatarUploaderRef = templateRef('avatarUploaderRef')
 
 const open = defineModel('open', { default: false })
 
-interface Payload {
-  name: string
-  avatar: string
-}
-
-const form = reactive({
-  name: props.name || '',
-  avatar: props.avatar || '',
-})
-
-watch(open, (val) => {
-  if (val) {
-    form.name = props.name || ''
-    form.avatar = props.avatar || ''
-  }
+const { rules, form, reset, handleSubmit } = useForm(v.object({
+  name: v.optional(v.string(), () => props.name),
+  avatar: v.optional(v.string(), () => props.avatar),
+}), {
+  watch: [() => props],
 })
 
 const formRef = templateRef('formRef')
 
-const { mutate, isPending } = useMutation({
-  mutationFn: (payload: Payload) => weilaRequest.post(
-    weilaApiUrl('/corp/web/org-change'),
-    {
-      ...payload,
-      org_num: org_num.value,
-    },
-  ),
+const qc = useQueryClient()
+
+const { mutateAsync: change, isPending } = useWeilaMutation('corp/org/change-org', {
   onSuccess: () => {
-    formRef.value?.resetFields()
+    reset()
     open.value = false
     Message.success(t('message.success'))
-    emits('success')
+    qc.invalidateQueries({ queryKey: ['corp/org/get-my-org'] })
   },
 })
 
-function handleSubmit() {
-  return formRef.value?.validate(async (errors) => {
-    if (errors)
-      return
+const submit = handleSubmit(async (values: any) => {
+  // @ts-expect-error type error: `defineExpose` no type declare find
+  const { upload } = avatarUploaderRef.value
+  if (form.value.avatar && !isRemoteImage(form.value.avatar)) {
+    await upload()
+  }
 
-    // @ts-expect-error type error: `defineExpose` no type declare find
-    const { upload } = avatarUploaderRef.value
-    if (form.avatar && !isRemoteImage(form.avatar)) {
-      await upload()
-    }
-
-    mutate(form, {
-      onSuccess: () => {
-        formRef.value?.resetFields()
-      },
-    })
-  })
-}
+  await change(values)
+})
 </script>
 
 <template>
@@ -88,7 +61,7 @@ function handleSubmit() {
           {{ t('corp.edit') }}
         </DialogTitle>
 
-        <a-form ref="formRef" :model="form" @submit="handleSubmit">
+        <a-form ref="formRef" :rules :model="form" @submit="submit">
           <a-form-item field="name" :label="t('org-form.name.label')">
             <a-input v-model="form.name" :max-length="20" show-word-limit />
           </a-form-item>

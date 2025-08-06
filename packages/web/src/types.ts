@@ -23,3 +23,21 @@ export interface TreeNodeData {
   isLeaf?: boolean
   children?: TreeNodeData[]
 }
+
+export interface Corp {
+  address_ver: number
+  avatar: string
+  created: number
+  creator: number
+  dept_cnt: number
+  device_cnt: number
+  device_ver: number
+  group_cnt: number
+  group_ver: number
+  intro: string
+  member_cnt: number
+  name: string
+  num: number
+  vip: number
+  vip_expired: number
+}
