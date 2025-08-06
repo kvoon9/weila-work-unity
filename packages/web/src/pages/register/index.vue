@@ -106,7 +106,7 @@ const submit = handleSubmit((values: any) => {
       <a-form-item field="phone" hide-label>
         <a-input
           v-model="form.phone" :max-length="20" :placeholder="t('register.form.phone.placeholder')" allow-clear
-          show-word-limit w-320px
+          show-word-limit
         >
           <template #prepend>
             <a-tag>
@@ -117,7 +117,7 @@ const submit = handleSubmit((values: any) => {
       </a-form-item>
 
       <a-form-item field="verifycode" hide-label>
-        <a-input v-model="form.verifycode" :placeholder="t('register.form.verifyCode.placeholder')" allow-clear mr4 w-auto>
+        <a-input v-model="form.verifycode" :placeholder="t('register.form.verifyCode.placeholder')" allow-clear pr0>
           <template #suffix>
             <a-button
               type="text"

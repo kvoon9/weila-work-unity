@@ -190,8 +190,8 @@ onMounted(async () => {
       <a-tab-pane key="sms" title="手机号登录">
         <a-form :model="smsLoginForm" :rules="smsLoginRules" class="login-form" layout="vertical" @submit="loginBySms">
           <a-form-item field="phone" hide-label>
-            <a-input-group>
-              <a-select v-model="smsLoginForm.country_code" style="width: 90px" placeholder="区号">
+            <a-input-group flex w-full>
+              <a-select v-model="smsLoginForm.country_code" w-fit placeholder="区号">
                 <a-option value="86">
                   +86
                 </a-option>
@@ -207,6 +207,7 @@ onMounted(async () => {
               </a-select>
               <a-input
                 v-model="smsLoginForm.phone"
+                flex-1
                 placeholder="请输入手机号"
                 allow-clear
               />
@@ -217,10 +218,10 @@ onMounted(async () => {
               v-model="smsLoginForm.verifycode"
               placeholder="请输入验证码"
               allow-clear
+              pr0
             >
               <template #suffix>
                 <a-button
-                  my1.5
                   type="text"
                   :loading="false"
                   :disabled="!smsLoginForm.phone"
