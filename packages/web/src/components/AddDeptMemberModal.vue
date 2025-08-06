@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import type { Member } from '~/types/api';
 import Message from '@arco-design/web-vue/es/message';
 import { useQueryClient } from '@tanstack/vue-query';
 import { ref as deepRef, shallowRef } from 'vue';
-import { Member } from '~/types/api';
 
 const props = defineProps<{
   deptId: number
@@ -18,8 +18,8 @@ const checkedMemberKeys = computed(() => checkedKeys.value.filter(i => i.startsW
 
 const { data: deptMembers, refetch } = useWeilaFetch<Member[]>('corp/address/get-dept-all-member', {
   body: {
-    dept_id: props.deptId
-  }
+    dept_id: props.deptId,
+  },
 })
 
 watchEffect(() => open.value && refetch())
@@ -57,8 +57,9 @@ const { mutate, isPending } = useWeilaMutation<never, {
         </DialogTitle>
 
         <div relative p4 min-w-100 max-h-60vh of-y-auto>
-          <ContactSelectTree v-model:checked-keys="checkedKeys"
-          :uncheckable-ids="deptMembers.map(i => i.user_id)"
+          <ContactSelectTree
+            v-model:checked-keys="checkedKeys"
+            :uncheckable-ids="deptMembers.map(i => i.user_id)"
           />
         </div>
 

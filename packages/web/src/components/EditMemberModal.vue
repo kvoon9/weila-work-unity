@@ -48,6 +48,7 @@ const { mutate: createMember } = useWeilaMutation('corp/address/change-member', 
     open.value = false
     Message.success(t('success'))
     qc.invalidateQueries({ queryKey: ['corp/address/get-member-list'] })
+    qc.invalidateQueries({ queryKey: ['corp/address/get-dept-member-list'] })
   },
 })
 
