@@ -117,7 +117,7 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
         <a-table-column title="群数量" :width="80">
           <template #cell="{ record: { grp_cnt, grp_lmt } }">
             <a-tag :color="grp_cnt >= grp_lmt ? 'magenta' : 'gray'">
-            {{ grp_cnt }} / {{ grp_lmt }}
+              {{ grp_cnt }} / {{ grp_lmt }}
             </a-tag>
           </template>
         </a-table-column>
@@ -194,7 +194,6 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
           </template>
         </a-table-column>
 
-        <a-table-column title="群数量" data-index="group_count" :width="100" />
         <a-table-column :title="t('controls')">
           <template #cell="{ record }">
             <div flex gap2>
