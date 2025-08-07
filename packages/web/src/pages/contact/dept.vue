@@ -61,7 +61,7 @@ function onSelect(dept: DeptModel, e: PointerEvent) {
 
       <!-- @vue-expect-error type error when arco's row-click -->
       <a-table
-        :data="data.depts" size="medium" :column-resizable="true" :scroll="{
+        :data="data?.depts" size="medium" :column-resizable="true" :scroll="{
           x: 1000,
           y: 600,
         }" :scrollbar="true" :columns="[{ title: t('name'), dataIndex: 'name' }]"
