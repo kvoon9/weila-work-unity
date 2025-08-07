@@ -26,11 +26,7 @@ const { form, rules, handleSubmit, reset } = useForm(v.object({
   watch: [() => props.group],
 })
 
-const { mutate, isPending } = useMutation({
-  mutationFn: (payload: any) => weilaRequest.post(
-    '/corp/web/group-change',
-    payload,
-  ),
+const { mutateAsync: change, isPending } = useWeilaMutation('corp/group/change-group', {
   onSuccess: () => {
     open.value = false
     Message.success(t('message.success'))
@@ -46,7 +42,7 @@ const submit = handleSubmit(async (values) => {
     await upload()
   }
 
-  mutate(values)
+  change(values)
 })
 </script>
 

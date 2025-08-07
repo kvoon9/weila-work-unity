@@ -5,7 +5,6 @@ import Message from '@arco-design/web-vue/es/message'
 import { useFileDialog } from '@vueuse/core'
 import { toFileWrapper, useUploadFile } from '@weila/network'
 import { computed, ref as deepRef, shallowRef, watch } from 'vue'
-import { $weilaRequestV2 } from '~/utils/api'
 import TheCropper from './TheCropper.vue'
 
 const props = defineProps<{
@@ -28,7 +27,9 @@ const { files, open } = useFileDialog({
   accept: 'image/*',
 })
 
-const { mutateAsync: uploadFile, filelist } = useUploadFile($weilaRequestV2)
+const { mutateAsync: uploadFile, filelist } = useUploadFile(
+  useWeilaApi().value.v2.request,
+)
 
 $inspect(filelist.value)
 

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { Corp } from '~/types'
 import Message from '@arco-design/web-vue/es/message'
-import { useMutation } from '@tanstack/vue-query'
-import { weilaApiUrl } from '~/api'
+import * as v from 'valibot'
+import { useForm } from 'zod-arco-rules/valibot'
 
 const emits = defineEmits(['success'])
 
@@ -10,63 +10,46 @@ const { t } = useI18n()
 
 const avatarUploaderRef = templateRef('avatarUploaderRef')
 
-const { data: corp, isSuccess, refetch } = useWeilaFetch<Corp>('corp/org/get-my-org')
+const { data: corp, isFetching, refetch } = useWeilaFetch<Corp>('corp/org/get-my-org')
 
 const open = computed(() => {
-  if (isSuccess && !corp.value)
+  if (!isFetching.value && !corp.value)
     return true
   else
     return false
 })
 
-$inspect(open)
-interface Payload {
+const { reset, rules, form, handleSubmit } = useForm(v.object({
+  name: v.string(),
+  avatar: v.optional(v.string(), ''),
+}))
+
+const { mutate, isPending } = useWeilaMutation<{
   name: string
   avatar: string
-}
-
-const form = reactive({
-  name: '',
-  avatar: '',
-})
-
-const formRef = templateRef('formRef')
-
-const { mutate, isPending } = useMutation({
-  mutationFn: (payload: Payload) => weilaRequest.post(
-    weilaApiUrl('/corp/web/org-create'),
-    payload,
-  ),
+}>('corp/org/create-org', {
   onSuccess: () => {
-    formRef.value?.resetFields()
+    reset()
     Message.success(t('message.success'))
     refetch()
     emits('success')
   },
+
 })
 
-function handleSubmit() {
-  return formRef.value?.validate(async (errors: any) => {
-    if (errors)
-      return
+const submit = handleSubmit(async (values: any) => {
+  // @ts-expect-error type error: `defineExpose` no type declare find
+  const { upload } = avatarUploaderRef.value
+  if (form.value.avatar && !isRemoteImage(form.value.avatar)) {
+    await upload()
+  }
 
-    // @ts-expect-error type error: `defineExpose` no type declare find
-    const { upload } = avatarUploaderRef.value
-    if (form.avatar && !isRemoteImage(form.avatar)) {
-      await upload()
-    }
-
-    mutate(form, {
-      onSuccess: () => {
-        formRef.value?.resetFields()
-      },
-    })
-  })
-}
+  mutate(values)
+})
 </script>
 
 <template>
-  <DialogRoot :open="false">
+  <DialogRoot :open="open">
     <DialogTrigger>
       <slot />
     </DialogTrigger>
@@ -80,28 +63,20 @@ function handleSubmit() {
           {{ t('corp.create.form.title') }}
         </DialogTitle>
 
-        <a-form ref="formRef" :model="form" @submit="handleSubmit">
+        <a-form :rules :model="form" @submit="submit">
           <a-form-item field="name" :label="t('org-form.name.label')">
             <a-input v-model="form.name" :max-length="20" show-word-limit />
           </a-form-item>
-          <a-form-item field="avatar" :label="t('member.form.avatar.label')" :validate-trigger="['change', 'blur']">
+          <a-form-item field="avatar" :label="t('member.form.avatar.label')">
             <AvatarUploader ref="avatarUploaderRef" v-model:src="form.avatar" />
           </a-form-item>
-        </a-form>
 
-        <div class="mt-[25px] flex justify-end">
-          <a-button type="text" @click="() => formRef?.resetFields()">
-            {{ t('button.reset') }}
-          </a-button>
-          <DialogClose as-child>
-            <a-button>
-              {{ t('button.cancel') }}
+          <a-form-item>
+            <a-button type="primary" mla :loading="isPending" html-type="submit">
+              {{ t('button.submit') }}
             </a-button>
-          </DialogClose>
-          <a-button type="primary" :loading="isPending" @click="(e) => formRef?.handleSubmit(e)">
-            {{ t('button.submit') }}
-          </a-button>
-        </div>
+          </a-form-item>
+        </a-form>
         <!-- <DialogClose
           class="text-grass11 absolute right-[10px] top-[10px] h-[25px] w-[25px] inline-flex appearance-none items-center justify-center rounded-full hover:bg-gray2 focus:shadow-[0_0_0_2px] focus:shadow-gray7 focus:outline-none"
           aria-label="Close"

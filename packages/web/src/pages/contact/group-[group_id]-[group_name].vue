@@ -5,7 +5,6 @@ import { TrackType } from '~/api/contact'
 
 import AddGroupMemberModal from './components/AddGroupMemberModal.vue'
 import DeleteGroupMemberModal from './components/DeleteGroupMemberModal.vue'
-import EditGroupMemberModal from './components/EditGroupMemberModal.vue'
 
 const { t } = useI18n()
 const route = useRoute('/contact/group-[group_id]-[group_name]')

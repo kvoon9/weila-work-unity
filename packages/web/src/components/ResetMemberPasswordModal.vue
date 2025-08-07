@@ -46,7 +46,7 @@ watch(() => props.member, (m) => {
 
 const { mutate, isPending } = useMutation({
   mutationFn: (payload: Payload) => {
-    return weilaRequest.post(weilaApiUrl('/corp/web/member-reset-password'), {
+    return useWeilaApi().value.v2.request.post(weilaApiUrl('/corp/web/member-reset-password'), {
       ...payload,
       password: md5(payload.password),
     })

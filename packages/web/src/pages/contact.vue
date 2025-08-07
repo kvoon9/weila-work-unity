@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import type { Corp } from '~/types'
 import { objectKeys } from '@antfu/utils'
-import { ref as deepRef, reactive, shallowRef } from 'vue'
-import CreateCorpModal from './contact/components/CreateCorpModal.vue'
+import { ref as deepRef, reactive } from 'vue'
 
 definePage({
   meta: {
@@ -11,10 +9,6 @@ definePage({
 })
 
 const router = useRouter()
-
-const { refetch } = useWeilaFetch<Corp>('corp/org/get-my-org')
-
-const isCreateCorpModalVisible = shallowRef(false)
 
 const menus = reactive({
   '/contact/org': 'corp-info',
@@ -39,6 +33,5 @@ watch(router.currentRoute, (curRoute) => {
     <section relative h-full w-full of-scroll>
       <RouterView absolute inset-0 />
     </section>
-    <CreateCorpModal v-model:open="isCreateCorpModalVisible" @success="refetch" />
   </div>
 </template>

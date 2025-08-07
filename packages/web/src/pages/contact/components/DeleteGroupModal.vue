@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import type { GroupModel } from '~/api/contact'
 import Message from '@arco-design/web-vue/es/message'
-import { useMutation } from '@tanstack/vue-query'
-import { weilaApiUrl } from '~/api'
 
-const props = defineProps<{
+defineProps<{
   group?: GroupModel
 }>()
 
@@ -14,13 +12,9 @@ const { t } = useI18n()
 
 const open = defineModel('open', { default: false })
 
-const { mutate, isPending } = useMutation({
-  mutationFn: () => weilaRequest.post(
-    weilaApiUrl('/corp/web/group-delete'),
-    {
-      group_id: props.group?.id,
-    },
-  ),
+const { mutate, isPending } = useWeilaMutation<{
+  group_id: number
+}>('corp/group/delete-group', {
   onSuccess: () => {
     open.value = false
     Message.success(t('message.success'))
@@ -54,7 +48,11 @@ const { mutate, isPending } = useMutation({
               {{ t('button.cancel') }}
             </a-button>
           </DialogClose>
-          <a-button type="primary" :loading="isPending" @click="(e) => mutate()">
+          <a-button
+            type="primary" :loading="isPending" @click="(e) => mutate({
+              group_id: group?.id,
+            })"
+          >
             {{ t('button.submit') }}
           </a-button>
         </div>

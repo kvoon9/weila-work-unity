@@ -72,7 +72,8 @@ watch(org_num, (value) => {
 
 const { mutate: createMember, isPending } = useMutation({
   mutationFn: (payload: MemberChangePayload) => {
-    return weilaRequest.post(weilaApiUrl('/corp/web/member-change'), {
+    const weilaApi = useWeilaApi()
+    return weilaApi.value.v2.request.post(weilaApiUrl('/corp/web/member-change'), {
       ...payload,
       tts: payload.tts ? 1 : 0,
       loc_share: payload.loc_share ? 1 : 0,
