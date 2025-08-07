@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import type { Corp } from '~/types'
 import type { Member } from '~/types/api'
 import { Message } from '@arco-design/web-vue'
 import { useMutation } from '@tanstack/vue-query'
 import md5 from 'md5'
-import { shallowRef } from 'vue'
 import { weilaApiUrl } from '~/api'
 
 const props = defineProps<{
@@ -11,11 +11,10 @@ const props = defineProps<{
 }>()
 
 const { t } = useI18n()
-const corpStore = useCorpStore()
-const formRef = templateRef('formRef')
+const { data: corp } = useWeilaFetch<Corp>('corp/org/get-my-org')
+const org_num = computed(() => corp.value?.num)
 
-const org_num = shallowRef(0)
-corpStore.$subscribe((_, { data }) => data ? org_num.value = data.num : void 0, { immediate: true })
+const formRef = templateRef('formRef')
 
 const open = defineModel('open', { default: false })
 
@@ -31,15 +30,19 @@ const form = reactive<Payload>({
   member_id: 0,
 })
 
+watch(org_num, (value) => {
+  value && (form.org_num = value)
+})
+
 watch(() => props.member, (m) => {
   if (m)
     form.member_id = m.user_id
 })
 
-corpStore.$subscribe((_, state) => {
-  if (state.data)
-    form.org_num = state.data.num
-}, { immediate: true })
+// corpStore.$subscribe((_, state) => {
+//   if (state.data)
+//     form.org_num = state.data.num
+// }, { immediate: true })
 
 const { mutate, isPending } = useMutation({
   mutationFn: (payload: Payload) => {
@@ -56,7 +59,7 @@ const { mutate, isPending } = useMutation({
 })
 
 function handleSubmit() {
-  return formRef.value?.validate((errors) => {
+  return formRef.value?.validate((errors: any) => {
     if (errors)
       return
 

@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { ValidatedError } from '@arco-design/web-vue'
 import type { MemberChangePayload } from 'generated/mock/weila'
+import type { Corp } from '~/types'
 import type { Member } from '~/types/api'
 import { objectPick } from '@antfu/utils'
 import { Message } from '@arco-design/web-vue'
 import { useMutation } from '@tanstack/vue-query'
-import { shallowRef } from 'vue'
 import { weilaApiUrl } from '~/api'
 import { TrackType } from '~/api/contact'
 
@@ -17,17 +17,16 @@ const emits = defineEmits(['success'])
 
 const { t } = useI18n()
 const { themeColor } = useAppStore()
-const corpStore = useCorpStore()
 const formRef = templateRef('formRef')
 const avatarUploaderRef = templateRef('avatarUploaderRef')
 
-const org_num = shallowRef(0)
-corpStore.$subscribe((_, { data }) => data ? org_num.value = data.num : void 0, { immediate: true })
+const { data: corp } = useWeilaFetch<Corp>('corp/org/get-my-org')
+const org_num = computed(() => corp.value?.num)
 
 const open = defineModel('open', { default: false })
 
 const { data: depts } = useWeilaFetch('corp/address/get-dept-list', {
-  pick: ['depts']
+  pick: ['depts'],
 })
 
 let form = reactive<MemberChangePayload>({
@@ -67,10 +66,9 @@ watch(() => props.member, (member) => {
   })
 }, { immediate: true })
 
-corpStore.$subscribe((_, state) => {
-  if (state.data)
-    form.org_num = state.data.num
-}, { immediate: true })
+watch(org_num, (value) => {
+  value && (form.org_num = value)
+})
 
 const { mutate: createMember, isPending } = useMutation({
   mutationFn: (payload: MemberChangePayload) => {

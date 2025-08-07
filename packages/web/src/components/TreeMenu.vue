@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import type { RouteRecordNormalized } from 'vue-router'
+import type { Corp } from '~/types'
 import type { Legal } from '~/types/api'
 
 const router = useRouter()
 
-const corpStore = useCorpStore()
-const { data: corp } = storeToRefs(corpStore)
+const { data: corp } = useWeilaFetch<Corp>('corp/org/get-my-org')
+
 const { data: legal } = useWeilaFetch<Legal>('corp/legal/get-legal')
 
 interface Menu {

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Corp } from '~/types'
 import Message from '@arco-design/web-vue/es/message'
 import { useMutation } from '@tanstack/vue-query'
 import { weilaApiUrl } from '~/api'
@@ -9,9 +10,7 @@ const { t } = useI18n()
 
 const avatarUploaderRef = templateRef('avatarUploaderRef')
 
-const corpStore = useCorpStore()
-const { isSuccess, refetch } = corpStore
-const { data: corp } = storeToRefs(corpStore)
+const { data: corp, isSuccess, refetch } = useWeilaFetch<Corp>('corp/org/get-my-org')
 
 const open = computed(() => {
   if (isSuccess && !corp.value)

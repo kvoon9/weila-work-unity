@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { TransferItem } from '@arco-design/web-vue/es/transfer/interface'
 import type { MemberModel } from '~/api/contact'
+import type { Corp } from '~/types'
 import { Message } from '@arco-design/web-vue'
 import { useQuery } from '@tanstack/vue-query'
 import { useAddBusinessPointStaffs, useGetBusinessPointStaffList } from '@weila/network'
@@ -17,7 +18,8 @@ const selectedIds = deepRef<string[]>([])
 const open = shallowRef(false)
 const { data: staffList, refetch: refetchStaffList, isFetching: isFetchingStaffList } = useGetBusinessPointStaffList($v2, { pid: props.pid })
 
-const { org_num } = storeToRefs(useCorpStore())
+const { data: corp } = useWeilaFetch<Corp>('corp/org/get-my-org')
+const org_num = computed(() => corp.value?.num)
 
 const { data: members, isFetching: isFetchingMembers } = useQuery<Array<MemberModel>>({
   enabled: computed(() => Boolean(org_num.value)),

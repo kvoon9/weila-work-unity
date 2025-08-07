@@ -1,13 +1,14 @@
 import type { ContactModel } from '~/api/contact'
+import type { Corp } from '~/types'
 import { objectPick } from '@antfu/utils'
-import { useQuery } from '@tanstack/vue-query'
 
+import { useQuery } from '@tanstack/vue-query'
 import { useAuthStore } from './auth'
 
 export const useContactStore = defineStore('contact', () => {
-  const corpStore = useCorpStore()
+  const { data: corp } = useWeilaFetch<Corp>('corp/org/get-my-org')
+  const org_num = computed(() => corp.value?.num)
   const { isLogin } = storeToRefs(useAuthStore())
-  const { org_num } = storeToRefs(corpStore)
   const enabled = computed(() =>
     isLogin.value
     && typeof org_num.value === 'number',

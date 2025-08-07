@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Corp } from '~/types'
 import { useQuery } from '@tanstack/vue-query'
 import { UseImage } from '@vueuse/components'
 import { RouterLink } from 'vue-router'
@@ -30,8 +31,7 @@ interface GroupModel {
 const route = useRoute('/message/[group_id]-[group_name]')
 // const router = useRouter()
 
-const corpStore = useCorpStore()
-const { data: corp } = storeToRefs(corpStore)
+const { data: corp } = useWeilaFetch<Corp>('corp/org/get-my-org')
 
 const { data: groups } = useQuery<GroupModel[]>({
   enabled: computed(() => Boolean(corp.value)),

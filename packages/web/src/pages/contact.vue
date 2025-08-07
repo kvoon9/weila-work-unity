@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Corp } from '~/types'
 import { objectKeys } from '@antfu/utils'
 import { ref as deepRef, reactive, shallowRef } from 'vue'
 import CreateCorpModal from './contact/components/CreateCorpModal.vue'
@@ -11,8 +12,7 @@ definePage({
 
 const router = useRouter()
 
-const corpStore = useCorpStore()
-const { refetch } = corpStore
+const { refetch } = useWeilaFetch<Corp>('corp/org/get-my-org')
 
 const isCreateCorpModalVisible = shallowRef(false)
 
