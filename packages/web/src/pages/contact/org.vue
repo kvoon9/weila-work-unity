@@ -67,7 +67,7 @@ watchEffect(() => {
                 </a-tag>
 
                 <a-tag>
-                  标准版
+                  {{ corp.vip ? `VIP (${new Date(corp.vip_expired * 1000).toLocaleDateString()})` : '标准版' }}
                 </a-tag>
               </div>
             </div>
