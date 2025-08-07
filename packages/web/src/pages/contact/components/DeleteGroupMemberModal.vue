@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import type { GroupMemberModel } from '~/api/contact'
 import Message from '@arco-design/web-vue/es/message'
-import { useMutation } from '@tanstack/vue-query'
-import { weilaApiUrl } from '~/api'
+import { shallowRef } from 'vue'
 
-const props = defineProps<{
+defineProps<{
   groupId?: number
   member?: GroupMemberModel
 }>()
@@ -13,17 +12,13 @@ const emits = defineEmits(['success'])
 
 const { t } = useI18n()
 
-const open = ref(false)
+const open = shallowRef(false)
 
-const { mutate, isPending } = useMutation({
-  mutationFn: () => weilaRequest.post(
-    weilaApiUrl('/corp/web/group-member-delete'),
-    {
-      group_id: props.groupId,
-      member_ids: [props.member?.user_id],
-    },
-  ),
-  onSuccess: () => {
+const { mutateAsync, isPending } = useWeilaMutation<{
+  group_id: number
+  user_id: number
+}>('corp/group/delete-group-member', {
+  onSuccess() {
     open.value = false
     Message.success(t('message.success'))
     emits('success')
@@ -62,7 +57,12 @@ const { mutate, isPending } = useMutation({
               {{ t('button.cancel') }}
             </a-button>
           </DialogClose>
-          <a-button type="primary" :loading="isPending" :disabled="!member" @click="(e) => mutate()">
+          <a-button
+            type="primary" :loading="isPending" :disabled="!member" @click="(e) => mutateAsync({
+              group_id: groupId,
+              user_id: member?.user_id,
+            })"
+          >
             {{ t('button.submit') }}
           </a-button>
         </div>

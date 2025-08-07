@@ -125,15 +125,6 @@ function onSelect(member: GroupMemberModel, e: PointerEvent) {
           <a-table-column :title="t('controls')">
             <template #cell>
               <div flex gap2>
-                <EditGroupMemberModal
-
-                  :group-id="Number(route.params.group_id)" :member="selectedMember"
-                  @success="refetch"
-                >
-                  <a-button v-show="false">
-                    {{ t('button.edit') }}
-                  </a-button>
-                </EditGroupMemberModal>
                 <DeleteGroupMemberModal
                   :group-id="Number(route.params.group_id)" :member="selectedMember"
                   @success="refetch"
