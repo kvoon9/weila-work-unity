@@ -120,7 +120,7 @@ const submit = handleSubmit(async (values: any) => {
             />
           </a-form-item>
           <a-form-item field="track" :label="t('change-member.form.track.label')">
-            <a-radio-group v-model="form.track" type="button" :disabled="!corp?.vip">
+            <a-radio-group v-model="form.track" type="button">
               <a-radio :value="TrackType.Close">
                 {{ t('track-type.close') }}
               </a-radio>
@@ -133,15 +133,10 @@ const submit = handleSubmit(async (values: any) => {
               <a-radio :value="TrackType.High">
                 {{ t('track-type.high') }}
               </a-radio>
-              <a-radio :value="TrackType.Fast">
+              <a-radio v-if="corp?.vip" :value="TrackType.Fast">
                 {{ t('track-type.fast') }}
               </a-radio>
             </a-radio-group>
-            <template #extra>
-              <a-tag v-if="!corp?.vip" mt4 color="orange">
-                VIP 功能
-              </a-tag>
-            </template>
           </a-form-item>
         </a-form>
 
