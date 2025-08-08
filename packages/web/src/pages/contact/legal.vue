@@ -239,7 +239,7 @@ async function uploadFile(option: any) {
 
         <!-- 提交按钮 -->
         <a-form-item>
-          <a-button mla type="primary" size="large" html-type="submit">
+          <a-button type="primary" size="large" html-type="submit">
             更新认证信息
           </a-button>
         </a-form-item>
