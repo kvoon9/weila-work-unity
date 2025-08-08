@@ -1,4 +1,5 @@
 import type { UserModule } from './types'
+import { Notification } from '@arco-design/web-vue'
 import * as v from 'valibot'
 import { setupLayouts } from 'virtual:generated-layouts'
 import { createWebHashHistory } from 'vue-router'
@@ -39,6 +40,18 @@ setup(
 
     // @ts-expect-error type error
     app.use(globalComponents)
+
+    // See: https://arco.design/vue/component/notification#API
+    Notification._context = app._context
+
+    app.config.errorHandler = (error: any, instance, info) => {
+      Notification.error({
+        title: String(error) + String(error?.stack),
+        content: info,
+      })
+
+      console.error('app error', [error, instance, info])
+    }
   },
 )
 

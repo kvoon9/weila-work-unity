@@ -34,7 +34,6 @@ const { mutate, isPending } = useWeilaMutation<{
     refetch()
     emits('success')
   },
-
 })
 
 const submit = handleSubmit(async (values: any) => {
