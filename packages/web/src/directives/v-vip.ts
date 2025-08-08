@@ -10,10 +10,10 @@ interface VipElement extends HTMLElement {
 
 export const vVip: Directive = {
   created(el: VipElement) {
-    const { isVip } = storeToRefs(useAuthStore())
+    const { vip } = storeToRefs(useAuthStore())
 
     watchEffect(() => {
-      if (!isVip.value) {
+      if (vip.value?.vip) {
         removeKillerEvent(el)
       }
       else {

@@ -1,16 +1,51 @@
 import type { LoginModel } from 'generated/mock/weila'
-import type { Corp } from '~/types'
 import md5 from 'md5'
 import { accountHistoryRecord } from '~/shared/const'
+
+export interface VipInfo {
+  vip: number
+  vip_expired: number
+  vip_created: number
+  member: Member
+  dept: Dept
+  group: Group
+  device: Device
+  track: Track
+}
+
+interface Dept {
+  support: boolean
+  dept_limit: number
+  dept_member_limit: number
+}
+
+interface Device {
+  support: boolean
+  device_limit: number
+}
+
+interface Group {
+  support: boolean
+  group_limit: number
+  group_member_limit: number
+}
+
+interface Member {
+  support: boolean
+  member_limit: number
+}
+
+interface Track {
+  support: boolean
+  track_type: number
+}
 
 export const useAuthStore = defineStore('auth', () => {
   const router = useRouter()
 
   const access_token = useLocalStorage('token', '')
 
-  const { data: corp } = useWeilaFetch<Corp>('corp/org/get-my-org')
-
-  const isVip = computed(() => corp.value)
+  const { data: vip } = useWeilaFetch<VipInfo>('corp/org/get-my-vip')
 
   const isLogin = computed(() => Boolean(access_token.value))
 
@@ -58,6 +93,6 @@ export const useAuthStore = defineStore('auth', () => {
     isLogin,
     login,
     logout,
-    isVip,
+    vip,
   }
 })
