@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { Member } from '~/types/api';
-import { Message } from '@arco-design/web-vue';
-import { useQueryClient } from '@tanstack/vue-query';
-import { ref as deepRef, shallowRef } from 'vue';
+import type { Member } from '~/types/api'
+import { Message } from '@arco-design/web-vue'
+import { useQueryClient } from '@tanstack/vue-query'
+import { ref as deepRef, shallowRef } from 'vue'
 
 const props = defineProps<{
   groupId: number

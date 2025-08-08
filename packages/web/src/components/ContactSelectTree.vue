@@ -12,6 +12,10 @@ const props = withDefaults(defineProps<{
   uncheckableIds: () => [],
 })
 
+const treeRef = useTemplateRef('treeRef')
+
+const isVisible = useElementVisibility(treeRef)
+
 const { data: depts } = useWeilaFetch<DeptGetallModel['data']['depts']>('/corp/address/get-all-dept')
 
 const treeData = deepRef<TreeNodeData[]>([])
@@ -28,6 +32,8 @@ const checkedKeys = defineModel<string[]>('checkedKeys', {
   required: false,
   default: [],
 })
+
+watchEffect(() => isVisible.value && (checkedKeys.value = []))
 
 async function loadMore(nodeData: TreeNodeData) {
   const dept_id = Number(nodeData.key.replace('dept-', ''))
@@ -61,10 +67,10 @@ async function loadMore(nodeData: TreeNodeData) {
 
 <template>
   <a-tree
+    ref="treeRef"
     v-model:checked-keys="checkedKeys"
     :data="treeData"
     :load-more="loadMore"
     checkable
-  >
-  </a-tree>
+  />
 </template>
