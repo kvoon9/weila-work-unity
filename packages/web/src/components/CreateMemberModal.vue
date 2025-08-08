@@ -131,7 +131,7 @@ const submit = handleSubmit(async (values: any) => {
               <a-radio :value="TrackType.High">
                 {{ t('track-type.high') }}
               </a-radio>
-              <a-radio v-if="corp?.vip" :value="TrackType.Fast">
+              <a-radio :disabled="!corp?.vip" :value="TrackType.Fast">
                 {{ t('track-type.fast') }}
               </a-radio>
             </a-radio-group>
