@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import Message from '@arco-design/web-vue/es/message';
-import { useQueryClient } from '@tanstack/vue-query';
-import * as v from 'valibot';
-import { useForm } from 'zod-arco-rules/valibot';
+import Message from '@arco-design/web-vue/es/message'
+import { useQueryClient } from '@tanstack/vue-query'
+import * as v from 'valibot'
+import { useForm } from 'zod-arco-rules/valibot'
 
 const props = defineProps<{
   name?: string
@@ -18,9 +18,7 @@ const open = defineModel('open', { default: false })
 const { rules, form, reset, handleSubmit } = useForm(v.object({
   name: v.optional(v.string(), () => props.name),
   avatar: v.optional(v.string(), () => props.avatar),
-}), {
-  watch: [() => props],
-})
+}))
 
 const formRef = templateRef('formRef')
 

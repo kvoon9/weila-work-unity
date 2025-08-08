@@ -5,6 +5,9 @@ import type { Legal } from '~/types/api'
 
 const router = useRouter()
 
+const curPath = computed(() => router.currentRoute.value.path)
+$inspect(curPath)
+
 const { data: corp } = useWeilaFetch<Corp>('corp/org/get-my-org')
 
 const { data: legal } = useWeilaFetch<Legal>('corp/legal/get-legal')
@@ -53,7 +56,7 @@ function goTo(path: string) {
 <template>
   <div>
     <a-menu
-      :default-selected-keys="[router.currentRoute.value.path]"
+      :selected-keys="[curPath]"
       :style="{ width: '200px', height: '100%' }"
       auto-open
       @menu-item-click="goTo"

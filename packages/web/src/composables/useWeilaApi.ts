@@ -16,9 +16,8 @@ export function useWeilaApi() {
   weilaApi.value.hook('response:error', onError)
 
   weilaApi.value.hook('auth:error', () => {
-    const router = useRouter()
     localStorage.setItem('token', '')
-    router.push('/login')
+    window.location.reload()
   })
   return weilaApi
 }

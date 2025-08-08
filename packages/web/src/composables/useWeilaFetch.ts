@@ -33,7 +33,7 @@ export function useWeilaFetch<T>(
   if (body && (isRef(body) || isFunction(body))) {
     watch([body, url], () => {
       // @ts-expect-error type error
-      if (toValue(tanstackOptions?.enabled ?? true))
+      if (toValue(tanstackOptions?.enabled) !== false)
         refetch()
     }, { deep: true })
   }
