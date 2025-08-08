@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { Corp } from '~/types'
 import type { Member } from '~/types/api'
 import Message from '@arco-design/web-vue/es/message'
 
@@ -16,7 +15,6 @@ const { t } = useI18n()
 const { themeColor } = useAppStore()
 const avatarUploaderRef = templateRef('avatarUploaderRef')
 
-const { data: corp } = useWeilaFetch<Corp>('corp/org/get-my-org')
 const open = defineModel('open', { default: false })
 
 $inspect(() => props.member)
@@ -156,7 +154,7 @@ const submit = handleSubmit(async (values) => {
               <a-radio :value="TrackType.High">
                 {{ t('track-type.high') }}
               </a-radio>
-              <a-radio :disabled="!corp?.vip" :value="TrackType.Fast">
+              <a-radio v-vip :value="TrackType.Fast">
                 {{ t('track-type.fast') }}
               </a-radio>
             </a-radio-group>

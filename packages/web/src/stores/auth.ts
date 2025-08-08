@@ -1,4 +1,5 @@
 import type { LoginModel } from 'generated/mock/weila'
+import type { Corp } from '~/types'
 import md5 from 'md5'
 import { accountHistoryRecord } from '~/shared/const'
 
@@ -6,6 +7,10 @@ export const useAuthStore = defineStore('auth', () => {
   const router = useRouter()
 
   const access_token = useLocalStorage('token', '')
+
+  const { data: corp } = useWeilaFetch<Corp>('corp/org/get-my-org')
+
+  const isVip = computed(() => corp.value)
 
   const isLogin = computed(() => Boolean(access_token.value))
 
@@ -53,5 +58,6 @@ export const useAuthStore = defineStore('auth', () => {
     isLogin,
     login,
     logout,
+    isVip,
   }
 })

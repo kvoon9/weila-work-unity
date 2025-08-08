@@ -198,7 +198,7 @@ function handleSubmit() {
               <a-radio :value="TrackType.High">
                 {{ t('track-type.high') }}
               </a-radio>
-              <a-radio :disabled="!corp?.vip" :value="TrackType.Fast">
+              <a-radio v-vip :value="TrackType.Fast">
                 {{ t('track-type.fast') }}
               </a-radio>
             </a-radio-group>

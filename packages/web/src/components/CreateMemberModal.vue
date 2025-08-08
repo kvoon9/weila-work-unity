@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { Corp } from '~/types'
 import Message from '@arco-design/web-vue/es/message'
 import { useQueryClient } from '@tanstack/vue-query'
 import * as v from 'valibot'
@@ -12,7 +11,6 @@ const avatarUploaderRef = templateRef('avatarUploaderRef')
 
 const open = defineModel('open', { default: false })
 
-const { data: corp } = useWeilaFetch<Corp>('corp/org/get-my-org')
 const { data: depts } = useWeilaFetch('corp/address/get-dept-list', {
   pick: ['depts'],
 })
@@ -131,7 +129,7 @@ const submit = handleSubmit(async (values: any) => {
               <a-radio :value="TrackType.High">
                 {{ t('track-type.high') }}
               </a-radio>
-              <a-radio :disabled="!corp?.vip" :value="TrackType.Fast">
+              <a-radio v-vip :value="TrackType.Fast">
                 {{ t('track-type.fast') }}
               </a-radio>
             </a-radio-group>
