@@ -263,6 +263,7 @@ track-type:
   keep: Keep
   low: Low
   medium: Medium
+  fast: Fast
 type: Type
 user:
   gender: Gender

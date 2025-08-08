@@ -59,11 +59,11 @@ export enum MemberType {
 }
 
 export enum TrackType {
-  Close,
-  High,
-  Medium,
-  Low,
-  Keep,
+  Fast = 60,
+  High = 300,
+  Medium = 900,
+  Low = 3600,
+  Close = 0,
 }
 
 export interface MemberModel {

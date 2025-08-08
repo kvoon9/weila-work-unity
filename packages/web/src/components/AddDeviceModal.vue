@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Corp } from '~/types'
 import { Message } from '@arco-design/web-vue'
 import { useQueryClient } from '@tanstack/vue-query'
 import * as v from 'valibot'
@@ -12,6 +13,8 @@ const formRef = templateRef('formRef')
 const open = defineModel('open', { default: false })
 
 const avatarUploaderRef = templateRef('avatarUploaderRef')
+
+const { data: corp } = useWeilaFetch<Corp>('corp/org/get-my-org')
 
 const { data: depts } = useWeilaFetch('corp/address/get-dept-list', {
   pick: ['depts'],
@@ -117,20 +120,28 @@ const submit = handleSubmit(async (values: any) => {
             />
           </a-form-item>
           <a-form-item field="track" :label="t('change-member.form.track.label')">
-            <a-radio-group v-model="form.track" type="button" :default-value="String(form.track)">
-              <a-radio default-checked :value="TrackType.Close">
+            <a-radio-group v-model="form.track" type="button" :disabled="!corp?.vip">
+              <a-radio :value="TrackType.Close">
                 {{ t('track-type.close') }}
               </a-radio>
-              <a-radio default-checked :value="TrackType.High">
-                {{ t('track-type.high') }}
-              </a-radio>
-              <a-radio default-checked :value="TrackType.Medium">
-                {{ t('track-type.medium') }}
-              </a-radio>
-              <a-radio default-checked :value="TrackType.Low">
+              <a-radio :value="TrackType.Low">
                 {{ t('track-type.low') }}
               </a-radio>
+              <a-radio :value="TrackType.Medium">
+                {{ t('track-type.medium') }}
+              </a-radio>
+              <a-radio :value="TrackType.High">
+                {{ t('track-type.high') }}
+              </a-radio>
+              <a-radio :value="TrackType.Fast">
+                {{ t('track-type.fast') }}
+              </a-radio>
             </a-radio-group>
+            <template #extra>
+              <a-tag v-if="!corp?.vip" mt4 color="orange">
+                VIP 功能
+              </a-tag>
+            </template>
           </a-form-item>
         </a-form>
 

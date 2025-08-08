@@ -185,20 +185,28 @@ function handleSubmit() {
             field="track" :label="t('change-member.form.track.label')"
             :validate-trigger="['change', 'blur']"
           >
-            <a-radio-group v-model="form.track" type="button" :default-value="String(form.track)">
-              <a-radio default-checked :value="TrackType.Close">
+            <a-radio-group v-model="form.track" type="button" :disabled="!corp?.vip">
+              <a-radio :value="TrackType.Close">
                 {{ t('track-type.close') }}
               </a-radio>
-              <a-radio default-checked :value="TrackType.High">
-                {{ t('track-type.high') }}
-              </a-radio>
-              <a-radio default-checked :value="TrackType.Medium">
-                {{ t('track-type.medium') }}
-              </a-radio>
-              <a-radio default-checked :value="TrackType.Low">
+              <a-radio :value="TrackType.Low">
                 {{ t('track-type.low') }}
               </a-radio>
+              <a-radio :value="TrackType.Medium">
+                {{ t('track-type.medium') }}
+              </a-radio>
+              <a-radio :value="TrackType.High">
+                {{ t('track-type.high') }}
+              </a-radio>
+              <a-radio :value="TrackType.Fast">
+                {{ t('track-type.fast') }}
+              </a-radio>
             </a-radio-group>
+            <template #extra>
+              <a-tag v-if="!corp?.vip" mt4 color="orange">
+                VIP 功能
+              </a-tag>
+            </template>
           </a-form-item>
         </a-form>
 

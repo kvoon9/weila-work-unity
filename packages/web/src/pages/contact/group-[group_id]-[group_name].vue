@@ -117,6 +117,7 @@ function onSelect(member: GroupMemberModel, e: PointerEvent) {
                   [TrackType.High]: t('track-type.high'),
                   [TrackType.Medium]: t('track-type.medium'),
                   [TrackType.Low]: t('track-type.low'),
+                  [TrackType.Fast]: t('track-type.fast'),
                 }[track] }}
               </a-tag>
             </template>

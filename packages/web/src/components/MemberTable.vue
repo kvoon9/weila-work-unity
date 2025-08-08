@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { Member } from '~/types/api';
-import { shallowRef } from 'vue';
-import { TrackType } from '~/api/contact';
+import type { Member } from '~/types/api'
+import { shallowRef } from 'vue'
+import { TrackType } from '~/api/contact'
 
 defineProps<{
   members: Member[]
@@ -179,6 +179,7 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
                   [TrackType.High]: t('track-type.high'),
                   [TrackType.Medium]: t('track-type.medium'),
                   [TrackType.Low]: t('track-type.low'),
+                  [TrackType.Fast]: t('track-type.fast'),
                 }[track] }}
             </a-tag>
           </template>

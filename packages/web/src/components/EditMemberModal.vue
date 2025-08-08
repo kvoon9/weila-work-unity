@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import type { Corp } from '~/types'
 import type { Member } from '~/types/api'
 import Message from '@arco-design/web-vue/es/message'
-import { useQueryClient } from '@tanstack/vue-query'
 
+import { useQueryClient } from '@tanstack/vue-query'
 import * as v from 'valibot'
 import { useForm } from 'zod-arco-rules/valibot'
 import { TrackType } from '~/api/contact'
@@ -15,6 +16,7 @@ const { t } = useI18n()
 const { themeColor } = useAppStore()
 const avatarUploaderRef = templateRef('avatarUploaderRef')
 
+const { data: corp } = useWeilaFetch<Corp>('corp/org/get-my-org')
 const open = defineModel('open', { default: false })
 
 $inspect(() => props.member)
@@ -141,20 +143,28 @@ const submit = handleSubmit(async (values) => {
           <a-form-item
             field="track" :label="t('change-member.form.track.label')"
           >
-            <a-radio-group v-model="form.track" type="button" :default-value="String(form.track)">
-              <a-radio default-checked :value="TrackType.Close">
+            <a-radio-group v-model="form.track" type="button" :disabled="!corp?.vip">
+              <a-radio :value="TrackType.Close">
                 {{ t('track-type.close') }}
               </a-radio>
-              <a-radio default-checked :value="TrackType.High">
-                {{ t('track-type.high') }}
-              </a-radio>
-              <a-radio default-checked :value="TrackType.Medium">
-                {{ t('track-type.medium') }}
-              </a-radio>
-              <a-radio default-checked :value="TrackType.Low">
+              <a-radio :value="TrackType.Low">
                 {{ t('track-type.low') }}
               </a-radio>
+              <a-radio :value="TrackType.Medium">
+                {{ t('track-type.medium') }}
+              </a-radio>
+              <a-radio :value="TrackType.High">
+                {{ t('track-type.high') }}
+              </a-radio>
+              <a-radio :value="TrackType.Fast">
+                {{ t('track-type.fast') }}
+              </a-radio>
             </a-radio-group>
+            <template #extra>
+              <a-tag v-if="!corp?.vip" mt4 color="orange">
+                VIP 功能
+              </a-tag>
+            </template>
           </a-form-item>
           <a-form-item>
             <a-button type="primary" html-type="submit">
