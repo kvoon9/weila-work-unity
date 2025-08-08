@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { VipInfo } from '~/stores/auth'
 import type { Corp } from '~/types'
 import type { Legal } from '~/types/api'
 import { shallowRef } from 'vue'
@@ -14,6 +15,8 @@ const { t } = useI18n()
 const router = useRouter()
 
 const { data: corp, isSuccess } = useWeilaFetch<Corp>('corp/org/get-my-org')
+
+const { data: vip } = useWeilaFetch<VipInfo>('corp/org/get-my-vip')
 
 const { data } = useWeilaFetch<Legal>('corp/legal/get-legal')
 
@@ -66,8 +69,14 @@ watchEffect(() => {
                   未认证
                 </a-tag>
 
-                <a-tag>
-                  {{ corp.vip ? `VIP (${new Date(corp.vip_expired * 1000).toLocaleDateString()})` : '标准版' }}
+                <a-tag v-if="vip?.vip === 0">
+                  免费版
+                </a-tag>
+                <a-tag v-else-if="vip?.vip === 1">
+                  标准版
+                </a-tag>
+                <a-tag v-else-if="vip?.vip === 2">
+                  旗舰版 ({{ new Date(corp.vip_expired * 1000).toLocaleDateString() }})
                 </a-tag>
               </div>
             </div>

@@ -1,12 +1,32 @@
 <script setup lang="ts">
 import type { RouteRecordNormalized } from 'vue-router'
+import type { VipInfo } from '~/stores/auth'
 import type { Corp } from '~/types'
 import type { Legal } from '~/types/api'
+import { objectKeys } from '@antfu/utils'
 
 const router = useRouter()
 
 const curPath = computed(() => router.currentRoute.value.path)
 $inspect(curPath)
+
+const { data: vip } = useWeilaFetch<VipInfo>('corp/org/get-my-vip')
+
+const infoMap = {
+  member_limit: '成员数上限',
+  dept_limit: '部门数上限',
+  dept_member_limit: '部门成员数上限',
+  group_limit: '群数量上限',
+  group_member_limit: '群成员数上限',
+  device_limit: '设备数上限',
+}
+
+// const supports = computed(() => !vip.value ? {} : Object.groupBy(vip.value?.vip_supports, i => i.name))
+// $inspect(supports)
+
+const disabledList = computed(() => vip.value?.vip_supports.filter(i => !i.support).map(i => i.name) || [])
+
+$inspect(disabledList)
 
 const { data: corp } = useWeilaFetch<Corp>('corp/org/get-my-org')
 
@@ -84,7 +104,18 @@ function goTo(path: string) {
         </div>
         <template #content>
           <div bg-white border p4 rounded-lg>
-            To-dos
+            <a-descriptions
+              :column="1"
+              :data="vip.vip_supports.flatMap((i) => {
+                const limits = objectKeys(i).filter(i => i.includes('limit'))
+
+                return limits.map(limit => ({
+                  // @ts-expect-error type error
+                  label: infoMap?.[limit],
+                  value: i[limit],
+                }))
+              })" bordered
+            />
           </div>
         </template>
       </a-trigger>
@@ -95,7 +126,7 @@ function goTo(path: string) {
         <template #title>
           {{ name }}
         </template>
-        <a-menu-item v-for="i in submenu" :key="i.path">
+        <a-menu-item v-for="i in submenu" :key="i.path" :disabled="disabledList.find(name => i.path.includes(name))">
           {{ i.meta.name }}
         </a-menu-item>
       </a-sub-menu>

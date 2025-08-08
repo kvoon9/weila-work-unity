@@ -6,38 +6,20 @@ export interface VipInfo {
   vip: number
   vip_expired: number
   vip_created: number
-  member: Member
-  dept: Dept
-  group: Group
-  device: Device
-  track: Track
+  vip_supports: VipSupport[]
 }
 
-interface Dept {
+// split code
+export interface VipSupport {
+  member_limit?: number
+  name: string
   support: boolean
-  dept_limit: number
-  dept_member_limit: number
-}
-
-interface Device {
-  support: boolean
-  device_limit: number
-}
-
-interface Group {
-  support: boolean
-  group_limit: number
-  group_member_limit: number
-}
-
-interface Member {
-  support: boolean
-  member_limit: number
-}
-
-interface Track {
-  support: boolean
-  track_type: number
+  dept_limit?: number
+  dept_member_limit?: number
+  group_limit?: number
+  group_member_limit?: number
+  device_limit?: number
+  type?: number
 }
 
 export const useAuthStore = defineStore('auth', () => {
