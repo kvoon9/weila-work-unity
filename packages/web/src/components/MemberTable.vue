@@ -95,9 +95,9 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
               value: '1',
             }, {
               text: t('user-type.owner'),
-              value: '2',
+              value: '255',
             }],
-            filter: (value: any, record: any) => Number(record.type) === Number(value),
+            filter: (value: [any], record: any) => Number(record.type) === Number(value?.[0]),
             multiple: false,
           }" :width="80"
         >
