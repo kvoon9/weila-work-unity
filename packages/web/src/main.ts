@@ -47,7 +47,7 @@ setup(
 
     app.config.errorHandler = (error: any, instance, info) => {
       Notification.error({
-        title: String(error) + String(error?.stack),
+        title: (error.message || error.stack) ? String(error?.message) + String(error?.stack) : String(error),
         content: info,
       })
 

@@ -8,6 +8,8 @@ defineProps<{
   count: number
 }>()
 
+const curPage = defineModel('page', { default: 0, required: true })
+
 const { t } = useI18n()
 const { themeColor } = useAppStore()
 

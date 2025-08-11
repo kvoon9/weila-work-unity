@@ -82,7 +82,7 @@ const { mutate } = useWeilaMutation<never, {
           </a-option>
         </a-select> -->
       </section>
-      <MemberTable :members :count="data?.count || 0">
+      <MemberTable v-model:page="curPage" :members :count="data?.count || 0">
         <template #actions="{ record }">
           <a-doption
             @click="record.type === 1

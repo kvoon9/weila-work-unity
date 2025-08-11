@@ -348,6 +348,9 @@ declare global {
   export type { Component, Slot, Slots, ComponentPublicInstance, ComputedRef, DirectiveBinding, ExtractDefaultPropTypes, ExtractPropTypes, ExtractPublicPropTypes, InjectionKey, PropType, Ref, MaybeRef, MaybeRefOrGetter, VNode, WritableComputedRef } from 'vue'
   import('vue')
   // @ts-ignore
+  export type { VipInfo, VipSupport } from './stores/auth'
+  import('./stores/auth')
+  // @ts-ignore
   export type { Role } from './stores/user'
   import('./stores/user')
 }

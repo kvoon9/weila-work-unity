@@ -44,6 +44,8 @@ const { mutateAsync: sendSmsVerifyCode } = useWeilaMutation<never, SendVerifySms
 const imageCodeModalVisible = shallowRef(false)
 const imageCode = shallowRef('')
 
+watchEffect(() => imageCodeModalVisible.value && refreshImageCode())
+
 let currentPhoneInfo: {
   phone: string
   countrycode: string

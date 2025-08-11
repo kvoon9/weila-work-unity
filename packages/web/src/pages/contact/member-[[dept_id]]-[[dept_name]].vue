@@ -72,7 +72,7 @@ const isDeleteMemberModalVisible = shallowRef(false)
           </a-option>
         </a-select> -->
       </section>
-      <MemberTable :members :count="data?.count || 0">
+      <MemberTable v-model:page="curPage" :members :count="data?.count || 0">
         <template #actions="{ record }">
           <a-doption v-if="record.type !== 1" @click="isEditMemberModalVisible = true">
             {{ t('button.edit') }}

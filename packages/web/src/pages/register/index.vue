@@ -26,17 +26,23 @@ const { data, refetch: refreshImageCode } = useWeilaFetch<{ id: string, image: s
 
 const { mutate: sendSmsVerifyCode } = useWeilaMutation<never, SendVerifySmsBody>('common/send-sms-verifycode')
 
+const router = useRouter()
+
 const { mutate: regist } = useWeilaMutation<{
-  user_name: string
+  phone: string
   country_code: string
   password: string
-}>('/corp/web/regist', {
+}>('/corp/auth/regist', {
   onSuccess() {
-
+    router.push('/login')
+    Message.success('注册成功')
   },
 })
 
 const imageCodeModalVisible = shallowRef(false)
+$inspect(imageCodeModalVisible)
+watchEffect(() => imageCodeModalVisible.value && refreshImageCode())
+
 const imageCode = shallowRef('')
 
 function handleSendSmsCode() {
@@ -89,7 +95,7 @@ function handleImageCodeCancel() {
 
 const submit = handleSubmit((values: any) => {
   regist({
-    user_name: values.phone,
+    phone: values.phone,
     country_code: values.country_code || '86',
     verifycode: values.verifycode,
     password: md5(values.password),
