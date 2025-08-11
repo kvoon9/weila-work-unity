@@ -3,7 +3,7 @@ import type { RouteRecordNormalized } from 'vue-router'
 import type { VipInfo } from '~/stores/auth'
 import type { Corp } from '~/types'
 import type { Legal } from '~/types/api'
-import { objectKeys } from '@antfu/utils'
+import { clearUndefined, objectKeys } from '@antfu/utils'
 
 const router = useRouter()
 
@@ -11,6 +11,12 @@ const curPath = computed(() => router.currentRoute.value.path)
 $inspect(curPath)
 
 const { data: vip } = useWeilaFetch<VipInfo>('corp/org/get-my-vip')
+
+const vipLevelMap = {
+  0: '免费版',
+  1: '标准版',
+  2: '旗舰版',
+}
 
 const infoMap = {
   num: '企业号',
@@ -85,7 +91,7 @@ function goTo(path: string) {
       <a-trigger v-if="corp" position="bl" auto-fit-position :unmount-on-close="false" :popup-translate="[5, 5]" trigger="hover">
         <div cursor-pointer text-neutral-500 px4 py2 hover:bg-neutral-200:50 rounded border mb4 mt2 flex items-center justify-between @click="goTo('/contact/org')">
           <div flex gap-2 items-center>
-            <a-image width="40" height="40" :src="corp.avatar"  rounded-full size-10/>
+            <a-image width="40" height="40" :src="corp.avatar" rounded-full size-10 />
             <div>
               <div font-bold truncate>
                 {{ corp.name }}
@@ -108,8 +114,19 @@ function goTo(path: string) {
             <a-descriptions
               :column="1"
               :data="[
-                {label: '企业号', value: corp?.num}
+                { label: '企业号', value: corp?.num },
               ]"
+              bordered
+            />
+
+            <a-descriptions
+
+              :column="1"
+              :data="[
+                { label: '会员等级', value: vipLevelMap?.[(vip?.vip || 0) as keyof typeof vipLevelMap] },
+                vip.vip && { label: '生效时间', value: new Date(vip.vip_created * 1000).toLocaleDateString() },
+                vip.vip && { label: '过期时间', value: new Date(vip.vip_expired * 1000).toLocaleDateString() },
+              ].filter(i => i && i.value)"
               bordered
             />
             <a-descriptions

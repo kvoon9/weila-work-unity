@@ -3,9 +3,12 @@ import { objectEntries } from '@antfu/utils'
 import Message from '@arco-design/web-vue/es/message'
 import md5 from 'md5'
 import * as v from 'valibot'
+import { shallowRef } from 'vue'
 import { useForm } from 'zod-arco-rules/valibot'
 
 const { t } = useI18n()
+
+const open = shallowRef(false)
 
 const { form, handleSubmit, rules, reset } = useForm(v.object({
   old_password: v.string(),
@@ -16,6 +19,7 @@ const { mutate, isPending } = useWeilaMutation('corp/user/change-password', {
   onSuccess() {
     Message.success(t('message.success'))
     reset()
+    open.value = false
   },
 })
 
@@ -25,7 +29,7 @@ const submit = handleSubmit((values) => {
 </script>
 
 <template>
-  <DialogRoot>
+  <DialogRoot v-model:open="open">
     <DialogTrigger>
       <slot />
     </DialogTrigger>
