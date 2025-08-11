@@ -9,6 +9,7 @@ export interface Legal {
   business_license: string
   state: number
   updated: string
+  reason?: string
 }
 
 export interface UserLegal {

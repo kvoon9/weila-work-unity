@@ -35,10 +35,13 @@ watchEffect(() => {
       <div border p-6>
         <header flex justify-between>
           <div flex>
-            <img
-              :src="corp.avatar || '/default-avatar.png'" :alt="corp?.name || 'Organization'"
+            <a-image 
+            height="70"
+            width="70"
+            :src="corp.avatar || '/default-avatar.png'" 
               class="mr-4 rounded object-cover size-20"
-            >
+            />
+
             <div space-y-4>
               <h1 dark:text-white flex gap-2>
                 <div>

@@ -13,6 +13,7 @@ $inspect(curPath)
 const { data: vip } = useWeilaFetch<VipInfo>('corp/org/get-my-vip')
 
 const infoMap = {
+  num: '企业号',
   member_limit: '成员数上限',
   dept_limit: '部门数上限',
   dept_member_limit: '部门成员数上限',
@@ -24,7 +25,7 @@ const infoMap = {
 // const supports = computed(() => !vip.value ? {} : Object.groupBy(vip.value?.vip_supports, i => i.name))
 // $inspect(supports)
 
-const disabledList = computed(() => vip.value?.vip_supports.filter(i => !i.support).map(i => i.name) || [])
+const disabledList = computed(() => vip.value?.vip_supports?.filter(i => !i.support).map(i => i.name) || [])
 
 $inspect(disabledList)
 
@@ -84,7 +85,7 @@ function goTo(path: string) {
       <a-trigger v-if="corp" position="bl" auto-fit-position :unmount-on-close="false" :popup-translate="[5, 5]" trigger="hover">
         <div cursor-pointer text-neutral-500 px4 py2 hover:bg-neutral-200:50 rounded border mb4 mt2 flex items-center justify-between @click="goTo('/contact/org')">
           <div flex gap-2 items-center>
-            <img :src="corp.avatar" :alt="corp.name" rounded-full size-10>
+            <a-image width="40" height="40" :src="corp.avatar"  rounded-full size-10/>
             <div>
               <div font-bold truncate>
                 {{ corp.name }}
@@ -103,10 +104,17 @@ function goTo(path: string) {
           <IconRight />
         </div>
         <template #content>
-          <div bg-white border p4 rounded-lg>
+          <div bg-white border p4 rounded-lg space-y-4>
             <a-descriptions
               :column="1"
-              :data="vip.vip_supports.flatMap((i) => {
+              :data="[
+                {label: '企业号', value: corp?.num}
+              ]"
+              bordered
+            />
+            <a-descriptions
+              :column="1"
+              :data="vip?.vip_supports?.flatMap((i) => {
                 const limits = objectKeys(i).filter(i => i.includes('limit'))
 
                 return limits.map(limit => ({

@@ -166,6 +166,11 @@ async function uploadFile(option: any) {
             label: '更新时间',
             value: data.updated,
           },
+
+          {
+            label: '原因',
+            value: data?.reason || '无',
+          },
         ]"
       />
     </div>
