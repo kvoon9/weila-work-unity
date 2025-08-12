@@ -18,6 +18,7 @@ const isCropperModalVisible = shallowRef(false)
 const isSupported = shallowRef(true)
 const { files, open, onChange } = useFileDialog({
   accept: 'image/*',
+  reset: true,
 })
 
 const file = computed(() => files.value?.[0])

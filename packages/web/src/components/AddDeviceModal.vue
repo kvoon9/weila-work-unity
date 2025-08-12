@@ -13,7 +13,6 @@ const open = defineModel('open', { default: false })
 
 const avatarUploaderRef = templateRef('avatarUploaderRef')
 
-$inspect(open)
 const { data: depts } = useWeilaFetch('corp/address/get-dept-list', {
   pick: ['depts'],
 }, {
@@ -32,7 +31,7 @@ const { form, rules, handleSubmit, reset } = useForm(v.object({
   track: v.optional(v.number(), 0),
 }))
 
-$inspect(form)
+watchEffect(() => open.value && reset())
 
 const qc = useQueryClient()
 

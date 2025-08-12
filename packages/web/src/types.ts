@@ -22,6 +22,7 @@ export interface TreeNodeData {
   checkable?: boolean
   isLeaf?: boolean
   children?: TreeNodeData[]
+  disableCheckbox?: boolean
 }
 
 export interface Corp {

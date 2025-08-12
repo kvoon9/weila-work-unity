@@ -24,7 +24,8 @@ watchEffect(() => {
     return {
       title: dept.name,
       key: `dept-${dept.id}`,
-      checkable: false,
+      checkable: true,
+      disableCheckbox: true,
     }
   })
 })
@@ -56,12 +57,14 @@ async function loadMore(nodeData: TreeNodeData) {
       title: `${member.name}`,
       isLeaf: true,
       selectable: !props.uncheckableIds.includes(member.user_id) && props.isItemEnable?.(member),
-      checkable: !props.uncheckableIds.includes(member.user_id) && props.isItemEnable?.(member),
+      checkable: true,
+      disableCheckbox: props.uncheckableIds.includes(member.user_id) && props.isItemEnable?.(member),
     }
   })
 
-  if (nodeData.children.some(i => i.checkable))
-    nodeData.checkable = true
+  if (nodeData.children.some(i => i.checkable)) {
+    nodeData.disableCheckbox = false
+  }
 }
 </script>
 
