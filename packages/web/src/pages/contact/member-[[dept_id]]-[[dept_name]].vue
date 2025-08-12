@@ -47,35 +47,40 @@ const isDeleteMemberModalVisible = shallowRef(false)
 </script>
 
 <template>
-  <div w-full p4 space-y-4>
-    <div w-full rounded p4 space-y-4 bg-base>
-      <section flex items-center space-x-2>
-        <CreateMemberModal @success="refetch">
-          <a-button type="primary">
-            <i i-ph-plus inline-block /> {{ t('button.create-member') }}
-          </a-button>
-        </CreateMemberModal>
-        <AddDeviceModal @success="refetch">
-          <a-button type="primary">
-            <i i-ph-plus inline-block /> {{ t('button.add-device') }}
-          </a-button>
-        </AddDeviceModal>
-        <a-input
-          v-model="filterInput" :max-length="20" show-word-limit
-          :placeholder="`${t('name')}/${t('job-number')}/${t('weila-number')}/${t('phone-number')}`" allow-clear
-          max-w-80
-        />
+  <a-page-header
+    :show-back="false"
+    :title="$route.meta.name"
+  >
+    <a-card>
+      <template #title>
+        <section flex items-center space-x-2>
+          <CreateMemberModal @success="refetch">
+            <a-button type="primary">
+              <i i-ph-plus inline-block /> {{ t('button.create-member') }}
+            </a-button>
+          </CreateMemberModal>
+          <AddDeviceModal @success="refetch">
+            <a-button type="primary">
+              <i i-ph-plus inline-block /> {{ t('button.add-device') }}
+            </a-button>
+          </AddDeviceModal>
+          <a-input
+            v-model="filterInput" :max-length="20" show-word-limit
+            :placeholder="`${t('name')}/${t('job-number')}/${t('weila-number')}/${t('phone-number')}`" allow-clear
+            max-w-80
+          />
         <!-- <a-select v-model:model-value="selectedDepts" :placeholder="t('dept.name')" allow-search allow-clear
           size="large" w-50>
           <a-option v-for="dept in depts" :key="dept.id">
             {{ dept.name }}
           </a-option>
         </a-select> -->
-      </section>
+        </section>
+      </template>
+
       <MemberTable v-model:page="curPage" :members :count="data?.count || 0">
         <template #actions>
           <a-space>
-
             <a-button @click="isEditMemberModalVisible = true">
               {{ t('button.edit') }}
             </a-button>
@@ -94,6 +99,6 @@ const isDeleteMemberModalVisible = shallowRef(false)
           <DeleteMemberModal v-model:open="isDeleteMemberModalVisible" :member="selected" />
         </template>
       </MemberTable>
-    </div>
-  </div>
+    </a-card>
+  </a-page-header>
 </template>

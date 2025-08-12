@@ -47,17 +47,22 @@ function onSelect(dept: DeptModel, e: PointerEvent) {
 </script>
 
 <template>
-  <div w-full p4 space-y-4>
-    <div w-full rounded p4 space-y-4 bg-base>
-      <section space-x-2>
-        <CreateDeptModal @success="refetch">
-          <a-button type="primary">
-            {{ t('button.create-dept') }}
-          </a-button>
-        </CreateDeptModal>
-        <!-- <CreateMemberTrigger />
+  <a-page-header
+    :show-back="false"
+    :title="$route.meta.name"
+  >
+    <a-card>
+      <template #title>
+        <a-space>
+          <CreateDeptModal @success="refetch">
+            <a-button type="primary">
+              {{ t('button.create-dept') }}
+            </a-button>
+          </CreateDeptModal>
+          <!-- <CreateMemberTrigger />
         <AddDeviceTrigger /> -->
-      </section>
+        </a-space>
+      </template>
 
       <!-- @vue-expect-error type error when arco's row-click -->
       <a-table
@@ -94,8 +99,8 @@ function onSelect(dept: DeptModel, e: PointerEvent) {
           </a-table-column>
         </template>
       </a-table>
-    </div>
-  </div>
+    </a-card>
+  </a-page-header>
 
   <EditDeptModal v-model:open="isEditDeptModalVisible" :dept="selectedDept" @success="refetch" />
 </template>

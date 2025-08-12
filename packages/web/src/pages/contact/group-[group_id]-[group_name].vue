@@ -34,15 +34,28 @@ function onSelect(member: GroupMemberModel, e: PointerEvent) {
 </script>
 
 <template>
-  <div w-full p4 space-y-4>
-    <div w-full rounded p4 space-y-4 bg-base>
-      <section space-x-2>
-        <AddGroupMemberModal :group-id="Number(route.params.group_id)" @success="refetch">
-          <a-button>
-            <i i-ph-plus inline-block /> {{ t('button.add-group-member') }}
-          </a-button>
-        </AddGroupMemberModal>
-      </section>
+  <a-page-header
+    show-back
+    title="群组管理"
+    @back="$router.back"
+  >
+    <template #breadcrumb>
+      <a-breadcrumb>
+        <a-breadcrumb-item>群列表</a-breadcrumb-item>
+        <a-breadcrumb-item>{{ route.params.group_name }}</a-breadcrumb-item>
+      </a-breadcrumb>
+    </template>
+    <a-card>
+      <template #title>
+        <a-space>
+          <AddGroupMemberModal :group-id="Number(route.params.group_id)" @success="refetch">
+            <a-button>
+              <i i-ph-plus inline-block /> {{ t('button.add-group-member') }}
+            </a-button>
+          </AddGroupMemberModal>
+        </a-space>
+      </template>
+
       <!-- @vue-expect-error type error when arco's row-click -->
       <a-table
         :columns="cols"
@@ -137,6 +150,6 @@ function onSelect(member: GroupMemberModel, e: PointerEvent) {
           </a-table-column>
         </template>
       </a-table>
-    </div>
-  </div>
+    </a-card>
+  </a-page-header>
 </template>

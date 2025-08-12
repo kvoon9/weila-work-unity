@@ -3,12 +3,9 @@ import type { RouteRecordNormalized } from 'vue-router'
 import type { VipInfo } from '~/stores/auth'
 import type { Corp } from '~/types'
 import type { Legal } from '~/types/api'
-import { objectKeys } from '@antfu/utils'
+import { objectEntries, objectKeys } from '@antfu/utils'
 
 const router = useRouter()
-
-const curPath = computed(() => router.currentRoute.value.path)
-$inspect(curPath)
 
 const { data: vip } = useWeilaFetch<VipInfo>('corp/org/get-my-vip')
 
@@ -75,6 +72,21 @@ const menu = computed<Menu>(() => {
 
   return data
 })
+
+const curPath = computed(() => patchPatch(router.currentRoute.value.path))
+
+function patchPatch(path: string) {
+  // fix path: /contact/dept-25-测试部门2 --> /contact/dept
+  for (const [_, { submenu }] of objectEntries(menu.value)) {
+    const matched = submenu.find(i => path.includes(i.path))
+    if (matched)
+      return matched.path
+  }
+
+  return path
+}
+
+$inspect(curPath)
 
 function goTo(path: string) {
   router.push(path)

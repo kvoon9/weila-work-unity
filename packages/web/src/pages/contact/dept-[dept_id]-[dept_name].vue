@@ -62,26 +62,38 @@ const { mutate } = useWeilaMutation<never, {
 </script>
 
 <template>
-  <div w-full p4 space-y-4>
-    <div w-full rounded p4 space-y-4 bg-base>
-      <section space-x-2 flex items-center>
-        <AddDeptMemberModal :dept-id="Number(route.params.dept_id)" @success="refetch">
-          <a-button type="primary">
-            <i i-ph-plus inline-block /> 添加成员
-          </a-button>
-        </AddDeptMemberModal>
-        <a-input
-          v-model="filterInput" :max-length="20" show-word-limit
-          :placeholder="`${t('name')}/${t('job-number')}/${t('weila-number')}/${t('phone-number')}`" allow-clear
-          max-w-80
-        />
+  <a-page-header
+    title="部门管理"
+    @back="$router.back"
+  >
+    <template #breadcrumb>
+      <a-breadcrumb>
+        <a-breadcrumb-item>部门列表</a-breadcrumb-item>
+        <a-breadcrumb-item>{{ route.params.dept_name }}</a-breadcrumb-item>
+      </a-breadcrumb>
+    </template>
+    <a-card>
+      <template #title>
+        <a-space>
+          <AddDeptMemberModal :dept-id="Number(route.params.dept_id)" @success="refetch">
+            <a-button type="primary">
+              <i i-ph-plus inline-block /> 添加成员
+            </a-button>
+          </AddDeptMemberModal>
+          <a-input
+            v-model="filterInput" :max-length="20" show-word-limit
+            :placeholder="`${t('name')}/${t('job-number')}/${t('weila-number')}/${t('phone-number')}`" allow-clear
+            max-w-80
+          />
         <!-- <a-select v-model:model-value="selectedDepts" :placeholder="t('dept.name')" allow-search allow-clear
           size="large" w-50>
           <a-option v-for="dept in depts" :key="dept.id">
             {{ dept.name }}
           </a-option>
         </a-select> -->
-      </section>
+        </a-space>
+      </template>
+
       <MemberTable v-model:page="curPage" :members :count="data?.count || 0">
         <template #actions="{ record }">
           <a-space>
@@ -121,6 +133,10 @@ const { mutate } = useWeilaMutation<never, {
           </TheModal>
         </template>
       </MemberTable>
-    </div>
+    </a-card>
+  </a-page-header>
+
+  <div w-full p4 space-y-4>
+    <div w-full rounded p4 space-y-4 bg-base />
   </div>
 </template>

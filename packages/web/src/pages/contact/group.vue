@@ -40,16 +40,22 @@ function onSelect(group: GroupModel, e: PointerEvent) {
 </script>
 
 <template>
-  <div w-full p4 space-y-4>
-    <div w-full rounded p4 space-y-4 bg-base>
-      <section space-x-2>
-        <CreateGroupModal @success="refetch">
-          <a-button type="primary">
-            {{ t('button.create-group') }}
-          </a-button>
-        </CreateGroupModal>
-      </section>
-      <!-- @vue-expect-error type error -->
+  <a-page-header
+    :show-back="false"
+    :title="$route.meta.name"
+  >
+    <a-card>
+      <template #title>
+        <a-space>
+          <CreateGroupModal @success="refetch">
+            <a-button type="primary">
+              {{ t('button.create-group') }}
+            </a-button>
+          </CreateGroupModal>
+        </a-space>
+      </template>
+
+      <!-- @vue-expect-error type error when arco's row-click -->
       <a-table
         :pagination="{
           total: data?.count || 0,
@@ -125,6 +131,6 @@ function onSelect(group: GroupModel, e: PointerEvent) {
           </a-table-column>
         </template>
       </a-table>
-    </div>
-  </div>
+    </a-card>
+  </a-page-header>
 </template>
