@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-import { UseImage } from '@vueuse/components'
-import { createReusableTemplate, useFullscreen } from '@vueuse/core'
+import { useFullscreen } from '@vueuse/core'
 import { computed, inject, shallowRef } from 'vue'
 import Menu from '~/components/menu/index.vue'
 import { useAuthStore } from '~/stores/auth'
@@ -15,8 +14,6 @@ const { isFullscreen, toggle: toggleFullScreen } = useFullscreen()
 const topMenu = computed(() => appStore.topMenu && appStore.menu)
 // const toggleTheme = useToggle(isDark)
 
-const [DefineTemplate, ReuseTemplate] = createReusableTemplate()
-
 const toggleDrawerMenu = inject('toggleDrawerMenu') as () => void
 
 // async function toggleLocales() {
@@ -25,8 +22,6 @@ const toggleDrawerMenu = inject('toggleDrawerMenu') as () => void
 //   await loadLanguageAsync(newLocale)
 //   locale.value = newLocale
 // }
-
-const hoverState = shallowRef(false)
 
 interface SelfInfo {
   user_id: number
@@ -59,24 +54,6 @@ function tryLogout() {
 </script>
 
 <template>
-  <DefineTemplate>
-    <div inline-block size-10>
-      <UseImage
-        v-if="selfInfo?.avatar" :src="selfInfo.avatar" alt="upload avatar"
-        class="mb-2 of-hidden rounded-full object-cover"
-      >
-        <template #loading>
-          <div class="animate-pulse rounded-full bg-gray-200 size-10" />
-        </template>
-        <template #error>
-          <i i-carbon-user-avatar-filled class="block rounded-full size-10" :src="selfInfo?.avatar" alt="Avatar" />
-        </template>
-      </UseImage>
-      <i v-else i-carbon-user-avatar-filled size-10 class="block rounded-full" :src="selfInfo?.avatar" alt="Avatar" />
-      <!-- <a-avatar :image-url="avatar?.replace(/^https?:/, '')"  :style="{ backgroundColor: '#3370ff' }" :image-url="user?.avatar" /> -->
-    </div>
-  </DefineTemplate>
-
   <div class="navbar">
     <div class="left-side" space-x-2>
       <a-space>
@@ -131,52 +108,40 @@ function tryLogout() {
         </a-tooltip>
       </li>
       <li>
-        <HoverCardRoot v-model:open="hoverState" :open-delay="0">
-          <HoverCardTrigger
-            class="inline-block cursor-pointer rounded-full shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] outline-none focus:shadow-[0_0_0_2px_white]"
-            target="_blank" rel="noreferrer noopener"
-          >
-            <ReuseTemplate />
-          </HoverCardTrigger>
-          <HoverCardPortal>
-            <HoverCardContent
-              class="data-[side=bottom]:animate-slideUpAndFade data-[side=right]:animate-slideLeftAndFade data-[side=left]:animate-slideRightAndFade data-[side=top]:animate-slideDownAndFade w-[300px] w-fit rounded-md p8 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] bg-base data-[state=open]:transition-all"
-              :side-offset="5"
-            >
-              <div class="flex flex-col gap-[7px]">
-                <ReuseTemplate class="mx-auto" />
-                <div class="flex-col gap-[15px] text-center">
-                  <div v-if="selfInfo" class="flex flex-col gap-2">
-                    <div class="text-lg text-primary font-semibold">
-                      {{ selfInfo.name }}
-                    </div>
-                    <div class="text-secondary text-sm">
-                      {{ t('weila-number') }}: {{ selfInfo.user_num }}
-                    </div>
-                    <div class="flex items-center gap-2">
-                      <a-tag color="blue">
-                        +{{ selfInfo.country_code }} {{ selfInfo.phone }}
-                      </a-tag>
-                    </div>
-                  </div>
-                  <div flex="~ col" mt6 gap2>
-                    <a-button @click="bindingPhoneModalVisible = true">
-                      {{ t('binding-phone') }}
-                    </a-button>
-                    <a-button @click="resetPasswordModalVisible = true">
-                      {{ t('button.reset-password') }}
-                    </a-button>
-                    <a-button @click="tryLogout">
-                      {{ t('logout') }}
-                    </a-button>
-                  </div>
+        <a-dropdown trigger="click">
+          <a-avatar hover:op75 cursor-pointer :image-url="selfInfo?.avatar">
+            <IconUser />
+          </a-avatar>
+
+          <template #content>
+            <div class="p4 flex-col gap-[15px] text-center">
+              <div v-if="selfInfo" class="flex flex-col gap-2">
+                <div class="text-lg text-primary font-semibold">
+                  {{ selfInfo.name }}
+                </div>
+                <div class="text-secondary text-sm">
+                  {{ t('weila-number') }}: {{ selfInfo.user_num }}
+                </div>
+                <div class="flex items-center gap-2">
+                  <a-tag color="blue">
+                    +{{ selfInfo.country_code }} {{ selfInfo.phone }}
+                  </a-tag>
                 </div>
               </div>
-
-              <HoverCardArrow class="fill-white" :width="8" />
-            </HoverCardContent>
-          </HoverCardPortal>
-        </HoverCardRoot>
+              <div flex="~ col" mt6 gap2>
+                <a-button @click="bindingPhoneModalVisible = true">
+                  {{ t('binding-phone') }}
+                </a-button>
+                <a-button @click="resetPasswordModalVisible = true">
+                  {{ t('button.reset-password') }}
+                </a-button>
+                <a-button @click="tryLogout">
+                  {{ t('logout') }}
+                </a-button>
+              </div>
+            </div>
+          </template>
+        </a-dropdown>
       </li>
     </ul>
   </div>

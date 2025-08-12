@@ -115,8 +115,8 @@ $inspect(data)
         <template v-for="page in data?.pages">
           <li v-for="message in page" id="message-list" :key="message.msg_id" flex gap1 p-3>
             <section>
-              <a-avatar>
-                <img alt="avatar" :src="users[message.user_id]?.avatar">
+              <a-avatar :image-url="users[message.user_id]?.avatar">
+                <IconUser />
               </a-avatar>
             </section>
             <section>

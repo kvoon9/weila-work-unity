@@ -67,8 +67,7 @@ function onSelect(member: GroupMemberModel, e: PointerEvent) {
           </a-table-column>
           <a-table-column :title="t('avatar')">
             <template #cell="{ record: { avatar } }">
-              <a-avatar :image-url="avatar?.replace(/^https?:/, '')" :style="{ backgroundColor: '#3370ff' }">
-                <img alt="avatar" :src="avatar">
+              <a-avatar :image-url="avatar?.replace(/^https?:/, '')">
                 <IconUser />
               </a-avatar>
             </template>

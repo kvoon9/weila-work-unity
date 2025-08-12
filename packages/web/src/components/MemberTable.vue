@@ -120,7 +120,9 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
         </a-table-column>
         <a-table-column :title="t('avatar')" :width="70">
           <template #cell="{ record: { avatar } }">
-            <a-avatar :image-url="avatar" :style="{ backgroundColor: '#3370ff' }" />
+            <a-avatar :image-url="avatar">
+              <IconUser />
+            </a-avatar>
           </template>
         </a-table-column>
         <a-table-column :title="t('name')" :width="140">

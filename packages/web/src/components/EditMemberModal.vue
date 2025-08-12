@@ -132,7 +132,7 @@ const submit = handleSubmit(async (values) => {
               unchecked-color="#ddd"
             />
           </a-form-item>
-          <a-form-item field="is_admin" label="管理员">
+          <a-form-item v-if="member?.type !== 1" field="is_admin" label="管理员">
             <a-switch
               v-model="form.is_admin" :checked-value="1" :unchecked-value="0" :checked-color="themeColor"
               unchecked-color="#ddd"

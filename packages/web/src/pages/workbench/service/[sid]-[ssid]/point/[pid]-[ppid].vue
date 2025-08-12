@@ -72,7 +72,9 @@ const tableColumns = [
         <template #columns>
           <a-table-column title="头像" data-index="avatar" :width="70">
             <template #cell="{ record }">
-              <a-avatar :image-url="record.avatar" :style="{ backgroundColor: '#3370ff' }" />
+              <a-avatar :image-url="record.avatar">
+                <IconUser />
+              </a-avatar>
             </template>
           </a-table-column>
           <a-table-column title="姓名" data-index="name" :width="120">

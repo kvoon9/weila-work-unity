@@ -32,6 +32,7 @@ const infoMap = {
 // $inspect(supports)
 
 const disabledList = computed(() => vip.value?.vip_supports?.filter(i => !i.support).map(i => i.name) || [])
+$inspect(disabledList)
 
 $inspect(disabledList)
 

@@ -54,8 +54,7 @@ const showMax = 3
         <a-list-item-meta>
           <template v-if="item.avatar" #avatar>
             <a-avatar :image-url="item.avatar?.replace(/^https?:/, '')" shape="circle">
-              <img v-if="item.avatar" :src="item.avatar">
-              <icon-desktop v-else />
+              <IconUser />
             </a-avatar>
           </template>
           <template #title>
