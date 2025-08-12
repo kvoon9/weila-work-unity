@@ -18,7 +18,7 @@ const ignores = [
 
 export default antfu(
   {
-    formatters: true,
+    formatters: false,
     unocss: false,
     vue: true,
     pnpm: true,

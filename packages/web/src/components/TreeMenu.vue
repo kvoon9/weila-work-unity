@@ -3,7 +3,7 @@ import type { RouteRecordNormalized } from 'vue-router'
 import type { VipInfo } from '~/stores/auth'
 import type { Corp } from '~/types'
 import type { Legal } from '~/types/api'
-import { clearUndefined, objectKeys } from '@antfu/utils'
+import { objectKeys } from '@antfu/utils'
 
 const router = useRouter()
 
@@ -120,12 +120,11 @@ function goTo(path: string) {
             />
 
             <a-descriptions
-
               :column="1"
               :data="[
                 { label: '会员等级', value: vipLevelMap?.[(vip?.vip || 0) as keyof typeof vipLevelMap] },
-                vip.vip && { label: '生效时间', value: new Date(vip.vip_created * 1000).toLocaleDateString() },
-                vip.vip && { label: '过期时间', value: new Date(vip.vip_expired * 1000).toLocaleDateString() },
+                vip?.vip && { label: '生效时间', value: new Date(vip?.vip_created * 1000).toLocaleDateString() },
+                vip?.vip && { label: '过期时间', value: new Date(vip?.vip_expired * 1000).toLocaleDateString() },
               ].filter(i => i && i.value)"
               bordered
             />

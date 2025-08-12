@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import type { DeptGetallModel } from 'generated/mock/weila'
 import type { RegeoModel, UserTrackModel } from '~/api/track'
+import type { TreeNodeData } from '~/types'
+import type { Member } from '~/types/api'
 import { isNull, isNumber, isUndefined } from '@antfu/utils'
 import { Message } from '@arco-design/web-vue'
 import { useQuery } from '@tanstack/vue-query'
@@ -8,9 +11,6 @@ import { ElAmapLoca, ElAmapLocaLine } from '@vuemap/vue-amap-loca'
 import { nanoid } from 'nanoid'
 import { ref as deepRef, shallowRef } from 'vue'
 import { weilaApiUrl } from '~/api'
-import { TreeNodeData } from '~/types'
-import { DeptGetallModel } from 'generated/mock/weila'
-import { Member } from '~/types/api'
 
 definePage({
   meta: {
@@ -71,7 +71,7 @@ async function loadMore(nodeData: TreeNodeData) {
       key: `member-${member.user_id}`,
       title: member.name,
       isLeaf: true,
-      selectable: true
+      selectable: true,
     }
   })
 
@@ -265,10 +265,10 @@ watch(markers, (val, oldVal) => {
   <div flex gap2 p4 bg-base>
     <a-tree-select
       v-model="selectedUserKeys"
-      :data="treeData" 
-      :loadMore
-      :placeholder="t('hint.please-select')" 
-      :block-node="true" 
+      :data="treeData"
+      :load-more
+      :placeholder="t('hint.please-select')"
+      :block-node="true"
       max-w-60
       grow-1
     />

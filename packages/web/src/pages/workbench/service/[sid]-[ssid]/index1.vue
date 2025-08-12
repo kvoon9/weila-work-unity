@@ -18,7 +18,7 @@ interface ServicePointModel {
 const { t } = useI18n()
 
 const sid = useRouteParams('sid', 0, { transform: Number })
-const ssid = useRouteParams('ssid', 0, { transform: Number })
+// const ssid = useRouteParams('ssid', 0, { transform: Number })
 
 const { data, refetch } = useBusinessPointList($v2, computed(() => ({ sid: sid.value })))
 

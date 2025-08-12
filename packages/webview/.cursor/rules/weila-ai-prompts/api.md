@@ -20,7 +20,6 @@
 https://demo.weila.hk/v2/corp/busi/get-my-info
 
 { "errcode": 0, "errmsg": "", "data": { "name": "kevin" } }
-
 ```
 
 返回给我的结果:
@@ -31,7 +30,7 @@ export interface GetMyInfoModel {
   name: string
 }
 
-export function useServiceAccount(payload: Reactive(<GetMyInfoPayload>)) {
+export function useServiceAccount(payload: Reactive<GetMyInfoPayload>) {
   const { $v2 } = useNuxtApp()
 
   return useQuery({
@@ -49,7 +48,6 @@ export function useServiceAccount(payload: Reactive(<GetMyInfoPayload>)) {
 https://demo.weila.hk/v2/corp/busi/change-my-info
 
 {"name": "Anthony Fu"}
-
 ```
 
 返回给我的结果:

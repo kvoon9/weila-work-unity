@@ -4,6 +4,7 @@ import { computedAsync } from '@vueuse/core'
 import imageCompression from 'browser-image-compression'
 import Cropper from 'cropperjs'
 import { defineEmits } from 'unplugin-vue-macros/macros'
+import { shallowRef } from 'vue'
 
 const props = defineProps<{
   file: Blob | File
@@ -16,8 +17,8 @@ const emits = defineEmits<{
 const { t } = useI18n()
 
 const imgRef = templateRef<HTMLImageElement>('imgRef')
-const cropper = ref<Cropper | undefined>(undefined)
-const state = ref<'init' | 'idle' | 'cropping' | 'error'>('init')
+const cropper = shallowRef<Cropper | undefined>(undefined)
+const state = shallowRef<'init' | 'idle' | 'cropping' | 'error'>('init')
 const isLoading = computed(() => state.value === 'cropping')
 
 const src = computedAsync<string>(async () => {

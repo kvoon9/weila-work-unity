@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { shallowRef } from 'vue'
+
 defineProps<{
   classes: string | string[]
   content: {
@@ -6,7 +8,7 @@ defineProps<{
   }
 }>()
 
-const visible = ref(false)
+const visible = shallowRef(false)
 </script>
 
 <template>

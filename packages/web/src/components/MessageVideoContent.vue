@@ -15,7 +15,7 @@ defineProps<{
   }
 }>()
 
-const visible = ref(false)
+const visible = shallowRef(false)
 
 const player = shallowRef<VideoJsPlayer>()
 

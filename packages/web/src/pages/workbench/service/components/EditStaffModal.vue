@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { defineProps, shallowRef } from 'vue'
 
-const props = defineProps<{
+defineProps<{
   staff: any
 }>()
 

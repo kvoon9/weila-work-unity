@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { SendVerifySmsBody } from '~/api/verify-sms';
-import Message from '@arco-design/web-vue/es/message';
-import { timestamp } from '~/shared/states';
+import type { SendVerifySmsBody } from '~/api/verify-sms'
+import Message from '@arco-design/web-vue/es/message'
+import { timestamp } from '~/shared/states'
 
 const props = defineProps<{
   classes?: string | string[]

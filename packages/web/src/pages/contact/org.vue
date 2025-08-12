@@ -35,10 +35,10 @@ watchEffect(() => {
       <div border p-6>
         <header flex justify-between>
           <div flex>
-            <a-image 
-            height="70"
-            width="70"
-            :src="corp.avatar || '/default-avatar.png'" 
+            <a-image
+              height="70"
+              width="70"
+              :src="corp.avatar || '/default-avatar.png'"
               class="mr-4 rounded object-cover size-20"
             />
 

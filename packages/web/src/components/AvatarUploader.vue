@@ -35,7 +35,7 @@ function upload() {
   const formData = new FormData()
   formData.append('file', compressedFile.value)
 
-  return weilaApi.value.v2.request.post< string >('common/upload-file', formData, {
+  return weilaApi.value.v2.request.post<string>('common/upload-file', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
@@ -46,7 +46,7 @@ function upload() {
       }
     },
   })
-    .then((url) => src.value = url)
+    .then(url => src.value = url)
     .catch((error) => {
       Message.error((error as Error)?.message || String(error))
     })

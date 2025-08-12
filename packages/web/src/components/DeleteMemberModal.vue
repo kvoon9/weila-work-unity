@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { Member } from '~/types/api';
-import Message from '@arco-design/web-vue/es/message';
-import { useQueryClient } from '@tanstack/vue-query';
+import type { Member } from '~/types/api'
+import Message from '@arco-design/web-vue/es/message'
+import { useQueryClient } from '@tanstack/vue-query'
 
 defineProps<{
   member?: Member

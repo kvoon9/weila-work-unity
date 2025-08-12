@@ -47,7 +47,6 @@ function handleCreate() {
   // @ts-expect-error type error: `defineExpose` no type declare find
   const { upload } = avatarUploaderRef.value
   if (form.merchant.avatar && !isRemoteImage(form.merchant.avatar)) {
-    console.log('form', form)
     return upload().then(() => create(form))
   }
 

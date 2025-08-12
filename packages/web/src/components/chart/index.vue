@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { nextTick, ref } from 'vue'
+import { nextTick, shallowRef } from 'vue'
 import VCharts from 'vue-echarts'
 // import { useAppStore } from '~/store';
 
@@ -28,7 +28,7 @@ defineProps({
 //   if (appStore.theme === 'dark') return 'dark';
 //   return '';
 // });
-const renderChart = ref(false)
+const renderChart = shallowRef(false)
 // wait container expand
 nextTick(() => {
   renderChart.value = true

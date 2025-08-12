@@ -3,7 +3,7 @@ import type {
   MessageListType,
   MessageRecord,
 } from '~/api/message'
-import { computed, reactive, ref, toRefs } from 'vue'
+import { computed, reactive, shallowRef, toRefs } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   queryMessageList,
@@ -18,7 +18,7 @@ interface TabItem {
   avatar?: string
 }
 const { loading, setLoading } = useLoading(true)
-const messageType = ref('message')
+const messageType = shallowRef('message')
 const { t } = useI18n()
 const messageData = reactive<{
   renderList: MessageRecord[]

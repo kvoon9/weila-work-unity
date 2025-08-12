@@ -5,7 +5,7 @@
   "private": true,
   "packageManager": "pnpm@9.15.0",
   "description": "Arco Design Pro for Vue",
-  "author": "ArcoDesign Team",
+  "author": "Kevin Kwong",
   "license": "MIT",
   "engines": {
     "node": ">=14.0.0"
@@ -92,7 +92,7 @@
     "@vuemap/vue-amap-extra": "catalog:",
     "@vuemap/vue-amap-loca": "catalog:",
     "@weila/network": "workspace:*",
-    "@wl/network": "link://../../../network",
+    "@wl/network": "catalog:",
     "apipost-mock-gen": "catalog:",
     "bumpp": "catalog:",
     "cross-env": "catalog:",

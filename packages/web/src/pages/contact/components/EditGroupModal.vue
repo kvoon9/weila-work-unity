@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { GroupGetallModel } from 'generated/mock/weila'
 import Message from '@arco-design/web-vue/es/message'
-import { useMutation } from '@tanstack/vue-query'
 import * as v from 'valibot'
 import { shallowRef } from 'vue'
 import { useForm } from 'zod-arco-rules/valibot'

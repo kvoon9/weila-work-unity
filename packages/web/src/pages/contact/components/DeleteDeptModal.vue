@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { DeptModel } from '~/api/contact';
-import Message from '@arco-design/web-vue/es/message';
-import { useQueryClient } from '@tanstack/vue-query';
-import { shallowRef } from 'vue';
+import type { DeptModel } from '~/api/contact'
+import Message from '@arco-design/web-vue/es/message'
+import { useQueryClient } from '@tanstack/vue-query'
+import { shallowRef } from 'vue'
 
 defineProps<{
   dept?: DeptModel
