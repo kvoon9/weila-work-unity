@@ -20,6 +20,7 @@ const { mutate, isPending } = useWeilaMutation('corp/address/create-dept', {
     open.value = false
     Message.success(t('message.success'))
     qc.invalidateQueries({ queryKey: ['corp/address/get-all-dept'] })
+    qc.invalidateQueries({ queryKey: ['corp/address/get-dept-list'] })
   },
 })
 

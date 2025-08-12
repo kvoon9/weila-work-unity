@@ -108,7 +108,7 @@ function tryLogout() {
         </a-tooltip>
       </li>
       <li>
-        <a-dropdown trigger="click">
+        <a-dropdown trigger="click" :popup-max-height="false">
           <a-avatar hover:op75 cursor-pointer :image-url="selfInfo?.avatar">
             <IconUser />
           </a-avatar>

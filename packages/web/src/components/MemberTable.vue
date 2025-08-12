@@ -196,14 +196,7 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
 
         <a-table-column :title="t('controls')">
           <template #cell="{ record }">
-            <div flex gap2>
-              <a-dropdown :popup-max-height="false">
-                <a-button>{{ t('controls') }}<icon-down /></a-button>
-                <template #content>
-                  <slot name="actions" v-bind="{ record, selected }" />
-                </template>
-              </a-dropdown>
-            </div>
+            <slot name="actions" v-bind="{ record, selected }" />
           </template>
         </a-table-column>
       </template>

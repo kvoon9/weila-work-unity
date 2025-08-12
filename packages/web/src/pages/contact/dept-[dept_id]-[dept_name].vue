@@ -84,19 +84,21 @@ const { mutate } = useWeilaMutation<never, {
       </section>
       <MemberTable v-model:page="curPage" :members :count="data?.count || 0">
         <template #actions="{ record }">
-          <a-doption
-            @click="record.type === 1
-              ? isEditDeviceModalOpen = true
-              : isEditMemberModalOpen = true"
-          >
-            {{ t('button.edit') }}
-          </a-doption>
-          <!-- <a-doption v-if="type !== 1" @click="isResetPasswordModalVisible = true">
-              {{ t('reset-password.button') }}
-            </a-doption> -->
-          <a-doption @click="isDeleteMemberModalOpen = true">
-            {{ t('button.delete') }}
-          </a-doption>
+          <a-space>
+            <a-button
+              @click="record.type === 1
+                ? isEditDeviceModalOpen = true
+                : isEditMemberModalOpen = true"
+            >
+              {{ t('button.edit') }}
+            </a-button>
+            <!-- <a-doption v-if="type !== 1" @click="isResetPasswordModalVisible = true">
+                {{ t('reset-password.button') }}
+              </a-doption> -->
+            <a-button status="danger" @click="isDeleteMemberModalOpen = true">
+              {{ t('button.delete') }}
+            </a-button>
+          </a-space>
         </template>
         <template #bottom="{ selected }">
           <EditMemberModal v-model:open="isEditMemberModalOpen" :member="selected" />
