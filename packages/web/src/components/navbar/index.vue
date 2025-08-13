@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { useFullscreen } from '@vueuse/core'
 import { computed, inject, shallowRef } from 'vue'
-import Menu from '~/components/menu/index.vue'
 import { useAuthStore } from '~/stores/auth'
 import { version } from '../../../package.json'
 import BindingPhone from '../BindingPhone.vue'
@@ -70,9 +69,6 @@ function tryLogout() {
         <a-tag>{{ version }}</a-tag>
       </a-space>
     </div>
-    <div class="center-side">
-      <Menu v-if="topMenu" />
-    </div>
     <ul class="right-side">
       <!-- <li>
         <a-tooltip :content="t('settings.language')">
@@ -83,15 +79,6 @@ function tryLogout() {
           </a-button>
         </a-tooltip>
       </li> -->
-
-      <li>
-        <!-- <a-button class="nav-btn" type="outline" shape="circle" @click="toggleTheme()">
-          <template #icon>
-            <icon-moon-fill v-if="!isDark" />
-            <icon-sun-fill v-else />
-          </template>
-        </a-button> -->
-      </li>
       <li>
         <a-tooltip
           :content="isFullscreen
@@ -207,10 +194,3 @@ function tryLogout() {
 }
 </style>
 
-<style lang="less">
-.message-popover {
-  .arco-popover-content {
-    margin-top: 0;
-  }
-}
-</style>

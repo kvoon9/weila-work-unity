@@ -4,7 +4,6 @@ import * as v from 'valibot'
 import { setupLayouts } from 'virtual:generated-layouts'
 import { createWebHashHistory } from 'vue-router'
 import { routes } from 'vue-router/auto-routes'
-import globalComponents from '~/components'
 import App from './App.vue'
 import { vVip } from './directives/v-vip'
 import { setup } from './setup'
@@ -38,9 +37,6 @@ setup(
     // install all modules under `modules/`
     Object.values(import.meta.glob<{ install: UserModule }>('./modules/*.ts', { eager: true }))
       .forEach(i => i.install?.(ctx))
-
-    // @ts-expect-error type error
-    app.use(globalComponents)
 
     // See: https://arco.design/vue/component/notification#API
     Notification._context = app._context
