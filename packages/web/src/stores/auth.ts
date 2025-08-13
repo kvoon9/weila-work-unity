@@ -40,6 +40,14 @@ export const useAuthStore = defineStore('auth', () => {
     router.push('/login')
   }
 
+  function needRefresh() {
+    const expireTime = loginTime.value + expiresIn.value * 1000
+    const now = Date.now()
+    const SAFE_GAP = 60 * 1000
+    const res = expireTime - now <= SAFE_GAP
+    return res
+  }
+
   return {
     token,
     refreshToken,
@@ -47,5 +55,6 @@ export const useAuthStore = defineStore('auth', () => {
     loginTime,
     logout,
     vip,
+    needRefresh,
   }
 })
