@@ -24,27 +24,28 @@ export function useWeilaApi() {
     const isPublic = ['login', 'common'].some(i => url.includes(i))
     const isNeedRefresh = needRefresh()
 
-    if (!isPublic && isNeedRefresh) {
-      if (!refreshing) {
-        refreshing = fetch(`/v2/corp/auth/refresh?${stringifyQuery(getOptionsV2())}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ refresh_token: refreshToken.value }),
-        })
-          .then(res => res.json())
-          .then(({ data: auth }: { data: AuthModel }) => {
-            token.value = auth.access_token
-            refreshToken.value = auth.refresh_token
-            expiresIn.value = auth.expires_in
-            loginTime.value = Date.now()
-            return auth
-          })
-      }
+    if (isPublic && !isNeedRefresh)
+      return
 
-      return refreshing
+    if (!refreshing) {
+      refreshing = fetch(`/v2/corp/auth/refresh?${stringifyQuery(getOptionsV2())}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ refresh_token: refreshToken.value }),
+      })
+        .then(res => res.json())
+        .then(({ data: auth }: { data: AuthModel }) => {
+          token.value = auth.access_token
+          refreshToken.value = auth.refresh_token
+          expiresIn.value = auth.expires_in
+          loginTime.value = Date.now()
+          return auth
+        })
     }
+
+    return refreshing
   })
   weilaApi.value.hook('request:error', onError)
   weilaApi.value.hook('response:error', onError)
