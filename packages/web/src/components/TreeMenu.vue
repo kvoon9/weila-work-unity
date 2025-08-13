@@ -4,16 +4,11 @@ import type { VipInfo } from '~/stores/auth'
 import type { Corp } from '~/types'
 import type { Legal } from '~/types/api'
 import { objectEntries, objectKeys } from '@antfu/utils'
+import { vipLevelMap } from '~/shared/const'
 
 const router = useRouter()
 
 const { data: vip } = useWeilaFetch<VipInfo>('corp/org/get-my-vip')
-
-const vipLevelMap = {
-  0: '免费版',
-  1: '标准版',
-  2: '旗舰版',
-}
 
 const infoMap = {
   num: '企业号',
@@ -133,11 +128,12 @@ function goTo(path: string) {
             />
 
             <a-descriptions
+              v-if="vip?.vip"
               :column="1"
               :data="[
-                { label: '会员等级', value: vipLevelMap?.[(vip?.vip || 0) as keyof typeof vipLevelMap] },
-                vip?.vip && { label: '生效时间', value: new Date(vip?.vip_created * 1000).toLocaleDateString() },
-                vip?.vip && { label: '过期时间', value: new Date(vip?.vip_expired * 1000).toLocaleDateString() },
+                { label: '会员等级', value: vip?.vip_name },
+                { label: '生效时间', value: new Date(vip?.vip_created * 1000).toLocaleDateString() },
+                { label: '过期时间', value: new Date(vip?.vip_expired * 1000).toLocaleDateString() },
               ].filter(i => i && i.value)"
               bordered
             />

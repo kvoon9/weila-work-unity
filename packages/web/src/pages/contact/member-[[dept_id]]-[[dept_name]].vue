@@ -40,6 +40,8 @@ const members = computed(() => {
     .sort((a, b) => a.dept_id - b.dept_id)
 })
 
+const isCreateMemberModalVisible = shallowRef(false)
+const isAddDeviceModalVisible = shallowRef(false)
 const isEditMemberModalVisible = shallowRef(false)
 const isEditDeviceModalVisible = shallowRef(false)
 // const isResetPasswordModalVisible = shallowRef(false)
@@ -53,17 +55,14 @@ const isDeleteMemberModalVisible = shallowRef(false)
   >
     <a-card>
       <template #title>
-        <section flex items-center space-x-2>
-          <CreateMemberModal @success="refetch">
-            <a-button type="primary">
-              <i i-ph-plus inline-block /> {{ t('button.create-member') }}
-            </a-button>
-          </CreateMemberModal>
-          <AddDeviceModal @success="refetch">
-            <a-button type="primary">
-              <i i-ph-plus inline-block /> {{ t('button.add-device') }}
-            </a-button>
-          </AddDeviceModal>
+        <a-space>
+          <a-button type="primary" @click="isCreateMemberModalVisible = true">
+            {{ t('button.create-member') }}
+          </a-button>
+
+          <a-button type="primary" @click="isAddDeviceModalVisible = true">
+            {{ t('button.add-device') }}
+          </a-button>
           <a-input
             v-model="filterInput" :max-length="20" show-word-limit
             :placeholder="`${t('name')}/${t('job-number')}/${t('weila-number')}/${t('phone-number')}`" allow-clear
@@ -75,28 +74,30 @@ const isDeleteMemberModalVisible = shallowRef(false)
             {{ dept.name }}
           </a-option>
         </a-select> -->
-        </section>
+        </a-space>
       </template>
 
       <MemberTable v-model:page="curPage" :members :count="data?.count || 0">
-        <template #actions>
+        <template #actions="{ record }">
           <a-space>
-            <a-button @click="isEditMemberModalVisible = true">
+            <a-button @click="() => { isEditMemberModalVisible = true }">
               {{ t('button.edit') }}
             </a-button>
             <!-- <a-doption v-if="type !== 1" @click="isResetPasswordModalVisible = true">
               {{ t('reset-password.button') }}
             </a-doption> -->
-            <a-button status="danger" @click="isDeleteMemberModalVisible = true">
+            <a-button v-if="record.type !== 255" status="danger" @click="isDeleteMemberModalVisible = true">
               {{ t('button.delete') }}
             </a-button>
           </a-space>
         </template>
         <template #bottom="{ selected }">
-          <EditMemberModal v-model:open="isEditMemberModalVisible" :member="selected" />
-          <EditDeviceModal v-model:open="isEditDeviceModalVisible" :member="selected" />
+          <CreateMemberModal v-if="isCreateMemberModalVisible" v-model:open="isCreateMemberModalVisible" @success="refetch" />
+          <AddDeviceModal v-if="isAddDeviceModalVisible" v-model:open="isAddDeviceModalVisible" @success="refetch" />
+          <EditMemberModal v-if="isEditMemberModalVisible" v-model:open="isEditMemberModalVisible" :member="selected" />
+          <EditDeviceModal v-if="isEditDeviceModalVisible" v-model:open="isEditDeviceModalVisible" :member="selected" />
+          <DeleteMemberModal v-if="isDeleteMemberModalVisible" v-model:open="isDeleteMemberModalVisible" :member="selected" />
           <!-- <ResetPasswordModal v-model:open="isResetPasswordModalVisible" :member="selected" /> -->
-          <DeleteMemberModal v-model:open="isDeleteMemberModalVisible" :member="selected" />
         </template>
       </MemberTable>
     </a-card>

@@ -180,9 +180,6 @@ catalogs:
     '@vueuse/sound':
       specifier: ^2.1.3
       version: 2.1.3
-    '@wl/network':
-      specifier: https://pkg.pr.new/kvoon3/wl-network/@weila/network@4bcc921
-      version: 0.0.3
     apipost-mock-gen:
       specifier: ^0.1.5
       version: 0.1.5
@@ -835,8 +832,8 @@ importers:
         specifier: workspace:*
         version: link:../network
       '@wl/network':
-        specifier: 'catalog:'
-        version: '@weila/network@https://pkg.pr.new/kvoon3/wl-network/@weila/network@4bcc921(@netlify/blobs@8.2.0)(axios@1.8.4)(crypto-js@4.2.0)(db0@0.3.2(better-sqlite3@11.10.0))(ioredis@5.6.1)(md5@2.3.0)(ofetch@1.4.1)'
+        specifier: link://../../../network
+        version: link:../../../network
       apipost-mock-gen:
         specifier: 'catalog:'
         version: 0.1.5
@@ -4834,15 +4831,6 @@ packages:
 
   '@webassemblyjs/wast-printer@1.14.1':
     resolution: {integrity: sha512-kPSSXE6De1XOR820C90RIo2ogvZG+c3KiHzqUoO/F34Y2shGzesfqv7o57xrxovZJH/MetF5UjroJ/R/3isoiw==}
-
-  '@weila/network@https://pkg.pr.new/kvoon3/wl-network/@weila/network@4bcc921':
-    resolution: {tarball: https://pkg.pr.new/kvoon3/wl-network/@weila/network@4bcc921}
-    version: 0.0.3
-    peerDependencies:
-      axios: ^1.10.0
-      crypto-js: ^4.2.0
-      md5: ^2.3.0
-      ofetch: ^1.4.1
 
   '@whatwg-node/disposablestack@0.0.6':
     resolution: {integrity: sha512-LOtTn+JgJvX8WfBVJtF08TGrdjuFzGJc4mkP8EdDI8ADbvO7kiexYep1o8dwnt0okb0jYclCDXF13xU7Ge4zSw==}
@@ -16250,34 +16238,6 @@ snapshots:
     dependencies:
       '@webassemblyjs/ast': 1.14.1
       '@xtuc/long': 4.2.2
-
-  '@weila/network@https://pkg.pr.new/kvoon3/wl-network/@weila/network@4bcc921(@netlify/blobs@8.2.0)(axios@1.8.4)(crypto-js@4.2.0)(db0@0.3.2(better-sqlite3@11.10.0))(ioredis@5.6.1)(md5@2.3.0)(ofetch@1.4.1)':
-    dependencies:
-      axios: 1.8.4(debug@4.4.0)
-      crypto-js: 4.2.0
-      hookable: 5.5.3
-      md5: 2.3.0
-      ofetch: 1.4.1
-      unstorage: 1.16.1(@netlify/blobs@8.2.0)(db0@0.3.2(better-sqlite3@11.10.0))(ioredis@5.6.1)
-    transitivePeerDependencies:
-      - '@azure/app-configuration'
-      - '@azure/cosmos'
-      - '@azure/data-tables'
-      - '@azure/identity'
-      - '@azure/keyvault-secrets'
-      - '@azure/storage-blob'
-      - '@capacitor/preferences'
-      - '@deno/kv'
-      - '@netlify/blobs'
-      - '@planetscale/database'
-      - '@upstash/redis'
-      - '@vercel/blob'
-      - '@vercel/kv'
-      - aws4fetch
-      - db0
-      - idb-keyval
-      - ioredis
-      - uploadthing
 
   '@whatwg-node/disposablestack@0.0.6':
     dependencies:

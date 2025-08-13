@@ -3,7 +3,7 @@ import type { VipInfo } from '~/stores/auth'
 import type { Corp } from '~/types'
 import type { Legal } from '~/types/api'
 import { shallowRef } from 'vue'
-import { VIP_TYPE } from '~/shared/const'
+import { VIP_LEVEL } from '~/shared/const'
 import CreateCorpModal from './components/CreateCorpModal.vue'
 import EditCorpModal from './components/EditCorpModal.vue'
 
@@ -73,17 +73,8 @@ watchEffect(() => {
                   未认证
                 </a-tag>
 
-                <a-tag v-if="vip?.vip === VIP_TYPE.ORG_VIP_FREE">
-                  免费版
-                </a-tag>
-                <a-tag v-else-if="vip?.vip === VIP_TYPE.ORG_VIP_STANDARD">
-                  标准版
-                </a-tag>
-                <a-tag v-else-if="vip?.vip === VIP_TYPE.ORG_VIP_ULTIMATE">
-                  旗舰版 ({{ new Date(corp.vip_expired * 1000).toLocaleDateString() }})
-                </a-tag>
-                <a-tag v-else-if="vip?.vip === VIP_TYPE.ORG_VIP_EXTRA">
-                  至尊版({{ new Date(corp.vip_expired * 1000).toLocaleDateString() }})
+                <a-tag>
+                  {{ vip?.vip_name }} <span v-if="vip?.vip">({{ new Date(corp.vip_expired * 1000).toLocaleDateString() }})</span>
                 </a-tag>
               </div>
             </div>

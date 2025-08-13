@@ -24,6 +24,15 @@ export function useWeilaFetch<T>(
       body: toValue(body),
       method,
     }),
+    retry: (failCount, error) => {
+      if (failCount > 3)
+        return false
+
+      if (JSON.parse(error.message).errcode === 32)
+        return false
+
+      return true
+    },
     refetchOnWindowFocus: false,
     ...tanstackOptions,
   })

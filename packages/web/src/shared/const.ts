@@ -41,9 +41,16 @@ export const accountHistoryRecord = useLocalStorage('account-history-record', ne
   },
 })
 
-export enum VIP_TYPE {
+export enum VIP_LEVEL {
   ORG_VIP_FREE = 0, // 0
   ORG_VIP_STANDARD = 0x10, // 16
   ORG_VIP_ULTIMATE = 0x20, // 32
   ORG_VIP_EXTRA = 0x30, // 48
+}
+
+export const vipLevelMap = {
+  [VIP_LEVEL.ORG_VIP_FREE]: '免费版',
+  [VIP_LEVEL.ORG_VIP_STANDARD]: '标准版',
+  [VIP_LEVEL.ORG_VIP_ULTIMATE]: '旗舰版',
+  [VIP_LEVEL.ORG_VIP_EXTRA]: '至尊版',
 }

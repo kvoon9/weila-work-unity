@@ -17,9 +17,7 @@ const checkedKeys = deepRef<string[]>([])
 const checkedMemberKeys = computed(() => checkedKeys.value.filter(i => i.startsWith('member-')))
 
 const { data: deptMembers, refetch } = useWeilaFetch<Member[]>('corp/address/get-dept-all-member', {
-  body: {
-    dept_id: props.deptId,
-  },
+  body: { dept_id: props.deptId },
 })
 
 watchEffect(() => open.value && refetch())
@@ -53,7 +51,7 @@ const { mutate, isPending } = useWeilaMutation<never, {
         }"
       >
         <DialogTitle class="m0 text-center text-lg font-semibold leading-loose">
-          {{ t('button.add-group-member') }}
+          添加部门成员
         </DialogTitle>
 
         <div relative p4 min-w-100 max-h-60vh of-y-auto>

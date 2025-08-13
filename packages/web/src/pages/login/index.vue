@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 import type { SendVerifySmsBody } from '~/api/verify-sms'
+import type { AuthModel } from '~/stores/auth'
+import type { Corp } from '~/types'
 import { Message } from '@arco-design/web-vue'
 import md5 from 'md5'
 import * as v from 'valibot'
@@ -53,20 +55,35 @@ let currentPhoneInfo: {
 
 const [isRememberPassword, toggleRememberPassword] = useToggle(false)
 
-const { mutateAsync: passwordMutate, isPending: passwordPending } = useWeilaMutation<{ access_token: string }>('/corp/auth/login', {
+const { mutateAsync: passwordMutate, isPending: passwordPending } = useWeilaMutation('/corp/auth/login', {
+  // @ts-expect-error type error
   onSuccess,
 })
 
-const { mutateAsync: smsMutate, isPending: smsPending } = useWeilaMutation<{ access_token: string }>('/corp/auth/login-by-sms', {
+const { mutateAsync: smsMutate, isPending: smsPending } = useWeilaMutation('/corp/auth/login-by-sms', {
+  // @ts-expect-error type error
   onSuccess,
 })
 
-function onSuccess(res: any) {
-  localStorage.setItem('token', res.access_token)
-  if (activeTab.value === 'password') {
+function onSuccess({ access_token, expires_in, refresh_token, org }: AuthModel & {
+  org?: Corp
+}) {
+  const authStore = useAuthStore()
+  authStore.$patch({
+    token: access_token,
+    expiresIn: expires_in,
+    refreshToken: refresh_token,
+    loginTime: Date.now(),
+  })
+
+  if (activeTab.value === 'password' && isRememberPassword.value) {
     accountHistoryRecord.value.set(loginForm.value.account, loginForm.value.password)
   }
-  router.push('/contact/org').catch(console.error)
+
+  if (!org)
+    router.push('/create-org')
+  else
+    router.push('/contact/org')
 }
 
 function handleSendSmsCode() {

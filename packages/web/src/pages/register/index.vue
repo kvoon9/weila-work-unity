@@ -172,7 +172,7 @@ const submit = handleSubmit((values: any) => {
             allow-clear
             :max-length="6"
           />
-          <img v-if="data?.image" :src="data.image" alt="验证码" @click="() => refreshImageCode()">
+          <img v-if="data?.image" :src="data.image" min-w-30 alt="验证码" @click="() => refreshImageCode()">
         </div>
         <div flex gap4>
           <div flex-1 />
