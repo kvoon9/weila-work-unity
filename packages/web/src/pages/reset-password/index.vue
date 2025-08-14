@@ -16,12 +16,20 @@ const { t } = useI18n()
 const router = useRouter()
 
 const { form, rules, handleSubmit } = useForm(v.object({
-  phone: v.string(),
+  phone: v.pipe(
+    v.string('手机号不能为空'),
+    v.minLength(11, '手机号长度不能少于11位'),
+    v.maxLength(11, '手机号长度不能超过11位'),
+    v.regex(/^1[3-9]\d{9}$/, '手机号格式不正确'),
+  ),
   country_code: v.optional(v.string(), '86'),
-  verifycode: v.string(),
-  password: v.string(),
+  verifycode: v.pipe(
+    v.string('验证码不能为空'),
+    v.regex(/^\d{4,6}$/, '验证码只能为4-6位数字'),
+  ),
+  password:
+    v.string('密码不能为空'),
 }))
-
 const { data, refetch: refreshImageCode } = useWeilaFetch<{ id: string, image: string }>('common/get-image-verifycode?width=160&height=80')
 
 const { mutate: sendSmsVerifyCode } = useWeilaMutation<never, SendVerifySmsBody>('common/send-sms-verifycode')

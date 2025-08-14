@@ -26,9 +26,19 @@ const { form: loginForm, rules: loginRules, handleSubmit: handleLogin } = useFor
 }))
 
 const { form: smsLoginForm, rules: smsLoginRules, handleSubmit: handleSmsLogin } = useForm(v.object({
-  phone: v.string(),
-  country_code: v.optional(v.string(), '86'),
-  verifycode: v.string(),
+  phone: v.pipe(
+    v.string('手机号不能为空'),
+    v.regex(/^1[3-9]\d{9}$/, '手机号格式不正确'),
+  ),
+  country_code: v.optional(v.pipe(
+    v.string(),
+    v.regex(/^\d{1,4}$/, '国家码格式不正确'),
+  ), '86'),
+  verifycode: v.pipe(
+    v.string('验证码不能为空'),
+    v.minLength(4, '验证码至少4位'),
+    v.maxLength(6, '验证码最多6位'),
+  ),
 }))
 
 $inspect(activeTab)

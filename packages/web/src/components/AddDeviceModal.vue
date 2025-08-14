@@ -20,13 +20,13 @@ const { data: depts } = useWeilaFetch('corp/address/get-dept-list', {
 })
 
 const { form, rules, handleSubmit, reset } = useForm(v.object({
-  verifycode: v.string(),
-  name: v.pipe(v.string(), v.maxLength(20)),
+  verifycode: v.pipe(v.string(), v.minLength(1, '验证码不能为空')),
+  name: v.pipe(v.string(), v.minLength(1, '姓名不能为空'), v.maxLength(20, '姓名最多20个字符')),
   job_num: v.optional(v.string(), ''),
   dept_id: v.optional(v.number(), 0),
   sex: v.optional(v.number(), 0),
   avatar: v.optional(v.string(), ''),
-  phone: v.optional(v.string(), ''),
+  phone: v.optional(v.pipe(v.string(), v.regex(/^1[3-9]\d{9}$/, '手机号格式不正确')), ''),
   loc_share: v.optional(v.number(), 0),
   track: v.optional(v.number(), 0),
 }))

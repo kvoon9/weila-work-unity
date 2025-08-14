@@ -10,8 +10,14 @@ const { t } = useI18n()
 const open = defineModel('open', { default: false })
 
 const { form, handleSubmit, rules, reset } = useForm(v.object({
-  old_password: v.string(),
-  new_password: v.string(),
+  old_password: v.pipe(
+    v.string('旧密码不能为空'),
+    v.minLength(6, '旧密码至少 6 位'),
+  ),
+  new_password: v.pipe(
+    v.string('新密码不能为空'),
+    v.minLength(6, '新密码至少 6 位'),
+  ),
 }))
 
 const { mutate, isPending } = useWeilaMutation('corp/user/change-password', {

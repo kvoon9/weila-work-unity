@@ -10,9 +10,16 @@ const { t } = useI18n()
 const open = defineModel('open', { default: false })
 
 const { form, rules, handleSubmit, reset } = useForm(v.object({
-  phone: v.string(),
+  phone: v.pipe(
+    v.string('手机号不能为空'),
+    v.regex(/^1[3-9]\d{9}$/, '手机号格式不正确'),
+  ),
   country_code: v.optional(v.string(), '86'),
-  verifycode: v.string(),
+  verifycode: v.pipe(
+    v.string('验证码不能为空'),
+    v.minLength(4, '验证码至少4位'),
+    v.maxLength(6, '验证码最多6位'),
+  ),
 }))
 
 watchEffect(() => open.value && reset())

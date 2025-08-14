@@ -9,7 +9,10 @@ const { t } = useI18n()
 const open = defineModel('open', { default: false })
 
 const { form, rules, handleSubmit } = useForm(v.object({
-  name: v.string(),
+  name: v.pipe(
+    v.string('姓名必须是字符串'),
+    v.nonEmpty('姓名不能为空'),
+  ),
 }))
 
 const qc = useQueryClient()

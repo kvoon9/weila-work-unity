@@ -18,15 +18,15 @@ const { data: depts } = useWeilaFetch('corp/address/get-dept-list', {
 })
 
 const { form, rules, handleSubmit, reset } = useForm(v.object({
-  name: v.pipe(v.string(), v.maxLength(20)),
-  job_num: v.optional(v.string(), ''),
-  dept_id: v.optional(v.number(), 0),
-  sex: v.optional(v.number(), 0),
-  avatar: v.optional(v.string(), ''),
-  phone: v.string(),
-  is_admin: v.optional(v.number(), 0),
-  loc_share: v.optional(v.number(), 0),
-  track: v.optional(v.number(), 0),
+  name: v.pipe(v.string('姓名必须是字符串'), v.maxLength(20, '姓名最多20个字符')),
+  job_num: v.optional(v.string('工号必须是字符串'), ''),
+  dept_id: v.optional(v.number('部门ID必须是数字'), 0),
+  sex: v.optional(v.number('性别必须是数字'), 0),
+  avatar: v.optional(v.string('头像必须是字符串'), ''),
+  phone: v.pipe(v.string('手机号必须是字符串'), v.regex(/^1[3-9]\d{9}$/, '手机号格式不正确')),
+  is_admin: v.optional(v.number('管理员标识必须是数字'), 0),
+  loc_share: v.optional(v.number('位置共享标识必须是数字'), 0),
+  track: v.optional(v.number('轨迹标识必须是数字'), 0),
 }))
 
 watchEffect(() => open.value && reset())

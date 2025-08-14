@@ -27,8 +27,11 @@ const avatarUploaderRef = templateRef('avatarUploaderRef')
 const open = defineModel('open', { default: false })
 
 const { rules, form, reset, handleSubmit } = useForm(v.object({
-  name: v.string(),
-  avatar: v.optional(v.string(), ''),
+  name: v.pipe(
+    v.string('姓名必须是字符串'),
+    v.nonEmpty('姓名不能为空'),
+  ),
+  avatar: v.optional(v.string('头像必须是字符串'), ''),
 }))
 
 const qc = useQueryClient()
