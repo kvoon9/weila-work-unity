@@ -24,7 +24,7 @@ export function useWeilaApi() {
     const isPublic = ['login', 'common'].some(i => url.includes(i))
     const isNeedRefresh = needRefresh()
 
-    if (isPublic && !isNeedRefresh)
+    if (isPublic || !isNeedRefresh)
       return
 
     if (!refreshing) {
