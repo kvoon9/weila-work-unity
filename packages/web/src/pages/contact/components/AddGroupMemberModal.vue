@@ -32,31 +32,29 @@ const { mutate, isPending } = useWeilaMutation('corp/group/add-group-members', {
 </script>
 
 <template>
-  <ModalTrigger :trigger="{type: 'primary'}" :title=" t('button.add-group-member') ">
+  <ModalTrigger v-model:open="open" :trigger="{ type: 'primary' }" :title=" t('button.add-group-member') ">
     <template #content>
-
-        <div relative p4 min-w-100 max-h-60vh of-y-auto>
-          <ContactSelectTree
-            v-model:checked-keys="checkedKeys"
-            :uncheckable-ids="groupMembers.map(i => i.user_id)"
-            :is-item-enable="(member) => {
-              return member.grp_cnt < member.grp_lmt
-            }"
-          />
-        </div>
+      <div relative p4 min-w-100 max-h-60vh of-y-auto>
+        <ContactSelectTree
+          v-model:checked-keys="checkedKeys"
+          :uncheckable-ids="groupMembers.map(i => i.user_id)"
+          :is-item-enable="(member) => {
+            return member.grp_cnt < member.grp_lmt
+          }"
+        />
+      </div>
     </template>
     <template #footer>
-
-          <a-button
-            type="primary" :disabled="!checkedMemberKeys?.length" :loading="isPending" @click="() => mutate({
-              group_id: Number(props.groupId),
-              user_ids: checkedKeys.filter((key) => key.startsWith('member')).map((key) => {
-                return Number(key.replace('member-', ''))
-              }),
-            })"
-          >
-            {{ t('button.submit') }}
-          </a-button>
+      <a-button
+        type="primary" :disabled="!checkedMemberKeys?.length" :loading="isPending" @click="() => mutate({
+          group_id: Number(props.groupId),
+          user_ids: checkedKeys.filter((key) => key.startsWith('member')).map((key) => {
+            return Number(key.replace('member-', ''))
+          }),
+        })"
+      >
+        {{ t('button.submit') }}
+      </a-button>
     </template>
   </ModalTrigger>
 </template>

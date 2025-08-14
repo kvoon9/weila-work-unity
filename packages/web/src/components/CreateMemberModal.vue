@@ -53,7 +53,7 @@ const submit = handleSubmit(async (values: any) => {
 </script>
 
 <template>
-  <ModalTrigger :trigger="{type: 'primary'}" :title=" t('create-member') ">
+  <ModalTrigger v-model:open="open" :trigger="{ type: 'primary' }" :title=" t('create-member') ">
     <template #content>
       <a-form :rules :model="form" @submit="submit">
         <a-form-item field="name" :label="t('member.form.name.label')" required>

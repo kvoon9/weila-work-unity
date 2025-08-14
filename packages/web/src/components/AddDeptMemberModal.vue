@@ -35,7 +35,7 @@ const { mutate, isPending } = useWeilaMutation<never, {
 </script>
 
 <template>
-  <ModalTrigger title="添加部门成员" :trigger="{ type: 'primary'}">
+  <ModalTrigger v-model:open="open" title="添加部门成员" :trigger="{ type: 'primary' }">
     <template #content>
       <div relative p4 min-w-100 max-h-60vh of-y-auto>
         <ContactSelectTree

@@ -44,7 +44,7 @@ const submit = handleSubmit(async (values: any) => {
 </script>
 
 <template>
-  <ModalTrigger :title=" t('corp.edit') ">
+  <ModalTrigger v-model:open="open" :title=" t('corp.edit') ">
     <template #content>
       <a-form ref="formRef" :rules :model="form" @submit="submit">
         <a-form-item field="name" :label="t('org-form.name.label')">

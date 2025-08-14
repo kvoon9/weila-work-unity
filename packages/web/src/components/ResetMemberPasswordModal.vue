@@ -73,7 +73,7 @@ function handleSubmit() {
 </script>
 
 <template>
-  <ModalTrigger :title=" t('reset-password.button') ">
+  <ModalTrigger v-model:open="open" :title=" t('reset-password.button') ">
     <template #content>
       <a-form ref="formRef" :model="form" @submit="handleSubmit">
         <a-form-item
