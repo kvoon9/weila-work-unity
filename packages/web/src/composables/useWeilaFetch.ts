@@ -28,7 +28,7 @@ export function useWeilaFetch<T>(
       if (failCount > 3)
         return false
 
-      if (JSON.parse(error.message).errcode === 32)
+      if (error?.message && JSON.parse(error.message).errcode === 32)
         return false
 
       return true
