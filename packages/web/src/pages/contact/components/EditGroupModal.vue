@@ -46,42 +46,31 @@ const submit = handleSubmit(async (values) => {
 </script>
 
 <template>
-  <DialogRoot v-model:open="open">
-    <DialogTrigger>
-      <!-- <i i-ph-plus inline-block /> {{ t('dept.create') }} -->
-      <slot />
-    </DialogTrigger>
-    <DialogPortal>
-      <DialogOverlay class="data-[state=open]:animate-overlayShow fixed inset-0 z-100 bg-black:60" />
-      <DialogContent
-        bg-base
-        class="fixed left-[50%] top-[50%] z-[100] max-h-[85vh] max-w-[450px] w-[90vw] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] data-[state=open]:animate-ease-in focus:outline-none"
-      >
-        <DialogTitle class="m0 text-center text-lg font-semibold leading-loose">
-          {{ t('button.edit-group') }}
-        </DialogTitle>
-
-        <a-form :rules :model="form" auto-label-width @submit="submit">
-          <a-form-item field="name" :label="t('org-form.name.label')">
-            <a-input v-model="form.name" :max-length="20" show-word-limit />
-          </a-form-item>
-          <a-form-item field="avatar" :label="t('avatar')">
-            <AvatarUploader ref="avatarUploaderRef" v-model:src="form.avatar" />
-          </a-form-item>
-          <a-form-item field="burst_mode" :label="t('burst-mode')">
-            <a-radio-group v-model="form.burst_mode" direction="vertical">
-              <a-radio :value="0">
-                {{ t('burst-mode-0') }}
-              </a-radio>
-              <a-radio :value="1">
-                {{ t('burst-mode-1') }}
-              </a-radio>
-              <a-radio :value="2">
-                {{ t('burst-mode-2') }}
-              </a-radio>
-            </a-radio-group>
-          </a-form-item>
-          <!-- <a-form-item field="shutup" :label="t('shutup')" >
+  <div inline-block @click="open = true">
+    <slot />
+  </div>
+  <a-modal v-model:visible="open" :title=" t('button.edit-group') " :footer="false">
+    <a-form :rules :model="form" auto-label-width @submit="submit">
+      <a-form-item field="name" :label="t('org-form.name.label')">
+        <a-input v-model="form.name" :max-length="20" show-word-limit />
+      </a-form-item>
+      <a-form-item field="avatar" :label="t('avatar')">
+        <AvatarUploader ref="avatarUploaderRef" v-model:src="form.avatar" />
+      </a-form-item>
+      <a-form-item field="burst_mode" :label="t('burst-mode')">
+        <a-radio-group v-model="form.burst_mode" direction="vertical">
+          <a-radio :value="0">
+            {{ t('burst-mode-0') }}
+          </a-radio>
+          <a-radio :value="1">
+            {{ t('burst-mode-1') }}
+          </a-radio>
+          <a-radio :value="2">
+            {{ t('burst-mode-2') }}
+          </a-radio>
+        </a-radio-group>
+      </a-form-item>
+      <!-- <a-form-item field="shutup" :label="t('shutup')" >
             <a-radio-group v-model="form.shutup" direction="vertical">
               <a-radio :value="0">
                 {{ t('shutup-disable') }}
@@ -91,19 +80,11 @@ const submit = handleSubmit(async (values) => {
               </a-radio>
             </a-radio-group>
           </a-form-item> -->
-          <a-form-item>
-            <a-button mla type="primary" :loading="isPending" html-type="submit">
-              {{ t('button.submit') }}
-            </a-button>
-          </a-form-item>
-        </a-form>
-        <DialogClose
-          class="text-grass11 absolute right-[10px] top-[10px] h-[25px] w-[25px] inline-flex appearance-none items-center justify-center rounded-full hover:bg-gray2 focus:shadow-[0_0_0_2px] focus:shadow-gray7 focus:outline-none"
-          aria-label="Close"
-        >
-          <i i-carbon-close />
-        </DialogClose>
-      </DialogContent>
-    </DialogPortal>
-  </DialogRoot>
+      <a-form-item>
+        <a-button mla type="primary" :loading="isPending" html-type="submit">
+          {{ t('button.submit') }}
+        </a-button>
+      </a-form-item>
+    </a-form>
+  </a-modal>
 </template>

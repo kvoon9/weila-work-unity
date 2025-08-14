@@ -55,10 +55,8 @@ const submit = handleSubmit(async (values: any) => {
 </script>
 
 <template>
-  <a-modal v-model:visible="open" :footer="false" unmount-on-close>
-    <template #title>
-      {{ t('add-device') }}
-    </template>
+  <ModalTrigger :trigger="{type: 'primary'}" :title=" t('add-device') ">
+    <template #content>
 
     <a-form ref="formRef" :model="form" :rules auto-label-width @submit="submit">
       <a-form-item field="name" :label="t('name')" required>
@@ -129,5 +127,7 @@ const submit = handleSubmit(async (values: any) => {
         </a-button>
       </a-form-item>
     </a-form>
-  </a-modal>
+    
+    </template>
+  </ModalTrigger>
 </template>

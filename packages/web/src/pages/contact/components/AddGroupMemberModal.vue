@@ -32,24 +32,8 @@ const { mutate, isPending } = useWeilaMutation('corp/group/add-group-members', {
 </script>
 
 <template>
-  <DialogRoot v-model:open="open">
-    <DialogTrigger>
-      <slot />
-    </DialogTrigger>
-    <DialogPortal>
-      <DialogOverlay class="data-[state=open]:animate-overlayShow fixed inset-0 z-100 bg-black:60" />
-      <DialogContent
-        bg-base
-        class="fixed left-[50%] top-[50%] z-[100] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] data-[state=open]:animate-ease-in bg-base focus:outline-none"
-        @interact-outside="event => {
-          const target = event.target as HTMLElement;
-          console.log(target)
-          if (target?.closest('.arco-select-option')) return event.preventDefault()
-        }"
-      >
-        <DialogTitle class="m0 text-center text-lg font-semibold leading-loose">
-          {{ t('button.add-group-member') }}
-        </DialogTitle>
+  <ModalTrigger :trigger="{type: 'primary'}" :title=" t('button.add-group-member') ">
+    <template #content>
 
         <div relative p4 min-w-100 max-h-60vh of-y-auto>
           <ContactSelectTree
@@ -60,13 +44,9 @@ const { mutate, isPending } = useWeilaMutation('corp/group/add-group-members', {
             }"
           />
         </div>
+    </template>
+    <template #footer>
 
-        <div class="mt-[25px] flex justify-end">
-          <DialogClose as-child>
-            <a-button>
-              {{ t('button.cancel') }}
-            </a-button>
-          </DialogClose>
           <a-button
             type="primary" :disabled="!checkedMemberKeys?.length" :loading="isPending" @click="() => mutate({
               group_id: Number(props.groupId),
@@ -77,14 +57,6 @@ const { mutate, isPending } = useWeilaMutation('corp/group/add-group-members', {
           >
             {{ t('button.submit') }}
           </a-button>
-        </div>
-        <DialogClose
-          class="text-grass11 absolute right-[10px] top-[10px] h-[25px] w-[25px] inline-flex appearance-none items-center justify-center rounded-full hover:bg-gray2 focus:shadow-[0_0_0_2px] focus:shadow-gray7 focus:outline-none"
-          aria-label="Close"
-        >
-          <i i-carbon-close />
-        </DialogClose>
-      </DialogContent>
-    </DialogPortal>
-  </DialogRoot>
+    </template>
+  </ModalTrigger>
 </template>

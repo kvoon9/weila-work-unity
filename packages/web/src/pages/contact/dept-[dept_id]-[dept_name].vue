@@ -43,8 +43,6 @@ const members = computed(() => {
     .sort((a, b) => a.dept_id - b.dept_id)
 })
 
-const isEditMemberModalOpen = shallowRef(false)
-const isEditDeviceModalOpen = shallowRef(false)
 // const isResetPasswordModalVisible = shallowRef(false)
 const isDeleteMemberModalOpen = shallowRef(false)
 
@@ -85,58 +83,31 @@ const { mutate } = useWeilaMutation<never, {
             :placeholder="`${t('name')}/${t('job-number')}/${t('weila-number')}/${t('phone-number')}`" allow-clear
             max-w-80
           />
-        <!-- <a-select v-model:model-value="selectedDepts" :placeholder="t('dept.name')" allow-search allow-clear
-          size="large" w-50>
-          <a-option v-for="dept in depts" :key="dept.id">
-            {{ dept.name }}
-          </a-option>
-        </a-select> -->
         </a-space>
       </template>
 
       <MemberTable v-model:page="curPage" :actions="!!Number(route.params.dept_id)" :members :count="data?.count || 0">
-        <template #actions="{ record }">
+        <template #actions="{ selected }">
           <a-space>
-            <a-button
-              @click="record.type === 1
-                ? isEditDeviceModalOpen = true
-                : isEditMemberModalOpen = true"
-            >
-              {{ t('button.edit') }}
-            </a-button>
-            <!-- <a-doption v-if="type !== 1" @click="isResetPasswordModalVisible = true">
-                {{ t('reset-password.button') }}
-              </a-doption> -->
-            <a-button status="danger" @click="isDeleteMemberModalOpen = true">
-              {{ t('button.delete') }}
-            </a-button>
+            <EditMemberModal :member="selected" />
+            <ModalTrigger :trigger="{ status: 'danger' }" :title=" t('button.delete') ">
+              <template #content>
+                {{ t('delete.modal.hint') }} {{ t('delete.modal.content') }}
+              </template>
+              <template #footer>
+                <a-button
+                  type="primary" @click="mutate({
+                    dept_id: Number(route.params.dept_id),
+                    user_id: selected!.user_id,
+                  })"
+                >
+                  {{ t('button.submit') }}
+                </a-button>
+              </template>
+            </ModalTrigger>
           </a-space>
-        </template>
-        <template #bottom="{ selected }">
-          <EditMemberModal v-model:open="isEditMemberModalOpen" :member="selected" />
-          <EditDeviceModal v-model:open="isEditDeviceModalOpen" :member="selected" />
-          <!-- <ResetPasswordModal v-model:open="isResetPasswordModalVisible" :member="selected" /> -->
-          <TheModal v-model:open="isDeleteMemberModalOpen" :title="t('delete.modal.title')">
-            <template #content>
-              {{ t('delete.modal.hint') }} {{ t('delete.modal.content') }}
-            </template>
-            <template #footer>
-              <a-button
-                type="primary" @click="mutate({
-                  dept_id: Number(route.params.dept_id),
-                  user_id: selected!.user_id,
-                })"
-              >
-                {{ t('button.submit') }}
-              </a-button>
-            </template>
-          </TheModal>
         </template>
       </MemberTable>
     </a-card>
   </a-page-header>
-
-  <div w-full p4 space-y-4>
-    <div w-full rounded p4 space-y-4 bg-base />
-  </div>
 </template>

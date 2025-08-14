@@ -68,11 +68,8 @@ const submit = handleSubmit(async (values) => {
 </script>
 
 <template>
-  <a-modal v-model:visible="open" :footer="false" unmount-on-close>
-    <template #title>
-      {{ t('edit-member') }}
-    </template>
-
+  <ModalTrigger :title=" t('edit') ">
+    <template #content>
     <a-form :rules :model="form" @submit="submit">
       <a-form-item
         field="name" :label="t('member.form.name.label')"
@@ -154,5 +151,7 @@ const submit = handleSubmit(async (values) => {
         </a-button>
       </a-form-item>
     </a-form>
-  </a-modal>
+    
+    </template>
+  </ModalTrigger>
 </template>

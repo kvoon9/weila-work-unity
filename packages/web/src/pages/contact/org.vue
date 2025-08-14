@@ -3,15 +3,11 @@ import type { VipInfo } from '~/stores/auth'
 import type { Corp } from '~/types'
 import type { Legal } from '~/types/api'
 import { shallowRef } from 'vue'
-import { VIP_LEVEL } from '~/shared/const'
-import CreateCorpModal from './components/CreateCorpModal.vue'
 import EditCorpModal from './components/EditCorpModal.vue'
 
 definePage({
   alias: ['/'],
 })
-
-const { t } = useI18n()
 
 const router = useRouter()
 
@@ -20,8 +16,6 @@ const { data: corp, isSuccess } = useWeilaFetch<Corp>('corp/org/get-my-org')
 const { data: vip } = useWeilaFetch<VipInfo>('corp/org/get-my-vip')
 
 const { data } = useWeilaFetch<Legal>('corp/legal/get-legal')
-
-const isEditCorpModalVisible = shallowRef(false)
 
 watchEffect(() => {
   if (isSuccess.value && !corp.value)
@@ -46,13 +40,13 @@ watchEffect(() => {
             <div space-y-4>
               <h1 dark:text-white flex gap-2>
                 <div>
-                  <div text-2xl font-semibold text-gray-800>
-                    {{ corp.name || 'Organization' }}
+                  <div text-2xl font-semibold text-gray-800 flex="~ items-center" gap2>
+                    <span> {{ corp.name || 'Organization' }} </span>
 
-                    <a-button type="secondary" size="mini" rounded @click="isEditCorpModalVisible = true">
+                    <!-- <a-button type="secondary" size="mini" rounded @click="isEditCorpModalVisible = true">
                       <i i-ph-pen mr2 inline-block />
                       {{ t('button.edit') }}
-                    </a-button>
+                    </a-button> -->
                   </div>
                   <!-- <div color-neutral-6>
                     {{ corp.num }}
@@ -79,9 +73,13 @@ watchEffect(() => {
               </div>
             </div>
           </div>
-          <a-button type="primary" @click="$router.push('/contact/legal')">
-            认证
-          </a-button>
+
+          <a-space>
+            <EditCorpModal />
+            <a-button type="primary" @click="$router.push('/contact/legal')">
+              认证
+            </a-button>
+          </a-space>
         </header>
       </div>
       <div grid="~ cols-3 gap-2" my4>
@@ -97,8 +95,4 @@ watchEffect(() => {
       </div>
     </div>
   </div>
-
-  <CreateCorpModal />
-
-  <EditCorpModal v-model:open="isEditCorpModalVisible" :avatar="corp?.avatar" :name="corp?.name" />
 </template>

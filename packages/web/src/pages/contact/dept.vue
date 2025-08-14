@@ -27,14 +27,6 @@ const { data, refetch } = useWeilaFetch<{
   dept: Dept
 }>('corp/address/get-dept-list')
 
-const isEditDeptModalVisible = shallowRef(false)
-const selectedDept = shallowRef<DeptModel | undefined>(undefined)
-
-function openEdit(dept: DeptModel) {
-  selectedDept.value = dept
-  isEditDeptModalVisible.value = true
-}
-
 function onSelect(dept: DeptModel, e: PointerEvent) {
   const whitelistEl = ['.arco-btn']
   // @ts-expect-error type error: no closest attr
@@ -82,14 +74,8 @@ function onSelect(dept: DeptModel, e: PointerEvent) {
           <a-table-column :title="t('controls')">
             <template #cell="{ record }">
               <div v-if="record.id" flex gap2>
-                <a-button @click="() => openEdit(record)">
-                  {{ t('button.edit') }}
-                </a-button>
-                <DeleteDeptModal :dept="record" @success="refetch">
-                  <a-button status="danger">
-                    {{ t('button.delete') }}
-                  </a-button>
-                </DeleteDeptModal>
+                <EditDeptModal :dept="record" />
+                <DeleteDeptModal :dept="record" />
               </div>
             </template>
           </a-table-column>
@@ -97,6 +83,4 @@ function onSelect(dept: DeptModel, e: PointerEvent) {
       </a-table>
     </a-card>
   </a-page-header>
-
-  <EditDeptModal v-model:open="isEditDeptModalVisible" :dept="selectedDept" @success="refetch" />
 </template>
