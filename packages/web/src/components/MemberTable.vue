@@ -3,10 +3,13 @@ import type { Member } from '~/types/api'
 import { shallowRef } from 'vue'
 import { TrackType } from '~/api/contact'
 
-defineProps<{
+withDefaults(defineProps<{
   members: Member[]
   count: number
-}>()
+  actions?: boolean
+}>(), {
+  actions: true,
+})
 
 const curPage = defineModel('page', { default: 0, required: true })
 
@@ -194,7 +197,7 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
           </template>
         </a-table-column>
 
-        <a-table-column :title="t('controls')">
+        <a-table-column v-if="actions" :title="t('controls')">
           <template #cell="{ record }">
             <slot name="actions" v-bind="{ record, selected }" />
           </template>

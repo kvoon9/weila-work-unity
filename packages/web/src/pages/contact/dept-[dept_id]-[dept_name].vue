@@ -94,7 +94,7 @@ const { mutate } = useWeilaMutation<never, {
         </a-space>
       </template>
 
-      <MemberTable v-model:page="curPage" :members :count="data?.count || 0">
+      <MemberTable v-model:page="curPage" :actions="!!Number(route.params.dept_id)" :members :count="data?.count || 0">
         <template #actions="{ record }">
           <a-space>
             <a-button
