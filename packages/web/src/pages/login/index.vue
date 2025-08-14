@@ -34,7 +34,7 @@ const { form: smsLoginForm, rules: smsLoginRules, handleSubmit: handleSmsLogin }
 $inspect(activeTab)
 
 const { data, refetch: refreshImageCode } = useWeilaFetch<{ id: string, image: string }>(
-  'common/get-image-verifycode',
+  'common/get-image-verifycode?width=160&height=80',
   {},
   {
     enabled: () => activeTab.value === 'sms',

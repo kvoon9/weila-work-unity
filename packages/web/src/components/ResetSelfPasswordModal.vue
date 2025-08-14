@@ -28,7 +28,7 @@ const submit = handleSubmit((values) => {
 </script>
 
 <template>
-  <a-modal v-model:visible="open" :title=" t('button.reset-password') ">
+  <a-modal v-model:visible="open" :title=" t('button.reset-password')" :footer="false">
     <a-form :model="form" :rules @submit="submit">
       <a-form-item field="old_password" :label="t('old-password')">
         <a-input v-model="form.old_password" :max-length="20" show-word-limit type="password" />

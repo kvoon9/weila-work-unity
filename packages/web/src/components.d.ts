@@ -23,7 +23,6 @@ declare module 'vue' {
     DialogPortal: typeof import('radix-vue')['DialogPortal']
     DialogRoot: typeof import('radix-vue')['DialogRoot']
     DialogTitle: typeof import('radix-vue')['DialogTitle']
-    DialogTrigger: typeof import('radix-vue')['DialogTrigger']
     EditDeviceModal: typeof import('./components/EditDeviceModal.vue')['default']
     EditMemberModal: typeof import('./components/EditMemberModal.vue')['default']
     FileUploader: typeof import('./components/FileUploader.vue')['default']

@@ -29,18 +29,17 @@ const submit = handleSubmit((values: any) => {
 </script>
 
 <template>
-  <a-button type="primary" @click="open = true">
-    {{ t('button.create-dept') }}
-  </a-button>
-  <a-modal v-model:visible="open" :title="t('dept.create')" :footer="false">
-    <a-form :rules :model="form" @submit="submit">
-      <a-form-item field="name" :label="t('org-form.name.label')">
-        <a-input v-model="form.name" :max-length="20" show-word-limit />
-      </a-form-item>
+  <ModalTrigger v-model:open="open" :trigger="{ type: 'primary' }" :title=" t('button.create-dept') ">
+    <template #content>
+      <a-form :rules :model="form" @submit="submit">
+        <a-form-item field="name" :label="t('org-form.name.label')">
+          <a-input v-model="form.name" :max-length="20" show-word-limit />
+        </a-form-item>
 
-      <a-button type="primary" mla w-fit :loading="isPending" html-type="submit">
-        {{ t('button.submit') }}
-      </a-button>
-    </a-form>
-  </a-modal>
+        <a-button type="primary" mla w-fit :loading="isPending" html-type="submit">
+          {{ t('button.submit') }}
+        </a-button>
+      </a-form>
+    </template>
+  </ModalTrigger>
 </template>

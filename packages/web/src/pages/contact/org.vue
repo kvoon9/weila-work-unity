@@ -2,7 +2,6 @@
 import type { VipInfo } from '~/stores/auth'
 import type { Corp } from '~/types'
 import type { Legal } from '~/types/api'
-import { shallowRef } from 'vue'
 import EditCorpModal from './components/EditCorpModal.vue'
 
 definePage({
@@ -42,15 +41,7 @@ watchEffect(() => {
                 <div>
                   <div text-2xl font-semibold text-gray-800 flex="~ items-center" gap2>
                     <span> {{ corp.name || 'Organization' }} </span>
-
-                    <!-- <a-button type="secondary" size="mini" rounded @click="isEditCorpModalVisible = true">
-                      <i i-ph-pen mr2 inline-block />
-                      {{ t('button.edit') }}
-                    </a-button> -->
                   </div>
-                  <!-- <div color-neutral-6>
-                    {{ corp.num }}
-                  </div> -->
                 </div>
               </h1>
               <div space-x-2>

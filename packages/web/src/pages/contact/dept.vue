@@ -47,8 +47,6 @@ function onSelect(dept: DeptModel, e: PointerEvent) {
       <template #title>
         <a-space>
           <CreateDeptModal @success="refetch" />
-          <!-- <CreateMemberTrigger />
-        <AddDeviceTrigger /> -->
         </a-space>
       </template>
 

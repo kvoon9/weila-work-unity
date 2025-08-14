@@ -34,7 +34,7 @@ const submit = handleSubmit((values: any) => {
 
 const verifyImageAnswer = shallowRef('')
 const { data: verifyImageData, refetch: refreshImageCode } = useWeilaFetch<{ id: string, image: string }>(
-  'common/get-image-verifycode',
+  'common/get-image-verifycode?width=160&height=80',
   {},
   {
     enabled: open,
@@ -81,7 +81,7 @@ const { data: verifyImageData, refetch: refreshImageCode } = useWeilaFetch<{ id:
             allow-clear
             :max-length="6"
           />
-          <img v-if="verifyImageData?.image" :src="verifyImageData.image" alt="验证码" min-w-30 @click="() => refreshImageCode()">
+          <img v-if="verifyImageData?.image" :src="verifyImageData.image" alt="验证码" w-30 @click="() => refreshImageCode()">
         </div>
       </a-form-item>
 
