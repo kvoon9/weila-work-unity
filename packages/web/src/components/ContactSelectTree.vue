@@ -83,8 +83,7 @@ async function loadMore(nodeData: TreeNodeData) {
       :data="treeData"
       :load-more="loadMore"
       checkable
-      @check="(_: string[], data: {checked: boolean, node:TreeNodeData}) => {
-        const { node, checked } = data
+      @check="(_: string[], { node, checked }: {checked: boolean, node:TreeNodeData}) => {
         if (checked && node.key.startsWith('dept') && !node.children?.length)
           loadMore(node).then(children => children && (checkedKeys = [
             ...checkedKeys,
