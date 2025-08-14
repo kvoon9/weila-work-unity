@@ -54,11 +54,7 @@ function onSelect(dept: DeptModel, e: PointerEvent) {
     <a-card>
       <template #title>
         <a-space>
-          <CreateDeptModal @success="refetch">
-            <a-button type="primary">
-              {{ t('button.create-dept') }}
-            </a-button>
-          </CreateDeptModal>
+          <CreateDeptModal @success="refetch" />
           <!-- <CreateMemberTrigger />
         <AddDeviceTrigger /> -->
         </a-space>

@@ -17,35 +17,41 @@ export function useWeilaApi() {
   ))
 
   weilaApi.value.hook('request:prepare', async (ctx) => {
-    const { needRefresh } = useAuthStore()
-    const { refreshToken, token, expiresIn, loginTime } = storeToRefs(useAuthStore())
+    try {
+      const { needRefresh } = useAuthStore()
+      const { refreshToken, token, expiresIn, loginTime } = storeToRefs(useAuthStore())
 
-    const url = ctx.request as string
-    const isPublic = ['login', 'common'].some(i => url.includes(i))
-    const isNeedRefresh = needRefresh()
+      const url = (ctx?.request || ctx?.url) || '' as string
+      const isPublic = ['login', 'common'].some(i => url.includes(i))
+      const isNeedRefresh = needRefresh()
 
-    if (isPublic || !isNeedRefresh)
-      return
+      if (isPublic || !isNeedRefresh)
+        return
 
-    if (!refreshing) {
-      refreshing = fetch(`/v2/corp/auth/refresh?${stringifyQuery(getOptionsV2())}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ refresh_token: refreshToken.value }),
-      })
-        .then(res => res.json())
-        .then(({ data: auth }: { data: AuthModel }) => {
-          token.value = auth.access_token
-          refreshToken.value = auth.refresh_token
-          expiresIn.value = auth.expires_in
-          loginTime.value = Date.now()
-          return auth
+      if (!refreshing) {
+        refreshing = fetch(`/v2/corp/auth/refresh?${stringifyQuery(getOptionsV2())}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ refresh_token: refreshToken.value }),
         })
-    }
+          .then(res => res.json())
+          .then(({ data: auth }: { data: AuthModel }) => {
+            token.value = auth.access_token
+            refreshToken.value = auth.refresh_token
+            expiresIn.value = auth.expires_in
+            loginTime.value = Date.now()
+            return auth
+          })
+      }
 
-    return refreshing
+      return refreshing
+    }
+    catch (error) {
+      console.error('error', error)
+      console.error('ctx', ctx)
+    }
   })
   weilaApi.value.hook('request:error', onError)
   weilaApi.value.hook('response:error', onError)
@@ -58,16 +64,13 @@ export function useWeilaApi() {
 }
 
 function onError(error: any) {
+  console.error('error', error)
   if (error instanceof Error) {
     Message.error(error.message)
   }
   else {
     const { errcode, errmsg } = error
-    if (errcode !== undefined && errmsg !== undefined) {
+    if (errcode !== undefined && errmsg !== undefined)
       Message.error(`${errcode}: ${errmsg}`)
-    }
-    else {
-      console.error(error)
-    }
   }
 }

@@ -47,11 +47,7 @@ function onSelect(group: GroupModel, e: PointerEvent) {
     <a-card>
       <template #title>
         <a-space>
-          <CreateGroupModal @success="refetch">
-            <a-button type="primary">
-              {{ t('button.create-group') }}
-            </a-button>
-          </CreateGroupModal>
+          <CreateGroupModal @success="refetch" />
         </a-space>
       </template>
 
