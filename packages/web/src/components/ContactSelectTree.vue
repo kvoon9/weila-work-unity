@@ -69,6 +69,8 @@ async function loadMore(nodeData: TreeNodeData) {
   if (nodeData.children.some(i => i.checkable)) {
     nodeData.disableCheckbox = false
   }
+
+  return members
 }
 </script>
 
@@ -84,7 +86,10 @@ async function loadMore(nodeData: TreeNodeData) {
       @check="(_: string[], data: {checked: boolean, node:TreeNodeData}) => {
         const { node, checked } = data
         if (checked && node.key.startsWith('dept') && !node.children?.length)
-          loadMore(node)
+          loadMore(node).then(children => children && (checkedKeys = [
+            ...checkedKeys,
+            ...children.map(i => `member-${i.user_id}`),
+          ]))
       }"
     />
   </div>
