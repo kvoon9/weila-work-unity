@@ -16,21 +16,9 @@ const avatarUploaderRef = templateRef('avatarUploaderRef')
 // type BurstMode = 0 | 1 | 2
 
 const { form, rules, handleSubmit, reset } = useForm(v.object({
-  name: v.pipe(
-    v.string('名称必须是字符串'),
-    v.nonEmpty('名称不能为空'),
-  ),
-  burst_mode: v.optional(
-    v.pipe(
-      v.number('爆发模式必须是数字'),
-      v.minValue(0, '爆发模式不能小于0'),
-    ),
-    0,
-  ),
-  avatar: v.optional(
-    v.string('头像必须是字符串'),
-    '',
-  ),
+  name: v.pipe( v.string('名称必须是字符串'), v.nonEmpty('名称不能为空'),),
+  burst_mode: v.optional(v.number(), 0),
+  avatar: v.optional(v.string('头像必须是字符串'), ''),
 }))
 
 const { mutate, isPending } = useWeilaMutation('corp/group/create-group', {

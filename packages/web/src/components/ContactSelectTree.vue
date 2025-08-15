@@ -75,21 +75,21 @@ async function loadMore(nodeData: TreeNodeData) {
 </script>
 
 <template>
-  <div>
-    <a-tree
-      ref="treeRef"
-      v-model:checked-keys="checkedKeys"
-      show-lines
-      :data="treeData"
-      :load-more="loadMore"
-      checkable
-      @check="(_: string[], { node, checked }: {checked: boolean, node:TreeNodeData}) => {
-        if (checked && node.key.startsWith('dept') && !node.children?.length)
-          loadMore(node).then(children => children && (checkedKeys = [
-            ...checkedKeys,
-            ...children.map(i => `member-${i.user_id}`),
-          ]))
-      }"
-    />
-  </div>
+  <a-tree
+    ref="treeRef"
+    v-model:checked-keys="checkedKeys"
+    blockNode
+    show-lines
+    :data="treeData"
+    :load-more="loadMore"
+    checkable
+    @check="(_: string[], { node, checked }: {checked: boolean, node:TreeNodeData}) => {
+      if (checked && node.key.startsWith('dept') && !node.children?.length)
+        loadMore(node).then(children => children && (checkedKeys = [
+          ...checkedKeys,
+          ...children.map(i => `member-${i.user_id}`),
+        ]))
+    }"
+  >
+  </a-tree>
 </template>
