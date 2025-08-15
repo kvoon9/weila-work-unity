@@ -4,7 +4,7 @@ import Message from '@arco-design/web-vue/es/message'
 import { useQueryClient } from '@tanstack/vue-query'
 import { shallowRef } from 'vue'
 
-const curPage = shallowRef(0)
+const curPage = shallowRef(1)
 const pageSize = shallowRef(10)
 
 const route = useRoute('/contact/dept-[dept_id]-[dept_name]')

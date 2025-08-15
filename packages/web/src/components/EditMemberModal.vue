@@ -146,7 +146,7 @@ const submit = handleSubmit(async (values) => {
           </a-radio-group>
         </a-form-item>
         <a-form-item>
-          <a-button type="primary" html-type="submit">
+          <a-button mla type="primary" html-type="submit">
             {{ t('button.submit') }}
           </a-button>
         </a-form-item>

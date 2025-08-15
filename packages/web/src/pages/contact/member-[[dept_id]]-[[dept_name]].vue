@@ -13,7 +13,7 @@ const { t } = useI18n()
 
 const filterInput = shallowRef('')
 
-const curPage = shallowRef(0)
+const curPage = shallowRef(1)
 const pageSize = shallowRef(10)
 
 const { data } = useWeilaFetch<{
@@ -46,7 +46,7 @@ const members = computed(() => {
     <a-card>
       <template #title>
         <a-space>
-          <CreateMemberModal/>
+          <CreateMemberModal />
 
           <AddDeviceModal />
 

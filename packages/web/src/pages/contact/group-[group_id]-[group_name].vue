@@ -9,7 +9,7 @@ import DeleteGroupMemberModal from './components/DeleteGroupMemberModal.vue'
 const { t } = useI18n()
 const route = useRoute('/contact/group-[group_id]-[group_name]')
 
-const curPage = shallowRef(0)
+const curPage = shallowRef(1)
 const pageSize = shallowRef(10)
 
 const { data, refetch } = useWeilaFetch(() => `corp/group/get-group-member-list?page=${curPage.value}&size=${pageSize.value}`, {
@@ -60,12 +60,15 @@ function onSelect(member: GroupMemberModel, e: PointerEvent) {
       <a-table
         :columns="cols"
         :pagination="{
+          pageSize: 10,
           total: data?.count || 0,
         }"
-        :data="data?.members" size="medium" :column-resizable="true" :scroll="{
+        :data="data?.members"
+        size="medium" :column-resizable="true" :scroll="{
           x: 1000,
           y: 600,
-        }" :scrollbar="true" @row-click="(...args) => onSelect(...args)"
+        }" :scrollbar="true"
+        @page-change="(page) => curPage = page" @row-click="(...args) => onSelect(...args)"
       >
         <template #columns>
           <a-table-column :title="t('type')">

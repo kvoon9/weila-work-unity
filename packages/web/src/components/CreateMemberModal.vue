@@ -23,7 +23,7 @@ const { form, rules, handleSubmit, reset } = useForm(v.object({
   dept_id: v.optional(v.number('部门ID必须是数字'), 0),
   sex: v.optional(v.number('性别必须是数字'), 0),
   avatar: v.optional(v.string('头像必须是字符串'), ''),
-  phone: v.pipe(v.string('手机号必须是字符串'), v.regex(/^1[3-9]\d{9}$/, '手机号格式不正确')),
+  phone: v.pipe(v.string('手机号必须是字符串')),
   is_admin: v.optional(v.number('管理员标识必须是数字'), 0),
   loc_share: v.optional(v.number('位置共享标识必须是数字'), 0),
   track: v.optional(v.number('轨迹标识必须是数字'), 0),

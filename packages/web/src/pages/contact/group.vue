@@ -17,7 +17,7 @@ const { t } = useI18n()
 
 const router = useRouter()
 
-const curPage = shallowRef(0)
+const curPage = shallowRef(1)
 const pageSize = shallowRef(10)
 
 const { data, refetch } = useWeilaFetch(() => `corp/group/get-group-list?page=${curPage.value}&size=${pageSize.value}`)
@@ -54,12 +54,15 @@ function onSelect(group: GroupModel, e: PointerEvent) {
       <!-- @vue-expect-error type error when arco's row-click -->
       <a-table
         :pagination="{
+          pageSize: 10,
           total: data?.count || 0,
         }"
         :data="data?.groups" size="medium" :column-resizable="true" :scroll="{
           x: 1000,
           y: 600,
         }" :scrollbar="true" @row-click="(...args) => onSelect(...args)"
+
+        @page-change="(page) => curPage = page"
       >
         <template #columns>
           <a-table-column :title="t('avatar')">

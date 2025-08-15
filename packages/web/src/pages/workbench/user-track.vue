@@ -223,15 +223,8 @@ watch(markers, (val, oldVal) => {
   const renderMarker = async (map: AMap.Map) => {
     val.forEach(i => map.add(i))
 
-    if (val.length) {
-      map.setFitView(
-        [
-          ...val,
-          infoWindow.value,
-        ]
-          .filter(i => !isUndefined(i) && !isNull(i)),
-      )
-    }
+    if (val.length)
+      map.setFitView([...val, infoWindow.value].filter(i => !isUndefined(i) && !isNull(i)))
 
     return true
   }
