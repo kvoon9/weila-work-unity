@@ -65,8 +65,9 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
     >
       <template #columns>
         <a-table-column :title="t('member.state')" :width="90">
-          <template #cell="{ record: { state, user_id } }">
+          <template #cell="{ record: { state, user_id, type } }">
             <a-switch
+              v-if="type !== 255"
               :default-checked="Boolean(!state)" :checked-value="0" :unchecked-value="1"
               :checked-color="themeColor" unchecked-color="#ddd" :before-change="(state) => toggleMemberState(
                 user_id,
@@ -128,7 +129,11 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
             </a-avatar>
           </template>
         </a-table-column>
-        <a-table-column :title="t('name')" :width="140">
+        <a-table-column
+          :title="t('name')" :width="140" :sortable="{
+            sortDirections: ['ascend', 'descend'],
+          }"
+        >
           <template #cell="{ record: { name } }">
             {{ name }}
           </template>
@@ -150,7 +155,11 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
             {{ depts?.find(d => d.id === dept_id)?.name || '' }}
           </template>
         </a-table-column>
-        <a-table-column :title="t('created')" :width="120">
+        <a-table-column
+          :title="t('created')" :width="120" :sortable="{
+            sortDirections: ['ascend', 'descend'],
+          }"
+        >
           <template #cell="{ record: { created } }">
             {{ new Date(created * 1000).toLocaleDateString() }}
           </template>
