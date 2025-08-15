@@ -5,12 +5,10 @@ import type { TreeNodeData } from '~/types'
 import type { Member } from '~/types/api'
 import { isNull, isNumber, isUndefined } from '@antfu/utils'
 import { Message } from '@arco-design/web-vue'
-import { useQuery } from '@tanstack/vue-query'
 import { ElAmap } from '@vuemap/vue-amap'
 import { ElAmapLoca, ElAmapLocaLine } from '@vuemap/vue-amap-loca'
 import { nanoid } from 'nanoid'
 import { ref as deepRef, shallowRef } from 'vue'
-import { weilaApiUrl } from '~/api'
 
 definePage({
   meta: {
@@ -87,7 +85,7 @@ const trackFeatureCollection = computed<GeoJSON.FeatureCollection<GeoJSON.LineSt
       properties: {},
       geometry: {
         type: 'LineString',
-        coordinates: tracks.value?.map(track => [track.longitude, track.latitude]) || [],
+        coordinates: tracks.value?.map(track => [track.lng, track.lat]) || [],
       },
     },
   ],
@@ -129,31 +127,25 @@ watch(selectedMarker, (marker) => {
     infoWindow.value.open(map.value, [lng, lat])
 })
 
-$inspect(selectedMarker)
+const weilaApi = useWeilaApi()
 
-const { data: regeoInfo } = useQuery({
-  enabled: computed(() => Boolean(selectedMarker.value?.getExtData().id)),
-  queryKey: [
-    'regeo',
-    weilaApiUrl('/corp/web/location-get-regeo'),
-    computed(() => selectedMarker.value?.getExtData().id),
-  ],
-  queryFn: async () => {
-    if (!selectedMarker.value)
-      return
+const regeoInfo = shallowRef(undefined)
+watch(selectedMarker, async () => {
+  if (!selectedMarker.value)
+    return
 
-    const pos = selectedMarker.value?.getPosition()
+  const pos = selectedMarker.value?.getPosition()
 
-    if (!pos)
-      throw new Error('No position')
+  if (!pos)
+    throw new Error('No position')
 
-    return weilaFetch(weilaApiUrl('/corp/web/location-get-regeo'), {
-      body: {
-        longitude: pos?.getLng(),
-        latitude: pos?.getLat(),
-      },
-    }).then((i: any) => i.regeo as RegeoModel)
-  },
+  regeoInfo.value = await weilaApi.value.v2.fetch('loc/regeo', {
+    body: {
+      lat: pos?.getLng(),
+      lon: pos?.getLat(),
+      radius: 300,
+    },
+  })
 })
 
 watch(regeoInfo, (info?: RegeoModel) => {
@@ -164,7 +156,7 @@ watch(regeoInfo, (info?: RegeoModel) => {
     <div color-black>
       <h3 class="text-lg font-semibold mb-2">${t('location-detail')}</h3>
       <div class="mb-2 ">
-        ${info.formatted_address}
+        ${info.Address}
       </div>
       <div>
         <span mr2>${t('time')}</span> <span>${new Date(selectedMarker.value?.getExtData().created * 1000).toLocaleString()}</span>
@@ -189,8 +181,6 @@ const layerStyle = deepRef({
   dashArray: [10, 0, 10, 0],
 })
 
-$inspect(markers)
-
 watch(tracks, (val) => {
   if (!val?.length) {
     markers.value = []
@@ -199,15 +189,15 @@ watch(tracks, (val) => {
 
   try {
     // generate markers
-    markers.value = val.map(({ longitude, latitude, created }) => {
+    markers.value = val.map(({ lng, lat, created }) => {
       const marker = new AMap.Marker({
-        position: [longitude, latitude],
+        position: [lng, lat],
         extData: {
           id: nanoid(),
           userId: selectedUserKeys.value,
           created,
-          longitude,
-          latitude,
+          longitude: lng,
+          latitude: lat,
         },
       })
 
@@ -231,15 +221,12 @@ watch(markers, (val, oldVal) => {
   }
 
   const renderMarker = async (map: AMap.Map) => {
-    for (let i = 0; i < val.length; i++) {
-      const marker = val[i]
-      map.add(marker)
-    }
+    val.forEach(i => map.add(i))
 
-    if (markers.value) {
+    if (val.length) {
       map.setFitView(
         [
-          ...markers.value,
+          ...val,
           infoWindow.value,
         ]
           .filter(i => !isUndefined(i) && !isNull(i)),
