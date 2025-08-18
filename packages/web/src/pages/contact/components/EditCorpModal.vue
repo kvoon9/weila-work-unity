@@ -7,10 +7,13 @@ import { useForm } from 'zod-arco-rules/valibot'
 
 const { t } = useI18n()
 
-const { data: corp } = useWeilaFetch<Corp>('corp/org/get-my-org')
-const avatarUploaderRef = templateRef('avatarUploaderRef')
-
 const open = defineModel('open', { default: false })
+
+const { data: corp } = useWeilaFetch<Corp>('corp/org/get-my-org', {}, {
+  enabled: computed(() => open.value),
+})
+
+const avatarUploaderRef = templateRef('avatarUploaderRef')
 
 const { rules, form, reset, handleSubmit } = useForm(v.object({
   name: v.optional(v.string(), () => corp.value.name),
