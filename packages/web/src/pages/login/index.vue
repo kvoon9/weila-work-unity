@@ -93,7 +93,7 @@ function onSuccess({ access_token, expires_in, refresh_token, org }: AuthModel &
   if (!org)
     router.push('/create-org')
   else
-    router.push('/contact/org')
+    router.replace('/contact/org')
 }
 
 function handleSendSmsCode() {
