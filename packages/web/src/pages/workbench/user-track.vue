@@ -141,8 +141,8 @@ watch(selectedMarker, async () => {
 
   regeoInfo.value = await weilaApi.value.v2.fetch('loc/regeo', {
     body: {
-      lat: pos?.getLng(),
-      lon: pos?.getLat(),
+      lon: pos?.getLng(),
+      lat: pos?.getLat(),
       radius: 300,
     },
   })
@@ -156,7 +156,7 @@ watch(regeoInfo, (info?: RegeoModel) => {
     <div color-black>
       <h3 class="text-lg font-semibold mb-2">${t('location-detail')}</h3>
       <div class="mb-2 ">
-        ${info.Address}
+        ${info.province + info.city + info.district + info.township + info.Address}
       </div>
       <div>
         <span mr2>${t('time')}</span> <span>${new Date(selectedMarker.value?.getExtData().created * 1000).toLocaleString()}</span>
