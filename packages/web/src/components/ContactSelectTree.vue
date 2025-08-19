@@ -28,7 +28,7 @@ watchEffect(() => {
       icon: () => h(IconUserGroup),
       key: `dept-${dept.id}`,
       checkable: true,
-      disableCheckbox: !dept.user_count,
+      disableCheckbox: true,
     }
   })
 })
@@ -83,13 +83,5 @@ async function loadMore(nodeData: TreeNodeData) {
     :data="treeData"
     :load-more="loadMore"
     checkable
-    @check="(_: string[], { node, checked }: {checked: boolean, node:TreeNodeData}) => {
-      if (checked && node.key.startsWith('dept') && !node.children?.length)
-        loadMore(node).then(children => children && (checkedKeys = [
-          ...checkedKeys,
-          ...children.map(i => `member-${i.user_id}`),
-        ]))
-    }"
-  >
-  </a-tree>
+  />
 </template>
