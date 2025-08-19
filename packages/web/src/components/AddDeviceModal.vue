@@ -102,7 +102,9 @@ const submit = handleSubmit(async (values: any) => {
           />
         </a-form-item>
         <a-form-item field="track" :label="t('change-member.form.track.label')">
-          <a-radio-group v-disabled="authStore.vip.vip_supports.find(i => i.name === 'track')?.support" v-model="form.track" type="button">
+          <a-radio-group v-disabled="{
+            value: !authStore.vip.vip_supports.find(i => i.name === 'track')?.support
+          }" v-model="form.track" type="button">
             <a-radio :value="TrackType.Close">
               {{ t('track-type.close') }}
             </a-radio>
@@ -115,7 +117,11 @@ const submit = handleSubmit(async (values: any) => {
             <a-radio :value="TrackType.High">
               {{ t('track-type.high') }}
             </a-radio>
-            <a-radio v-disabled="authStore.vip.vip_supports.find((i) => i.name === 'track')?.quick_suppport" :value="TrackType.Fast">
+            <a-radio v-disabled="{
+              value:!authStore.vip.vip_supports.find((i) => i.name === 'track')?.quick_support,
+              title: '旗舰版功能'
+            }
+            " :value="TrackType.Fast">
               {{ t('track-type.fast') }}
             </a-radio>
           </a-radio-group>

@@ -23,7 +23,7 @@ export interface VipSupport {
   group_member_limit?: number
   device_limit?: number
   type?: number
-  quick_suppport?: boolean
+  quick_support?: boolean
 }
 
 export const useAuthStore = defineStore('auth', () => {

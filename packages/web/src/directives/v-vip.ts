@@ -1,20 +1,18 @@
 import type { Directive } from 'vue'
-import { disableEl, enableEl, type DisableElement } from './disableEl'
+import { useDisableEl, type DisableElement } from './disableEl'
 
 export const vVip: Directive = {
   created(el: DisableElement) {
     const { vip } = storeToRefs(useAuthStore())
+    const {disable, enable} = useDisableEl(el)
 
     watchEffect(() => {
       if (vip.value?.vip) {
-        enableEl(el)
+        enable()
       }
       else {
-        disableEl(el)
+        disable()
       }
     })
-  },
-  unmounted(el: DisableElement) {
-    enableEl(el)
   },
 }
