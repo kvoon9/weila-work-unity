@@ -90,7 +90,7 @@ const { mutate } = useWeilaMutation<never, {
         <template #actions="{ selected }">
           <a-space>
             <EditMemberModal :member="selected" />
-            <ModalTrigger :trigger="{ status: 'danger' }" :title=" t('button.delete') ">
+            <ModalTrigger v-model:open="isDeleteMemberModalOpen" :trigger="{ status: 'danger' }" :title=" t('button.delete') ">
               <template #content>
                 {{ t('delete.modal.hint') }} {{ t('delete.modal.content') }}
               </template>
