@@ -65,9 +65,9 @@ const submit = handleSubmit(async (values) => {
           <a-radio :value="1">
             {{ t('burst-mode-1') }}
           </a-radio>
-          <a-radio :value="2">
+          <!-- <a-radio :value="2">
             {{ t('burst-mode-2') }}
-          </a-radio>
+          </a-radio> -->
         </a-radio-group>
       </a-form-item>
       <!-- <a-form-item field="shutup" :label="t('shutup')" >
