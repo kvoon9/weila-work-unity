@@ -8,6 +8,7 @@ import { TrackType } from '~/api/contact'
 const { t } = useI18n()
 const { themeColor } = useAppStore()
 const formRef = templateRef('formRef')
+const authStore = useAuthStore()
 
 const open = defineModel('open', { default: false })
 
@@ -26,7 +27,7 @@ const { form, rules, handleSubmit, reset } = useForm(v.object({
   dept_id: v.optional(v.number(), 0),
   sex: v.optional(v.number(), 0),
   avatar: v.optional(v.string(), ''),
-  phone: v.optional(v.pipe(v.string(), v.regex(/^1[3-9]\d{9}$/, '手机号格式不正确')), ''),
+  phone: v.optional(v.string(), ''),
   loc_share: v.optional(v.number(), 0),
   track: v.optional(v.number(), 0),
 }))
@@ -101,7 +102,7 @@ const submit = handleSubmit(async (values: any) => {
           />
         </a-form-item>
         <a-form-item field="track" :label="t('change-member.form.track.label')">
-          <a-radio-group v-model="form.track" type="button">
+          <a-radio-group v-disabled="authStore.vip.vip_supports.find(i => i.name === 'track')?.support" v-model="form.track" type="button">
             <a-radio :value="TrackType.Close">
               {{ t('track-type.close') }}
             </a-radio>
@@ -114,7 +115,7 @@ const submit = handleSubmit(async (values: any) => {
             <a-radio :value="TrackType.High">
               {{ t('track-type.high') }}
             </a-radio>
-            <a-radio v-vip :value="TrackType.Fast">
+            <a-radio v-disabled="authStore.vip.vip_supports.find((i) => i.name === 'track')?.quick_suppport" :value="TrackType.Fast">
               {{ t('track-type.fast') }}
             </a-radio>
           </a-radio-group>

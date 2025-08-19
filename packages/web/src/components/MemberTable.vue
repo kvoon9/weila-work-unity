@@ -84,44 +84,6 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
           </template>
         </a-table-column>
 
-        <a-table-column title="管理员" :width="80">
-          <template #cell="{ record: { is_admin } }">
-            <a-tag v-if="is_admin" color="orange">
-              管理员
-            </a-tag>
-          </template>
-        </a-table-column>
-        <a-table-column
-          :title="t('type')" :filterable="{
-            filters: [{
-              text: t('user-type.member'),
-              value: '0',
-            }, {
-              text: t('user-type.device'),
-              value: '1',
-            }, {
-              text: t('user-type.owner'),
-              value: '255',
-            }],
-            filter: (value: [any], record: any) => Number(record.type) === Number(value?.[0]),
-            multiple: false,
-          }" :width="80"
-        >
-          <template #cell="{ record: { type } }">
-            {{ {
-              0: t('user-type.member'),
-              1: t('user-type.device'),
-              255: t('user-type.owner'),
-            }[Number(type)] }}
-          </template>
-        </a-table-column>
-        <a-table-column title="群数量" :width="80">
-          <template #cell="{ record: { grp_cnt, grp_lmt } }">
-            <a-tag :color="grp_cnt >= grp_lmt ? 'magenta' : 'gray'">
-              {{ grp_cnt }} / {{ grp_lmt }}
-            </a-tag>
-          </template>
-        </a-table-column>
         <a-table-column :title="t('avatar')" :width="70">
           <template #cell="{ record: { avatar } }">
             <a-avatar :image-url="avatar">
@@ -143,6 +105,48 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
             {{ user_num }}
           </template>
         </a-table-column>
+
+        <a-table-column
+          :title="t('type')"
+          :width="80"
+          :filterable="{
+            filters: [{
+              text: t('user-type.member'),
+              value: 0,
+            }, {
+              text: t('user-type.device'),
+              value: 1,
+            }, {
+              text: t('manager'),
+              value: 2,
+            }, {
+              text: t('user-type.owner'),
+              value: 255,
+            }],
+            filter: (value: [any], record: any) => Number(record.type) === Number(value?.[0]),
+            multiple: false,
+          }"
+        >
+          <template #cell="{ record: { type, is_admin } }">
+            <a-tag :color="is_admin ? 'orange' : ''">
+              {{ {
+                0: t('user-type.member'),
+                1: t('user-type.device'),
+                2: t('manager'),
+                255: t('user-type.owner'),
+              }[Number(type)] }}
+            </a-tag>
+          </template>
+        </a-table-column>
+
+        <a-table-column title="群数量" :width="80">
+          <template #cell="{ record: { grp_cnt, grp_lmt } }">
+            <a-tag :color="grp_cnt >= grp_lmt ? 'magenta' : 'gray'">
+              {{ grp_cnt }} / {{ grp_lmt }}
+            </a-tag>
+          </template>
+        </a-table-column>
+
         <a-table-column :title="t('job-number')" :width="100">
           <template #cell="{ record: { job_num } }">
             {{ job_num }}
@@ -155,6 +159,7 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
             {{ depts?.find(d => d.id === dept_id)?.name || '' }}
           </template>
         </a-table-column>
+
         <a-table-column
           :title="t('created')" :width="120" :sortable="{
             sortDirections: ['ascend', 'descend'],
@@ -164,6 +169,7 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
             {{ new Date(created * 1000).toLocaleDateString() }}
           </template>
         </a-table-column>
+
         <a-table-column :title="t('phone')" :width="130">
           <template #cell="{ record: { phone } }">
             {{ phone }}
@@ -195,6 +201,7 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
             </a-tag>
           </template>
         </a-table-column>
+
         <a-table-column :title="t('loc_share')" :width="100">
           <template #cell="{ record: { loc_share } }">
             <a-tag v-if="loc_share" color="green">

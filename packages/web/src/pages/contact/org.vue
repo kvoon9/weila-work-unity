@@ -73,9 +73,12 @@ watchEffect(() => {
           </a-space>
         </header>
       </div>
-      <div grid="~ cols-3 gap-2" my4>
+      <div grid="~ cols-4 gap-2" my4>
         <RouterLink to="/contact/member" border rounded-lg p4>
           <a-statistic title="成员数量 " :value="corp.member_cnt" show-group-separator />
+        </RouterLink>
+        <RouterLink to="/contact/dept" border rounded-lg p4>
+          <a-statistic title="部门数量 " :value="corp.dept_cnt" show-group-separator />
         </RouterLink>
         <RouterLink to="/contact/group" border rounded-lg p4>
           <a-statistic title="群组数量" :value="corp.group_cnt" show-group-separator />

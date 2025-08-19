@@ -37,7 +37,15 @@ export function useWeilaApi() {
           body: JSON.stringify({ refresh_token: refreshToken.value }),
         })
           .then(res => res.json())
-          .then(({ data: auth }: { data: AuthModel }) => {
+          .then(({ data: auth, errcode }: { data: AuthModel, errcode: number }) => {
+            if (errcode === 31) {
+              token.value = ''
+              refreshToken.value = ''
+              expiresIn.value = -1
+              loginTime.value = -1
+              window.location.reload()
+            }
+
             token.value = auth.access_token
             refreshToken.value = auth.refresh_token
             expiresIn.value = auth.expires_in

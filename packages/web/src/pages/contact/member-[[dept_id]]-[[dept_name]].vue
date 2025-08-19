@@ -53,7 +53,7 @@ const members = computed(() => {
           <a-input
             v-model="filterInput" :max-length="20" show-word-limit
             :placeholder="`${t('name')}/${t('job-number')}/${t('weila-number')}/${t('phone-number')}`" allow-clear
-            max-w-80
+            w-100
           />
         </a-space>
       </template>

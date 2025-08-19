@@ -1,5 +1,5 @@
 import type { UseQueryOptions } from '@tanstack/vue-query'
-import { isFunction } from '@antfu/utils'
+import { isFunction, isObject } from '@antfu/utils'
 import { useQuery } from '@tanstack/vue-query'
 import { parseURL } from 'ufo'
 import { computed, isRef, toValue, watch } from 'vue'
@@ -28,7 +28,7 @@ export function useWeilaFetch<T>(
       if (failCount > 3)
         return false
 
-      if (error?.message && JSON.parse(error.message).errcode === 32)
+      if (error?.message && isObject(error.message) && JSON.parse(error.message).errcode === 32)
         return false
 
       return true

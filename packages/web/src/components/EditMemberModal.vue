@@ -16,6 +16,7 @@ const { themeColor } = useAppStore()
 const avatarUploaderRef = templateRef('avatarUploaderRef')
 
 const open = defineModel('open', { default: false })
+const authStore = useAuthStore()
 
 $inspect(() => props.member)
 
@@ -51,7 +52,7 @@ const { mutate: createMember } = useWeilaMutation('corp/address/change-member', 
   onSuccess() {
     reset()
     open.value = false
-    Message.success(t('success'))
+    Message.success(t('message.success'))
     qc.invalidateQueries({ queryKey: ['corp/address/get-member-list'] })
     qc.invalidateQueries({ queryKey: ['corp/address/get-dept-member-list'] })
   },
@@ -127,7 +128,7 @@ const submit = handleSubmit(async (values) => {
         <a-form-item
           field="track" :label="t('change-member.form.track.label')"
         >
-          <a-radio-group v-model="form.track" type="button">
+          <a-radio-group v-disabled="authStore.vip.vip_supports.find(i => i.name === 'track')?.support" v-model="form.track" type="button">
             <a-radio :value="TrackType.Close">
               {{ t('track-type.close') }}
             </a-radio>
@@ -140,7 +141,7 @@ const submit = handleSubmit(async (values) => {
             <a-radio :value="TrackType.High">
               {{ t('track-type.high') }}
             </a-radio>
-            <a-radio v-vip :value="TrackType.Fast">
+            <a-radio v-disabled="authStore.vip.vip_supports.find((i) => i.name === 'track')?.quick_suppport" :value="TrackType.Fast">
               {{ t('track-type.fast') }}
             </a-radio>
           </a-radio-group>

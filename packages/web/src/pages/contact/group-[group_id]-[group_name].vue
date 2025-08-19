@@ -71,7 +71,7 @@ function onSelect(member: GroupMemberModel, e: PointerEvent) {
         @page-change="(page) => curPage = page" @row-click="(...args) => onSelect(...args)"
       >
         <template #columns>
-          <a-table-column :title="t('type')">
+          <!-- <a-table-column :title="t('type')">
             <template #cell="{ record: { type } }">
               <a-tag v-if="type === 255" color="orange">
                 {{ t('member-type.host') }}
@@ -80,7 +80,7 @@ function onSelect(member: GroupMemberModel, e: PointerEvent) {
                 {{ t('member-type.member') }}
               </a-tag>
             </template>
-          </a-table-column>
+          </a-table-column> -->
           <a-table-column :title="t('avatar')">
             <template #cell="{ record: { avatar } }">
               <a-avatar :image-url="avatar?.replace(/^https?:/, '')">
@@ -88,14 +88,14 @@ function onSelect(member: GroupMemberModel, e: PointerEvent) {
               </a-avatar>
             </template>
           </a-table-column>
-          <a-table-column :title="t('weila-number')">
-            <template #cell="{ record: { user_num } }">
-              {{ user_num }}
-            </template>
-          </a-table-column>
           <a-table-column :title="t('name')">
             <template #cell="{ record: { name } }">
               {{ name }}
+            </template>
+          </a-table-column>
+          <a-table-column :title="t('weila-number')">
+            <template #cell="{ record: { user_num } }">
+              {{ user_num }}
             </template>
           </a-table-column>
           <a-table-column :title="t('phone')">

@@ -19,6 +19,7 @@ import '~/styles/main.css'
 import 'viewerjs/dist/viewer.css'
 import '@unocss/reset/tailwind.css'
 import 'virtual:uno.css'
+import { vDisabled } from './directives/v-disabled'
 
 setup(
   // the root component
@@ -51,6 +52,7 @@ setup(
     }
 
     app.directive('vip', vVip)
+    app.directive('disabled', vDisabled)
   },
 )
 
