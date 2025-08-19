@@ -258,10 +258,10 @@ time: 时间
 track: 轨迹
 track-type:
   close: 关闭
-  high: 高
+  high: 高频
   keep: 保持
-  low: 低
-  medium: 中等
+  low: 低频
+  medium: 中频
   fast: 快速
 type: 类型
 user:
