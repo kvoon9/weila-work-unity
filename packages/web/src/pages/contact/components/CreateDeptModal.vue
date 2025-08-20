@@ -8,7 +8,7 @@ const { t } = useI18n()
 
 const open = defineModel('open', { default: false })
 
-const { form, rules, handleSubmit } = useForm(v.object({
+const { form, rules, handleSubmit, reset } = useForm(v.object({
   name: v.pipe(
     v.string('姓名必须是字符串'),
     v.nonEmpty('姓名不能为空'),
@@ -16,6 +16,8 @@ const { form, rules, handleSubmit } = useForm(v.object({
 }))
 
 const qc = useQueryClient()
+
+watchEffect(() => open.value && reset())
 
 const { mutate, isPending } = useWeilaMutation('corp/address/create-dept', {
   onSuccess() {

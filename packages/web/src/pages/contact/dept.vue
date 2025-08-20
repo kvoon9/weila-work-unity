@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { DeptModel } from '~/api/contact'
-import { shallowRef } from 'vue'
 
 import CreateDeptModal from './components/CreateDeptModal.vue'
 import DeleteDeptModal from './components/DeleteDeptModal.vue'
