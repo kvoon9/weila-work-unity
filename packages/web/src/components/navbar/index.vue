@@ -66,7 +66,7 @@ const buildTime = new Date(__BUILD_TIME__).toLocaleString()
         @click="toggleDrawerMenu"
       />
       <a-tag color="green">v {{ version }}</a-tag>
-      <a-tag color="blue">构建时间: {{ buildTime }}</a-tag>  
+      <a-tag color="gray">构建时间: {{ buildTime }}</a-tag>  
     </a-space>
     <a-space size="large">
       <!-- <li>
