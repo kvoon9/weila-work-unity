@@ -29,7 +29,7 @@ const qc = useQueryClient()
 const { mutate } = useWeilaMutation('corp/user/bind-phone', {
   onSuccess() {
     open.value = false
-    Message.success(t('success'))
+    Message.success(t('message.success'))
     reset()
     qc.invalidateQueries({ queryKey: ['corp/user/get-selfinfo'] })
   },

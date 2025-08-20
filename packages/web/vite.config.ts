@@ -16,6 +16,10 @@ import { viteMockServe as ViteMockServe } from 'vite-plugin-mock'
 import Layouts from 'vite-plugin-vue-layouts'
 import SvgLoader from 'vite-svg-loader'
 import ConfigArcoStyleImportPlugin from './plugins/arcoStyleImport'
+import { writeFileSync } from 'node:fs'
+import { writeFile } from 'node:fs/promises'
+
+const now = Date.now()
 
 export default defineConfig({
   base: './',
@@ -38,7 +42,7 @@ export default defineConfig({
 
   define: {
     'process.env': {},
-    '__BUILD_TIME__': Date.now()
+    '__BUILD_TIME__': now
   },
 
   css: {
@@ -160,5 +164,14 @@ export default defineConfig({
     mkcert(),
 
     Unused(),
+
+    {
+      name: 'vite-plugin-build-info',
+      async closeBundle() {
+        return await writeFile('./dist/build-info.json', JSON.stringify({
+          timestamp: now,
+        }, null, 2))
+      }
+    },
   ],
 })
