@@ -90,10 +90,12 @@ function onSuccess({ access_token, expires_in, refresh_token, org }: AuthModel &
     accountHistoryRecord.value.set(loginForm.value.account, loginForm.value.password)
   }
 
-  if (!org)
-    router.push('/create-org')
-  else
-    router.replace('/contact/org')
+  nextTick(() => {
+    if (!org)
+      router.push('/create-org')
+    else
+      router.replace('/contact/org')
+  })
 }
 
 function handleSendSmsCode() {
