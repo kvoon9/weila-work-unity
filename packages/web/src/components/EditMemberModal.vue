@@ -18,8 +18,6 @@ const avatarUploaderRef = templateRef('avatarUploaderRef')
 const open = defineModel('open', { default: false })
 const authStore = useAuthStore()
 
-$inspect(() => props.member)
-
 const { form, rules, handleSubmit, reset } = useForm(v.object({
   user_id: v.optional(v.number('用户ID必须为数字'), () => props.member?.user_id),
   name: v.optional(v.pipe(

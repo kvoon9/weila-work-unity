@@ -55,18 +55,21 @@ async function loadMore(nodeData: TreeNodeData) {
   }
 
   nodeData.children = members.map((member) => {
+    const enabled = props.isItemEnable?.(member)
+    const isInsideUncheckable = props.uncheckableIds.includes(member.user_id)
+
     return {
       key: `member-${member.user_id}`,
       title: `${member.name}`,
       icon: () => h(IconUser),
       isLeaf: true,
-      selectable: !props.uncheckableIds.includes(member.user_id) && props.isItemEnable?.(member),
+      selectable: enabled && !isInsideUncheckable,
       checkable: true,
-      disableCheckbox: props.uncheckableIds.includes(member.user_id) && props.isItemEnable?.(member),
+      disableCheckbox: !enabled || isInsideUncheckable,
     }
   })
 
-  if (nodeData.children.some(i => i.checkable)) {
+  if (nodeData.children.some(i => i.checkable && !i.disableCheckbox)) {
     nodeData.disableCheckbox = false
   }
 

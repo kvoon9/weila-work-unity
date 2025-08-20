@@ -38,9 +38,7 @@ const { mutate, isPending } = useWeilaMutation('corp/group/add-group-members', {
         <ContactSelectTree
           v-model:checked-keys="checkedKeys"
           :uncheckable-ids="groupMembers.map(i => i.user_id)"
-          :is-item-enable="(member) => {
-            return member.grp_cnt < member.grp_lmt
-          }"
+          :is-item-enable="(member) => member.grp_cnt < member.grp_lmt"
         />
       </div>
     </template>
