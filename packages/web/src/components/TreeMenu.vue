@@ -4,7 +4,6 @@ import type { VipInfo } from '~/stores/auth'
 import type { Corp } from '~/types'
 import type { Legal } from '~/types/api'
 import { objectEntries, objectKeys } from '@antfu/utils'
-import { vipLevelMap } from '~/shared/const'
 
 const router = useRouter()
 

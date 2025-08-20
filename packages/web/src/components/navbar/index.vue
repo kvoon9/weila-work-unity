@@ -50,6 +50,8 @@ const bindingPhoneModalVisible = shallowRef(false)
 function tryLogout() {
   logout()
 }
+
+const buildTime = new Date(__BUILD_TIME__).toLocaleString()
 </script>
 
 <template>
@@ -63,7 +65,8 @@ function tryLogout() {
         v-if="!topMenu && appStore.device === 'mobile'" style="font-size: 22px; cursor: pointer"
         @click="toggleDrawerMenu"
       />
-      <a-tag>{{ version }}</a-tag>
+      <a-tag color="green">v {{ version }}</a-tag>
+      <a-tag color="blue">构建时间: {{ buildTime }}</a-tag>  
     </a-space>
     <a-space size="large">
       <!-- <li>

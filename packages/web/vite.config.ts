@@ -38,6 +38,7 @@ export default defineConfig({
 
   define: {
     'process.env': {},
+    '__BUILD_TIME__': Date.now()
   },
 
   css: {
