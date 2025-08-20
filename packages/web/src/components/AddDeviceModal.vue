@@ -26,7 +26,7 @@ const { form, rules, handleSubmit, reset } = useForm(v.object({
   sex: v.optional(v.number(), 0),
   avatar: v.optional(v.string(), ''),
   phone: v.optional(v.string(), ''),
-  loc_share: v.optional(v.number(), 0),
+  loc_share: v.optional(v.number(), 1),
   track: v.optional(v.number(), 0),
 }))
 

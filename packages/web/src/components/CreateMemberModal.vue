@@ -24,7 +24,7 @@ const { form, rules, handleSubmit, reset } = useForm(v.object({
   avatar: v.optional(v.string('头像必须是字符串'), ''),
   phone: v.pipe(v.string('手机号必须是字符串')),
   is_admin: v.optional(v.number('管理员标识必须是数字'), 0),
-  loc_share: v.optional(v.number('位置共享标识必须是数字'), 0),
+  loc_share: v.optional(v.number('位置共享标识必须是数字'), 1),
   track: v.optional(v.number('轨迹标识必须是数字'), 0),
 }))
 
