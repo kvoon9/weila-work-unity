@@ -13,7 +13,8 @@ const props = withDefaults(defineProps<{
   memberTitle?: (item: Member) => string
 }>(), {
   uncheckableIds: () => [],
-  memberTitle: (i: Member) => i.name
+  memberTitle: (i: Member) => i.name,
+  isItemEnable: () => true
 })
 
 const treeRef = useTemplateRef('treeRef')
