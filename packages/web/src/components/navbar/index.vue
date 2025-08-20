@@ -88,7 +88,7 @@ function reloadPage() {
       />
       <a-tag color="green" shape="round">v {{ version }}</a-tag>
       <a-button v-if="hasNewBundle" shape="round" size="mini" status="warning" space-x-2 @click="reloadPage"><icon-refresh /> <span>系统有新更新可用</span></a-button>
-      <a-tag shape="round" color="gray">构建时间: {{ buildTime }}</a-tag>  
+      <a-tag shape="round" color="gray" space-x-2><icon-code-sandbox /> <span>构建时间: {{ buildTime }}</span></a-tag>  
     </a-space>
     <a-space size="large">
       <!-- <li>

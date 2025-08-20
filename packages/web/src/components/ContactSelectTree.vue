@@ -10,8 +10,10 @@ import { ref as deepRef } from 'vue'
 const props = withDefaults(defineProps<{
   uncheckableIds?: number[]
   isItemEnable?: (item: Member) => boolean
+  memberTitle?: (item: Member) => string
 }>(), {
   uncheckableIds: () => [],
+  memberTitle: (i: Member) => i.name
 })
 
 const treeRef = useTemplateRef('treeRef')
@@ -41,6 +43,7 @@ watchEffect(() => isVisible.value && (checkedKeys.value = []))
 
 async function loadMore(nodeData: TreeNodeData) {
   const dept_id = Number(nodeData.key.replace('dept-', ''))
+  console.log('nodeData',nodeData)
   const weilaApi = useWeilaApi()
 
   const members = await weilaApi.value.v2.fetch<Member[]>('corp/address/get-dept-all-member', {
@@ -60,7 +63,7 @@ async function loadMore(nodeData: TreeNodeData) {
 
     return {
       key: `member-${member.user_id}`,
-      title: `${member.name}`,
+      title: props.memberTitle(member),
       icon: () => h(IconUser),
       isLeaf: true,
       selectable: enabled && !isInsideUncheckable,
@@ -86,5 +89,6 @@ async function loadMore(nodeData: TreeNodeData) {
     :data="treeData"
     :load-more="loadMore"
     checkable
-  />
+  >
+  </a-tree>
 </template>
