@@ -12,9 +12,7 @@ const authStore = useAuthStore()
 
 const open = defineModel('open', { default: false })
 
-const { data: depts } = useWeilaFetch('corp/address/get-dept-list', {
-  pick: ['depts'],
-}, {
+const { data: depts } = useWeilaFetch('corp/address/get-all-dept', {}, {
   enabled: open,
 })
 
@@ -38,7 +36,7 @@ const { mutate: createMember } = useWeilaMutation('corp/address/create-member', 
   onSuccess() {
     qc.invalidateQueries({ queryKey: ['corp/address/get-member-list'] })
     reset()
-    Message.success(t('success'))
+    Message.success(t('message.success'))
     open.value = false
   },
 })

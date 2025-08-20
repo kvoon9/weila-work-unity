@@ -14,9 +14,7 @@ const open = defineModel('open', { default: false })
 
 const avatarUploaderRef = templateRef('avatarUploaderRef')
 
-const { data: depts } = useWeilaFetch('corp/address/get-dept-list', {
-  pick: ['depts'],
-}, {
+const { data: depts } = useWeilaFetch('corp/address/get-all-dept', {}, {
   enabled: open,
 })
 

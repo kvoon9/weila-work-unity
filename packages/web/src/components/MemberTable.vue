@@ -154,6 +154,14 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
         </a-table-column>
         <a-table-column
           :title="t('dept.name')" :width="100" data-index="dept_id"
+          :filterable="{
+            filters: depts?.map((i) => ({
+              text: i.name,
+              value: i.id,
+            })),
+            filter: ([value]: any, record: any) => record.dept_id === value,
+            multiple: true,
+          }"
         >
           <template #cell="{ record: { dept_id } }">
             {{ depts?.find(d => d.id === dept_id)?.name || '' }}
@@ -170,7 +178,7 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
           </template>
         </a-table-column>
 
-        <a-table-column :title="t('phone')" :width="130">
+        <a-table-column :title="t('phone')" :width="140">
           <template #cell="{ record: { phone } }">
             {{ phone }}
           </template>

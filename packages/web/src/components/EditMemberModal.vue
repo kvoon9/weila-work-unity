@@ -40,7 +40,9 @@ const { data: depts } = useWeilaFetch<{
   id: number
   name: string
   user_count: number
-}[]>('corp/address/get-all-dept')
+}[]>('corp/address/get-all-dept', {}, {
+  enabled: open
+})
 
 const qc = useQueryClient()
 
