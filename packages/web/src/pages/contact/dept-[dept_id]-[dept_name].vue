@@ -57,6 +57,9 @@ const { mutate } = useWeilaMutation<never, {
     Message.success(t('message.success'))
   },
 })
+
+const isEditMemberModalOpen = shallowRef(false)
+const selectedItem = shallowRef<Member | undefined>(undefined)
 </script>
 
 <template>
@@ -86,10 +89,12 @@ const { mutate } = useWeilaMutation<never, {
         </a-space>
       </template>
 
-      <MemberTable v-model:page="curPage" :actions="!!Number(route.params.dept_id)" :members :count="data?.count || 0">
+      <MemberTable v-model:page="curPage" v-model:selected-item="selectedItem" :actions="!!Number(route.params.dept_id)" :members :count="data?.count || 0" @select="isEditMemberModalOpen = true">
         <template #actions="{ selected }">
           <a-space>
-            <EditMemberModal :member="selected" />
+            <a-button @click="isEditMemberModalOpen = true">
+              {{ t('edit') }}
+            </a-button>
             <ModalTrigger v-model:open="isDeleteMemberModalOpen" :trigger="{ status: 'danger' }" :title=" t('button.delete') ">
               <template #content>
                 {{ t('delete.modal.hint') }} {{ t('delete.modal.content') }}
@@ -108,6 +113,8 @@ const { mutate } = useWeilaMutation<never, {
           </a-space>
         </template>
       </MemberTable>
+
+      <EditMemberModal v-model:open="isEditMemberModalOpen" :member="selectedItem" />
     </a-card>
   </a-page-header>
 </template>

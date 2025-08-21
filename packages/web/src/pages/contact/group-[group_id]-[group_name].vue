@@ -22,11 +22,9 @@ const isEditModalVisible = shallowRef(false)
 const selectedMember = shallowRef<GroupMemberModel | undefined>(undefined)
 
 function onSelect(member: GroupMemberModel, e: PointerEvent) {
-  const whitelistEl = ['.arco-switch', '.arco-btn']
-  // @ts-expect-error type error: no closest attr
-  if (whitelistEl.find(className => e.target?.closest(className))) {
-    selectedMember.value = member
-    return
+  // @ts-expect-error type error
+  if (!e.target?.className?.includes('arco-table')) {
+    return void 0
   }
 
   isEditModalVisible.value = true

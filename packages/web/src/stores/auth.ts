@@ -34,7 +34,9 @@ export const useAuthStore = defineStore('auth', () => {
   const expiresIn = useLocalStorage('expires_in', 7200)
   const loginTime = useLocalStorage('login_time', 0, {})
 
-  const { data: vip } = useWeilaFetch<VipInfo>('corp/org/get-my-vip')
+  const { data: vip } = useWeilaFetch<VipInfo>('corp/org/get-my-vip', {}, {
+    enabled: computed(() => Boolean(token.value)),
+  })
 
   function logout() {
     localStorage.removeItem('token')

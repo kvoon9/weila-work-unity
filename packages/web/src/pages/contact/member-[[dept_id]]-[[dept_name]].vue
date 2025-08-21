@@ -39,6 +39,9 @@ const members = computed(() => {
     )
     .sort((a, b) => a.dept_id - b.dept_id)
 })
+
+const isEditMemberModalOpen = shallowRef(false)
+const selectedItem = shallowRef<Member | undefined>(undefined)
 </script>
 
 <template>
@@ -58,14 +61,18 @@ const members = computed(() => {
         </a-space>
       </template>
 
-      <MemberTable v-model:page="curPage" :members :count="data?.count || 0">
+      <MemberTable v-model:page="curPage" v-model:selected-item="selectedItem" :members :count="data?.count || 0" @select="isEditMemberModalOpen = true">
         <template #actions="{ record, selected }">
           <a-space>
-            <EditMemberModal :member="selected" />
+            <a-button @click="isEditMemberModalOpen = true">
+              {{ t('edit') }}
+            </a-button>
             <DeleteMemberModal v-if="record.type !== 255" :member="selected" />
           </a-space>
         </template>
       </MemberTable>
+
+      <EditMemberModal v-model:open="isEditMemberModalOpen" :member="selectedItem" />
     </a-card>
   </a-page-header>
 </template>

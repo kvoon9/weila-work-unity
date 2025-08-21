@@ -29,9 +29,8 @@ const checkedGroupIds = deepRef<number[]>([])
 $inspect(checkedGroupIds)
 
 function onSelect(group: GroupModel, e: PointerEvent) {
-  const whitelistEl = ['.arco-btn']
-  // @ts-expect-error type error: no closest attr
-  if (whitelistEl.find(className => e.target?.closest(className))) {
+  // @ts-expect-error type error
+  if (!e.target?.className?.includes('arco-table')) {
     return void 0
   }
 

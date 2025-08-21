@@ -43,7 +43,7 @@ const treeData = deepRef<TreeNodeData[]>([])
 watchEffect(() => {
   treeData.value = depts.value?.map((dept) => {
     return {
-      title: dept.name,
+      title: `${dept.name} (${dept.user_count})`,
       key: `dept-${dept.id}`,
       selectable: false,
     }

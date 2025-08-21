@@ -26,7 +26,7 @@ export function useWeilaApi() {
       refreshToken.value = ''
       expiresIn.value = -1
       loginTime.value = -1
-      window.location.reload()
+      // window.location.reload()
     }
 
     try {

@@ -21,24 +21,14 @@ const router = useRouter()
 const activeTab = shallowRef<'password' | 'sms'>('password')
 
 const { form: loginForm, rules: loginRules, handleSubmit: handleLogin } = useForm(v.object({
-  account: v.string(),
-  password: v.string(),
+  account: v.string('账号不能为空'),
+  password: v.string('密码不能为空'),
 }))
 
 const { form: smsLoginForm, rules: smsLoginRules, handleSubmit: handleSmsLogin } = useForm(v.object({
-  phone: v.pipe(
-    v.string('手机号不能为空'),
-    v.regex(/^1[3-9]\d{9}$/, '手机号格式不正确'),
-  ),
-  country_code: v.optional(v.pipe(
-    v.string(),
-    v.regex(/^\d{1,4}$/, '国家码格式不正确'),
-  ), '86'),
-  verifycode: v.pipe(
-    v.string('验证码不能为空'),
-    v.minLength(4, '验证码至少4位'),
-    v.maxLength(6, '验证码最多6位'),
-  ),
+  phone: v.string('手机号不能为空'),
+  country_code: v.optional(v.string(), '86'),
+  verifycode: v.string('验证码不能为空'),
 }))
 
 $inspect(activeTab)
@@ -168,7 +158,10 @@ onMounted(async () => {
 
 <template>
   <div class="login-form-wrapper">
-    <div class="login-form-title" mb-4>
+    <div text-10 text-center leading-loose my8 font-semibold>
+      微喇企业版
+    </div>
+    <div class="login-form-title" mb-4 color-neutral-500>
       {{ t('login.form.title') }}
     </div>
     <a-tabs v-model:active-key="activeTab">
@@ -321,7 +314,6 @@ onMounted(async () => {
   }
 
   &-title {
-    color: var(--color-text-1);
     font-weight: 500;
     font-size: 24px;
     line-height: 32px;

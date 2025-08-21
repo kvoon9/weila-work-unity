@@ -11,14 +11,25 @@ withDefaults(defineProps<{
   actions: true,
 })
 
+const emits = defineEmits<{
+  (e: 'select', member: Member, _: PointerEvent): void
+}>()
 const curPage = defineModel('page', { default: 0, required: true })
 
 const { t } = useI18n()
 const { themeColor } = useAppStore()
 
-const selected = shallowRef<Member | undefined>(undefined)
-function onSelect(member: Member, _: PointerEvent) {
+const selected = defineModel<Member | undefined>('selected-item', { default: undefined })
+
+function onSelect(member: Member, e: PointerEvent) {
   selected.value = member
+
+  // @ts-expect-error type error
+  if (!e.target?.className?.includes('arco-table')) {
+    return void 0
+  }
+
+  emits('select', member, e)
 }
 
 const { data: depts } = useWeilaFetch<{
@@ -197,7 +208,6 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
           <template #cell="{ record: { track } }">
             <a-tag>
               <!-- @vue-expect-error type error -->
-
               {{
                 {
                   [TrackType.Close]: t('track-type.close'),

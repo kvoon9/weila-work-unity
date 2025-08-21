@@ -111,7 +111,10 @@ const submit = handleSubmit((values: any) => {
 
 <template>
   <div class="login-form-wrapper">
-    <div class="login-form-title" mb4>
+    <div text-10 text-center leading-loose my8 font-semibold>
+      微喇企业版
+    </div>
+    <div class="login-form-title" mb4 color-neutral-500>
       {{ t('register.form.title') }}
     </div>
     <a-form :model="form" :rules class="login-form" layout="vertical" @submit="submit">
@@ -201,7 +204,6 @@ const submit = handleSubmit((values: any) => {
   }
 
   &-title {
-    color: var(--color-text-1);
     font-weight: 500;
     font-size: 24px;
     line-height: 32px;

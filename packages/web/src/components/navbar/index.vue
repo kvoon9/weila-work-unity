@@ -55,16 +55,16 @@ const buildTime = new Date(__BUILD_TIME__).toLocaleString()
 
 const hasNewBundle = shallowRef(false)
 
-if(import.meta.env.PROD) {
+if (import.meta.env.PROD) {
   useIntervalFn(async () => {
-    const res = await fetch('/corp-manager/build-info.json')
-    if(!res.ok) {
+    const res = await fetch('/build-info.json')
+    if (!res.ok) {
       return
     }
 
     const { timestamp }: { timestamp: number } = await res.json()
 
-    if(String(timestamp) !== String(__BUILD_TIME__)) {
+    if (String(timestamp) !== String(__BUILD_TIME__)) {
       hasNewBundle.value = true
     }
   }, 3_600_000, { immediateCallback: true })
@@ -86,9 +86,15 @@ function reloadPage() {
         v-if="!topMenu && appStore.device === 'mobile'" style="font-size: 22px; cursor: pointer"
         @click="toggleDrawerMenu"
       />
-      <a-tag color="green" shape="round">v {{ version }}</a-tag>
-      <a-button v-if="hasNewBundle" shape="round" size="mini" status="warning" space-x-2 @click="reloadPage"><icon-refresh /> <span>系统有新更新可用</span></a-button>
-      <a-tag shape="round" color="gray" space-x-2><icon-code-sandbox /> <span>构建时间: {{ buildTime }}</span></a-tag>  
+      <a-tag color="green" shape="round">
+        v {{ version }}
+      </a-tag>
+      <a-button v-if="hasNewBundle" shape="round" size="mini" status="warning" space-x-2 @click="reloadPage">
+        <icon-refresh /> <span>系统有新更新可用</span>
+      </a-button>
+      <a-tag shape="round" color="gray" space-x-2>
+        <icon-code-sandbox /> <span>构建时间: {{ buildTime }}</span>
+      </a-tag>
     </a-space>
     <a-space size="large">
       <!-- <li>
