@@ -17,10 +17,19 @@ export function useWeilaApi() {
   ))
 
   weilaApi.value.hook('request:prepare', async (ctx) => {
-    try {
-      const { needRefresh } = useAuthStore()
-      const { refreshToken, token, expiresIn, loginTime } = storeToRefs(useAuthStore())
+    const { needRefresh } = useAuthStore()
+    const { refreshToken, token, expiresIn, loginTime } = storeToRefs(useAuthStore())
 
+    const clean = (reason?: any) => {
+      console.error('clean reason', reason)
+      token.value = ''
+      refreshToken.value = ''
+      expiresIn.value = -1
+      loginTime.value = -1
+      window.location.reload()
+    }
+
+    try {
       const url = (ctx?.request || ctx?.url) || '' as string
       const isPublic = ['login', 'common'].some(i => url.includes(i))
       const isNeedRefresh = needRefresh()
@@ -36,14 +45,16 @@ export function useWeilaApi() {
           },
           body: JSON.stringify({ refresh_token: refreshToken.value }),
         })
-          .then(res => res.json())
+          .then((res) => {
+            if (!res.ok)
+              throw new Error('refresh token failed')
+
+            return res.json()
+          })
           .then(({ data: auth, errcode }: { data: AuthModel, errcode: number }) => {
             if (errcode === 31) {
-              token.value = ''
-              refreshToken.value = ''
-              expiresIn.value = -1
-              loginTime.value = -1
-              window.location.reload()
+              clean('refresh token error equal 31')
+              return
             }
 
             token.value = auth.access_token
@@ -52,6 +63,10 @@ export function useWeilaApi() {
             loginTime.value = Date.now()
             return auth
           })
+          .catch((error) => {
+            console.error('error', error)
+            clean()
+          })
       }
 
       return refreshing
@@ -59,6 +74,7 @@ export function useWeilaApi() {
     catch (error) {
       console.error('error', error)
       console.error('ctx', ctx)
+      clean()
     }
   })
   weilaApi.value.hook('request:error', onError)

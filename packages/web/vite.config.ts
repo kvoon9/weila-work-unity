@@ -1,3 +1,4 @@
+import { writeFile } from 'node:fs/promises'
 import path, { resolve } from 'node:path'
 import ViteYaml from '@modyfi/vite-plugin-yaml'
 import Vue from '@vitejs/plugin-vue'
@@ -16,8 +17,6 @@ import { viteMockServe as ViteMockServe } from 'vite-plugin-mock'
 import Layouts from 'vite-plugin-vue-layouts'
 import SvgLoader from 'vite-svg-loader'
 import ConfigArcoStyleImportPlugin from './plugins/arcoStyleImport'
-import { writeFileSync } from 'node:fs'
-import { writeFile } from 'node:fs/promises'
 
 const now = Date.now()
 
@@ -42,7 +41,7 @@ export default defineConfig({
 
   define: {
     'process.env': {},
-    '__BUILD_TIME__': now
+    '__BUILD_TIME__': now,
   },
 
   css: {
@@ -171,7 +170,7 @@ export default defineConfig({
         return await writeFile('./dist/build-info.json', JSON.stringify({
           timestamp: now,
         }, null, 2))
-      }
+      },
     },
   ],
 })

@@ -14,7 +14,7 @@ const props = withDefaults(defineProps<{
 }>(), {
   uncheckableIds: () => [],
   memberTitle: (i: Member) => i.name,
-  isItemEnable: () => true
+  isItemEnable: () => true,
 })
 
 const treeRef = useTemplateRef('treeRef')
@@ -44,7 +44,6 @@ watchEffect(() => isVisible.value && (checkedKeys.value = []))
 
 async function loadMore(nodeData: TreeNodeData) {
   const dept_id = Number(nodeData.key.replace('dept-', ''))
-  console.log('nodeData',nodeData)
   const weilaApi = useWeilaApi()
 
   const members = await weilaApi.value.v2.fetch<Member[]>('corp/address/get-dept-all-member', {
@@ -85,11 +84,10 @@ async function loadMore(nodeData: TreeNodeData) {
   <a-tree
     ref="treeRef"
     v-model:checked-keys="checkedKeys"
-    blockNode
+    block-node
     show-lines
     :data="treeData"
     :load-more="loadMore"
     checkable
-  >
-  </a-tree>
+  />
 </template>
