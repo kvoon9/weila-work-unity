@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { useFullscreen } from '@vueuse/core'
 import { computed, inject, shallowRef } from 'vue'
+import { useBundleInfo } from '~/composables/useBundleInfo'
 import { useAuthStore } from '~/stores/auth'
 import { version } from '../../../package.json'
 import BindingPhone from '../BindingPhone.vue'
@@ -53,22 +54,9 @@ function tryLogout() {
 
 const buildTime = new Date(__BUILD_TIME__).toLocaleString()
 
-const hasNewBundle = shallowRef(false)
+const { outdated, update } = useBundleInfo()
 
-if (import.meta.env.PROD) {
-  useIntervalFn(async () => {
-    const res = await fetch('/build-info.json')
-    if (!res.ok) {
-      return
-    }
-
-    const { timestamp }: { timestamp: number } = await res.json()
-
-    if (String(timestamp) !== String(__BUILD_TIME__)) {
-      hasNewBundle.value = true
-    }
-  }, 3_600_000, { immediateCallback: true })
-}
+useIntervalFn(() => update(), 36_000_000, { immediateCallback: true })
 
 function reloadPage() {
   window.location.reload()
@@ -89,7 +77,7 @@ function reloadPage() {
       <a-tag color="green" shape="round">
         v {{ version }}
       </a-tag>
-      <a-button v-if="hasNewBundle" shape="round" size="mini" status="warning" space-x-2 @click="reloadPage">
+      <a-button v-if="outdated" shape="round" size="mini" status="warning" space-x-2 @click="reloadPage">
         <icon-refresh /> <span>系统有新更新可用</span>
       </a-button>
       <a-tag shape="round" color="gray" space-x-2>

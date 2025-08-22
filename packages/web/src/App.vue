@@ -10,6 +10,14 @@ const arcoLang = computed(() => ({
   'zh-CN': zhCN,
   en,
 }[locale.value]))
+
+const { outdated, update } = useBundleInfo()
+
+watchEffect(() => outdated.value && window.location.reload())
+
+onBeforeRouteUpdate(() => {
+  update()
+})
 </script>
 
 <template>
