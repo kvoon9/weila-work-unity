@@ -54,6 +54,7 @@ export function useWeilaApi() {
           .then(({ data: auth, errcode }: { data: AuthModel, errcode: number }) => {
             if (errcode === 31) {
               clean('refresh token error equal 31')
+              window.location.reload()
               return
             }
 
