@@ -64,7 +64,7 @@ const submit = handleSubmit(async (values: any) => {
           <a-input v-model="form.verifycode" :max-length="20" show-word-limit />
         </a-form-item>
         <a-form-item :label="t('phone-number')" field="phone">
-          <a-input v-model="form.phone" :max-length="12" show-word-limit />
+          <a-input v-model="form.phone" :max-length="11" show-word-limit />
         </a-form-item>
         <a-form-item field="dept_id" :label="t('member.form.dept.label')">
           <a-select allow-search :empty="t('no-data')" @change="(value: string) => form.dept_id = Number(value)">

@@ -29,6 +29,7 @@ const checkedGroupIds = deepRef<number[]>([])
 $inspect(checkedGroupIds)
 
 function onSelect(group: GroupModel, e: PointerEvent) {
+  selectedGroup.value = group
   // @ts-expect-error type error
   if (!e.target?.className?.includes('arco-table')) {
     return void 0

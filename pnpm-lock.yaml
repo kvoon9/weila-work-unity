@@ -180,6 +180,9 @@ catalogs:
     '@vueuse/sound':
       specifier: ^2.1.3
       version: 2.1.3
+    '@wl/network':
+      specifier: https://pkg.pr.new/kvoon3/wl-network/@weila/network@0460b32a274959dd5a3e70edf92d5e575bfadea2
+      version: 0.0.3
     apipost-mock-gen:
       specifier: ^0.1.5
       version: 0.1.5
@@ -832,8 +835,8 @@ importers:
         specifier: workspace:*
         version: link:../network
       '@wl/network':
-        specifier: link://../../../network
-        version: link:../../../network
+        specifier: 'catalog:'
+        version: '@weila/network@https://pkg.pr.new/kvoon3/wl-network/@weila/network@0460b32a274959dd5a3e70edf92d5e575bfadea2(@netlify/blobs@8.2.0)(axios@1.8.4)(crypto-js@4.2.0)(db0@0.3.2(better-sqlite3@11.10.0))(ioredis@5.6.1)(md5@2.3.0)(ofetch@1.4.1)'
       apipost-mock-gen:
         specifier: 'catalog:'
         version: 0.1.5
@@ -4832,6 +4835,15 @@ packages:
   '@webassemblyjs/wast-printer@1.14.1':
     resolution: {integrity: sha512-kPSSXE6De1XOR820C90RIo2ogvZG+c3KiHzqUoO/F34Y2shGzesfqv7o57xrxovZJH/MetF5UjroJ/R/3isoiw==}
 
+  '@weila/network@https://pkg.pr.new/kvoon3/wl-network/@weila/network@0460b32a274959dd5a3e70edf92d5e575bfadea2':
+    resolution: {tarball: https://pkg.pr.new/kvoon3/wl-network/@weila/network@0460b32a274959dd5a3e70edf92d5e575bfadea2}
+    version: 0.0.3
+    peerDependencies:
+      axios: ^1.10.0
+      crypto-js: ^4.2.0
+      md5: ^2.3.0
+      ofetch: ^1.4.1
+
   '@whatwg-node/disposablestack@0.0.6':
     resolution: {integrity: sha512-LOtTn+JgJvX8WfBVJtF08TGrdjuFzGJc4mkP8EdDI8ADbvO7kiexYep1o8dwnt0okb0jYclCDXF13xU7Ge4zSw==}
     engines: {node: '>=18.0.0'}
@@ -5644,6 +5656,9 @@ packages:
 
   crossws@0.3.4:
     resolution: {integrity: sha512-uj0O1ETYX1Bh6uSgktfPvwDiPYGQ3aI4qVsaC/LWpkIzGj1nUYm5FK3K+t11oOlpN01lGbprFCH4wBlKdJjVgw==}
+
+  crossws@0.3.5:
+    resolution: {integrity: sha512-ojKiDvcmByhwa8YYqbQI/hg7MEU0NC03+pSdEq4ZUnZR9xXpwk7E43SMNGkn+JxJGPFtNvQ48+vV2p+P1ml5PA==}
 
   crypt@0.0.2:
     resolution: {integrity: sha512-mCxBlsHFYh9C+HVpiEacem8FEBnMXgU9gy4zmNC+SXAZNB/1idgp/aulFJ4FgCi7GPEVbfyng092GqL2k2rmow==}
@@ -7063,6 +7078,9 @@ packages:
   h3@1.15.3:
     resolution: {integrity: sha512-z6GknHqyX0h9aQaTx22VZDf6QyZn+0Nh+Ym8O/u0SGSkyF5cuTJYKlc8MkzW3Nzf9LE1ivcpmYC3FUGpywhuUQ==}
 
+  h3@1.15.4:
+    resolution: {integrity: sha512-z5cFQWDffyOe4vQ9xIqNfCZdV4p//vy6fBnr8Q1AWnVZ0teurKMG66rLj++TKwKPUP3u7iMUvrvKaEUiQw2QWQ==}
+
   handle-thing@2.0.1:
     resolution: {integrity: sha512-9Qn4yBxelxoh2Ow62nP+Ka/kMnOXRi8BXnRaUwezLNhqelnN49xKz4F/dPP8OYLxLxq6JDtZb2i9XznUQbNPTg==}
 
@@ -8322,6 +8340,9 @@ packages:
   node-fetch-native@1.6.6:
     resolution: {integrity: sha512-8Mc2HhqPdlIfedsuZoc3yioPuzp6b+L5jRCRY1QzuWZh2EGJVQrGppC6V6cF0bLdbW0+O2YpqCA25aF/1lvipQ==}
 
+  node-fetch-native@1.6.7:
+    resolution: {integrity: sha512-g9yhqoedzIUm0nTnTqAQvueMPVOuIY16bqgAJJC8XOOubYFNwz6IER9qs0Gq2Xd0+CecCKFjtdDTMA4u4xG06Q==}
+
   node-fetch@2.7.0:
     resolution: {integrity: sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==}
     engines: {node: 4.x || >=6.0.0}
@@ -8345,6 +8366,9 @@ packages:
 
   node-mock-http@1.0.0:
     resolution: {integrity: sha512-0uGYQ1WQL1M5kKvGRXWQ3uZCHtLTO8hln3oBjIusM75WoesZ909uQJs/Hb946i2SS+Gsrhkaa6iAO17jRIv6DQ==}
+
+  node-mock-http@1.0.2:
+    resolution: {integrity: sha512-zWaamgDUdo9SSLw47we78+zYw/bDr5gH8pH7oRRs8V3KmBtu8GLgGIbV2p/gRPd3LWpEOpjQj7X1FOU3VFMJ8g==}
 
   node-releases@2.0.19:
     resolution: {integrity: sha512-xxOWJsBKtzAq7DY0J+DTzuz58K8e7sJbdgwkbMWQe8UYB6ekmsQ45q0M/tJDsGaZmbC+l7n57UV8Hl5tHxO9uw==}
@@ -10542,6 +10566,68 @@ packages:
       '@upstash/redis':
         optional: true
       '@vercel/blob':
+        optional: true
+      '@vercel/kv':
+        optional: true
+      aws4fetch:
+        optional: true
+      db0:
+        optional: true
+      idb-keyval:
+        optional: true
+      ioredis:
+        optional: true
+      uploadthing:
+        optional: true
+
+  unstorage@1.17.0:
+    resolution: {integrity: sha512-l9Z7lBiwtNp8ZmcoZ/dmPkFXFdtEdZtTZafCSnEIj3YvtkXeGAtL2rN8MQFy/0cs4eOLpuRJMp9ivdug7TCvww==}
+    peerDependencies:
+      '@azure/app-configuration': ^1.8.0
+      '@azure/cosmos': ^4.2.0
+      '@azure/data-tables': ^13.3.0
+      '@azure/identity': ^4.6.0
+      '@azure/keyvault-secrets': ^4.9.0
+      '@azure/storage-blob': ^12.26.0
+      '@capacitor/preferences': ^6.0.3 || ^7.0.0
+      '@deno/kv': '>=0.9.0'
+      '@netlify/blobs': ^6.5.0 || ^7.0.0 || ^8.1.0 || ^9.0.0 || ^10.0.0
+      '@planetscale/database': ^1.19.0
+      '@upstash/redis': ^1.34.3
+      '@vercel/blob': '>=0.27.1'
+      '@vercel/functions': ^2.2.12
+      '@vercel/kv': ^1.0.1
+      aws4fetch: ^1.0.20
+      db0: '>=0.2.1'
+      idb-keyval: ^6.2.1
+      ioredis: ^5.4.2
+      uploadthing: ^7.4.4
+    peerDependenciesMeta:
+      '@azure/app-configuration':
+        optional: true
+      '@azure/cosmos':
+        optional: true
+      '@azure/data-tables':
+        optional: true
+      '@azure/identity':
+        optional: true
+      '@azure/keyvault-secrets':
+        optional: true
+      '@azure/storage-blob':
+        optional: true
+      '@capacitor/preferences':
+        optional: true
+      '@deno/kv':
+        optional: true
+      '@netlify/blobs':
+        optional: true
+      '@planetscale/database':
+        optional: true
+      '@upstash/redis':
+        optional: true
+      '@vercel/blob':
+        optional: true
+      '@vercel/functions':
         optional: true
       '@vercel/kv':
         optional: true
@@ -16239,6 +16325,35 @@ snapshots:
       '@webassemblyjs/ast': 1.14.1
       '@xtuc/long': 4.2.2
 
+  '@weila/network@https://pkg.pr.new/kvoon3/wl-network/@weila/network@0460b32a274959dd5a3e70edf92d5e575bfadea2(@netlify/blobs@8.2.0)(axios@1.8.4)(crypto-js@4.2.0)(db0@0.3.2(better-sqlite3@11.10.0))(ioredis@5.6.1)(md5@2.3.0)(ofetch@1.4.1)':
+    dependencies:
+      axios: 1.8.4(debug@4.4.0)
+      crypto-js: 4.2.0
+      hookable: 5.5.3
+      md5: 2.3.0
+      ofetch: 1.4.1
+      unstorage: 1.17.0(@netlify/blobs@8.2.0)(db0@0.3.2(better-sqlite3@11.10.0))(ioredis@5.6.1)
+    transitivePeerDependencies:
+      - '@azure/app-configuration'
+      - '@azure/cosmos'
+      - '@azure/data-tables'
+      - '@azure/identity'
+      - '@azure/keyvault-secrets'
+      - '@azure/storage-blob'
+      - '@capacitor/preferences'
+      - '@deno/kv'
+      - '@netlify/blobs'
+      - '@planetscale/database'
+      - '@upstash/redis'
+      - '@vercel/blob'
+      - '@vercel/functions'
+      - '@vercel/kv'
+      - aws4fetch
+      - db0
+      - idb-keyval
+      - ioredis
+      - uploadthing
+
   '@whatwg-node/disposablestack@0.0.6':
     dependencies:
       '@whatwg-node/promise-helpers': 1.3.1
@@ -17105,6 +17220,10 @@ snapshots:
       which: 2.0.2
 
   crossws@0.3.4:
+    dependencies:
+      uncrypto: 0.1.3
+
+  crossws@0.3.5:
     dependencies:
       uncrypto: 0.1.3
 
@@ -18841,6 +18960,18 @@ snapshots:
       ufo: 1.6.1
       uncrypto: 0.1.3
 
+  h3@1.15.4:
+    dependencies:
+      cookie-es: 1.2.2
+      crossws: 0.3.5
+      defu: 6.1.4
+      destr: 2.0.5
+      iron-webcrypto: 1.2.1
+      node-mock-http: 1.0.2
+      radix3: 1.1.2
+      ufo: 1.6.1
+      uncrypto: 0.1.3
+
   handle-thing@2.0.1: {}
 
   has-ansi@2.0.0:
@@ -20331,6 +20462,8 @@ snapshots:
 
   node-fetch-native@1.6.6: {}
 
+  node-fetch-native@1.6.7: {}
+
   node-fetch@2.7.0:
     dependencies:
       whatwg-url: 5.0.0
@@ -20346,6 +20479,8 @@ snapshots:
   node-gyp-build@4.8.4: {}
 
   node-mock-http@1.0.0: {}
+
+  node-mock-http@1.0.2: {}
 
   node-releases@2.0.19: {}
 
@@ -22957,6 +23092,21 @@ snapshots:
       h3: 1.15.3
       lru-cache: 10.4.3
       node-fetch-native: 1.6.6
+      ofetch: 1.4.1
+      ufo: 1.6.1
+    optionalDependencies:
+      '@netlify/blobs': 8.2.0
+      db0: 0.3.2(better-sqlite3@11.10.0)
+      ioredis: 5.6.1
+
+  unstorage@1.17.0(@netlify/blobs@8.2.0)(db0@0.3.2(better-sqlite3@11.10.0))(ioredis@5.6.1):
+    dependencies:
+      anymatch: 3.1.3
+      chokidar: 4.0.3
+      destr: 2.0.5
+      h3: 1.15.4
+      lru-cache: 10.4.3
+      node-fetch-native: 1.6.7
       ofetch: 1.4.1
       ufo: 1.6.1
     optionalDependencies:

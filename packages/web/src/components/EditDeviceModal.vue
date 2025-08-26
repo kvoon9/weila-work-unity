@@ -132,7 +132,7 @@ function handleSubmit() {
         field="phone" :label="t('member.form.phone.label')" :rules="[{ required: false }]"
         :validate-trigger="['change', 'blur']"
       >
-        <a-input v-model="form.phone" :max-length="12" show-word-limit />
+        <a-input v-model="form.phone" :max-length="11" show-word-limit />
       </a-form-item>
       <a-form-item field="sex" :label="t('member.form.gender.label')" :validate-trigger="['change', 'blur']">
         <a-radio-group v-model="form.sex">

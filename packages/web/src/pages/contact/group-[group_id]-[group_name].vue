@@ -22,6 +22,7 @@ const isEditModalVisible = shallowRef(false)
 const selectedMember = shallowRef<GroupMemberModel | undefined>(undefined)
 
 function onSelect(member: GroupMemberModel, e: PointerEvent) {
+  selectedMember.value = member
   // @ts-expect-error type error
   if (!e.target?.className?.includes('arco-table')) {
     return void 0
