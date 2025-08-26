@@ -19,6 +19,7 @@
     "zip": "esno ./scripts/zip.ts"
   },
   "dependencies": {
+    "@kvoon/utils": "catalog:",
     "@nuxt/eslint": "catalog:",
     "@nuxt/icon": "catalog:",
     "@nuxt/kit": "catalog:",
@@ -27,7 +28,7 @@
     "@vueuse/integrations": "catalog:",
     "@vueuse/nuxt": "catalog:",
     "@vueuse/router": "catalog:",
-    "@weila/network": "workspace:*",
+    "@wl/network": "catalog:",
     "nuxt": "catalog:",
     "qrcode": "catalog:",
     "ufo": "catalog:",

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useQRCode } from '@vueuse/integrations/useQRCode'
 import { useRouteQuery } from '@vueuse/router'
-import { useAppDownloadLink } from '@weila/network'
 import { normalizeURL } from 'ufo'
 
 enum AppDownloadLinkType {
@@ -15,7 +14,12 @@ const router = useRouter()
 
 const type = useRouteQuery<AppDownloadLinkType>('type', AppDownloadLinkType.WeilaNormal)
 
-const { data } = useAppDownloadLink($v1, computed(() => ({ type: type.value })))
+const { data } = useWeilaFetch<{ avatar: string, url: string }>('web/app-download', {
+  body: {
+    type: type.value,
+  },
+  watch: [type],
+})
 
 const url = computed(() => normalizeURL(data.value?.url || ''))
 const qrcode = useQRCode(url)

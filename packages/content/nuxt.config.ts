@@ -35,9 +35,9 @@ export default defineNuxtConfig({
   nitro: {
     preset: 'static',
     routeRules: {
-      '/proxy/**': {
+      '/v2/**': {
         proxy: {
-          to: 'http://demo.weila.hk/v1/**',
+          to: 'http://demo.weila.hk/v2/**',
         },
         cors: true,
       },
