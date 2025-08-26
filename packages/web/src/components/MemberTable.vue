@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { Member } from '~/types/api'
-import { shallowRef } from 'vue'
 import { TrackType } from '~/api/contact'
 
 withDefaults(defineProps<{
