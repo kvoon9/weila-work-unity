@@ -11,5 +11,14 @@
   <body>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
+    <script>
+      window.navigator.serviceWorker.register('/src/sw.ts')
+        .then((...args) => console.log('args', args))
+        .catch(console.error)
+
+      self.addEventListener('fetch', (e) => {
+        console.log('e',e)
+      })
+    </script>
   </body>
 </html>

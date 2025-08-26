@@ -44,11 +44,9 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   function needRefresh() {
-    const expireTime = loginTime.value + expiresIn.value * 1000
+    const expireTime = loginTime.value + (expiresIn.value / 2) * 1000
     const now = Date.now()
-    const SAFE_GAP = 60 * 1000
-    const res = expireTime - now <= SAFE_GAP
-    return res
+    return expireTime < now
   }
 
   return {

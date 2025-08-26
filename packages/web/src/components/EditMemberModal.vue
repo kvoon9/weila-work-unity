@@ -124,7 +124,7 @@ const submit = handleSubmit(async (values) => {
           unchecked-color="#ddd"
         />
       </a-form-item>
-      <a-form-item v-if="authStore.vip.vip_supports.find((i) => i.name === 'track')?.support" field="track" :label="t('change-member.form.track.label')">
+      <a-form-item v-if="authStore?.vip?.vip_supports?.find((i) => i.name === 'track')?.support" field="track" :label="t('change-member.form.track.label')">
         <a-radio-group v-model="form.track" type="button">
           <a-radio :value="TrackType.Close">
             {{ t('track-type.close') }}
@@ -140,7 +140,7 @@ const submit = handleSubmit(async (values) => {
           </a-radio>
           <a-radio
             v-disabled="{
-              value: !authStore?.vip?.vip_supports.find((i) => i.name === 'track')?.quick_support,
+              value: !authStore?.vip?.vip_supports?.find((i) => i.name === 'track')?.quick_support,
               title: '专业版功能',
             }" :value="TrackType.Fast"
           >
