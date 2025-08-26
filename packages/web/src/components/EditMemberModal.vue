@@ -142,7 +142,7 @@ const submit = handleSubmit(async (values) => {
           </a-radio>
           <a-radio
             v-disabled="{
-              value: !authStore.vip.vip_supports.find((i) => i.name === 'track')?.quick_support,
+              value: !authStore?.vip?.vip_supports.find((i) => i.name === 'track')?.quick_support,
               title: '专业版功能',
             }" :value="TrackType.Fast"
           >
