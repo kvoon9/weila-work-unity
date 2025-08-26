@@ -94,6 +94,7 @@ function onSuccess({ access_token, expires_in, refresh_token, org, account }: Au
 
   tempAccount.value.set('account', account.user_number)
   tempAccount.value.set('password', account.password)
+  autoLogin.value = true
 
   if (activeTab.value === 'password' && isRememberPassword.value) {
     accountHistoryRecord.value.set(loginForm.value.account, loginForm.value.password)
