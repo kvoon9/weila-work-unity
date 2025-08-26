@@ -5,21 +5,21 @@ import { setupLayouts } from 'virtual:generated-layouts'
 import { createWebHashHistory } from 'vue-router'
 import { routes } from 'vue-router/auto-routes'
 import App from './App.vue'
+import { vDisabled } from './directives/v-disabled'
 import { vVip } from './directives/v-vip'
-import { setup } from './setup'
 
+import { setup } from './setup'
 import '@valibot/i18n/zh-CN'
 // Styles are imported via arco-plugin. See config/plugin/arcoStyleImport.ts in the directory for details
 // 样式通过 arco-plugin 插件导入。详见目录文件 config/plugin/arcoStyleImport.ts
 // https://arco.design/docs/designlab/use-theme-package
 import '~/assets/style/global.less'
 import 'cropperjs/dist/cropper.min.css'
-import '~/styles/main.css'
 
+import '~/styles/main.css'
 import 'viewerjs/dist/viewer.css'
 import '@unocss/reset/tailwind.css'
 import 'virtual:uno.css'
-import { vDisabled } from './directives/v-disabled'
 
 setup(
   // the root component

@@ -1,3 +1,5 @@
+import { autoLogin } from '~/shared/states'
+
 export interface AuthModel {
   access_token: string
   expires_in: number
@@ -40,12 +42,15 @@ export const useAuthStore = defineStore('auth', () => {
 
   function logout() {
     localStorage.removeItem('token')
+    autoLogin.value = false
     router.push('/login')
   }
 
   function needRefresh() {
     const expireTime = loginTime.value + (expiresIn.value / 2) * 1000
     const now = Date.now()
+    // eslint-disable-next-line no-console
+    console.log('expiresIn.value', expiresIn.value)
     return expireTime < now
   }
 

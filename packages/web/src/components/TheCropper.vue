@@ -55,7 +55,7 @@ function save() {
 
     imageCompression(blob as File, {
       maxSizeMB: 1,
-      maxWidthOrHeight: 1080,
+      maxWidthOrHeight: 320,
       useWebWorker: true,
       initialQuality: 0.6,
     })

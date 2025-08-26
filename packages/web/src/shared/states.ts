@@ -1,5 +1,3 @@
-import { shallowRef } from 'vue'
-
 export const timestamp = useTimestamp({ offset: 0 })
 export const et = computed(() => Math.floor(timestamp.value / 1000))
 
@@ -133,3 +131,5 @@ export async function hasNewBundle() {
     return true
   }
 }
+
+export const autoLogin = useLocalStorage('auto_login', false)

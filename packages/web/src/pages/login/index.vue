@@ -7,7 +7,8 @@ import md5 from 'md5'
 import * as v from 'valibot'
 import { shallowRef } from 'vue'
 import { useForm } from 'zod-arco-rules/valibot'
-import { accountHistoryRecord } from '~/shared/const'
+import { useLocalCrypto } from '~/composables/useLocalCrypto'
+import { autoLogin } from '~/shared/states'
 
 definePage({
   meta: {
@@ -16,8 +17,12 @@ definePage({
   },
 })
 
-const { t } = useI18n()
+const authStore = useAuthStore()
 const router = useRouter()
+const accountHistoryRecord = useLocalCrypto('account-history-record')
+const tempAccount = useLocalCrypto('temp-account')
+
+const { t } = useI18n()
 const activeTab = shallowRef<'password' | 'sms'>('password')
 
 const { form: loginForm, rules: loginRules, handleSubmit: handleLogin } = useForm(v.object({
@@ -55,26 +60,40 @@ let currentPhoneInfo: {
 
 const [isRememberPassword, toggleRememberPassword] = useToggle(false)
 
-const { mutateAsync: passwordMutate, isPending: passwordPending } = useWeilaMutation('/corp/auth/login', {
+const { mutateAsync: passwordLogin, isPending: passwordPending } = useWeilaMutation('/corp/auth/login', {
   // @ts-expect-error type error
   onSuccess,
 })
 
-const { mutateAsync: smsMutate, isPending: smsPending } = useWeilaMutation('/corp/auth/login-by-sms', {
+const { mutateAsync: smsLogin, isPending: smsPending } = useWeilaMutation('/corp/auth/login-by-sms', {
   // @ts-expect-error type error
   onSuccess,
 })
 
-function onSuccess({ access_token, expires_in, refresh_token, org }: AuthModel & {
+if (autoLogin.value && tempAccount.value.size) {
+  passwordLogin({
+    account: tempAccount.value.get('account'),
+    password: tempAccount.value.get('password'),
+  })
+}
+
+function onSuccess({ access_token, expires_in, refresh_token, org, account }: AuthModel & {
   org?: Corp
+  account: {
+    user_number: string
+    password: string
+    country_code: string
+  }
 }) {
-  const authStore = useAuthStore()
   authStore.$patch({
     token: access_token,
     expiresIn: expires_in,
     refreshToken: refresh_token,
     loginTime: Date.now(),
   })
+
+  tempAccount.value.set('account', account.user_number)
+  tempAccount.value.set('password', account.password)
 
   if (activeTab.value === 'password' && isRememberPassword.value) {
     accountHistoryRecord.value.set(loginForm.value.account, loginForm.value.password)
@@ -143,17 +162,17 @@ function handleImageCodeCancel() {
 }
 
 const login = handleLogin((values: any) => {
-  passwordMutate({ ...values, password: md5(values.password) })
+  passwordLogin({ ...values, password: md5(values.password) })
 })
 
 const loginBySms = handleSmsLogin((values: any) => {
-  smsMutate(values)
+  smsLogin(values)
 })
 
-onMounted(async () => {
-  const form = document.querySelector('form')
-  form?.setAttribute('autocomplete', 'on')
-})
+// onMounted(async () => {
+//   const form = document.querySelector('form')
+//   form?.setAttribute('autocomplete', 'on')
+// })
 </script>
 
 <template>
