@@ -181,7 +181,7 @@ catalogs:
       specifier: ^2.1.3
       version: 2.1.3
     '@wl/network':
-      specifier: https://pkg.pr.new/kvoon3/wl-network/@weila/network@0460b32a274959dd5a3e70edf92d5e575bfadea2
+      specifier: https://pkg.pr.new/kvoon3/wl-network/@weila/network@0fa834aa31508f06a7b4b2184b484575b37f5090
       version: 0.0.3
     apipost-mock-gen:
       specifier: ^0.1.5
@@ -545,7 +545,7 @@ importers:
         version: 13.1.0(vue-router@4.5.0(vue@3.5.13(typescript@5.8.3)))(vue@3.5.13(typescript@5.8.3))
       '@wl/network':
         specifier: 'catalog:'
-        version: '@weila/network@https://pkg.pr.new/kvoon3/wl-network/@weila/network@0460b32a274959dd5a3e70edf92d5e575bfadea2(@netlify/blobs@8.2.0)(axios@1.8.4)(crypto-js@4.2.0)(db0@0.3.2(better-sqlite3@11.10.0))(ioredis@5.6.1)(md5@2.3.0)(ofetch@1.4.1)'
+        version: '@weila/network@https://pkg.pr.new/kvoon3/wl-network/@weila/network@0fa834aa31508f06a7b4b2184b484575b37f5090(@netlify/blobs@8.2.0)(axios@1.8.4)(crypto-js@4.2.0)(db0@0.3.2(better-sqlite3@11.10.0))(ioredis@5.6.1)(md5@2.3.0)(ofetch@1.4.1)'
       nuxt:
         specifier: 'catalog:'
         version: 3.16.2(@netlify/blobs@8.2.0)(@parcel/watcher@2.5.1)(@types/node@22.14.1)(better-sqlite3@11.10.0)(db0@0.3.2(better-sqlite3@11.10.0))(eslint@9.25.0(jiti@2.4.2))(ioredis@5.6.1)(less@4.3.0)(magicast@0.3.5)(meow@13.2.0)(optionator@0.9.4)(rollup@4.40.0)(terser@5.37.0)(tsx@4.19.3)(typescript@5.8.3)(vite@6.3.2(@types/node@22.14.1)(jiti@2.4.2)(less@4.3.0)(terser@5.37.0)(tsx@4.19.3)(yaml@2.7.1))(vue-tsc@2.2.8(typescript@5.8.3))(yaml@2.7.1)
@@ -838,8 +838,8 @@ importers:
         specifier: workspace:*
         version: link:../network
       '@wl/network':
-        specifier: 'catalog:'
-        version: '@weila/network@https://pkg.pr.new/kvoon3/wl-network/@weila/network@0460b32a274959dd5a3e70edf92d5e575bfadea2(@netlify/blobs@8.2.0)(axios@1.8.4)(crypto-js@4.2.0)(db0@0.3.2(better-sqlite3@11.10.0))(ioredis@5.6.1)(md5@2.3.0)(ofetch@1.4.1)'
+        specifier: link://../../../network
+        version: link:../../../network
       apipost-mock-gen:
         specifier: 'catalog:'
         version: 0.1.5
@@ -4841,8 +4841,8 @@ packages:
   '@webassemblyjs/wast-printer@1.14.1':
     resolution: {integrity: sha512-kPSSXE6De1XOR820C90RIo2ogvZG+c3KiHzqUoO/F34Y2shGzesfqv7o57xrxovZJH/MetF5UjroJ/R/3isoiw==}
 
-  '@weila/network@https://pkg.pr.new/kvoon3/wl-network/@weila/network@0460b32a274959dd5a3e70edf92d5e575bfadea2':
-    resolution: {tarball: https://pkg.pr.new/kvoon3/wl-network/@weila/network@0460b32a274959dd5a3e70edf92d5e575bfadea2}
+  '@weila/network@https://pkg.pr.new/kvoon3/wl-network/@weila/network@0fa834aa31508f06a7b4b2184b484575b37f5090':
+    resolution: {tarball: https://pkg.pr.new/kvoon3/wl-network/@weila/network@0fa834aa31508f06a7b4b2184b484575b37f5090}
     version: 0.0.3
     peerDependencies:
       axios: ^1.10.0
@@ -16333,7 +16333,7 @@ snapshots:
       '@webassemblyjs/ast': 1.14.1
       '@xtuc/long': 4.2.2
 
-  '@weila/network@https://pkg.pr.new/kvoon3/wl-network/@weila/network@0460b32a274959dd5a3e70edf92d5e575bfadea2(@netlify/blobs@8.2.0)(axios@1.8.4)(crypto-js@4.2.0)(db0@0.3.2(better-sqlite3@11.10.0))(ioredis@5.6.1)(md5@2.3.0)(ofetch@1.4.1)':
+  '@weila/network@https://pkg.pr.new/kvoon3/wl-network/@weila/network@0fa834aa31508f06a7b4b2184b484575b37f5090(@netlify/blobs@8.2.0)(axios@1.8.4)(crypto-js@4.2.0)(db0@0.3.2(better-sqlite3@11.10.0))(ioredis@5.6.1)(md5@2.3.0)(ofetch@1.4.1)':
     dependencies:
       axios: 1.8.4(debug@4.4.0)
       crypto-js: 4.2.0

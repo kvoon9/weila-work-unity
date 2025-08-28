@@ -3,9 +3,10 @@ import en from '@arco-design/web-vue/es/locale/lang/en-us'
 import zhCN from '@arco-design/web-vue/es/locale/lang/zh-cn'
 import Message from '@arco-design/web-vue/es/message'
 import { VueQueryDevtools } from '@tanstack/vue-query-devtools'
-import { getOptionsV2 } from '@weila/network'
+import { v2Query } from '@wl/network'
 import { stringifyQuery } from 'ufo'
 import { computed } from 'vue'
+import { appid, appkey } from './shared/const'
 
 const { locale } = useI18n()
 
@@ -46,14 +47,13 @@ weilaApi.value.hook('request:prepare', async (ctx) => {
     const isPublic = ['login', 'common'].some(i => url.includes(i))
     const isNeedRefresh = needRefresh()
 
-    console.log('isPublic', isPublic)
-    console.log('isNeedRefresh', isNeedRefresh)
-
     if (isPublic || !isNeedRefresh)
       return
 
     if (!refreshing) {
-      refreshing = fetch(`/v2/corp/auth/refresh?${stringifyQuery(getOptionsV2())}`, {
+      refreshing = fetch(`/v2/corp/auth/refresh?${stringifyQuery({
+        ...v2Query(appid, appkey),
+      })}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -68,6 +68,11 @@ weilaApi.value.hook('request:prepare', async (ctx) => {
         })
         .then(({ data: auth, errcode }: { data: AuthModel, errcode: number }) => {
           if (errcode === 31) {
+            router.push('/login')
+            return
+          }
+
+          if (errcode !== 0) {
             router.push('/login')
             return
           }
@@ -101,13 +106,11 @@ weilaApi.value.hook('auth:error', () => {
 })
 function onError(error: any) {
   console.error('error', error)
-  if (error instanceof Error) {
-    Message.error(error.message)
+  if (error?.error) {
+    Message.error(error?.error)
   }
   else {
-    const { errcode, errmsg } = error
-    if (errcode !== undefined && errmsg !== undefined)
-      Message.error(`${errcode}: ${errmsg}`)
+    Message.error(`${error?.response?.status}:${error?.response?.statusText}`)
   }
 }
 </script>

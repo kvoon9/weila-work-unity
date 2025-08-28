@@ -21,6 +21,11 @@ const { data } = useWeilaFetch<{
   members: Member[]
 }>(() => `corp/address/get-member-list?page=${curPage.value}&size=${pageSize.value}`)
 
+const {error} = useWeilaFetch('123')
+watchEffect(() => {
+console.log('error.value',error.value)
+})
+
 const members = computed(() => {
   if (!data.value?.members)
     return []
