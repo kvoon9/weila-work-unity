@@ -14,7 +14,7 @@ const router = useRouter()
 
 const type = useRouteQuery<AppDownloadLinkType>('type', AppDownloadLinkType.WeilaNormal)
 
-const { data } = useWeilaFetch<{ avatar: string, url: string }>('web/app-download', {
+const { data } = useWeilaFetch<{ avatar: string, url: string }>('common/app-download', {
   body: {
     type: type.value,
   },

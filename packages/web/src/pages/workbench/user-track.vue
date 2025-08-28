@@ -21,6 +21,7 @@ const { t } = useI18n()
 const selectedUserKeys = shallowRef('')
 const selectedDate = shallowRef('')
 
+const enabled = computed(() => Boolean(selectedUserKeys.value && selectedDate.value))
 const { data: tracks } = useWeilaFetch<UserTrackModel[]>('corp/loc/get-track', {
   body: () => ({
     user_id: Number(selectedUserKeys.value.replace('member-', '')),
@@ -28,7 +29,7 @@ const { data: tracks } = useWeilaFetch<UserTrackModel[]>('corp/loc/get-track', {
   }),
   pick: ['tracks'],
 }, {
-  enabled: () => Boolean(selectedUserKeys.value && selectedDate.value !== ''),
+  enabled,
 })
 
 watchDebounced(() => tracks.value, (val) => {
