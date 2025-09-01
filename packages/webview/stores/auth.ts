@@ -19,7 +19,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const EXPIRES_BUFFER = 60 * 60 * 12
 
-  const app_id = '102036'
+  // const app_id = '102036'
   const key = 'b3c658bd2e637c65efb134fb381d4a18'
 
   const app_sign = computed(() => md5(`${et.value}${key}`))
@@ -168,7 +168,6 @@ export const useAuthStore = defineStore('auth', () => {
   watchEffect(() => isOutdate.value ? refreshToken() : void 0)
 
   return {
-    app_id,
     app_sign,
     app_sign_v2,
     access_token,

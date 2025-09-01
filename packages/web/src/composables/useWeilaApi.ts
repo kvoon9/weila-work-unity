@@ -5,8 +5,8 @@ import { appid, appkey } from '~/shared/const'
 
 const weilaApi = shallowRef(new WeilaApi(
   // demo server
-  appid,
-  appkey,
+  appid.value,
+  appkey.value,
 
   // '102065',
   // '3c227f2cbc2084ebdd9617fd283c42c7',
