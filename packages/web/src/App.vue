@@ -15,9 +15,9 @@ const arcoLang = computed(() => ({
   en,
 }[locale.value]))
 
-const { outdated, update } = useBundleInfo()
+const { update } = useBundleInfo()
 
-watchEffect(() => outdated.value && window.location.reload())
+// watchEffect(() => outdated.value && window.location.reload())
 
 onBeforeRouteUpdate(() => {
   update()
