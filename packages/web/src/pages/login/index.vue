@@ -290,7 +290,7 @@ const loginBySms = handleSmsLogin((values: any) => {
           {{ t('login.form.register') }}
         </a-button>
       </router-link>
-      <a href="https://demo.weila.hk/weila-content/#/app-download">
+      <a href="http://static.voischat.cn/common/app-download?type=corp-normal">
         <a-button type="text" long class="login-form-register-btn">
           安卓 APP 下载
         </a-button>
