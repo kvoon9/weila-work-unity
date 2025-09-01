@@ -26,6 +26,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "catalog:",
     "@antfu/ni": "catalog:",
+    "@intlify/eslint-plugin-vue-i18n": "catalog:",
     "@tanstack/eslint-plugin-query": "catalog:",
     "@unocss/eslint-plugin": "catalog:",
     "eslint": "catalog:",

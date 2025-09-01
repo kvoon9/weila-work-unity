@@ -1,5 +1,5 @@
 import antfu from '@antfu/eslint-config'
-// import vueI18n from '@intlify/eslint-plugin-vue-i18n'
+import vueI18n from '@intlify/eslint-plugin-vue-i18n'
 import pluginQuery from '@tanstack/eslint-plugin-query'
 import { createSimplePlugin } from 'eslint-factory'
 import { createAutoInsert } from 'eslint-plugin-unimport'
@@ -27,7 +27,21 @@ export default antfu(
   },
   pluginQuery.configs['flat/recommended'],
   // NOTE: disable temporarily
-  // vueI18n.configs['flat/recommended'],
+  vueI18n.configs['flat/recommended'].map(i => ({
+    ...i,
+    ignores: [
+      '**/webview/**',
+      '**/network/**',
+    ],
+  })),
+  {
+    settings: {
+      'vue-i18n': {
+        localeDir: './packages/web/locales/*.{json,json5,yaml,yml}', // extens
+        messageSyntaxVersion: '^10.0.7',
+      },
+    },
+  },
   createAutoInsert({
     imports: [
       {
@@ -40,7 +54,9 @@ export default antfu(
         as: 'deepRef',
       },
     ],
-    ignores,
+    ignores: [
+      '**/webview/**',
+    ],
   }),
   createSimplePlugin({
     name: 'no-ref',
