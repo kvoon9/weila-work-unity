@@ -1,6 +1,7 @@
-import type { Directive } from "vue"
-import { type DisableElement, useDisableEl } from "./disableEl"
-import { isObject } from "@antfu/utils"
+import type { Directive } from 'vue'
+import type { DisableElement } from './disableEl'
+import { isObject } from '@antfu/utils'
+import { useDisableEl } from './disableEl'
 
 interface VDisabledOptions {
   value: boolean
@@ -14,11 +15,11 @@ export const vDisabled: Directive = {
     const options: VDisabledOptions = (isObject(binding.value)
       ? binding.value as any
       : { value: binding.value })
-        ?? { value: false }
-    
-    const { 
+    ?? { value: false }
+
+    const {
       value: isDisabled = false,
-      title = '已禁用'
+      title = '已禁用',
     } = options
 
     if (isDisabled) {

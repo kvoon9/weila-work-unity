@@ -49,7 +49,7 @@ function save() {
 
   cropper.value?.getCroppedCanvas({
     maxWidth: 320,
-    maxHeight: 320
+    maxHeight: 320,
   }).toBlob(async (blob) => {
     if (!blob) {
       Message.error('no data')
@@ -64,7 +64,6 @@ function save() {
     })
       .then((compressedFile) => {
         state.value = 'idle'
-        console.log('compressedFile',compressedFile.size)
         emits('save', compressedFile)
       })
       .catch((error) => {

@@ -1,4 +1,4 @@
-import { objectEntries } from "@antfu/utils"
+import { objectEntries } from '@antfu/utils'
 
 export type AnyFn = (...args: any[]) => any
 
@@ -42,7 +42,6 @@ export function useDisableEl(el: DisableElement) {
   // const isHover = useElementHover(el)
 
   const enable = () => {
-    console.log('elUIStatesMap.get(el)',elUIStatesMap.get(el))
     const styles = elUIStatesMap.get(el)?.styles ?? {}
     const attrs = elUIStatesMap.get(el)?.attrs ?? {}
 
@@ -61,7 +60,7 @@ export function useDisableEl(el: DisableElement) {
     elUIStatesMap.set(el, {
       title: el.title,
       styles: {},
-      attrs: {}
+      attrs: {},
     })
 
     const styles = elUIStatesMap.get(el)?.styles ?? {}
@@ -73,8 +72,7 @@ export function useDisableEl(el: DisableElement) {
     styles.cursor = el.style.cursor
     el.style.cursor = 'not-allowed'
 
-
-    if(hintText) 
+    if (hintText)
       el.title = hintText
 
     // TODO
@@ -88,17 +86,14 @@ export function useDisableEl(el: DisableElement) {
     attrs.disabled = el.getAttribute('disabled')
     el.setAttribute('disabled', '')
 
-
     attrs.tabindex = el.getAttribute('tabindex')
     el.setAttribute('tabindex', '-1')
-
-    console.log('elUIStatesMap.get(el)',elUIStatesMap.get(el))
 
     addKillerEvent(el)
   }
 
   return {
     disable,
-    enable
+    enable,
   }
 }
