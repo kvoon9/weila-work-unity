@@ -247,7 +247,7 @@ login:
     form:
       successMsg: Login successful.
     get-sms-code: Get SMS verification code.
-    weila-enterprise: Micro Flare Enterprise Edition
+    weila-enterprise: Weila Enterprise Edition
   form:
     forgetPassword: forget the password
     login: Login
@@ -263,8 +263,8 @@ login:
   type:
     phone: phone
     username: account
-login-by-password: Account password login
-login-by-phone: Mobile number login
+login-by-password: Account
+login-by-phone: Phone
 login.banner.slogan1: Out-of-the-box high-quality template
 login.banner.slogan2: Built-in solutions to common problems
 login.banner.slogan3: Access visualization enhancement tool AUX
@@ -375,7 +375,7 @@ plus: >-
 priority: Priority
 project:
   name: Weila Enterprise Manager
-project-name: Micro Flare Enterprise Edition
+project-name: Weila Enterprise Edition
 quote: ''
 register:
   cancel: Cancel
@@ -399,7 +399,7 @@ register:
       errMsg: verify code is needed
       placeholder: verify code
   get-sms-code: Get SMS verification code.
-  weila-enterprise: Micro Flare Enterprise Edition
+  weila-enterprise: Weila Enterprise Edition
 reset-password:
   button: Reset Password
   cancel: Cancel
