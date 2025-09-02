@@ -115,7 +115,7 @@ function reloadPage() {
         </a-avatar>
 
         <template #content>
-          <div class="p4 flex-col gap-[15px] text-center">
+          <div class="p4 flex-col gap-[15px] text-center items-center justify-center">
             <div v-if="selfInfo" class="flex flex-col gap-2">
               <div class="text-lg text-primary font-semibold">
                 {{ selfInfo.name }}
@@ -124,7 +124,7 @@ function reloadPage() {
                 {{ t('weila-number') }}: {{ selfInfo.user_num }}
               </div>
               <div class="flex items-center gap-2">
-                <a-tag color="blue">
+                <a-tag color="blue" mxa>
                   +{{ selfInfo.country_code }} {{ selfInfo.phone }}
                 </a-tag>
               </div>

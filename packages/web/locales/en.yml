@@ -15,7 +15,7 @@ auth:
 avatar: Avatar
 back: Return
 batch-operation: Batch Operation
-binding-phone: Bind mobile phone number
+binding-phone: Bind Phone
 binding-phone-form:
   err-msg:
     password: password required
