@@ -3,7 +3,7 @@ import en from '@arco-design/web-vue/es/locale/lang/en-us'
 import zhCN from '@arco-design/web-vue/es/locale/lang/zh-cn'
 import Message from '@arco-design/web-vue/es/message'
 import { VueQueryDevtools } from '@tanstack/vue-query-devtools'
-import { v2Query } from '@wl/network'
+import { isWeilaRes, v2Query } from '@wl/network'
 import { stringifyQuery } from 'ufo'
 import { computed } from 'vue'
 import { appid, appkey } from './shared/const'
@@ -104,9 +104,13 @@ weilaApi.value.hook('auth:error', () => {
   localStorage.setItem('token', '')
   window.location.reload()
 })
+
 function onError(error: any) {
   console.error('error', error)
-  if (error?.error) {
+  if (isWeilaRes(error)) {
+    Message.error(`${error.errcode}${error.errmsg}`)
+  }
+  else if (error?.error) {
     Message.error(error?.error)
   }
   else {
