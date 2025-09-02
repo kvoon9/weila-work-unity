@@ -12,13 +12,13 @@ const { data: vip } = useWeilaFetch<VipInfo>('corp/org/get-my-vip')
 const { t } = useI18n()
 
 const infoMap = {
-  num: t('corp-number'),
-  member_limit: t('corp.member-limit'),
-  dept_limit: t('corp.dept-limit'),
-  dept_member_limit: t('corp.dept-member-limit'),
-  group_limit: t('corp.group-limit'),
-  group_member_limit: t('corp.group-member-limit'),
-  device_limit: t('corp.device-limit'),
+  num: 'corp-number',
+  member_limit: 'corp.member-limit',
+  dept_limit: 'corp.dept-limit',
+  dept_member_limit: 'corp.dept-member-limit',
+  group_limit: 'corp.group-limit',
+  group_member_limit: 'corp.group-member-limit',
+  device_limit: 'corp.device-limit',
 }
 
 // const supports = computed(() => !vip.value ? {} : Object.groupBy(vip.value?.vip_supports, i => i.name))
@@ -145,7 +145,7 @@ function goTo(path: string) {
 
                 return limits.map(limit => ({
                   // @ts-expect-error type error
-                  label: infoMap?.[limit],
+                  label: t(infoMap?.[limit]),
                   value: i[limit],
                 }))
               })" bordered

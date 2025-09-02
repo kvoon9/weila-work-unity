@@ -60,13 +60,13 @@ const { data: groups } = useQuery<GroupModel[]>({
           : ''
         "
       >
-        <UseImage :src="group.avatar" class="mr-4 h-12 w-12 rounded-full" alt="Group Avatar">
+        <UseImage :src="group.avatar" class="mr-4 h-12 w-12 rounded-full">
           <template #loading>
             <div class="mr-4 h-12 w-12 animate-pulse rounded-full bg-gray-200" />
           </template>
           <template #error>
             <div class="mr-4 h-12 w-12 flex items-center justify-center rounded-full bg-gray-300">
-              <span class="text-xs text-gray-500">Error</span>
+              <span class="text-xs text-gray-500">{{ $t('error') }}</span>
             </div>
           </template>
         </UseImage>

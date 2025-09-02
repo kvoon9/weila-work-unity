@@ -62,8 +62,8 @@ button:
   copied: Copy successful.
   copy: Copy
   create: Create
-  create-dept: Create Department
-  create-group: Create group
+  create-dept: Create Dept
+  create-group: Create Group
   create-member: Create Member
   delete: Delete
   delete-dept: Delete Dept
@@ -135,12 +135,12 @@ delete:
 department-list: Department List
 dept:
   create: Add Dept
-  edit: Modification Department
+  edit: Modification Dept
   form:
     name:
       label: name
       placeholder: name is required
-  name: Department
+  name: Dept
 dept-count: Number of departments
 device-count: Number of devices
 download-android-app: Android APP download
@@ -183,12 +183,59 @@ hint:
   please-select: Please select...
 home: Home
 img-verify-code: Graphic verification code
-job-number: Employee ID
+job-number: Job ID
 latitude: latitude
+lega-form:
+  step:
+    success: Certification completed.
 legal:
   enterprise: Enterprise Certification
+  identify-number: Document number
+  label:
+    audit-category: Certification Category
+    audit-status: Review status
+    business-license: Business license
+    cert-number: Document number
+    corp-name: Company Name
+    id-card-front: Front of the ID card
+    id-card-reverse: Back of the ID card
+    org-name: Organization Name
+    reason: Reason
+    update-time: Update time
   personal: Personal certification
+  placeholder:
+    corp-identify: Please enter the 18-digit unified social credit code.
+    corp-name: Please enter the company name.
+  type:
+    corp: Enterprise Certification
+    personal: Personal certification
   update-info: Update certification information.
+  value:
+    enterprise: Enterprise
+    failed: Not passed
+    none: None
+    passed: Approved
+    pending: Pending review
+    personal: Personal
+legal-form:
+  error:
+    business-license: Please upload a photo of the business license.
+    corp-identify: The unified social credit code must be 18 digits.
+    identify: The ID number must be 18 digits.
+    identify-card-front: Please upload a photo of the front of your ID card.
+    identify-card-reverse: Please upload a photo of the back of your ID card.
+  placeholder:
+    identify: Please enter an 18-digit ID number.
+  step:
+    description:
+      failed: Review not approved, please resubmit for review.
+      fill-info: Complete the certification information and submit.
+      success: Review approved, certification successful.
+      waiting-verify: We will complete the review within 1-3 working days.
+    failed: Authentication failed.
+    fill-info: Fill in the information.
+    success: Certification completed.
+    waiting-verify: Waiting for review.
 loading: Loading...
 loc_share: location share
 location-detail: Location information
@@ -236,11 +283,11 @@ member:
     avatar:
       label: Avatar
     dept:
-      label: Department
+      label: Dept
     gender:
       label: Gender
     job-num:
-      label: Employee ID
+      label: Job ID
     loc_share:
       label: Share Location
     name:
@@ -319,6 +366,7 @@ parenthesis:
     It seems there is no text provided for translation. Please provide the text
     you would like to have translated from Chinese (zh-CN) to English.
 password: Password
+person-name: Name
 phone: phone
 phone-number: Phone Number
 plus: >-
@@ -387,7 +435,7 @@ sms-code: Message Code
 state:
   online: Online status
 submenu:
-  dept-manage: Department Management
+  dept-manage: Dept Management
   group-manage: Group Management
   member-manage: Member Management
   user-track: Track
@@ -420,7 +468,7 @@ vip:
   expired:
     time: Membership expiration time
   level: Membership Level
-weila-number: Micro trumpet
+weila-number: ID
 workbench:
   add-customer-service: Add customer service.
   area: Region

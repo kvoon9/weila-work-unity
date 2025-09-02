@@ -128,10 +128,10 @@ async function uploadFile(option: any) {
           })()"
           w-300
         >
-          <a-step :title="$t('legal-form.step.fill-info')" description="完善认证信息并提交" />
-          <a-step :title="$t('legal-form.step.waiting-verify')" description="我们将在1-3个工作日内完成审核" />
-          <a-step v-if="data?.state === 9" :title="$t('legal-form.step.failed')" description="审核未通过，请重新提交审核" />
-          <a-step v-else :title="$t('lega-form.step.success')" description="审核通过，认证成功" />
+          <a-step :title="$t('legal-form.step.fill-info')" :description="$t('legal-form.step.description.fill-info')" />
+          <a-step :title="$t('legal-form.step.waiting-verify')" :description="$t('legal-form.step.description.waiting-verify')" />
+          <a-step v-if="data?.state === 9" :title="$t('legal-form.step.failed')" :description="$t('legal-form.step.description.failed')" />
+          <a-step v-else :title="$t('legal-form.step.success')" :description="$t('legal-form.step.description.success')" />
         </a-steps>
       </div>
 
@@ -141,33 +141,33 @@ async function uploadFile(option: any) {
           bordered
           :data="[
             {
-              label: '审核状态',
+              label: t('legal.label.audit-status'),
               value: data.state === 8
-                ? '已通过'
+                ? t('legal.value.passed')
                 : data.state === 9
-                  ? '未通过'
-                  : '待审核',
+                  ? t('legal.value.failed')
+                  : t('legal.value.pending'),
             },
             {
-              label: '认证类别',
-              value: data.category === 0 ? '企业' : '个人',
+              label: t('legal.label.audit-category'),
+              value: data.category === 0 ? t('legal.value.enterprise') : t('legal.value.personal'),
             },
             {
-              label: '机构名称',
+              label: t('legal.label.org-name'),
               value: data.name,
             },
             {
-              label: '证件号码',
+              label: t('legal.label.cert-number'),
               value: data.identify,
             },
             {
-              label: '更新时间',
+              label: t('legal.label.update-time'),
               value: data.updated,
             },
 
             {
-              label: '原因',
-              value: data?.reason || '无',
+              label: t('legal.label.reason'),
+              value: data?.reason || t('legal.value.none'),
             },
           ]"
         />
@@ -211,7 +211,7 @@ async function uploadFile(option: any) {
             />
           </a-form-item>
 
-          <a-form-item label="身份证正面" field="identify_card_front">
+          <a-form-item :label="$t('legal.label.id-card-front')" field="identify_card_front">
             <a-upload
               :multiple="false"
               :limit="1"
@@ -225,7 +225,7 @@ async function uploadFile(option: any) {
             />
           </a-form-item>
 
-          <a-form-item label="身份证反面" field="identify_card_reverse">
+          <a-form-item :label="$t('legal.label.id-card-reverse')" field="identify_card_reverse">
             <a-upload
               :multiple="false"
               :file-list="[{ url: userForm.identify_card_reverse }].filter(i => i.url)"
@@ -242,7 +242,7 @@ async function uploadFile(option: any) {
           <!-- 提交按钮 -->
           <a-form-item>
             <a-button type="primary" size="large" html-type="submit">
-              更新认证信息
+              {{ $t('legal.update-info') }}
             </a-button>
           </a-form-item>
         </a-form>
@@ -255,27 +255,27 @@ async function uploadFile(option: any) {
           border-b
           @submit="submitCorp"
         >
-          <a-form-item label="企业名称" field="name">
+          <a-form-item :label="$t('legal.label.corp-name')" field="name">
             <a-input
               v-model="corpForm.name"
-              placeholder="请输入企业名称"
+              :placeholder="$t('legal.placeholder.corp-name')"
               allow-clear
               style="width: 450px"
             />
           </a-form-item>
 
-          <a-form-item label="证件号码" field="identify">
+          <a-form-item :label="$t('legal.label.cert-number')" field="identify">
             <a-input
               v-model="corpForm.identify"
               :max-length="18"
               show-word-limit
-              placeholder="请输入 18 位统一社会信用代码"
+              :placeholder="$t('legal.placeholder.corp-identify')"
               allow-clear
               style="width: 450px"
             />
           </a-form-item>
 
-          <a-form-item label="营业执照" field="business_license">
+          <a-form-item :label="$t('legal.label.business-license')" field="business_license">
             <a-upload
               :multiple="false"
               :default-file-list="[]"
@@ -292,7 +292,7 @@ async function uploadFile(option: any) {
           <!-- 提交按钮 -->
           <a-form-item>
             <a-button type="primary" size="large" html-type="submit">
-              更新认证信息
+              {{ $t('legal.update-info') }}
             </a-button>
           </a-form-item>
         </a-form>
