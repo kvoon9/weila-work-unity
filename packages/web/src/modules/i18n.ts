@@ -65,7 +65,5 @@ export async function loadLanguageAsync(lang: string): Promise<Locale> {
 
 export const install: UserModule = ({ app }) => {
   app.use(i18n)
-  // loadLanguageAsync(cashedLocaleName.value)
-  // TODO: 暂时强制中文
-  loadLanguageAsync(DEFAULT_LOCALE)
+  loadLanguageAsync(cashedLocaleName.value)
 }
