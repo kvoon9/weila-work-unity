@@ -1,7 +1,21 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { useToggleLocales } from '~/composables/useToggleLocales'
+
+const { t } = useI18n()
+const { toggle: toggleLocales } = useToggleLocales()
+</script>
 
 <template>
   <a-layout-footer flex="~ col center" p4 gap2 text-center>
+    <p>
+      <a-tooltip :content="t('settings.language')">
+        <a-button class="nav-btn" type="outline" shape="circle" @click="toggleLocales">
+          <template #icon>
+            <icon-language />
+          </template>
+        </a-button>
+      </a-tooltip>
+    </p>
     <p>
       <span m0 border-0 p0 text-center text-12px class="ff">Copyright © 2025-2026 Voistech All Rights
         Reserved.&nbsp;</span>

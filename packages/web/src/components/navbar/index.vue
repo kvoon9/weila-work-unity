@@ -2,12 +2,12 @@
 import { useFullscreen } from '@vueuse/core'
 import { computed, inject, shallowRef } from 'vue'
 import { useBundleInfo } from '~/composables/useBundleInfo'
-import { availableLocales, loadLanguageAsync } from '~/modules/i18n'
+import { useToggleLocales } from '~/composables/useToggleLocales'
 import { useAuthStore } from '~/stores/auth'
 import { version } from '../../../package.json'
 import BindingPhone from '../BindingPhone.vue'
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 
 const appStore = useAppStore()
 const { logout } = useAuthStore()
@@ -17,12 +17,7 @@ const topMenu = computed(() => appStore.topMenu && appStore.menu)
 
 const toggleDrawerMenu = inject('toggleDrawerMenu') as () => void
 
-async function toggleLocales() {
-  const locales = availableLocales
-  const newLocale = locales[(locales.indexOf(locale.value) + 1) % locales.length]
-  await loadLanguageAsync(newLocale)
-  locale.value = newLocale
-}
+const { toggle: toggleLocales } = useToggleLocales()
 
 interface SelfInfo {
   user_id: number
