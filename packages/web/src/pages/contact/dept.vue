@@ -7,7 +7,7 @@ import EditDeptModal from './components/EditDeptModal.vue'
 
 definePage({
   meta: {
-    name: '部门管理',
+    name: 'submenu.dept-manage',
   },
 })
 
@@ -39,7 +39,7 @@ function onSelect(dept: DeptModel, e: PointerEvent) {
 <template>
   <a-page-header
     :show-back="false"
-    :title="$route.meta.name"
+    :title="$t($route.meta.name || '')"
   >
     <a-card>
       <template #title>

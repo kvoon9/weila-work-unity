@@ -20,10 +20,10 @@ const { data: myLegal, isPending: isFetchingLegal } = useServiceLegal($v2)
 
 const isFetchingService = computed(() => isFetchingBusiness.value || isFetchingLegal.value)
 
-enum ServiceState {
-  Uncreated = '未创建',
-  Unverified = '未认证',
-  Verified = '已开通',
+const ServiceState = {
+  Uncreated: t('service-state.uncreate'),
+  Unverified: t('service-state.unauth'),
+  Verified: t('service-state.opened'),
 }
 
 const hasBusiness = computed(() => !!myBusiness.value)
@@ -73,7 +73,7 @@ const isCreateBusinessModalOpen = shallowRef(false)
         <div class="mb-4 flex items-center">
           <i class="i-carbon-map mr-3 text-2xl text-primary-600 dark:text-primary-400" />
           <h3 class="text-xl text-gray-900 font-semibold dark:text-gray-100">
-            用户轨迹
+            {{ t('workbench.user-track') }}
           </h3>
         </div>
       </RouterLink>
@@ -94,7 +94,7 @@ const isCreateBusinessModalOpen = shallowRef(false)
           <a-spin v-if="isFetchingService" />
           <i v-else class="i-carbon-group text-2xl text-primary-600 dark:text-primary-400" />
           <h3 class="text-xl text-gray-900 font-semibold dark:text-gray-100">
-            <span>服务号</span>
+            <span>{{ t('workbench.service-account') }}</span>
             <span v-if="myLegal" ml-2 text-sm font-normal>{{ serviceState }}</span>
           </h3>
         </div>

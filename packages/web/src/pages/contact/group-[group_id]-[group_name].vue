@@ -35,12 +35,12 @@ function onSelect(member: GroupMemberModel, e: PointerEvent) {
 <template>
   <a-page-header
     show-back
-    title="群组管理"
+    :title="$t('submenu.group-manage')"
     @back="$router.back"
   >
     <template #breadcrumb>
       <a-breadcrumb>
-        <a-breadcrumb-item>群列表</a-breadcrumb-item>
+        <a-breadcrumb-item>{{ $t('group-list') }}</a-breadcrumb-item>
         <a-breadcrumb-item>{{ route.params.group_name }}</a-breadcrumb-item>
       </a-breadcrumb>
     </template>

@@ -64,12 +64,12 @@ const selectedItem = shallowRef<Member | undefined>(undefined)
 
 <template>
   <a-page-header
-    title="部门管理"
+    :title="$t('submenu.dept-manage')"
     @back="$router.back"
   >
     <template #breadcrumb>
       <a-breadcrumb>
-        <a-breadcrumb-item>部门列表</a-breadcrumb-item>
+        <a-breadcrumb-item>{{ $t('department-list') }}</a-breadcrumb-item>
         <a-breadcrumb-item>{{ route.params.dept_name }}</a-breadcrumb-item>
       </a-breadcrumb>
     </template>
@@ -78,7 +78,7 @@ const selectedItem = shallowRef<Member | undefined>(undefined)
         <a-space>
           <AddDeptMemberModal :dept-id="Number(route.params.dept_id)" @success="refetch">
             <a-button type="primary">
-              <i i-ph-plus inline-block /> 添加成员
+              <i i-ph-plus inline-block /> {{ $t('button.add-member') }}
             </a-button>
           </AddDeptMemberModal>
           <a-input

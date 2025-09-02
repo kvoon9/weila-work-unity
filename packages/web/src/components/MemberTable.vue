@@ -74,7 +74,7 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
       @row-click="(...args) => onSelect(...args)"
     >
       <template #columns>
-        <a-table-column :title="t('member.state')" :width="90">
+        <a-table-column :title="t('member.state')">
           <template #cell="{ record: { state, user_id, type } }">
             <a-switch
               v-if="type !== 255"
@@ -94,7 +94,7 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
           </template>
         </a-table-column>
 
-        <a-table-column :title="t('avatar')" :width="70">
+        <a-table-column :title="t('avatar')">
           <template #cell="{ record: { avatar } }">
             <a-avatar :image-url="avatar">
               <IconUser />
@@ -102,7 +102,7 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
           </template>
         </a-table-column>
         <a-table-column
-          :title="t('name')" :width="140" :sortable="{
+          :title="t('name')" :sortable="{
             sortDirections: ['ascend', 'descend'],
           }"
         >
@@ -110,7 +110,7 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
             {{ name }}
           </template>
         </a-table-column>
-        <a-table-column :title="t('weila-number')" :width="100">
+        <a-table-column :title="t('weila-number')">
           <template #cell="{ record: { user_num } }">
             {{ user_num }}
           </template>
@@ -118,7 +118,7 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
 
         <a-table-column
           :title="t('type')"
-          :width="80"
+
           :filterable="{
             filters: [{
               text: t('user-type.member'),
@@ -149,7 +149,7 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
           </template>
         </a-table-column>
 
-        <a-table-column title="群数量" :width="80">
+        <a-table-column title="群数量">
           <template #cell="{ record: { grp_cnt, grp_lmt } }">
             <a-tag :color="grp_cnt >= grp_lmt ? 'magenta' : 'gray'">
               {{ grp_cnt }} / {{ grp_lmt }}
@@ -157,13 +157,13 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
           </template>
         </a-table-column>
 
-        <a-table-column :title="t('job-number')" :width="100">
+        <a-table-column :title="t('job-number')">
           <template #cell="{ record: { job_num } }">
             {{ job_num }}
           </template>
         </a-table-column>
         <a-table-column
-          :title="t('dept.name')" :width="100" data-index="dept_id"
+          :title="t('dept.name')" data-index="dept_id"
           :filterable="{
             filters: depts?.map((i) => ({
               text: i.name,
@@ -179,7 +179,7 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
         </a-table-column>
 
         <a-table-column
-          :title="t('created')" :width="120" :sortable="{
+          :title="t('created')" :sortable="{
             sortDirections: ['ascend', 'descend'],
           }"
         >
@@ -188,7 +188,7 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
           </template>
         </a-table-column>
 
-        <a-table-column :title="t('phone')" :width="140">
+        <a-table-column :title="t('phone')">
           <template #cell="{ record: { phone } }">
             {{ phone }}
           </template>
@@ -203,7 +203,7 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
               </a-tag>
             </template>
           </a-table-column> -->
-        <a-table-column :title="t('track')" :width="60">
+        <a-table-column :title="t('track')">
           <template #cell="{ record: { track } }">
             <a-tag>
               <!-- @vue-expect-error type error -->
@@ -219,7 +219,7 @@ async function toggleMemberState(targetId: number, state: 0 | 1) {
           </template>
         </a-table-column>
 
-        <a-table-column :title="t('loc_share')" :width="100">
+        <a-table-column :title="t('loc_share')">
           <template #cell="{ record: { loc_share } }">
             <a-tag v-if="loc_share" color="green">
               {{ t('open') }}

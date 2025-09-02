@@ -11,6 +11,8 @@ const { data, isFetched, refetch } = useWeilaFetch<Legal>('corp/legal/get-legal'
 
 // const isVerified = computed(() => data.value?.state === 8)
 
+const { t } = useI18n()
+
 const category = shallowRef(data.value?.category || 0)
 const { stop } = watch(data, (value) => {
   if (value) {
@@ -21,22 +23,18 @@ const { stop } = watch(data, (value) => {
 
 const { form: userForm, rules: userRules, handleSubmit: handleUserSubmit } = useForm(v.object({
   id: v.optional(v.number(), () => (data.value as UserLegal)?.id ?? undefined),
-  name: v.optional(v.pipe(
-    v.string(),
-    v.minLength(2, '姓名至少需要 2 个字符'),
-    v.maxLength(50, '姓名不能超过 50 个字符'),
-  ), () => (data.value as UserLegal)?.name ?? ''),
+  name: v.optional(v.pipe(v.string()), () => (data.value as UserLegal)?.name ?? ''),
   identify: v.optional(v.pipe(
     v.string(),
-    v.length(18, '身份证号码必须为 18 位'),
+    v.length(18, t('legal-form.error.identify')),
   ), () => (data.value as UserLegal)?.identify ?? ''),
   identify_card_front: v.optional(v.pipe(
     v.string(),
-    v.minLength(1, '请上传身份证正面照片'),
+    v.minLength(1, t('legal-form.error.identify-card-front')),
   ), () => (data.value as UserLegal)?.identify_card_front ?? ''),
   identify_card_reverse: v.optional(v.pipe(
     v.string(),
-    v.minLength(1, '请上传身份证反面照片'),
+    v.minLength(1, t('legal-form.error.identify-card-reverse')),
   ), () => (data.value as UserLegal)?.identify_card_reverse ?? ''),
 }), {
   watch: [category, data],
@@ -44,18 +42,14 @@ const { form: userForm, rules: userRules, handleSubmit: handleUserSubmit } = use
 
 const { form: corpForm, rules: corpRules, handleSubmit: handleCorpSubmit } = useForm(v.object({
   id: v.optional(v.number(), () => (data.value as CorpLegal)?.id ?? undefined),
-  name: v.optional(v.pipe(
-    v.string(),
-    v.minLength(2, '企业名称至少需要 2 个字符'),
-    v.maxLength(100, '企业名称不能超过 100 个字符'),
-  ), () => (data.value as CorpLegal)?.name ?? ''),
+  name: v.optional(v.string(), () => (data.value as CorpLegal)?.name ?? ''),
   identify: v.optional(v.pipe(
     v.string(),
-    v.length(18, '统一社会信用代码必须为 18 位'),
+    v.length(18, t('legal-form.error.corp-identify')),
   ), () => (data.value as CorpLegal)?.identify ?? ''),
   business_license: v.optional(v.pipe(
     v.string(),
-    v.minLength(1, '请上传营业执照照片'),
+    v.minLength(1, t('legal-form.error.business-license')),
   ), () => (data.value as CorpLegal)?.business_license ?? ''),
 }), {
   watch: [category, data],
@@ -67,7 +61,7 @@ const submitUser = handleUserSubmit(async (value) => {
     body: value,
   })
 
-  Message.success('修改成功')
+  Message.success(t('message.success'))
   refetch()
 })
 
@@ -77,7 +71,7 @@ const submitCorp = handleCorpSubmit(async (value) => {
     body: value,
   })
 
-  Message.success('修改成功')
+  Message.success(t('message.success'))
   refetch()
 })
 
@@ -108,7 +102,7 @@ async function uploadFile(option: any) {
 
 <template>
   <a-page-header
-    title="认证信息"
+    :title="$t('adt-message')"
     @back="$router.back"
   >
     <a-skeleton v-if="!isFetched" :animation="true">
@@ -134,16 +128,16 @@ async function uploadFile(option: any) {
           })()"
           w-300
         >
-          <a-step title="填写信息" description="完善认证信息并提交" />
-          <a-step title="等待审核" description="我们将在1-3个工作日内完成审核" />
-          <a-step v-if="data?.state === 9" title="认证失败" description="审核未通过，请重新提交审核" />
-          <a-step v-else title="认证完成" description="审核通过，认证成功" />
+          <a-step :title="$t('legal-form.step.fill-info')" description="完善认证信息并提交" />
+          <a-step :title="$t('legal-form.step.waiting-verify')" description="我们将在1-3个工作日内完成审核" />
+          <a-step v-if="data?.state === 9" :title="$t('legal-form.step.failed')" description="审核未通过，请重新提交审核" />
+          <a-step v-else :title="$t('lega-form.step.success')" description="审核通过，认证成功" />
         </a-steps>
       </div>
 
       <div v-if="data" p4 border-b>
         <a-descriptions
-          :title="data.category === 0 ? '企业认证' : '个人认证'" size="large"
+          :title="data.category === 0 ? t('legal.type.corp') : t('legal.type.personal')" size="large"
           bordered
           :data="[
             {
@@ -182,10 +176,10 @@ async function uploadFile(option: any) {
       <div v-if="data?.category !== 0" p4 border-b>
         <a-radio-group v-model="category" type="button">
           <a-radio :value="0">
-            企业认证
+            {{ $t('legal.enterprise') }}
           </a-radio>
           <a-radio :value="1">
-            个人认证
+            {{ $t('legal.type.personal') }}
           </a-radio>
         </a-radio-group>
       </div>
@@ -198,21 +192,20 @@ async function uploadFile(option: any) {
           border-b
           @submit="submitUser"
         >
-          <a-form-item label="姓名" field="name">
+          <a-form-item :label="$t('person-name')" field="name">
             <a-input
               v-model="userForm.name"
-              placeholder="请输入姓名"
               allow-clear
               style="width: 450px"
             />
           </a-form-item>
 
-          <a-form-item label="证件号码" field="identify">
+          <a-form-item :label="$t('legal.identify-number')" field="identify">
             <a-input
               v-model="userForm.identify"
               :max-length="18"
               show-word-limit
-              placeholder="请输入 18 位身份证号"
+              :placeholder="$t('legal-form.placeholder.identify')"
               allow-clear
               style="width: 450px"
             />

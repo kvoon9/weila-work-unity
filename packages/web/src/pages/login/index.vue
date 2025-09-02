@@ -26,14 +26,14 @@ const { t } = useI18n()
 const activeTab = shallowRef<'password' | 'sms'>('password')
 
 const { form: loginForm, rules: loginRules, handleSubmit: handleLogin } = useForm(v.object({
-  account: v.string('账号不能为空'),
-  password: v.string('密码不能为空'),
+  account: v.string(t('form.error.account-nonempty')),
+  password: v.string(t('form.error.password-nonempty')),
 }))
 
 const { form: smsLoginForm, rules: smsLoginRules, handleSubmit: handleSmsLogin } = useForm(v.object({
-  phone: v.string('手机号不能为空'),
+  phone: v.string(t('form.error.phone-nonempty')),
   country_code: v.optional(v.string(), '86'),
-  verifycode: v.string('验证码不能为空'),
+  verifycode: v.string(t('form.error.verify-code-nonempty')),
 }))
 
 $inspect(activeTab)
@@ -110,7 +110,7 @@ function onSuccess({ access_token, expires_in, refresh_token, org, account }: Au
 
 function handleSendSmsCode() {
   if (!smsLoginForm.value.phone) {
-    Message.warning('请输入手机号')
+    Message.warning(t('message.please-enter-phone-number'))
     return
   }
 
@@ -127,17 +127,17 @@ function handleSendSmsCode() {
 
 function handleImageCodeConfirm() {
   if (!data.value?.id) {
-    Message.error('图形验证码异常')
+    Message.error(t('message.verify-code-error'))
     return
   }
 
   if (!imageCode.value.trim()) {
-    Message.warning('请输入图形验证码')
+    Message.warning(t('binding-phone-form.placeholder.image-verifycode'))
     return
   }
 
   if (!currentPhoneInfo) {
-    Message.error('获取手机号失败，请重试')
+    Message.error(t('message.get-phone-error'))
     return
   }
 
@@ -151,7 +151,7 @@ function handleImageCodeConfirm() {
     onSuccess: () => {
       imageCodeModalVisible.value = false
       imageCode.value = ''
-      Message.success('短信发送成功')
+      Message.success(t('message.success'))
       // 这里可以账号密码添加倒计时等逻辑
     },
   })
@@ -179,13 +179,13 @@ const loginBySms = handleSmsLogin((values: any) => {
 <template>
   <div class="login-form-wrapper">
     <div text-10 text-center leading-loose my8 font-semibold>
-      微喇企业版
+      {{ $t('project-name') }}
     </div>
     <div class="login-form-title" mb-4 color-neutral-500>
       {{ t('login.form.title') }}
     </div>
     <a-tabs v-model:active-key="activeTab">
-      <a-tab-pane key="password" title="账号密码登录">
+      <a-tab-pane key="password" :title="t('login-by-password')">
         <a-form :model="loginForm" :rules="loginRules" class="login-form" layout="vertical" @submit="login">
           <a-form-item field="account" hide-label>
             <a-auto-complete
@@ -231,28 +231,20 @@ const loginBySms = handleSmsLogin((values: any) => {
           </a-space>
         </a-form>
       </a-tab-pane>
-      <a-tab-pane key="sms" title="手机号登录">
+      <a-tab-pane key="sms" :title="t('login-by-phone')">
         <a-form :model="smsLoginForm" :rules="smsLoginRules" class="login-form" layout="vertical" @submit="loginBySms">
           <a-form-item field="phone" hide-label>
             <a-input-group flex w-full>
-              <a-select v-model="smsLoginForm.country_code" w-fit placeholder="区号">
-                <a-option value="86">
-                  +86
-                </a-option>
-                <a-option value="852">
-                  +852
-                </a-option>
-                <a-option value="853">
-                  +853
-                </a-option>
-                <a-option value="886">
-                  +886
-                </a-option>
+              <a-select v-model="smsLoginForm.country_code" w-fit>
+                <a-option value="86" label="+86" />
+                <a-option value="852" label="+852" />
+                <a-option value="853" label="+853" />
+                <a-option value="886" label="+886" />
               </a-select>
               <a-input
                 v-model="smsLoginForm.phone"
                 flex-1
-                placeholder="请输入手机号"
+                :placeholder="t('binding-phone-form.placeholder.phone')"
                 allow-clear
               />
             </a-input-group>
@@ -260,7 +252,6 @@ const loginBySms = handleSmsLogin((values: any) => {
           <a-form-item field="verifycode" hide-label>
             <a-input
               v-model="smsLoginForm.verifycode"
-              placeholder="请输入验证码"
               allow-clear
               pr0
             >
@@ -271,7 +262,7 @@ const loginBySms = handleSmsLogin((values: any) => {
                   :disabled="!smsLoginForm.phone"
                   @click="handleSendSmsCode"
                 >
-                  获取短信验证码
+                  {{ $t('get-sms-code') }}
                 </a-button>
               </template>
             </a-input>
@@ -287,19 +278,19 @@ const loginBySms = handleSmsLogin((values: any) => {
     <a-space :size="16" w-full direction="vertical" style="margin-top: 16px;">
       <router-link to="/register">
         <a-button type="text" long class="login-form-register-btn">
-          {{ t('login.form.register') }}
+          {{ $t('register.form.title') }}
         </a-button>
       </router-link>
       <a href="http://static.voischat.cn/common/app-download?type=corp-normal">
         <a-button type="text" long class="login-form-register-btn">
-          安卓 APP 下载
+          {{ $t('download-android-app') }}
         </a-button>
       </a>
     </a-space>
 
     <a-modal
       v-model:visible="imageCodeModalVisible"
-      title="图形验证"
+      :title="$t('img-verify-code')"
       :footer="false"
       @cancel="handleImageCodeCancel"
     >
@@ -307,19 +298,18 @@ const loginBySms = handleSmsLogin((values: any) => {
         <div flex gap2>
           <a-input
             v-model="imageCode"
-            placeholder="请输入图形验证码"
             allow-clear
             :max-length="6"
           />
-          <img v-if="data?.image" :src="data.image" alt="验证码" min-w-30 @click="() => refreshImageCode()">
+          <img v-if="data?.image" :src="data.image" min-w-30 @click="() => refreshImageCode()">
         </div>
         <div flex gap4>
           <div flex-1 />
           <a-button @click="handleImageCodeCancel">
-            取消
+            {{ $t('button.cancel') }}
           </a-button>
           <a-button type="primary" @click="handleImageCodeConfirm">
-            确认
+            {{ $t('button.ok') }}
           </a-button>
         </div>
       </div>

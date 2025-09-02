@@ -2,6 +2,16 @@ TTS: TTS
 account:
   txt: 账号
 add-device: 添加设备
+add-member: 添加成员
+adt: '{0}认证'
+adt-message: 认证信息
+adt-state:
+  passed: 审核通过
+  pending: 待审核
+  unpassed: 审核未通过
+auth:
+  certified: 已认证
+  uncertified: 未认证
 avatar: 头像
 back: 返回
 batch-operation: 批量操作
@@ -9,26 +19,30 @@ binding-phone: 绑定手机号
 binding-phone-form:
   err-msg:
     password: 密码为必填项
+    phone-format: 手机号格式不正确
     phone-number: 手机号为必填项
+    phone-required: 手机号不能为空
     verify-code: 短信验证码为必填项
     verify-image-code: 图形验证码为必选项
-    phone-required: 手机号不能为空
-    phone-format: 手机号格式不正确
-    verifycode-required: 验证码不能为空
-    verifycode-min: 验证码至少4位
     verifycode-max: 验证码最多6位
-  title: 绑定手机号
+    verifycode-min: 验证码至少4位
+    verifycode-required: 验证码不能为空
   placeholder:
-    country-code: 区号
-    phone: 请输入手机号
+    country-code: 国家码
     image-verifycode: 请输入图形验证码
+    phone: 请输入手机号
     sms-verifycode: 短信验证码
+  title: 绑定手机号
+bracket:
+  left: \[
+  right: \]
 breadcrumb:
   binding-phone: 绑定手机
   me: 我
   reset-password: 重置密码
 btn:
   create: 创建
+build-time: 构建时间
 burst-mode: 对讲模式
 burst-mode-0: 排麦
 burst-mode-1: 抢麦
@@ -54,6 +68,7 @@ button:
   edit-group: 修改群组
   edit-group-member: 修改群成员
   login: 登录
+  ok: 确认
   remove: 移除
   reset: 重置
   reset-password: 重置密码
@@ -78,6 +93,7 @@ change-member:
 change-member-settings-form:
   title: Edit Member Info
 close: 关闭
+colon: ':'
 confirm-password: 确认密码
 controls: 操作
 copy:
@@ -86,21 +102,29 @@ corp:
   create:
     form:
       title: 创建企业
+  dept-limit: 部门数上限
+  dept-member-limit: 部门成员数上限
+  device-limit: 设备数上限
   edit: 修改企业
+  group-limit: 群数量上限
+  group-member-limit: 群成员数上限
   member: 组织成员
+  member-limit: 部门数上限
+  number: 企业号
 corp-info: 企业详情
 corp-number: 企业号
 create-member: 创建成员
 created: 创建日期
 crop:
+  avatar: 裁剪头像
   image: 裁剪图片
   image-size: 裁剪图片尺寸
-  avatar: 裁剪头像
 delete:
   modal:
     content: 您确定要删除吗？
     hint: 此操作无法撤销
     title: 删除
+department-list: 部门列表
 dept:
   create: 添加部门
   edit: 修改部门
@@ -109,11 +133,35 @@ dept:
       label: 名称
       placeholder: 名称是必需的
   name: 部门
+dept-count: 部门数量
+device-count: 设备数量
+download-android-app: 安卓 APP 下载
 edit: 编辑
+edit-adt-message: 修改认证信息
 edit-device: 修改设备
 edit-member: 修改成员
+error: Error
+famale: 女
 female: 女
+footer:
+  copyright: Copyright © 2025-2026 Voistech All Rights Reserved.
+  icp: 粤ICP备05000494号
+form:
+  error:
+    account-nonempty: 账号不能为空
+    password-nonempty: 密码不能为空
+    phone-nonempty: 手机号不能为空
+    verify-code-nonempty: 验证码不能为空
+form-error:
+  password-required: 密码不能为空
+  phone-max-length: 手机号长度不能超过11位
+  phone-min-length: 手机号长度不能少于11位
+  phone-required: 手机号不能为空
+  verifycode-required: 验证码不能为空
+form-placeholder:
+  please-enter-new-password: 请设置新密码
 gender: 性别
+get-sms-code: 获取短信验证码
 group:
   create: 创建群组
   member: 群成员
@@ -121,15 +169,42 @@ group:
   settings:
     members: 成员
     title: 群组设置
+group-count: 群组数量
+group-list: 群列表
 hint:
   please-select: 请选择...
+home: 主页
+img-verify-code: 图形验证码
 job-number: 工号
 latitude: 纬度
+lega-form:
+  step:
+    success: 认证完成
+legal:
+  enterprise: 企业认证
+  identify-number: 证件号码
+  personal: 个人认证
+  type:
+    corp: 企业认证
+    personal: 个人认证
+  update-info: 更新认证信息
+legal-form:
+  error:
+    business-license: 请上传营业执照照片
+    corp-identify: 统一社会信用代码必须为 18 位
+    identify: 身份证号码必须为 18 位
+    identify-card-front: 请上传身份证正面照片
+    identify-card-reverse: 请上传身份证反面照片
+  placeholder:
+    identify: 请输入 18 位身份证号
+  step:
+    failed: 认证失败
+    fill-info: 填写信息
+    waiting-verify: 等待审核
+loading: 加载中...
 loc_share: 位置共享
 location-detail: 位置信息
 login:
-  weila-enterprise: 微喇企业版
-  get-sms-code: 获取短信验证码
   android-download: 安卓 APP 下载
   cancel: 取消
   confirm: 确认
@@ -146,9 +221,13 @@ login:
     userName:
       errMsg: 用户名未填写
       placeholder: 用户名/手机号
+  get-sms-code: 获取短信验证码
   type:
     phone: 手机号
     username: 账号
+  weila-enterprise: 微喇企业版
+login-by-password: 账号密码登录
+login-by-phone: 手机号登录
 login.banner.slogan1: 开箱即用的高质量模板
 login.banner.slogan2: 内置了常见问题的解决方案
 login.banner.slogan3: 接入可视化增强工具AUX
@@ -158,6 +237,10 @@ login.banner.subSlogan3: 实现灵活的区块式开发
 logout: 退出登录
 longitude: 经度
 male: 男
+manager: 管理员
+map:
+  confirm: 确认
+  reset: 重置
 member:
   form:
     avatar:
@@ -179,6 +262,7 @@ member:
     track:
       label: 轨迹
   state: 状态
+member-count: 成员数量
 member-list: 成员列表
 member-state:
   enabled: 启用
@@ -193,10 +277,19 @@ menu:
   message: 历史消息
   workbench: 工作台
 message:
+  get-phone-error: 获取手机号失败，请重试
   not-support: 不支持的消息
+  please-enter-phone-number: 请输入手机号
   revoke: 消息已撤回
   success: 成功
+  verify-code-error: 图形验证码异常
 name: 名称
+navbar:
+  back: 返回
+  build-time: 构建时间
+  settings: 设置
+  system-update: 系统有新更新可用
+  version: v
 new-password: 新密码
 no-data: 暂无数据
 no-intro-data: 无描述信息
@@ -206,16 +299,19 @@ offline: 离线
 old-password: 旧密码
 online: 在线
 open: 打开
+option:
+  a: Option A
+  b: Option B
 org:
-  created-date: 创建日期
-  create-org: 创建企业
-  devices: 设备
-  groups: 群组
-  members: 成员
-  enterprise: 企业
-  personal: 个人
   auth: 认证
   auth-failed: 认证未通过
+  create-org: 创建企业
+  created-date: 创建日期
+  devices: 设备
+  enterprise: 企业
+  groups: 群组
+  members: 成员
+  personal: 个人
   unauth: 未认证
 org-form:
   avatar:
@@ -223,15 +319,20 @@ org-form:
   name:
     label: 名称
 organazition: 组织
+parenthesis:
+  left: (
+  right: )
 password: 密码
-phone: 电话
+person-name: 姓名
+phone: 手机号
 phone-number: 电话号码
+plus: +
 priority: 优先级
 project:
   name: 微喇企业管理系统
+project-name: 微喇企业版
+quote: ''
 register:
-  weila-enterprise: 微喇企业版
-  get-sms-code: 获取短信验证码
   cancel: 取消
   confirm: 确认
   form:
@@ -252,15 +353,17 @@ register:
     verifyCode:
       errMsg: 验证码为必填项
       placeholder: 验证码
-reset-password:
   get-sms-code: 获取短信验证码
+  weila-enterprise: 微喇企业版
+reset-password:
+  button: 重置密码
   cancel: 取消
   confirm: 确认
-  button: 重置密码
   form:
     password:
       label: 新密码
     title: 重置密码
+  get-sms-code: 获取短信验证码
 reset-password-form:
   title: 重置密码
 reset-pwd:
@@ -273,9 +376,14 @@ selected: 已选择
 sendSMS:
   success:
     hint: 发送成功，请注意查看短信消息
+service-state:
+  opened: 已开通
+  unauth: 未认证
+  uncreate: 未创建
 shutup: 禁言
 shutup-disable: 不禁言
 shutup-enable: 禁言
+slash: /
 sms-code: 短信验证码
 state:
   online: 在线
@@ -283,107 +391,75 @@ submenu:
   dept-manage: 部门管理
   group-manage: 群组管理
   member-manage: 成员管理
+  user-track: 轨迹
 time: 时间
 track: 轨迹
 track-type:
   close: 关闭
+  fast: 快速
   high: 高频
   keep: 保持
   low: 低频
   medium: 中频
-  fast: 快速
 type: 类型
 user:
   gender: 性别
   phone: 电话
 user-count: 用户数量
+user-info-loading: Loading user information...
 user-track: 用户轨迹
 user-type:
   device: 设备
   member: 成员
   owner: 企业主
+v-version: v
 verify-code: 验证码
 verify-image-code: 验证图形代码
+vip:
+  enable:
+    time: 会员生效时间
+  expired:
+    time: 会员过期时间
+  level: 会员等级
 weila-number: 微喇号
-manager: 管理员
-option:
-  a: Option A
-  b: Option B
-loading: 加载中...
-map:
-  reset: 重置
-  confirm: 确认
-slash: /
-bracket:
-  left: \[
-  right: \]
-quote: ''
-colon: ':'
-plus: +
-famale: 女
-user-info-loading: Loading user information...
-auth:
-  certified: 已认证
-  uncertified: 未认证
-home: 主页
-footer:
-  copyright: Copyright © 2025-2026 Voistech All Rights Reserved.
-  icp: 粤ICP备05000494号
-navbar:
-  version: v
-  system-update: 系统有新更新可用
-  build-time: 构建时间
-  settings: 设置
-  back: 返回
-parenthesis:
-  left: (
-  right: )
-department-list: 部门列表
-add-member: 添加成员
-group-list: 群列表
-legal:
-  enterprise: 企业认证
-  personal: 个人认证
-  update-info: 更新认证信息
-error: Error
 workbench:
-  user-track: 用户轨迹
-  service-account: 服务号
-  platform: 工作台
-  service-audit: 服务号审核
-  loading: 加载中...
-  no-audit-info: 暂无待审核的认证信息
-  id: ID
-  category: 类别
-  type: 类型
-  business-license: 营业执照
-  pass: 通过
-  reject: 拒绝
-  profile: 简介
-  contact: 联系方式
+  add-customer-service: 添加客服
   area: 区域
-  street: 街道
-  coordinates: 经纬度
-  service-album: 服务号相册
-  qualification: 资质信息
-  service-point: 服务点
-  create-service-point: 创建服务点
-  confirm-delete-point: 确定删除该服务点吗？
+  auth-info: 认证信息
+  business-license: 营业执照
+  category: 类别
   confirm: 确定
-  service-point-management: 服务点管理
-  service-point-customer-service: 服务点客服管理
+  confirm-delete-point: 确定删除该服务点吗？
+  confirm-delete-staff: 确定删除客服
+  contact: 联系方式
+  coordinates: 经纬度
+  create-service: 创建服务点
+  create-service-point: 创建服务点
   delete: 删除
   edit: 编辑
-  staff-management: 客服管理
-  add-customer-service: 添加客服
-  save: 保存
-  create-service: 创建服务点
-  confirm-delete-staff: 确定删除客服
-  question-mark: 吗？
   edit-qualification: 编辑资质
-  modify-auth-info: 修改认证信息
-  auth-info: 认证信息
+  id: ID
   id-colon: ID：
-  type-colon: 类型：
+  loading: 加载中...
+  modify-auth-info: 修改认证信息
+  no-audit-info: 暂无待审核的认证信息
+  pass: 通过
+  platform: 工作台
+  profile: 简介
+  qualification: 资质信息
+  question-mark: 吗？
+  reject: 拒绝
+  save: 保存
+  service-account: 服务号
+  service-album: 服务号相册
+  service-audit: 服务号审核
+  service-point: 服务点
+  service-point-customer-service: 服务点客服管理
+  service-point-management: 服务点管理
+  staff-management: 客服管理
   status-colon: 状态：
+  street: 街道
   submit: 提交
+  type: 类型
+  type-colon: 类型：
+  user-track: 用户轨迹

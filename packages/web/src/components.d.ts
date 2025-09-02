@@ -47,6 +47,7 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     SelfCard: typeof import('./components/SelfCard.vue')['default']
     SendSmsButton: typeof import('./components/SendSmsButton.vue')['default']
+    SideBar: typeof import('./components/SideBar.vue')['default']
     TestTable: typeof import('./components/TestTable.vue')['default']
     TheCropper: typeof import('./components/TheCropper.vue')['default']
     TheModal: typeof import('./components/TheModal.vue')['default']

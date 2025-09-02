@@ -9,14 +9,16 @@ const router = useRouter()
 
 const { data: vip } = useWeilaFetch<VipInfo>('corp/org/get-my-vip')
 
+const { t } = useI18n()
+
 const infoMap = {
-  num: '企业号',
-  member_limit: '成员数上限',
-  dept_limit: '部门数上限',
-  dept_member_limit: '部门成员数上限',
-  group_limit: '群数量上限',
-  group_member_limit: '群成员数上限',
-  device_limit: '设备数上限',
+  num: t('corp-number'),
+  member_limit: t('corp.member-limit'),
+  dept_limit: t('corp.dept-limit'),
+  dept_member_limit: t('corp.dept-member-limit'),
+  group_limit: t('corp.group-limit'),
+  group_member_limit: t('corp.group-member-limit'),
+  device_limit: t('corp.device-limit'),
 }
 
 // const supports = computed(() => !vip.value ? {} : Object.groupBy(vip.value?.vip_supports, i => i.name))
@@ -40,8 +42,8 @@ interface Menu {
 
 const menu = computed<Menu>(() => {
   const data = {
-    contact: { name: '通讯录', submenu: [] },
-    workbench: { name: '工作台', submenu: [] },
+    contact: { name: t('menu.contact'), submenu: [] },
+    workbench: { name: t('menu.workbench'), submenu: [] },
   }
   const routeList = router.getRoutes().filter((i: any) => i?.meta?.name)
 
@@ -95,7 +97,7 @@ function goTo(path: string) {
       auto-open
       @menu-item-click="goTo"
     >
-      <a-trigger v-if="corp" position="bl" auto-fit-position :unmount-on-close="false" :popup-translate="[5, 5]" trigger="hover">
+      <a-trigger v-if="corp" position="bl" auto-fit-position :unmount-on-close="true" :popup-translate="[5, 5]" trigger="hover">
         <div cursor-pointer text-neutral-500 px4 py2 hover:bg-neutral-200:50 rounded border mb4 mt2 flex items-center justify-between @click="goTo('/contact/org')">
           <div flex gap-2 items-center>
             <a-image width="40" height="40" :src="corp.avatar" rounded-full size-10 />
@@ -107,10 +109,10 @@ function goTo(path: string) {
                 <template #icon>
                   <icon-check-circle-fill />
                 </template>
-                已认证
+                {{ $t('auth.certified') }}
               </a-tag>
               <a-tag v-else>
-                未认证
+                {{ $t('org.unauth') }}
               </a-tag>
             </div>
           </div>
@@ -121,7 +123,7 @@ function goTo(path: string) {
             <a-descriptions
               :column="1"
               :data="[
-                { label: '企业号', value: corp?.num },
+                { label: t('corp.number'), value: corp?.num },
               ]"
               bordered
             />
@@ -130,9 +132,9 @@ function goTo(path: string) {
               v-if="vip?.vip"
               :column="1"
               :data="[
-                { label: '会员等级', value: vip?.vip_name },
-                { label: '生效时间', value: new Date(vip?.vip_created * 1000).toLocaleDateString() },
-                { label: '过期时间', value: new Date(vip?.vip_expired * 1000).toLocaleDateString() },
+                { label: t('vip.level'), value: vip?.vip_name },
+                { label: t('vip.enable.time'), value: new Date(vip?.vip_created * 1000).toLocaleDateString() },
+                { label: t('vip.expired.time'), value: new Date(vip?.vip_expired * 1000).toLocaleDateString() },
               ].filter(i => i && i.value)"
               bordered
             />
@@ -152,14 +154,14 @@ function goTo(path: string) {
         </template>
       </a-trigger>
       <a-menu-item key="/contact/org">
-        主页
+        {{ $t('home') }}
       </a-menu-item>
       <a-sub-menu v-for="{ name, submenu } in menu" :key="name">
         <template #title>
           {{ name }}
         </template>
         <a-menu-item v-for="i in submenu" :key="i.path" :disabled="disabledList.find(name => i.path.includes(name))">
-          {{ i.meta.name }}
+          {{ $t(i.meta.name || '') }}
         </a-menu-item>
       </a-sub-menu>
     </a-menu>

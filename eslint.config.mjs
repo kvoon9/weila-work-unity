@@ -32,6 +32,8 @@ export default antfu(
     ignores: [
       '**/webview/**',
       '**/network/**',
+      'packages/web/src/pages/workbench/service/**',
+      'packages/web/src/pages/workbench/service-adt/**',
     ],
   })),
   {

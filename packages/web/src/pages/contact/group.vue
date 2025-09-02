@@ -9,7 +9,7 @@ import EditGroupModal from './components/EditGroupModal.vue'
 
 definePage({
   meta: {
-    name: '群组管理',
+    name: 'submenu.group-manage',
   },
 })
 
@@ -42,7 +42,7 @@ function onSelect(group: GroupModel, e: PointerEvent) {
 <template>
   <a-page-header
     :show-back="false"
-    :title="$route.meta.name"
+    :title="$t($route.meta.name || '')"
   >
     <a-card>
       <template #title>

@@ -8,6 +8,8 @@ definePage({
   alias: ['/'],
 })
 
+const { t } = useI18n()
+
 const router = useRouter()
 
 const { data: corp, isSuccess } = useWeilaFetch<Corp>('corp/org/get-my-org')
@@ -49,15 +51,14 @@ watchEffect(() => {
                   <template #icon>
                     <icon-check-circle-fill />
                   </template>
-                  {{ data.category === 0 ? '企业' : '个人' }}认证
+                  {{ $t('adt', [data.category === 0 ? t('org.enterprise') : t('org.personal')]) }}
                 </a-tag>
                 <a-tag v-else-if="data?.state === 9">
-                  认证未通过
+                  {{ $t('org.auth-failed') }}
                 </a-tag>
                 <a-tag v-else>
-                  未认证
+                  {{ $t('org.unauth') }}
                 </a-tag>
-
                 <a-tag>
                   {{ vip?.vip_name }} <span v-if="vip?.vip">({{ new Date(corp.vip_expired * 1000).toLocaleDateString() }})</span>
                 </a-tag>
@@ -68,23 +69,23 @@ watchEffect(() => {
           <a-space>
             <EditCorpModal />
             <a-button type="primary" @click="$router.push('/contact/legal')">
-              认证
+              {{ $t('org.auth') }}
             </a-button>
           </a-space>
         </header>
       </div>
       <div grid="~ cols-4 gap-2" my4>
         <RouterLink to="/contact/member" border rounded-lg p4>
-          <a-statistic title="成员数量 " :value="corp.member_cnt" show-group-separator />
+          <a-statistic :title="$t('member-count') " :value="corp.member_cnt" show-group-separator />
         </RouterLink>
         <RouterLink to="/contact/dept" border rounded-lg p4>
-          <a-statistic title="部门数量 " :value="corp.dept_cnt" show-group-separator />
+          <a-statistic :title="$t('dept-count') " :value="corp.dept_cnt" show-group-separator />
         </RouterLink>
         <RouterLink to="/contact/group" border rounded-lg p4>
-          <a-statistic title="群组数量" :value="corp.group_cnt" show-group-separator />
+          <a-statistic :title="$t('group-count')" :value="corp.group_cnt" show-group-separator />
         </RouterLink>
         <RouterLink to="/contact/member" border rounded-lg p4>
-          <a-statistic title="设备数量" :value="corp.device_cnt" show-group-separator />
+          <a-statistic :title="$t('device-count')" :value="corp.device_cnt" show-group-separator />
         </RouterLink>
       </div>
     </div>

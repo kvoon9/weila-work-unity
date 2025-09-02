@@ -3,6 +3,15 @@ account:
   txt: Account
 add-device: Add device
 add-member: Add member
+adt: '{0} Certification'
+adt-message: Certification Information
+adt-state:
+  passed: Approved
+  pending: Pending review
+  unpassed: Review not passed.
+auth:
+  certified: Certified
+  uncertified: Unverified
 avatar: Avatar
 back: Return
 batch-operation: Batch Operation
@@ -10,16 +19,34 @@ binding-phone: Bind mobile phone number
 binding-phone-form:
   err-msg:
     password: password required
+    phone-format: The phone number format is incorrect.
     phone-number: phone number Required
+    phone-required: The phone number cannot be empty.
     verify-code: message code Required
     verify-image-code: verify image code required
+    verifycode-max: The verification code can be up to 6 digits.
+    verifycode-min: The verification code must be at least 4 digits.
+    verifycode-required: The verification code cannot be empty.
+  placeholder:
+    country-code: Country code
+    image-verifycode: Please enter the graphic verification code.
+    phone: Please enter your phone number.
+    sms-verifycode: SMS verification code
   title: Binding Phone
+bracket:
+  left: >-
+    It seems that there is no text provided for translation. Please provide the
+    text you would like to have translated from Chinese (zh-CN) to English.
+  right: >-
+    It seems there is no text provided for translation. Please provide the text
+    you would like to have translated from Chinese (zh-CN) to English.
 breadcrumb:
   binding-phone: binding phone
   me: me
   reset-password: reset password
 btn:
   create: create
+build-time: Build time
 burst-mode: Burst Mode
 burst-mode-0: Arrange wheat
 burst-mode-1: grab the mic.
@@ -45,6 +72,7 @@ button:
   edit-group: Modify group
   edit-group-member: Modify group members
   login: Login
+  ok: Confirm
   remove: remove
   reset: reset
   reset-password: Reset Password
@@ -69,6 +97,9 @@ change-member:
 change-member-settings-form:
   title: Edit Member Info
 close: close
+colon: >-
+  It seems there is no text provided for translation. Please provide the text
+  you would like to have translated from Chinese (zh-CN) to English.
 confirm-password: Confirm Password
 controls: Operation
 copy:
@@ -77,8 +108,15 @@ corp:
   create:
     form:
       title: create corp
+  dept-limit: Department limit
+  dept-member-limit: Department member limit
+  device-limit: Device limit
   edit: Modify enterprise
+  group-limit: Group quantity limit
+  group-member-limit: Group member limit
   member: Organizational members
+  member-limit: Department limit
+  number: Enterprise account
 corp-info: Company Details
 corp-number: Enterprise account
 country-code:
@@ -87,11 +125,14 @@ create-member: Create member
 created: created date
 crop:
   avatar: Crop avatar
+  image: Crop image
+  image-size: Crop image size
 delete:
   modal:
     content: Are you sure your want to delete?
     hint: This action cannot be undone
     title: Delete
+department-list: Department List
 dept:
   create: Add Dept
   edit: Modification Department
@@ -100,11 +141,35 @@ dept:
       label: name
       placeholder: name is required
   name: Department
+dept-count: Number of departments
+device-count: Number of devices
+download-android-app: Android APP download
 edit: Edit
+edit-adt-message: Modify authentication information.
 edit-device: Modify device
 edit-member: Modify member
+error: Error
+famale: Female
 female: Female
+footer:
+  copyright: Copyright © 2025-2026 Voistech All Rights Reserved.
+  icp: Guangdong ICP No. 05000494
+form:
+  error:
+    account-nonempty: The account cannot be empty.
+    password-nonempty: The password cannot be empty.
+    phone-nonempty: The phone number cannot be empty.
+    verify-code-nonempty: The verification code cannot be empty.
+form-error:
+  password-required: The password cannot be empty.
+  phone-max-length: The phone number length cannot exceed 11 digits.
+  phone-min-length: The phone number length cannot be less than 11 digits.
+  phone-required: The phone number cannot be empty.
+  verifycode-required: The verification code cannot be empty.
+form-placeholder:
+  please-enter-new-password: Please set a new password.
 gender: Gender
+get-sms-code: Get SMS verification code.
 group:
   create: Create Group
   member: Group members
@@ -112,16 +177,30 @@ group:
   settings:
     members: Members
     title: Group Settings
+group-count: Number of groups
+group-list: Group list
 hint:
   please-select: Please select...
+home: Home
+img-verify-code: Graphic verification code
 job-number: Employee ID
 latitude: latitude
+legal:
+  enterprise: Enterprise Certification
+  personal: Personal certification
+  update-info: Update certification information.
+loading: Loading...
 loc_share: location share
 location-detail: Location information
 login:
   __i18n_ally_root__:
+    android-download: Android APP download
+    cancel: Cancel
+    confirm: Confirm
     form:
       successMsg: Login successful.
+    get-sms-code: Get SMS verification code.
+    weila-enterprise: Micro Flare Enterprise Edition
   form:
     forgetPassword: forget the password
     login: Login
@@ -137,6 +216,8 @@ login:
   type:
     phone: phone
     username: account
+login-by-password: Account password login
+login-by-phone: Mobile number login
 login.banner.slogan1: Out-of-the-box high-quality template
 login.banner.slogan2: Built-in solutions to common problems
 login.banner.slogan3: Access visualization enhancement tool AUX
@@ -146,6 +227,10 @@ login.banner.subSlogan3: Realize flexible block development
 logout: Log out
 longitude: longitude
 male: Male
+manager: Administrator
+map:
+  confirm: Confirm
+  reset: Reset
 member:
   form:
     avatar:
@@ -167,6 +252,7 @@ member:
     track:
       label: Track
   state: State
+member-count: Number of members
 member-list: Member List
 member-state:
   enabled: Enabled
@@ -181,9 +267,21 @@ menu:
   message: Message
   workbench: Workbench
 message:
+  get-phone-error: Failed to obtain phone number, please try again.
   not-support: Not Supported Message
+  please-enter-phone-number: Please enter your phone number.
+  revoke: The message has been recalled.
   success: Success
+  verify-code-error: Abnormal graphic verification code
 name: Name
+navbar:
+  back: Return
+  build-time: Build time
+  settings: Settings
+  system-update: A new update is available for the system.
+  version: >-
+    It seems that the text you provided is just "v." Please provide more context
+    or additional text for translation.
 new-password: New password
 no-data: No data available.
 no-intro-data: No description information.
@@ -193,24 +291,47 @@ offline: Offline
 old-password: Old password
 online: Online
 open: open
+option:
+  a: Option A
+  b: Option B
 org:
+  auth: Certification
+  auth-failed: Certification not passed.
+  create-org: Create a business.
   created-date: Created Date
   devices: Devices
+  enterprise: Enterprise
   groups: Groups
   members: Members
+  personal: Personal
+  unauth: Unverified
 org-form:
   avatar:
     label: Avatar
   name:
     label: Name
 organazition: organazition
+parenthesis:
+  left: >-
+    It seems that your message is incomplete. Please provide the full text you
+    would like to have translated.
+  right: >-
+    It seems there is no text provided for translation. Please provide the text
+    you would like to have translated from Chinese (zh-CN) to English.
 password: Password
 phone: phone
 phone-number: Phone Number
+plus: >-
+  It seems there is no text provided for translation. Please provide the text
+  you would like to have translated.
 priority: Priority
 project:
   name: Weila Enterprise Manager
+project-name: Micro Flare Enterprise Edition
+quote: ''
 register:
+  cancel: Cancel
+  confirm: Confirm
   form:
     getSMS: Get SMS
     imgVerifyCode:
@@ -229,12 +350,17 @@ register:
     verifyCode:
       errMsg: verify code is needed
       placeholder: verify code
+  get-sms-code: Get SMS verification code.
+  weila-enterprise: Micro Flare Enterprise Edition
 reset-password:
   button: Reset Password
+  cancel: Cancel
+  confirm: Confirm
   form:
     password:
       label: new password
     title: Reset Password
+  get-sms-code: Get SMS verification code.
 reset-password-form:
   title: Reset Password
 reset-pwd:
@@ -247,16 +373,24 @@ selected: Selected
 sendSMS:
   success:
     hint: Sent successfully, please pay attention to your message
+service-state:
+  opened: Activated
+  unauth: Unverified
+  uncreate: Not created
 shutup: Mute
 shutup-disable: Not muted.
 shutup-enable: Muted
+slash: >-
+  It seems that there is no text provided for translation. Please provide the
+  text you would like to have translated from Chinese (zh-CN) to English.
 sms-code: Message Code
 state:
   online: Online status
 submenu:
-  dept-manage: Department management
+  dept-manage: Department Management
   group-manage: Group Management
   member-manage: Member Management
+  user-track: Track
 time: Time
 track: Track
 track-type:
@@ -271,11 +405,60 @@ user:
   gender: Gender
   phone: Phone
 user-count: Number of users
+user-info-loading: Loading user information...
 user-track: User trajectory
 user-type:
   device: Device
   member: Member
   owner: business owner
+v-version: v
 verify-code: Verification code
 verify-image-code: Verify Image Code
+vip:
+  enable:
+    time: Membership effective date
+  expired:
+    time: Membership expiration time
+  level: Membership Level
 weila-number: Micro trumpet
+workbench:
+  add-customer-service: Add customer service.
+  area: Region
+  auth-info: Certification Information
+  business-license: Business license
+  category: Category
+  confirm: Sure.
+  confirm-delete-point: Are you sure you want to delete this service point?
+  confirm-delete-staff: Confirm deletion of customer service.
+  contact: Contact information
+  coordinates: Latitude and longitude
+  create-service: Create service point
+  create-service-point: Create service point
+  delete: Delete
+  edit: Edit
+  edit-qualification: Editing qualifications
+  id: ID
+  id-colon: 'ID:'
+  loading: Loading...
+  modify-auth-info: Modify authentication information
+  no-audit-info: No certification information pending review.
+  pass: through
+  platform: Workbench
+  profile: Introduction
+  qualification: Qualification Information
+  question-mark: '"Ma?" translates to "Is it?" or "Really?" depending on the context.'
+  reject: Refuse
+  save: Save
+  service-account: Service account
+  service-album: Service account album
+  service-audit: Service account review
+  service-point: Service point
+  service-point-customer-service: Service Point Customer Service Management
+  service-point-management: Service Point Management
+  staff-management: Customer Service Management
+  status-colon: 'Status:'
+  street: Street
+  submit: Submit
+  type: Type
+  type-colon: 'Type:'
+  user-track: User trajectory

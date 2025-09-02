@@ -2,11 +2,12 @@
 import { useFullscreen } from '@vueuse/core'
 import { computed, inject, shallowRef } from 'vue'
 import { useBundleInfo } from '~/composables/useBundleInfo'
+import { availableLocales, loadLanguageAsync } from '~/modules/i18n'
 import { useAuthStore } from '~/stores/auth'
 import { version } from '../../../package.json'
 import BindingPhone from '../BindingPhone.vue'
 
-const { t /* locale */ } = useI18n()
+const { t, locale } = useI18n()
 
 const appStore = useAppStore()
 const { logout } = useAuthStore()
@@ -16,12 +17,12 @@ const topMenu = computed(() => appStore.topMenu && appStore.menu)
 
 const toggleDrawerMenu = inject('toggleDrawerMenu') as () => void
 
-// async function toggleLocales() {
-//   const locales = availableLocales
-//   const newLocale = locales[(locales.indexOf(locale.value) + 1) % locales.length]
-//   await loadLanguageAsync(newLocale)
-//   locale.value = newLocale
-// }
+async function toggleLocales() {
+  const locales = availableLocales
+  const newLocale = locales[(locales.indexOf(locale.value) + 1) % locales.length]
+  await loadLanguageAsync(newLocale)
+  locale.value = newLocale
+}
 
 interface SelfInfo {
   user_id: number
@@ -75,17 +76,17 @@ function reloadPage() {
         @click="toggleDrawerMenu"
       />
       <a-tag color="green" shape="round">
-        v {{ version }}
+        {{ $t('v-version') }} {{ version }}
       </a-tag>
       <a-button v-if="outdated" shape="round" size="mini" status="warning" space-x-2 @click="reloadPage">
-        <icon-refresh /> <span>系统有新更新可用</span>
+        <icon-refresh /> <span>{{ $t('navbar.system-update') }}</span>
       </a-button>
       <a-tag shape="round" color="gray" space-x-2>
-        <icon-code-sandbox /> <span>构建时间: {{ buildTime }}</span>
+        <icon-code-sandbox /> <span>{{ $t('build-time') }} {{ buildTime }}</span>
       </a-tag>
     </a-space>
     <a-space size="large">
-      <!-- <li>
+      <li>
         <a-tooltip :content="t('settings.language')">
           <a-button class="nav-btn" type="outline" shape="circle" @click="toggleLocales">
             <template #icon>
@@ -93,7 +94,7 @@ function reloadPage() {
             </template>
           </a-button>
         </a-tooltip>
-      </li> -->
+      </li>
       <a-tooltip
         :content="isFullscreen
           ? t('settings.navbar.screen.toExit')

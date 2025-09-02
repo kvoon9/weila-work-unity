@@ -5,7 +5,7 @@ import { shallowRef } from 'vue'
 definePage({
   alias: 'member',
   meta: {
-    name: '成员管理',
+    name: 'submenu.member-manage',
   },
 })
 
@@ -45,7 +45,10 @@ const selectedItem = shallowRef<Member | undefined>(undefined)
 </script>
 
 <template>
-  <a-page-header :show-back="false" :title="$route.meta.name">
+  <a-page-header
+    :show-back="false"
+    :title="$t($route.meta.name || '')"
+  >
     <a-card>
       <template #title>
         <a-space>

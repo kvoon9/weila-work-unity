@@ -17,18 +17,13 @@ const router = useRouter()
 
 const { form, rules, handleSubmit } = useForm(v.object({
   phone: v.pipe(
-    v.string('手机号不能为空'),
-    v.minLength(11, '手机号长度不能少于11位'),
-    v.maxLength(11, '手机号长度不能超过11位'),
-    v.regex(/^1[3-9]\d{9}$/, '手机号格式不正确'),
+    v.string(t('form-error.phone-required')),
+    v.minLength(11, t('form-error.phone-min-length')),
+    v.maxLength(11, t('form-error.phone-max-length')),
   ),
   country_code: v.optional(v.string(), '86'),
-  verifycode: v.pipe(
-    v.string('验证码不能为空'),
-    v.regex(/^\d{4,6}$/, '验证码只能为4-6位数字'),
-  ),
-  password:
-    v.string('密码不能为空'),
+  verifycode: v.pipe(v.string(t('form-error.verifycode-required'))),
+  password: v.string(t('form-error.password-required')),
 }))
 const { data, refetch: refreshImageCode } = useWeilaFetch<{ id: string, image: string }>('common/get-image-verifycode?width=160&height=80')
 
@@ -50,7 +45,7 @@ const submit = handleSubmit((values) => {
 
 function handleSendSmsCode() {
   if (!form.value.phone) {
-    Message.warning('请输入手机号')
+    Message.warning(t('message.please-enter-phone-number'))
     return
   }
 
@@ -67,17 +62,17 @@ function handleSendSmsCode() {
 
 function handleImageCodeConfirm() {
   if (!data.value?.id) {
-    Message.error('图形验证码异常')
+    Message.error(t('message.verify-code-error'))
     return
   }
 
   if (!imageCode.value.trim()) {
-    Message.warning('请输入图形验证码')
+    Message.warning(t('binding-phone-form.placeholder.image-verifycode'))
     return
   }
 
   if (!currentPhoneInfo) {
-    Message.error('获取手机号失败，请重试')
+    Message.error(t('message.get-phone-error'))
     return
   }
 
@@ -91,7 +86,7 @@ function handleImageCodeConfirm() {
     onSuccess: () => {
       imageCodeModalVisible.value = false
       imageCode.value = ''
-      Message.success('短信发送成功')
+      Message.success(t('message.success'))
     },
   })
 }
@@ -111,23 +106,15 @@ function handleImageCodeCancel() {
     <a-form :model="form" :rules layout="vertical" @submit="submit">
       <a-form-item field="phone" hide-label>
         <a-input-group>
-          <a-select v-model="form.country_code" style="width: 90px" placeholder="区号">
-            <a-option value="86">
-              +86
-            </a-option>
-            <a-option value="852">
-              +852
-            </a-option>
-            <a-option value="853">
-              +853
-            </a-option>
-            <a-option value="886">
-              +886
-            </a-option>
+          <a-select v-model="form.country_code" style="width: 90px" :placeholder="t('binding-phone-form.placeholder.country-code')">
+            <a-option value="86" label="+86" />
+            <a-option value="852" label="+852" />
+            <a-option value="853" label="+853" />
+            <a-option value="886" label="+886" />
           </a-select>
           <a-input
             v-model="form.phone"
-            placeholder="请输入手机号"
+            :placeholder="t('phone')"
             allow-clear
           />
         </a-input-group>
@@ -136,7 +123,7 @@ function handleImageCodeCancel() {
       <a-form-item field="verifycode" hide-label>
         <a-input
           v-model="form.verifycode"
-          placeholder="请输入验证码"
+          :placeholder="$t('verify-code')"
           allow-clear
         >
           <template #suffix>
@@ -146,7 +133,7 @@ function handleImageCodeCancel() {
               :disabled="!form.phone"
               @click="handleSendSmsCode"
             >
-              获取短信验证码
+              {{ $t('get-sms-code') }}
             </a-button>
           </template>
         </a-input>
@@ -155,7 +142,7 @@ function handleImageCodeCancel() {
       <a-form-item field="password" hide-label>
         <a-input-password
           v-model="form.password"
-          placeholder="请设置新密码"
+          :placeholder="t('form-placeholder.please-enter-new-password')"
           allow-clear
         />
       </a-form-item>
@@ -170,7 +157,7 @@ function handleImageCodeCancel() {
 
     <a-modal
       v-model:visible="imageCodeModalVisible"
-      title="图形验证"
+      :title="t('img-verify-code')"
       :footer="false"
       @cancel="handleImageCodeCancel"
     >
@@ -178,19 +165,19 @@ function handleImageCodeCancel() {
         <div flex gap2>
           <a-input
             v-model="imageCode"
-            placeholder="请输入图形验证码"
+            :placeholder="t('binding-phone-form.placeholder.image-verifycode')"
             allow-clear
             :max-length="6"
           />
-          <img v-if="data?.image" :src="data.image" alt="验证码" @click="() => refreshImageCode()">
+          <img v-if="data?.image" :src="data.image" @click="() => refreshImageCode()">
         </div>
         <div flex gap4>
           <div flex-1 />
           <a-button @click="handleImageCodeCancel">
-            取消
+            {{ $t('button.cancel') }}
           </a-button>
           <a-button type="primary" @click="handleImageCodeConfirm">
-            确认
+            {{ $t('button.ok') }}
           </a-button>
         </div>
       </div>

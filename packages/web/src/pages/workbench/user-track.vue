@@ -12,7 +12,8 @@ import { ref as deepRef, shallowRef } from 'vue'
 
 definePage({
   meta: {
-    name: '轨迹',
+    // name: '轨迹',
+    name: 'submenu.user-track',
   },
 })
 
