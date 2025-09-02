@@ -2,7 +2,6 @@ TTS: TTS
 account:
   txt: 账号
 add-device: 添加设备
-add-member: 添加成员
 avatar: 头像
 back: 返回
 batch-operation: 批量操作
@@ -13,7 +12,17 @@ binding-phone-form:
     phone-number: 手机号为必填项
     verify-code: 短信验证码为必填项
     verify-image-code: 图形验证码为必选项
+    phone-required: 手机号不能为空
+    phone-format: 手机号格式不正确
+    verifycode-required: 验证码不能为空
+    verifycode-min: 验证码至少4位
+    verifycode-max: 验证码最多6位
   title: 绑定手机号
+  placeholder:
+    country-code: 区号
+    phone: 请输入手机号
+    image-verifycode: 请输入图形验证码
+    sms-verifycode: 短信验证码
 breadcrumb:
   binding-phone: 绑定手机
   me: 我
@@ -84,6 +93,8 @@ corp-number: 企业号
 create-member: 创建成员
 created: 创建日期
 crop:
+  image: 裁剪图片
+  image-size: 裁剪图片尺寸
   avatar: 裁剪头像
 delete:
   modal:
@@ -117,6 +128,11 @@ latitude: 纬度
 loc_share: 位置共享
 location-detail: 位置信息
 login:
+  weila-enterprise: 微喇企业版
+  get-sms-code: 获取短信验证码
+  android-download: 安卓 APP 下载
+  cancel: 取消
+  confirm: 确认
   form:
     forgetPassword: 忘记密码
     login: 登录
@@ -192,9 +208,15 @@ online: 在线
 open: 打开
 org:
   created-date: 创建日期
+  create-org: 创建企业
   devices: 设备
   groups: 群组
   members: 成员
+  enterprise: 企业
+  personal: 个人
+  auth: 认证
+  auth-failed: 认证未通过
+  unauth: 未认证
 org-form:
   avatar:
     label: 头像
@@ -208,6 +230,10 @@ priority: 优先级
 project:
   name: 微喇企业管理系统
 register:
+  weila-enterprise: 微喇企业版
+  get-sms-code: 获取短信验证码
+  cancel: 取消
+  confirm: 确认
   form:
     getSMS: 获取短信
     imgVerifyCode:
@@ -227,6 +253,9 @@ register:
       errMsg: 验证码为必填项
       placeholder: 验证码
 reset-password:
+  get-sms-code: 获取短信验证码
+  cancel: 取消
+  confirm: 确认
   button: 重置密码
   form:
     password:
@@ -277,3 +306,84 @@ verify-code: 验证码
 verify-image-code: 验证图形代码
 weila-number: 微喇号
 manager: 管理员
+option:
+  a: Option A
+  b: Option B
+loading: 加载中...
+map:
+  reset: 重置
+  confirm: 确认
+slash: /
+bracket:
+  left: \[
+  right: \]
+quote: ''
+colon: ':'
+plus: +
+famale: 女
+user-info-loading: Loading user information...
+auth:
+  certified: 已认证
+  uncertified: 未认证
+home: 主页
+footer:
+  copyright: Copyright © 2025-2026 Voistech All Rights Reserved.
+  icp: 粤ICP备05000494号
+navbar:
+  version: v
+  system-update: 系统有新更新可用
+  build-time: 构建时间
+  settings: 设置
+  back: 返回
+parenthesis:
+  left: (
+  right: )
+department-list: 部门列表
+add-member: 添加成员
+group-list: 群列表
+legal:
+  enterprise: 企业认证
+  personal: 个人认证
+  update-info: 更新认证信息
+error: Error
+workbench:
+  user-track: 用户轨迹
+  service-account: 服务号
+  platform: 工作台
+  service-audit: 服务号审核
+  loading: 加载中...
+  no-audit-info: 暂无待审核的认证信息
+  id: ID
+  category: 类别
+  type: 类型
+  business-license: 营业执照
+  pass: 通过
+  reject: 拒绝
+  profile: 简介
+  contact: 联系方式
+  area: 区域
+  street: 街道
+  coordinates: 经纬度
+  service-album: 服务号相册
+  qualification: 资质信息
+  service-point: 服务点
+  create-service-point: 创建服务点
+  confirm-delete-point: 确定删除该服务点吗？
+  confirm: 确定
+  service-point-management: 服务点管理
+  service-point-customer-service: 服务点客服管理
+  delete: 删除
+  edit: 编辑
+  staff-management: 客服管理
+  add-customer-service: 添加客服
+  save: 保存
+  create-service: 创建服务点
+  confirm-delete-staff: 确定删除客服
+  question-mark: 吗？
+  edit-qualification: 编辑资质
+  modify-auth-info: 修改认证信息
+  auth-info: 认证信息
+  id-colon: ID：
+  type-colon: 类型：
+  status-colon: 状态：
+  submit: 提交

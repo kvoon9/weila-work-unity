@@ -11,14 +11,14 @@ const open = defineModel('open', { default: false })
 
 const { form, rules, handleSubmit, reset } = useForm(v.object({
   phone: v.pipe(
-    v.string('手机号不能为空'),
-    v.regex(/^1[3-9]\d{9}$/, '手机号格式不正确'),
+    v.string(t('binding-phone-form.err-msg.phone-required')),
+    v.regex(/^1[3-9]\d{9}$/, t('binding-phone-form.err-msg.phone-format')),
   ),
   country_code: v.optional(v.string(), '86'),
   verifycode: v.pipe(
-    v.string('验证码不能为空'),
-    v.minLength(4, '验证码至少4位'),
-    v.maxLength(6, '验证码最多6位'),
+    v.string(t('binding-phone-form.err-msg.verifycode-required')),
+    v.minLength(4, t('binding-phone-form.err-msg.verifycode-min')),
+    v.maxLength(6, t('binding-phone-form.err-msg.verifycode-max')),
   ),
 }))
 
@@ -58,23 +58,15 @@ const { data: verifyImageData, refetch: refreshImageCode } = useWeilaFetch<{ id:
     <a-form mxa w-fit :model="form" :rules layout="vertical" @submit="submit">
       <a-form-item field="phone" hide-label>
         <a-input-group>
-          <a-select v-model="form.country_code" style="width: 100px" placeholder="区号">
-            <a-option value="86">
-              +86
-            </a-option>
-            <a-option value="852">
-              +852
-            </a-option>
-            <a-option value="853">
-              +853
-            </a-option>
-            <a-option value="886">
-              +886
-            </a-option>
+          <a-select v-model="form.country_code" style="width: 100px" :placeholder="t('binding-phone-form.placeholder.country-code')">
+            <a-option value="86" label="+86" />
+            <a-option value="852" label="+852" />
+            <a-option value="853" label="+853" />
+            <a-option value="886" label="+886" />
           </a-select>
           <a-input
             v-model="form.phone"
-            placeholder="请输入手机号"
+            :placeholder="t('binding-phone-form.placeholder.phone')"
             allow-clear
           />
         </a-input-group>
@@ -84,7 +76,7 @@ const { data: verifyImageData, refetch: refreshImageCode } = useWeilaFetch<{ id:
         <div flex gap2>
           <a-input
             v-model="verifyImageAnswer"
-            placeholder="请输入图形验证码"
+            :placeholder="t('binding-phone-form.placeholder.image-verifycode')"
             allow-clear
             :max-length="6"
           />
@@ -96,7 +88,7 @@ const { data: verifyImageData, refetch: refreshImageCode } = useWeilaFetch<{ id:
         <div flex gap2>
           <a-input
             v-model="form.verifycode"
-            placeholder="短信验证码"
+            :placeholder="t('binding-phone-form.placeholder.sms-verifycode')"
             allow-clear
           />
           <SendSmsButton

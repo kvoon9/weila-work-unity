@@ -1,0 +1,424 @@
+
+> weila-crop-mgr@1.0.0 lint /Users/kvoon/weila/weila-work-unity
+> eslint . .
+
+
+/Users/kvoon/weila/weila-work-unity/packages/network/src/api/service.ts
+  198:5  warning  Object rest destructuring on a query will observe all changes to the query, leading to excessive re-renders  @tanstack/query/no-rest-destructuring
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/components/BindingPhone.vue
+  62:34  warning  raw text '
+              +86
+            ' is used   @intlify/vue-i18n/no-raw-text
+  65:35  warning  raw text '
+              +852
+            ' is used  @intlify/vue-i18n/no-raw-text
+  68:35  warning  raw text '
+              +853
+            ' is used  @intlify/vue-i18n/no-raw-text
+  71:35  warning  raw text '
+              +886
+            ' is used  @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/components/CreateMemberModal.vue
+  128:23  warning  raw text 'Option A' is used  @intlify/vue-i18n/no-raw-text
+  128:52  warning  raw text 'Option B' is used  @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/components/FileUploader.vue
+  138:75  warning  raw text '
+            裁剪图片
+          ' is used    @intlify/vue-i18n/no-raw-text
+  141:89  warning  raw text '
+            裁剪图片尺寸
+          ' is used  @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/components/LoadingMask.vue
+  9:27  warning  raw text '
+      加载中...
+    ' is used  @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/components/MapPicker.vue
+  221:115  warning  raw text '
+          重置
+        ' is used  @intlify/vue-i18n/no-raw-text
+  224:81   warning  raw text '
+          确认
+        ' is used  @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/components/MemberTable.vue
+  155:28  warning  raw text ' / ' is used  @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/components/MessageRevokeContent.vue
+  6:64  warning  raw text '
+    [' is used  @intlify/vue-i18n/no-raw-text
+  7:31  warning  raw text ']
+  ' is used    @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/components/MessageUnsupportedContent.vue
+  6:63  warning  raw text '
+    [' is used  @intlify/vue-i18n/no-raw-text
+  7:36  warning  raw text ']
+  ' is used    @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/components/MessageVoiceContent.vue
+  70:46  warning  raw text '" ' is used  @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/components/SelfCard.vue
+  66:38   warning  raw text ': ' is used                                       @intlify/vue-i18n/no-raw-text
+  76:60   warning  raw text ':' is used                                        @intlify/vue-i18n/no-raw-text
+  76:101  warning  'famale' does not exist in localization message resources   @intlify/vue-i18n/no-missing-keys
+  78:58   warning  raw text ':' is used                                        @intlify/vue-i18n/no-raw-text
+  78:66   warning  raw text ' +' is used                                       @intlify/vue-i18n/no-raw-text
+  90:121  warning  raw text '
+      Loading user information...
+    ' is used  @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/components/TreeMenu.vue
+  109:28  warning  raw text '
+                已认证
+              ' is used  @intlify/vue-i18n/no-raw-text
+  112:29  warning  raw text '
+                未认证
+              ' is used  @intlify/vue-i18n/no-raw-text
+  154:39  warning  raw text '
+        主页
+      ' is used                   @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/components/footer/index.vue
+  6:61  warning  raw text 'Copyright © 2025-2026 Voistech All Rights
+        Reserved. ' is used  @intlify/vue-i18n/no-raw-text
+  9:44  warning  raw text '粤ICP备05000494号' is used                                                @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/components/navbar/index.vue
+   77:42  warning  raw text '
+        v ' is used                               @intlify/vue-i18n/no-raw-text
+   81:32  warning  raw text '系统有新更新可用' is used                                  @intlify/vue-i18n/no-raw-text
+   84:37  warning  raw text '构建时间: ' is used                                    @intlify/vue-i18n/no-raw-text
+   99:13  warning  'settings' does not exist in localization message resources  @intlify/vue-i18n/no-missing-keys
+  100:13  warning  'settings' does not exist in localization message resources  @intlify/vue-i18n/no-missing-keys
+  123:40  warning  raw text ': ' is used                                        @intlify/vue-i18n/no-raw-text
+  126:37  warning  raw text '
+                  +' is used                      @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/composables/useWeilaFetch.ts
+  58:5  warning  Object rest destructuring on a query will observe all changes to the query, leading to excessive re-renders  @tanstack/query/no-rest-destructuring
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/pages/[...catch].vue
+  22:57  warning  raw text '
+        back
+      ' is used  @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/pages/contact/components/DeleteGroupMemberModal.vue
+  34:28  warning  raw text ' (' is used          @intlify/vue-i18n/no-raw-text
+  34:51  warning  raw text ')
+        ' is used  @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/pages/contact/dept-[dept_id]-[dept_name].vue
+  72:28  warning  raw text '部门列表' is used                @intlify/vue-i18n/no-raw-text
+  81:43  warning  raw text ' 添加成员
+            ' is used  @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/pages/contact/group-[group_id]-[group_name].vue
+  43:28  warning  raw text '群列表' is used  @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/pages/contact/legal.vue
+  184:31  warning  raw text '
+            企业认证
+          ' is used        @intlify/vue-i18n/no-raw-text
+  187:31  warning  raw text '
+            个人认证
+          ' is used        @intlify/vue-i18n/no-raw-text
+  251:70  warning  raw text '
+              更新认证信息
+            ' is used  @intlify/vue-i18n/no-raw-text
+  301:70  warning  raw text '
+              更新认证信息
+            ' is used  @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/pages/contact/org.vue
+  52:44   warning  raw text '企业' is used                                         @intlify/vue-i18n/no-raw-text
+  52:51   warning  raw text '个人' is used                                         @intlify/vue-i18n/no-raw-text
+  52:58   warning  raw text '认证
+                ' is used                        @intlify/vue-i18n/no-raw-text
+  54:54   warning  raw text '
+                  认证未通过
+                ' is used  @intlify/vue-i18n/no-raw-text
+  57:31   warning  raw text '
+                  未认证
+                ' is used    @intlify/vue-i18n/no-raw-text
+  62:61   warning  raw text '(' is used                                          @intlify/vue-i18n/no-raw-text
+  62:122  warning  raw text ')' is used                                          @intlify/vue-i18n/no-raw-text
+  70:78   warning  raw text '
+              认证
+            ' is used             @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/pages/create-org.vue
+  65:60  warning  raw text '
+        创建企业
+      ' is used  @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/pages/login/index.vue
+  181:62  warning  raw text '
+      微喇企业版
+    ' is used                            @intlify/vue-i18n/no-raw-text
+  239:38  warning  raw text '
+                  +86
+                ' is used      @intlify/vue-i18n/no-raw-text
+  242:39  warning  raw text '
+                  +852
+                ' is used     @intlify/vue-i18n/no-raw-text
+  245:39  warning  raw text '
+                  +853
+                ' is used     @intlify/vue-i18n/no-raw-text
+  248:39  warning  raw text '
+                  +886
+                ' is used     @intlify/vue-i18n/no-raw-text
+  273:18  warning  raw text '
+                  获取短信验证码
+                ' is used  @intlify/vue-i18n/no-raw-text
+  294:68  warning  raw text '
+          安卓 APP 下载
+        ' is used                @intlify/vue-i18n/no-raw-text
+  318:52  warning  raw text '
+            取消
+          ' is used                   @intlify/vue-i18n/no-raw-text
+  321:68  warning  raw text '
+            确认
+          ' is used                   @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/pages/message.vue
+  69:51  warning  raw text 'Error' is used  @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/pages/message/[group_id]-[group_name].vue
+  126:55  warning  raw text '(' is used                     @intlify/vue-i18n/no-raw-text
+  126:94  warning  raw text ')
+                  ' is used  @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/pages/register/index.vue
+  114:62  warning  raw text '
+      微喇企业版
+    ' is used                    @intlify/vue-i18n/no-raw-text
+  127:20  warning  raw text '
+              +86
+            ' is used      @intlify/vue-i18n/no-raw-text
+  142:14  warning  raw text '
+              获取短信验证码
+            ' is used  @intlify/vue-i18n/no-raw-text
+  188:52  warning  raw text '
+            取消
+          ' is used           @intlify/vue-i18n/no-raw-text
+  191:68  warning  raw text '
+            确认
+          ' is used           @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/pages/reset-password/index.vue
+  115:34  warning  raw text '
+              +86
+            ' is used      @intlify/vue-i18n/no-raw-text
+  118:35  warning  raw text '
+              +852
+            ' is used     @intlify/vue-i18n/no-raw-text
+  121:35  warning  raw text '
+              +853
+            ' is used     @intlify/vue-i18n/no-raw-text
+  124:35  warning  raw text '
+              +886
+            ' is used     @intlify/vue-i18n/no-raw-text
+  148:14  warning  raw text '
+              获取短信验证码
+            ' is used  @intlify/vue-i18n/no-raw-text
+  189:52  warning  raw text '
+            取消
+          ' is used           @intlify/vue-i18n/no-raw-text
+  192:68  warning  raw text '
+            确认
+          ' is used           @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/pages/workbench/index.vue
+  75:78  warning  raw text '
+            用户轨迹
+          ' is used  @intlify/vue-i18n/no-raw-text
+  97:19  warning  raw text '服务号' is used                           @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/pages/workbench/service-adt/index.vue
+   75:28  warning  raw text '工作台' is used                                 @intlify/vue-i18n/no-raw-text
+   77:26  warning  raw text '服务号审核' is used                               @intlify/vue-i18n/no-raw-text
+   81:39  warning  raw text '
+        服务号审核
+      ' is used               @intlify/vue-i18n/no-raw-text
+   87:26  warning  raw text '
+          加载中...
+        ' is used          @intlify/vue-i18n/no-raw-text
+   94:26  warning  raw text '
+          暂无待审核的认证信息
+        ' is used      @intlify/vue-i18n/no-raw-text
+  107:39  warning  raw text 'ID: ' is used                                @intlify/vue-i18n/no-raw-text
+  118:46  warning  raw text '类别' is used                                  @intlify/vue-i18n/no-raw-text
+  123:46  warning  raw text '类型' is used                                  @intlify/vue-i18n/no-raw-text
+  128:46  warning  raw text '营业执照' is used                                @intlify/vue-i18n/no-raw-text
+  139:16  warning  raw text '
+                通过
+              ' is used  @intlify/vue-i18n/no-raw-text
+  147:16  warning  raw text '
+                拒绝
+              ' is used  @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/pages/workbench/service/[sid]-[ssid]/detail.vue
+   82:78  warning  raw text '
+                  简介
+                ' is used    @intlify/vue-i18n/no-raw-text
+   94:78  warning  raw text '
+                  联系方式
+                ' is used  @intlify/vue-i18n/no-raw-text
+  101:26  warning  raw text '区域: ' is used                                      @intlify/vue-i18n/no-raw-text
+  102:26  warning  raw text '街道: ' is used                                      @intlify/vue-i18n/no-raw-text
+  103:26  warning  raw text '经纬度: ' is used                                     @intlify/vue-i18n/no-raw-text
+  103:53  warning  raw text ', ' is used                                        @intlify/vue-i18n/no-raw-text
+  116:28  warning  raw text ' 服务号相册
+          ' is used                         @intlify/vue-i18n/no-raw-text
+  177:26  warning  raw text ' 资质信息
+          ' is used                          @intlify/vue-i18n/no-raw-text
+  181:43  warning  raw text 'ID' is used                                        @intlify/vue-i18n/no-raw-text
+  185:43  warning  raw text '类别' is used                                        @intlify/vue-i18n/no-raw-text
+  189:43  warning  raw text '类型' is used                                        @intlify/vue-i18n/no-raw-text
+  193:43  warning  raw text '营业执照' is used                                      @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/pages/workbench/service/[sid]-[ssid]/index1.vue
+   51:26  warning  raw text '服务号' is used                         @intlify/vue-i18n/no-raw-text
+   58:16  warning  raw text '创建服务点' is used                       @intlify/vue-i18n/no-raw-text
+  124:10  warning  raw text '
+        确定删除该服务点吗？
+      ' is used  @intlify/vue-i18n/no-raw-text
+  129:86  warning  raw text '
+        确定
+      ' is used          @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/pages/workbench/service/[sid]-[ssid]/point/[pid]-[ppid].vue
+  61:30  warning  raw text '服务点管理' is used                                   @intlify/vue-i18n/no-raw-text
+  63:28  warning  raw text '服务点客服管理' is used                                 @intlify/vue-i18n/no-raw-text
+  98:98  warning  raw text '
+                  删除
+                ' is used  @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/pages/workbench/service/[sid]-[ssid]/point/index.vue
+   68:28  warning  raw text '服务点管理' is used                                   @intlify/vue-i18n/no-raw-text
+   98:96  warning  raw text '
+                  编辑
+                ' is used  @intlify/vue-i18n/no-raw-text
+  101:95  warning  raw text '
+                  删除
+                ' is used  @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/pages/workbench/service/[sid]-[ssid]/staff.vue
+  60:28  warning  raw text '客服管理' is used                                    @intlify/vue-i18n/no-raw-text
+  95:95  warning  raw text '
+                  删除
+                ' is used  @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/pages/workbench/service/components/AddBusinessPointStaffModal.vue
+  72:30  warning  raw text '
+      添加客服
+    ' is used        @intlify/vue-i18n/no-raw-text
+  94:10  warning  raw text '
+          确定
+        ' is used  @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/pages/workbench/service/components/AddBusinessStaffModal.vue
+  71:30  warning  raw text '
+      添加客服
+    ' is used        @intlify/vue-i18n/no-raw-text
+  93:10  warning  raw text '
+          确定
+        ' is used  @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/pages/workbench/service/components/CreateBusinessModal.vue
+  115:8  warning  raw text '
+        保存
+      ' is used  @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/pages/workbench/service/components/CreateBusinessPointModal.vue
+   59:30  warning  raw text '
+      创建服务点
+    ' is used   @intlify/vue-i18n/no-raw-text
+  113:8   warning  raw text '
+        保存
+      ' is used  @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/pages/workbench/service/components/DelBusinessPointModal.vue
+  25:14   warning  raw text '确定删除服务点吗？' is used           @intlify/vue-i18n/no-raw-text
+  29:113  warning  raw text '
+        确定
+      ' is used  @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/pages/workbench/service/components/DelBusinessPointStaffModal.vue
+  28:14  warning  raw text '确定删除客服 ' is used             @intlify/vue-i18n/no-raw-text
+  28:43  warning  raw text ' 吗？' is used                 @intlify/vue-i18n/no-raw-text
+  36:8   warning  raw text '
+        确定
+      ' is used  @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/pages/workbench/service/components/DelBusinessStaffModal.vue
+  28:14  warning  raw text '确定删除客服 ' is used             @intlify/vue-i18n/no-raw-text
+  28:43  warning  raw text ' 吗？' is used                 @intlify/vue-i18n/no-raw-text
+  36:8   warning  raw text '
+        确定
+      ' is used  @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/pages/workbench/service/components/EditBusinessModal.vue
+   76:30  warning  raw text '
+      编辑
+    ' is used      @intlify/vue-i18n/no-raw-text
+  136:8   warning  raw text '
+        保存
+      ' is used  @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/pages/workbench/service/components/EditBusinessPointModal.vue
+  103:8  warning  raw text '
+        保存
+      ' is used  @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/pages/workbench/service/components/EditLegalModal.vue
+  33:30  warning  raw text '
+      编辑资质
+    ' is used    @intlify/vue-i18n/no-raw-text
+  65:8   warning  raw text '
+        保存
+      ' is used  @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/pages/workbench/service/components/EditServicePointModal.vue
+  6:8  warning  raw text '
+    123
+  ' is used  @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/pages/workbench/service/components/EditStaffModal.vue
+  16:14  warning  raw text '姓名：' is used                 @intlify/vue-i18n/no-raw-text
+  20:32  warning  raw text '
+        保存
+      ' is used  @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/web/src/pages/workbench/service/set-license.vue
+   53:26   warning  raw text '修改认证信息' is used                               @intlify/vue-i18n/no-raw-text
+   57:41   warning  raw text '
+          认证信息
+        ' is used             @intlify/vue-i18n/no-raw-text
+   79:61   warning  raw text '
+                ID：
+              ' is used  @intlify/vue-i18n/no-raw-text
+   87:61   warning  raw text '
+                类型：
+              ' is used  @intlify/vue-i18n/no-raw-text
+   95:61   warning  raw text '
+                状态：
+              ' is used  @intlify/vue-i18n/no-raw-text
+  113:118  warning  raw text '
+            提交
+          ' is used           @intlify/vue-i18n/no-raw-text
+
+/Users/kvoon/weila/weila-work-unity/packages/webview/composables/memberList.ts
+  50:5  warning  Object rest destructuring on a query will observe all changes to the query, leading to excessive re-renders  @tanstack/query/no-rest-destructuring
+
+/Users/kvoon/weila/weila-work-unity/packages/webview/composables/service.ts
+  180:5  warning  Object rest destructuring on a query will observe all changes to the query, leading to excessive re-renders  @tanstack/query/no-rest-destructuring
+
+✖ 148 problems (0 errors, 148 warnings)
+

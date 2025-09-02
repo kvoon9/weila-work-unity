@@ -81,6 +81,8 @@ corp:
   member: Organizational members
 corp-info: Company Details
 corp-number: Enterprise account
+country-code:
+  macau: '853'
 create-member: Create member
 created: created date
 crop:
@@ -259,11 +261,11 @@ time: Time
 track: Track
 track-type:
   close: Close
+  fast: Fast
   high: High
   keep: Keep
   low: Low
   medium: Medium
-  fast: Fast
 type: Type
 user:
   gender: Gender

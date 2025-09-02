@@ -51,5 +51,11 @@
   "autoHide.mode": "auto",
   "cSpell.words": [
     "Weila"
-  ]
+  ],
+  "i18n-ally.sourceLanguage": "zh-CN",
+  "i18n-ally.keystyle": "nested",
+  "i18n-ally.localesPaths": [
+    "packages/web/locales"
+  ],
+  "i18n-ally.sortKeys": true
 }

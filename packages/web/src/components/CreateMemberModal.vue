@@ -125,7 +125,7 @@ const submit = handleSubmit(async (values: any) => {
             </a-radio>
 
             <div id="test" popover="auto">
-              <button>Option A</button><br><button>Option B</button>
+              <button>{{ t('option.a') }}</button><br><button>{{ t('option.b') }}</button>
             </div>
           </a-radio-group>
         </a-form-item>

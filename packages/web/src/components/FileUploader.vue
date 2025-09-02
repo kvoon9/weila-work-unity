@@ -19,6 +19,8 @@ const emits = defineEmits<{
   (e: 'error', error: unknown): void
 }>()
 
+const { t } = useI18n()
+
 const isUploading = defineModel<boolean>('isUploading', { required: false })
 
 const initialFiles = computed(() => toArray(props.initialFiles))
@@ -136,10 +138,10 @@ defineExpose({
           class="data-[state=open]:animate-contentShow fixed left-[50%] top-[50%] z-[100] max-h-[85vh] max-w-[450px] w-[90vw] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none"
         >
           <DialogTitle class="text-mauve12 m-0 text-[17px] font-semibold">
-            裁剪图片
+            {{ t('crop.image') }}
           </DialogTitle>
           <DialogDescription class="text-mauve11 mb-5 mt-[10px] text-sm leading-normal">
-            裁剪图片尺寸
+            {{ t('crop.image-size') }}
           </DialogDescription>
           <!-- @vue-expect-error type error  -->
           <TheCropper
