@@ -13,6 +13,7 @@
     "dev:webview": "pnpm -C packages/webview run dev",
     "dev:network": "pnpm -C packages/network run dev",
     "build:web": "pnpm -C packages/web run build",
+    "build:web:staging": "pnpm -C packages/web run build:staging",
     "build:webview": "pnpm -C packages/webview run build",
     "build:network": "pnpm -C packages/network run build",
     "lint": "eslint .",
