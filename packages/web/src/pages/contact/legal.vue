@@ -26,15 +26,15 @@ const { form: userForm, rules: userRules, handleSubmit: handleUserSubmit } = use
   name: v.optional(v.pipe(v.string()), () => (data.value as UserLegal)?.name ?? ''),
   identify: v.optional(v.pipe(
     v.string(),
-    v.length(18, t('legal-form.error.identify')),
+    v.length(18, () => t('legal-form.error.identify')),
   ), () => (data.value as UserLegal)?.identify ?? ''),
   identify_card_front: v.optional(v.pipe(
     v.string(),
-    v.minLength(1, t('legal-form.error.identify-card-front')),
+    v.minLength(1, () => t('legal-form.error.identify-card-front')),
   ), () => (data.value as UserLegal)?.identify_card_front ?? ''),
   identify_card_reverse: v.optional(v.pipe(
     v.string(),
-    v.minLength(1, t('legal-form.error.identify-card-reverse')),
+    v.minLength(1, () => t('legal-form.error.identify-card-reverse')),
   ), () => (data.value as UserLegal)?.identify_card_reverse ?? ''),
 }), {
   watch: [category, data],
@@ -45,11 +45,11 @@ const { form: corpForm, rules: corpRules, handleSubmit: handleCorpSubmit } = use
   name: v.optional(v.string(), () => (data.value as CorpLegal)?.name ?? ''),
   identify: v.optional(v.pipe(
     v.string(),
-    v.length(18, t('legal-form.error.corp-identify')),
+    v.length(18, () => t('legal-form.error.corp-identify')),
   ), () => (data.value as CorpLegal)?.identify ?? ''),
   business_license: v.optional(v.pipe(
     v.string(),
-    v.minLength(1, t('legal-form.error.business-license')),
+    v.minLength(1, () => t('legal-form.error.business-license')),
   ), () => (data.value as CorpLegal)?.business_license ?? ''),
 }), {
   watch: [category, data],

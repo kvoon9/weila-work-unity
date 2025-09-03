@@ -119,8 +119,7 @@ corp:
   number: Enterprise account
 corp-info: Company Details
 corp-number: Enterprise account
-country-code:
-  macau: '853'
+country-code: {}
 create-member: Create member
 created: created date
 crop:
@@ -158,6 +157,8 @@ form:
   error:
     account-nonempty: The account cannot be empty.
     password-nonempty: The password cannot be empty.
+    phone-maxLength: ''
+    phone-minLength: The phone number must be at least 11 digits.
     phone-nonempty: The phone number cannot be empty.
     verify-code-nonempty: The verification code cannot be empty.
 form-error:
@@ -295,7 +296,7 @@ member:
     password:
       label: Password
     phone:
-      label: Phoen
+      label: Phone
     track:
       label: Track
   state: State
@@ -376,7 +377,6 @@ priority: Priority
 project:
   name: Weila Enterprise Manager
 project-name: Weila Enterprise Edition
-quote: ''
 register:
   cancel: Cancel
   confirm: Confirm

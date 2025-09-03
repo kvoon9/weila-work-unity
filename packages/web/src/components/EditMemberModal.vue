@@ -19,19 +19,16 @@ const open = defineModel('open', { default: false })
 const authStore = useAuthStore()
 
 const { form, rules, handleSubmit, reset } = useForm(v.object({
-  user_id: v.optional(v.number('用户ID必须为数字'), () => props.member?.user_id),
-  name: v.optional(v.pipe(
-    v.string('姓名必须为字符串'),
-    v.maxLength(20, '姓名长度不能超过20个字符'),
-  ), () => props.member?.name),
-  job_num: v.optional(v.string('工号必须为字符串'), () => props.member?.job_num),
-  dept_id: v.optional(v.number('部门ID必须为数字'), () => props.member?.dept_id),
-  sex: v.optional(v.number('性别必须为数字'), () => props.member?.sex),
-  avatar: v.optional(v.string('头像地址必须为字符串'), () => props.member?.avatar),
-  phone: v.optional(v.string('手机号必须为字符串'), () => props.member?.phone),
-  is_admin: v.optional(v.number('管理员标识必须为数字'), () => props.member?.is_admin),
-  loc_share: v.optional(v.number('位置共享标识必须为数字'), () => props.member?.loc_share),
-  track: v.optional(v.number('轨迹标识必须为数字'), () => props.member?.track),
+  user_id: v.optional(v.number(), () => props.member?.user_id),
+  name: v.optional(v.pipe(v.string()), () => props.member?.name),
+  job_num: v.optional(v.string(), () => props.member?.job_num),
+  dept_id: v.optional(v.number(), () => props.member?.dept_id),
+  sex: v.optional(v.number(), () => props.member?.sex),
+  avatar: v.optional(v.string(), () => props.member?.avatar),
+  phone: v.optional(v.string(), () => props.member?.phone),
+  is_admin: v.optional(v.number(), () => props.member?.is_admin),
+  loc_share: v.optional(v.number(), () => props.member?.loc_share),
+  track: v.optional(v.number(), () => props.member?.track),
 }), {
   watch: [() => props.member],
 })

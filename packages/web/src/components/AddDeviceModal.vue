@@ -19,8 +19,8 @@ const { data: depts } = useWeilaFetch('corp/address/get-all-dept', {}, {
 })
 
 const { form, rules, handleSubmit, reset } = useForm(v.object({
-  verifycode: v.pipe(v.string(), v.minLength(1, '验证码不能为空')),
-  name: v.pipe(v.string(), v.minLength(1, '姓名不能为空'), v.maxLength(20, '姓名最多20个字符')),
+  verifycode: v.pipe(v.string(), v.minLength(1, () => t('form.error.verify-code-nonempty'))),
+  name: v.pipe(v.string(() => t('form.error.name-nonempty'))),
   job_num: v.optional(v.string(), ''),
   dept_id: v.optional(v.number(), 0),
   sex: v.optional(v.number(), 0),

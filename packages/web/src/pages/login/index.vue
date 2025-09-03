@@ -26,14 +26,14 @@ const { t } = useI18n()
 const activeTab = shallowRef<'password' | 'sms'>('password')
 
 const { form: loginForm, rules: loginRules, handleSubmit: handleLogin } = useForm(v.object({
-  account: v.string(t('form.error.account-nonempty')),
-  password: v.string(t('form.error.password-nonempty')),
+  account: v.string(() => t('form.error.account-nonempty')),
+  password: v.string(() => t('form.error.password-nonempty')),
 }))
 
 const { form: smsLoginForm, rules: smsLoginRules, handleSubmit: handleSmsLogin } = useForm(v.object({
-  phone: v.string(t('form.error.phone-nonempty')),
+  phone: v.string(() => t('form.error.phone-nonempty')),
   country_code: v.optional(v.string(), '86'),
-  verifycode: v.string(t('form.error.verify-code-nonempty')),
+  verifycode: v.string(() => t('form.error.verify-code-nonempty')),
 }))
 
 $inspect(activeTab)

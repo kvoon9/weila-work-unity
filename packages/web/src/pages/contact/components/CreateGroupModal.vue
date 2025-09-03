@@ -16,9 +16,9 @@ const avatarUploaderRef = templateRef('avatarUploaderRef')
 // type BurstMode = 0 | 1 | 2
 
 const { form, rules, handleSubmit, reset } = useForm(v.object({
-  name: v.pipe(v.string('名称必须是字符串'), v.nonEmpty('名称不能为空')),
+  name: v.pipe(v.string(() => t('form.error.name-nonempty'))),
   burst_mode: v.optional(v.number(), 0),
-  avatar: v.optional(v.string('头像必须是字符串'), ''),
+  avatar: v.optional(v.string(), ''),
 }))
 
 const { mutate, isPending } = useWeilaMutation('corp/group/create-group', {

@@ -149,6 +149,9 @@ footer:
 form:
   error:
     account-nonempty: 账号不能为空
+    name-nonempty: 名称不能为空
+    new-password-nonempty: 新密码不能为空
+    old-password-nonempty: 旧密码不能为空
     password-nonempty: 密码不能为空
     phone-maxLength: 手机号最多11位
     phone-minLength: 手机号至少11位
@@ -179,6 +182,9 @@ home: 主页
 img-verify-code: 图形验证码
 job-number: 工号
 latitude: 纬度
+lega-form:
+  step:
+    success: 认证完成
 legal:
   enterprise: 企业认证
   identify-number: 证件号码
@@ -357,7 +363,6 @@ priority: 优先级
 project:
   name: 微喇企业管理系统
 project-name: 微喇企业版
-quote: ''
 register:
   cancel: 取消
   confirm: 确认

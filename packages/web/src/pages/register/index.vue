@@ -17,15 +17,15 @@ const { t } = useI18n()
 
 const { form, rules, handleSubmit } = useForm(v.object({
   phone: v.pipe(
-    v.string(t('form.error.phone-nonempty')),
-    v.minLength(11, t('form.error.phone-minLength')),
-    v.maxLength(11, t('form.error.phone-maxLength')),
+    v.string(() => t('form.error.phone-nonempty')),
+    v.minLength(11, () => t('form.error.phone-minLength')),
+    v.maxLength(11, () => t('form.error.phone-maxLength')),
   ),
   country_code: v.optional(v.string(), '86'),
   verifycode:
-    v.string(t('form.error.verify-code-nonempty')),
+    v.string(() => t('form.error.verify-code-nonempty')),
   password:
-    v.string(t('form.error.password-nonempty')),
+    v.string(() => t('form.error.password-nonempty')),
 }))
 const { data, refetch: refreshImageCode } = useWeilaFetch<{ id: string, image: string }>('common/get-image-verifycode?width=160&height=80')
 

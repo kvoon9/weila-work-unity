@@ -10,15 +10,12 @@ const { t } = useI18n()
 const open = defineModel('open', { default: false })
 
 const { form, rules, handleSubmit, reset } = useForm(v.object({
-  phone: v.pipe(
-    v.string(t('binding-phone-form.err-msg.phone-required')),
-    v.regex(/^1[3-9]\d{9}$/, t('binding-phone-form.err-msg.phone-format')),
-  ),
+  phone: v.pipe(v.string(() => t('binding-phone-form.err-msg.phone-required'))),
   country_code: v.optional(v.string(), '86'),
   verifycode: v.pipe(
-    v.string(t('binding-phone-form.err-msg.verifycode-required')),
-    v.minLength(4, t('binding-phone-form.err-msg.verifycode-min')),
-    v.maxLength(6, t('binding-phone-form.err-msg.verifycode-max')),
+    v.string(() => t('binding-phone-form.err-msg.verifycode-required')),
+    v.minLength(4, () => t('binding-phone-form.err-msg.verifycode-min')),
+    v.maxLength(6, () => t('binding-phone-form.err-msg.verifycode-max')),
   ),
 }))
 

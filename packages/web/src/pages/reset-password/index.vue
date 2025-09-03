@@ -17,13 +17,13 @@ const router = useRouter()
 
 const { form, rules, handleSubmit } = useForm(v.object({
   phone: v.pipe(
-    v.string(t('form-error.phone-required')),
-    v.minLength(11, t('form-error.phone-min-length')),
-    v.maxLength(11, t('form-error.phone-max-length')),
+    v.string(() => t('form-error.phone-required')),
+    v.minLength(11, () => t('form-error.phone-min-length')),
+    v.maxLength(11, () => t('form-error.phone-max-length')),
   ),
   country_code: v.optional(v.string(), '86'),
-  verifycode: v.pipe(v.string(t('form-error.verifycode-required'))),
-  password: v.string(t('form-error.password-required')),
+  verifycode: v.pipe(v.string(() => t('form-error.verifycode-required'))),
+  password: v.string(() => t('form-error.password-required')),
 }))
 const { data, refetch: refreshImageCode } = useWeilaFetch<{ id: string, image: string }>('common/get-image-verifycode?width=160&height=80')
 
