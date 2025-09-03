@@ -3,6 +3,7 @@ import type { SendVerifySmsBody } from '~/api/verify-sms'
 import type { AuthModel } from '~/stores/auth'
 import type { Corp } from '~/types'
 import { Message } from '@arco-design/web-vue'
+import { useIntervalFn } from '@vueuse/core'
 import md5 from 'md5'
 import * as v from 'valibot'
 import { shallowRef } from 'vue'
@@ -50,6 +51,15 @@ const { mutateAsync: sendSmsVerifyCode } = useWeilaMutation<never, SendVerifySms
 
 const imageCodeModalVisible = shallowRef(false)
 const imageCode = shallowRef('')
+const countdown = shallowRef(0)
+const { pause, resume, isActive } = useIntervalFn(() => {
+  if (countdown.value > 0) {
+    countdown.value--
+  }
+  else {
+    pause()
+  }
+}, 1000, { immediate: false })
 
 watchEffect(() => imageCodeModalVisible.value && refreshImageCode())
 
@@ -133,7 +143,9 @@ function handleSendSmsCode() {
   }, {
     onSuccess: () => {
       Message.success(t('message.success'))
-      // 这里可以账号密码添加倒计时等逻辑
+      // 启动倒计时
+      countdown.value = 60
+      resume()
     },
   })
 }
@@ -241,10 +253,10 @@ const loginBySms = handleSmsLogin((values: any) => {
                 <a-button
                   type="text"
                   :loading="false"
-                  :disabled="!(smsLoginForm.phone && imageCode)"
+                  :disabled="!(smsLoginForm.phone && imageCode) || isActive"
                   @click="handleSendSmsCode"
                 >
-                  {{ $t('get-sms-code') }}
+                  {{ isActive ? `${countdown}s` : $t('get-sms-code') }}
                 </a-button>
               </template>
             </a-input>
