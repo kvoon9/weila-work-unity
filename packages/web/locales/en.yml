@@ -156,6 +156,9 @@ footer:
 form:
   error:
     account-nonempty: The account cannot be empty.
+    name-nonempty: The name cannot be empty.
+    new-password-nonempty: The new password cannot be empty.
+    old-password-nonempty: The old password cannot be empty.
     password-nonempty: The password cannot be empty.
     phone-maxLength: ''
     phone-minLength: The phone number must be at least 11 digits.
@@ -248,7 +251,7 @@ login:
     form:
       successMsg: Login successful.
     get-sms-code: Get SMS verification code.
-    weila-enterprise: Weila Enterprise Edition
+    weila-enterprise: Micro Flare Enterprise Edition
   form:
     forgetPassword: forget the password
     login: Login
