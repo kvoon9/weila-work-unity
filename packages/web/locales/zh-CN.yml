@@ -291,6 +291,8 @@ member:
       label: 密码
     phone:
       label: 手机号
+    product:
+      label: 产品型号
     track:
       label: 轨迹
   state: 状态

@@ -68,10 +68,14 @@ const submit = handleSubmit(async (values) => {
 <template>
   <a-modal v-model:visible="open" :title="t('edit')" :footer="false">
     <a-form :rules :model="form" @submit="submit">
-      <a-form-item
-        field="name" :label="t('member.form.name.label')"
-      >
+      <a-form-item field="name" :label="t('member.form.name.label')">
         <a-input v-model="form.name" :max-length="20" show-word-limit />
+      </a-form-item>
+      <a-form-item v-if="member?.product" :label="t('member.form.product.label')">
+        <a-input disabled :default-value="member.product" :max-length="20" show-word-limit />
+      </a-form-item>
+      <a-form-item v-if="member?.imei" label="IMEI">
+        <a-input disabled :default-value="member.imei" :max-length="20" show-word-limit />
       </a-form-item>
       <a-form-item field="dept_id" :label="t('member.form.dept.label')">
         <a-select v-model:model-value="form.dept_id" allow-search :empty="t('no-data')">

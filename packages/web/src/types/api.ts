@@ -58,4 +58,8 @@ export interface Member {
   created: number
   grp_cnt: number
   grp_lmt: number
+
+  // device only
+  product: string
+  imei: string
 }
