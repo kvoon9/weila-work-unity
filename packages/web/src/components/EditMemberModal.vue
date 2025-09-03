@@ -45,7 +45,7 @@ const qc = useQueryClient()
 
 watchEffect(() => open.value && reset())
 
-const { mutate: createMember } = useWeilaMutation('corp/address/change-member', {
+const { mutate: createMember, isPending } = useWeilaMutation('corp/address/change-member', {
   onSuccess() {
     reset()
     open.value = false
@@ -146,7 +146,7 @@ const submit = handleSubmit(async (values) => {
         </a-radio-group>
       </a-form-item>
       <a-form-item>
-        <a-button mla type="primary" html-type="submit">
+        <a-button mla type="primary" html-type="submit" :loading="isPending">
           {{ t('button.submit') }}
         </a-button>
       </a-form-item>

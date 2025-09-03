@@ -34,7 +34,7 @@ watchEffect(() => open.value && reset())
 
 const qc = useQueryClient()
 
-const { mutate } = useWeilaMutation('corp/address/add-device', {
+const { mutate, isPending } = useWeilaMutation('corp/address/add-device', {
   onSuccess() {
     Message.success(t('message.success'))
     qc.invalidateQueries({ queryKey: ['corp/address/get-member-list'] })
@@ -120,7 +120,7 @@ const submit = handleSubmit(async (values: any) => {
         </a-form-item>
 
         <a-form-item>
-          <a-button mla type="primary" @click="(e) => formRef?.handleSubmit(e)">
+          <a-button :loading="isPending" mla type="primary" @click="(e) => formRef?.handleSubmit(e)">
             {{ t('button.submit') }}
           </a-button>
         </a-form-item>

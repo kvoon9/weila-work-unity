@@ -23,7 +23,7 @@ watchEffect(() => open.value && reset())
 
 const qc = useQueryClient()
 
-const { mutate } = useWeilaMutation('corp/user/bind-phone', {
+const { mutate, isPending } = useWeilaMutation('corp/user/bind-phone', {
   onSuccess() {
     open.value = false
     Message.success(t('message.success'))
@@ -101,7 +101,7 @@ const { data: verifyImageData, refetch: refreshImageCode } = useWeilaFetch<{ id:
       </a-form-item>
 
       <a-form-item>
-        <a-button mla type="primary" html-type="submit">
+        <a-button mla type="primary" html-type="submit" :loading="isPending">
           {{ t('button.submit') }}
         </a-button>
       </a-form-item>
