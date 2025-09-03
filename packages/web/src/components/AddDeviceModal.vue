@@ -19,7 +19,7 @@ const { data: depts } = useWeilaFetch('corp/address/get-all-dept', {}, {
 })
 
 const { form, rules, handleSubmit, reset } = useForm(v.object({
-  verifycode: v.pipe(v.string(), v.minLength(1, () => t('form.error.verify-code-nonempty'))),
+  verifycode: v.optional(v.pipe(v.string(), v.minLength(1, () => t('form.error.verify-code-nonempty'))), ''),
   name: v.pipe(v.string(() => t('form.error.name-nonempty'))),
   job_num: v.optional(v.string(), ''),
   dept_id: v.optional(v.number(), 0),
@@ -57,10 +57,20 @@ const submit = handleSubmit(async (values: any) => {
   <ModalTrigger v-model:open="open" :trigger="{ type: 'primary' }" :title=" t('add-device') ">
     <template #content>
       <a-form ref="formRef" :model="form" :rules auto-label-width @submit="submit">
-        <a-form-item field="name" :label="t('name')" required>
+        <a-form-item field="name">
+          <template #label>
+            <RequiredLabel>
+              {{ t('name') }}
+            </RequiredLabel>
+          </template>
           <a-input v-model="form.name" :max-length="20" show-word-limit />
         </a-form-item>
-        <a-form-item field="verifycode" :label="t('verify-code')" required>
+        <a-form-item field="verifycode" :label="t('verify-code')">
+          <template #label>
+            <RequiredLabel>
+              {{ t('name') }}
+            </RequiredLabel>
+          </template>
           <a-input v-model="form.verifycode" :max-length="20" show-word-limit />
         </a-form-item>
         <a-form-item :label="t('phone-number')" field="phone">

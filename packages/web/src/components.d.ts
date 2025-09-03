@@ -41,6 +41,7 @@ declare module 'vue' {
     MessageVoiceContent: typeof import('./components/MessageVoiceContent.vue')['default']
     ModalTrigger: typeof import('./components/ModalTrigger.vue')['default']
     Navbar: typeof import('./components/navbar/index.vue')['default']
+    RequiredLabel: typeof import('./components/RequiredLabel.vue')['default']
     ResetMemberPasswordModal: typeof import('./components/ResetMemberPasswordModal.vue')['default']
     ResetSelfPasswordModal: typeof import('./components/ResetSelfPasswordModal.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

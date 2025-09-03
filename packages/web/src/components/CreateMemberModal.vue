@@ -55,7 +55,12 @@ const submit = handleSubmit(async (values: any) => {
   <ModalTrigger v-model:open="open" :trigger="{ type: 'primary' }" :title=" t('create-member') ">
     <template #content>
       <a-form :rules :model="form" @submit="submit">
-        <a-form-item field="name" :label="t('member.form.name.label')" required>
+        <a-form-item field="name">
+          <template #label>
+            <RequiredLabel>
+              {{ t('name') }}
+            </RequiredLabel>
+          </template>
           <a-input v-model="form.name" :max-length="20" show-word-limit />
         </a-form-item>
         <a-form-item field="dept_id" :label="t('member.form.dept.label')">
@@ -69,7 +74,12 @@ const submit = handleSubmit(async (values: any) => {
         <a-form-item field="job_num" :label="t('member.form.job-num.label')">
           <a-input v-model="form.job_num" :max-length="12" show-word-limit />
         </a-form-item>
-        <a-form-item field="phone" :label="t('member.form.phone.label')" required>
+        <a-form-item field="phone">
+          <template #label>
+            <RequiredLabel>
+              {{ t('member.form.phone.label') }}
+            </RequiredLabel>
+          </template>
           <a-input v-model="form.phone" :max-length="11" show-word-limit />
         </a-form-item>
         <a-form-item field="sex" :label="t('member.form.gender.label')">
