@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { GroupMemberModel } from '~/api/contact'
+import type { Member } from '~/types/api'
 import Message from '@arco-design/web-vue/es/message'
 import { shallowRef } from 'vue'
 
 defineProps<{
   groupId?: number
-  member?: GroupMemberModel
+  member?: Member
 }>()
 
 const emits = defineEmits(['success'])

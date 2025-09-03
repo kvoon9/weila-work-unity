@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { GroupMemberModel } from '~/api/contact'
+import type { Member } from '~/types/api'
 import { shallowRef } from 'vue'
-import { TrackType } from '~/api/contact'
 
+import { TrackType } from '~/api/contact'
 import AddGroupMemberModal from './components/AddGroupMemberModal.vue'
 import DeleteGroupMemberModal from './components/DeleteGroupMemberModal.vue'
 
@@ -19,10 +19,10 @@ const { data, refetch } = useWeilaFetch(() => `corp/group/get-group-member-list?
 })
 
 const isEditModalVisible = shallowRef(false)
-const selectedMember = shallowRef<GroupMemberModel | undefined>(undefined)
+const selectedItem = shallowRef<Member | undefined>(undefined)
 
-function onSelect(member: GroupMemberModel, e: PointerEvent) {
-  selectedMember.value = member
+function onSelect(member: Member, e: PointerEvent) {
+  selectedItem.value = member
   // @ts-expect-error type error
   if (!e.target?.className?.includes('arco-table')) {
     return void 0
@@ -140,7 +140,7 @@ function onSelect(member: GroupMemberModel, e: PointerEvent) {
             <template #cell>
               <div flex gap2>
                 <DeleteGroupMemberModal
-                  :group-id="Number(route.params.group_id)" :member="selectedMember"
+                  :group-id="Number(route.params.group_id)" :member="selectedItem"
                   @success="refetch"
                 >
                   <a-button status="danger">
@@ -152,6 +152,8 @@ function onSelect(member: GroupMemberModel, e: PointerEvent) {
           </a-table-column>
         </template>
       </a-table>
+
+      <EditMemberModal v-model:open="isEditModalVisible" :member="selectedItem" />
     </a-card>
   </a-page-header>
 </template>

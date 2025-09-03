@@ -65,10 +65,10 @@ const submit = handleSubmit(async (values: any) => {
           </template>
           <a-input v-model="form.name" :max-length="20" show-word-limit />
         </a-form-item>
-        <a-form-item field="verifycode" :label="t('verify-code')">
+        <a-form-item field="verifycode">
           <template #label>
             <RequiredLabel>
-              {{ t('name') }}
+              {{ t('verify-code') }}
             </RequiredLabel>
           </template>
           <a-input v-model="form.verifycode" :max-length="20" show-word-limit />

@@ -53,11 +53,6 @@ const imageCode = shallowRef('')
 
 watchEffect(() => imageCodeModalVisible.value && refreshImageCode())
 
-let currentPhoneInfo: {
-  phone: string
-  countrycode: string
-} | null = null
-
 const [isRememberPassword, toggleRememberPassword] = useToggle(false)
 
 const { mutateAsync: passwordLogin, isPending: passwordPending } = useWeilaMutation('/corp/auth/login', {
@@ -109,23 +104,6 @@ function onSuccess({ access_token, expires_in, refresh_token, org, account }: Au
 }
 
 function handleSendSmsCode() {
-  if (!smsLoginForm.value.phone) {
-    Message.warning(t('message.please-enter-phone-number'))
-    return
-  }
-
-  currentPhoneInfo = {
-    phone: smsLoginForm.value.phone,
-    countrycode: smsLoginForm.value.country_code || '86',
-  }
-
-  if (data.value) {
-    imageCodeModalVisible.value = true
-    imageCode.value = ''
-  }
-}
-
-function handleImageCodeConfirm() {
   if (!data.value?.id) {
     Message.error(t('message.verify-code-error'))
     return
@@ -136,30 +114,28 @@ function handleImageCodeConfirm() {
     return
   }
 
-  if (!currentPhoneInfo) {
+  if (!smsLoginForm.value.phone) {
     Message.error(t('message.get-phone-error'))
     return
   }
 
+  if (!smsLoginForm.value.phone) {
+    Message.warning(t('message.please-enter-phone-number'))
+    return
+  }
+
   sendSmsVerifyCode({
-    phone: currentPhoneInfo.phone,
-    countrycode: currentPhoneInfo.countrycode,
+    phone: smsLoginForm.value.phone,
+    countrycode: smsLoginForm.value.country_code || '86',
     verify_id: data.value.id,
     verify_answer: imageCode.value.trim(),
     smstype: 'work-login',
   }, {
     onSuccess: () => {
-      imageCodeModalVisible.value = false
-      imageCode.value = ''
       Message.success(t('message.success'))
       // 这里可以账号密码添加倒计时等逻辑
     },
   })
-}
-
-function handleImageCodeCancel() {
-  imageCodeModalVisible.value = false
-  imageCode.value = ''
 }
 
 const login = handleLogin((values: any) => {
@@ -249,17 +225,23 @@ const loginBySms = handleSmsLogin((values: any) => {
               />
             </a-input-group>
           </a-form-item>
+          <a-form-item>
+            <a-space>
+              <a-input
+                v-model="imageCode"
+                allow-clear
+                :max-length="6"
+              />
+              <img v-if="data?.image" :src="data.image" min-w-30 @click="() => refreshImageCode()">
+            </a-space>
+          </a-form-item>
           <a-form-item field="verifycode" hide-label>
-            <a-input
-              v-model="smsLoginForm.verifycode"
-              allow-clear
-              pr0
-            >
+            <a-input v-model="smsLoginForm.verifycode" allow-clear pr0>
               <template #suffix>
                 <a-button
                   type="text"
                   :loading="false"
-                  :disabled="!smsLoginForm.phone"
+                  :disabled="!(smsLoginForm.phone && imageCode)"
                   @click="handleSendSmsCode"
                 >
                   {{ $t('get-sms-code') }}
@@ -287,33 +269,6 @@ const loginBySms = handleSmsLogin((values: any) => {
         </a-button>
       </a>
     </a-space>
-
-    <a-modal
-      v-model:visible="imageCodeModalVisible"
-      :title="$t('img-verify-code')"
-      :footer="false"
-      @cancel="handleImageCodeCancel"
-    >
-      <div space-y-8>
-        <div flex gap2>
-          <a-input
-            v-model="imageCode"
-            allow-clear
-            :max-length="6"
-          />
-          <img v-if="data?.image" :src="data.image" min-w-30 @click="() => refreshImageCode()">
-        </div>
-        <div flex gap4>
-          <div flex-1 />
-          <a-button @click="handleImageCodeCancel">
-            {{ $t('button.cancel') }}
-          </a-button>
-          <a-button type="primary" @click="handleImageCodeConfirm">
-            {{ $t('button.ok') }}
-          </a-button>
-        </div>
-      </div>
-    </a-modal>
   </div>
 </template>
 
