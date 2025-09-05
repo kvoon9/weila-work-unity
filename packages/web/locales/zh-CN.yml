@@ -318,6 +318,8 @@ menu:
 message:
   get-phone-error: 获取手机号失败，请重试
   not-support: 不支持的消息
+  payment:
+    success: 支付成功
   please-enter-phone-number: 请输入手机号
   revoke: 消息已撤回
   success: 成功

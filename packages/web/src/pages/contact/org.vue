@@ -89,5 +89,6 @@ watchEffect(() => {
         </RouterLink>
       </div>
     </div>
+    <PayPal />
   </div>
 </template>
