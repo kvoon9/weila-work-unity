@@ -295,11 +295,6 @@ const loginBySms = handleSmsLogin((values: any) => {
           {{ $t('register.form.title') }}
         </a-button>
       </router-link>
-      <a href="http://static.voischat.cn/common/app-download?type=corp-normal">
-        <a-button type="text" long class="login-form-register-btn">
-          {{ $t('download-android-app') }}
-        </a-button>
-      </a>
     </a-space>
   </div>
 </template>

@@ -185,7 +185,7 @@ function handleSubmit() {
           <a-radio :value="TrackType.High">
             {{ t('track-type.high') }}
           </a-radio>
-          <a-radio v-disabled="!authStore.vip.vip_supports.find((i) => i.name === 'track')?.quick_suppport" :value="TrackType.Fast">
+          <a-radio :value="TrackType.Fast">
             {{ t('track-type.fast') }}
           </a-radio>
         </a-radio-group>

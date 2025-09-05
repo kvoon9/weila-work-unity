@@ -2,24 +2,13 @@
 import type { RouteRecordNormalized } from 'vue-router'
 import type { VipInfo } from '~/stores/auth'
 import type { Corp } from '~/types'
-import type { Legal } from '~/types/api'
-import { objectEntries, objectKeys } from '@antfu/utils'
+import { objectEntries } from '@antfu/utils'
 
 const router = useRouter()
 
 const { data: vip } = useWeilaFetch<VipInfo>('corp/org/get-my-vip')
 
 const { t } = useI18n()
-
-const infoMap = {
-  num: 'corp-number',
-  member_limit: 'corp.member-limit',
-  dept_limit: 'corp.dept-limit',
-  dept_member_limit: 'corp.dept-member-limit',
-  group_limit: 'corp.group-limit',
-  group_member_limit: 'corp.group-member-limit',
-  device_limit: 'corp.device-limit',
-}
 
 // const supports = computed(() => !vip.value ? {} : Object.groupBy(vip.value?.vip_supports, i => i.name))
 // $inspect(supports)
@@ -30,8 +19,6 @@ $inspect(disabledList)
 $inspect(disabledList)
 
 const { data: corp } = useWeilaFetch<Corp>('corp/org/get-my-org')
-
-const { data: legal } = useWeilaFetch<Legal>('corp/legal/get-legal')
 
 interface Menu {
   [key: string]: {
@@ -101,57 +88,12 @@ function goTo(path: string) {
         <div cursor-pointer text-neutral-500 px4 py2 hover:bg-neutral-200:50 rounded border mb4 mt2 flex items-center justify-between @click="goTo('/contact/org')">
           <div flex gap-2 items-center>
             <a-image width="40" height="40" :src="corp.avatar" rounded-full size-10 />
-            <div>
-              <div font-bold truncate>
-                {{ corp.name }}
-              </div>
-              <a-tag v-if="legal?.state === 8" color="orangered">
-                <template #icon>
-                  <icon-check-circle-fill />
-                </template>
-                {{ $t('auth.certified') }}
-              </a-tag>
-              <a-tag v-else>
-                {{ $t('org.unauth') }}
-              </a-tag>
+            <div font-bold truncate>
+              {{ corp.name }}
             </div>
           </div>
           <IconRight />
         </div>
-        <template #content>
-          <div bg-white border p4 rounded-lg space-y-4>
-            <a-descriptions
-              :column="1"
-              :data="[
-                { label: t('corp.number'), value: corp?.num },
-              ]"
-              bordered
-            />
-
-            <a-descriptions
-              v-if="vip?.vip"
-              :column="1"
-              :data="[
-                { label: t('vip.level'), value: vip?.vip_name },
-                { label: t('vip.enable.time'), value: new Date(vip?.vip_created * 1000).toLocaleDateString() },
-                { label: t('vip.expired.time'), value: new Date(vip?.vip_expired * 1000).toLocaleDateString() },
-              ].filter(i => i && i.value)"
-              bordered
-            />
-            <a-descriptions
-              :column="1"
-              :data="vip?.vip_supports?.flatMap((i) => {
-                const limits = objectKeys(i).filter(i => i.includes('limit'))
-
-                return limits.map(limit => ({
-                  // @ts-expect-error type error
-                  label: t(infoMap?.[limit]),
-                  value: i[limit],
-                }))
-              })" bordered
-            />
-          </div>
-        </template>
       </a-trigger>
       <a-menu-item key="/contact/org">
         {{ $t('home') }}
@@ -160,7 +102,7 @@ function goTo(path: string) {
         <template #title>
           {{ name }}
         </template>
-        <a-menu-item v-for="i in submenu" :key="i.path" :disabled="disabledList.find(name => i.path.includes(name))">
+        <a-menu-item v-for="i in submenu" :key="i.path">
           {{ $t(i.meta.name || '') }}
         </a-menu-item>
       </a-sub-menu>
