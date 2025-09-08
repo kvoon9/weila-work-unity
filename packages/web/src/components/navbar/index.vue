@@ -6,6 +6,7 @@ import { useToggleLocales } from '~/composables/useToggleLocales'
 import { useAuthStore } from '~/stores/auth'
 import { version } from '../../../package.json'
 import BindingPhone from '../BindingPhone.vue'
+import DeleteAccount from '../DeleteAccount.vue'
 
 const { t } = useI18n()
 
@@ -43,6 +44,7 @@ const { data: selfInfo } = useWeilaFetch<SelfInfo>('corp/user/get-selfinfo')
 
 const resetPasswordModalVisible = shallowRef(false)
 const bindingPhoneModalVisible = shallowRef(false)
+const deleteAccountModalVisible = shallowRef(false)
 
 function tryLogout() {
   logout()
@@ -134,6 +136,9 @@ function reloadPage() {
               <a-button @click="tryLogout">
                 {{ t('logout') }}
               </a-button>
+              <a-button status="danger" @click="deleteAccountModalVisible = true">
+                {{ t('button.delete-account') }}
+              </a-button>
             </div>
           </div>
         </template>
@@ -143,4 +148,5 @@ function reloadPage() {
 
   <ResetSelfPasswordModal v-model:open="resetPasswordModalVisible" />
   <BindingPhone v-model:open="bindingPhoneModalVisible" />
+  <DeleteAccount v-model:open="deleteAccountModalVisible" />
 </template>

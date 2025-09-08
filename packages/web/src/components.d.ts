@@ -15,6 +15,7 @@ declare module 'vue' {
     Breadcrumb: typeof import('./components/breadcrumb/index.vue')['default']
     ContactSelectTree: typeof import('./components/ContactSelectTree.vue')['default']
     CreateMemberModal: typeof import('./components/CreateMemberModal.vue')['default']
+    DeleteAccount: typeof import('./components/DeleteAccount.vue')['default']
     DeleteMemberModal: typeof import('./components/DeleteMemberModal.vue')['default']
     DialogClose: typeof import('radix-vue')['DialogClose']
     DialogContent: typeof import('radix-vue')['DialogContent']

@@ -62,6 +62,7 @@ button:
   create-group: 创建群组
   create-member: 创建成员
   delete: 删除
+  delete-account: 注销账号
   delete-dept: 删除部门
   edit: 编辑
   edit-dept: 编辑部门
@@ -124,6 +125,8 @@ delete:
     content: 您确定要删除吗？
     hint: 此操作无法撤销
     title: 删除
+delete-account-form:
+  title: 注销账号
 department-list: 部门列表
 dept:
   create: 添加部门
@@ -418,6 +421,7 @@ shutup-disable: 不禁言
 shutup-enable: 禁言
 slash: /
 sms-code: 短信验证码
+sms-verify-code: 短信验证码
 state:
   online: 在线
 submenu:

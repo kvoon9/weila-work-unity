@@ -66,6 +66,7 @@ button:
   create-group: Create Group
   create-member: Create Member
   delete: Delete
+  delete-account: Deactivate Account
   delete-dept: Delete Dept
   edit: Edit
   edit-dept: Edit Dept
@@ -131,6 +132,8 @@ delete:
     content: Are you sure your want to delete?
     hint: This action cannot be undone
     title: Delete
+delete-account-form:
+  title: Deactivate Account
 department-list: Department List
 dept:
   create: Add Dept
@@ -300,6 +303,8 @@ member:
       label: Password
     phone:
       label: Phone
+    product:
+      label: Product model
     track:
       label: Track
   state: State
@@ -435,6 +440,7 @@ slash: >-
   It seems that there is no text provided for translation. Please provide the
   text you would like to have translated from Chinese (zh-CN) to English.
 sms-code: Message Code
+sms-verify-code: SMS verification code
 state:
   online: Online status
 submenu:
