@@ -5,8 +5,8 @@ overrides:
   '@intlify/message-compiler': ^11.1.2
   vite: 'npm:rolldown-vite@latest'
 catalog:
-  '@antfu/eslint-config': ^4.10.2
-  '@antfu/ni': ^24.3.0
+  '@antfu/eslint-config': ^5.2.2
+  '@antfu/ni': ^25.0.0
   '@antfu/utils': ^9.2.0
   '@arco-design/web-vue': ^2.57.0
   '@arco-plugins/vite-vue': ^1.4.5
@@ -75,7 +75,7 @@ catalog:
   crypto-js: ^4.2.0
   dotenv: ^16.5.0
   echarts: ^5.6.0
-  eslint: ^9.25.0
+  eslint: ^9.35.0
   eslint-factory: ^0.1.2
   eslint-plugin-fix-later: ^2.1.0
   eslint-plugin-format: ^1.0.1
@@ -83,10 +83,10 @@ catalog:
   esno: ^4.8.0
   fuse.js: ^7.1.0
   https-localhost: ^4.7.1
-  jiti: ^2.4.2
+  jiti: ^2.5.1
   jsonc-parser: ^3.3.1
   less: ^4.3.0
-  lint-staged: ^15.5.1
+  lint-staged: ^16.1.6
   listhen: ^1.9.0
   lodash: ^4.17.21
   lucide-vue-next: ^0.503.0
@@ -114,11 +114,11 @@ catalog:
   remark-stringify: ^11.0.0
   rollup: ^4.40.0
   rollup-plugin-visualizer: ^5.14.0
-  simple-git-hooks: ^2.12.1
-  taze: ^19.0.4
-  typescript: ^5.8.3
+  simple-git-hooks: ^2.13.1
+  taze: ^19.6.0
+  typescript: ^5.9.2
   ufo: ^1.6.1
-  unbuild: ^3.5.0
+  unbuild: ^3.6.1
   undici: ^7.8.0
   unfetch: ^5.0.0
   unified: ^11.0.5
@@ -148,7 +148,7 @@ catalog:
   vite-plugin-vue-devtools: ^7.7.5
   vite-plugin-vue-layouts: ^0.11.0
   vite-svg-loader: ^5.1.0
-  vitest: ^3.1.2
+  vitest: ^3.2.4
   vue: ^3.5.13
   vue-echarts: ^7.0.3
   vue-i18n: ^10.0.7
@@ -156,5 +156,5 @@ catalog:
   vue-tsc: ^2.2.8
   whatwg-fetch: ^3.6.20
   zod: ^3.24.3
-  zod-arco-rules: ^1.0.0
+  zod-arco-rules: ^1.0.2
   zx: ^8.5.3
