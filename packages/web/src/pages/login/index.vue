@@ -219,7 +219,7 @@ const loginBySms = handleSmsLogin((values: any) => {
                 {{ $t('i-have-read-and-agree') }}
               </a-checkbox>
 
-              <a-link href="https://demoui.weila.hk/common/corp-web/privacy">
+              <a-link href="https://www.voiswork.cn/common/corp-web/privacy">
                 {{ t('privacy-agreement') }}
               </a-link>
             </div>
@@ -278,7 +278,7 @@ const loginBySms = handleSmsLogin((values: any) => {
                 {{ $t('i-have-read-and-agree') }}
               </a-checkbox>
 
-              <a-link href="https://demoui.weila.hk/common/corp-web/privacy">
+              <a-link href="https://www.voiswork.cn/common/corp-web/privacy">
                 {{ t('privacy-agreement') }}
               </a-link>
             </div>
