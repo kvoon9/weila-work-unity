@@ -33,7 +33,7 @@ const { data, refetch: refreshImageCode } = useWeilaFetch<{ id: string, image: s
 const { mutateAsync: sendSmsVerifyCode } = useWeilaMutation<never, SendVerifySmsBody>('common/send-sms-verifycode')
 
 const router = useRouter()
-const privacyAgreed = ref(false)
+const privacyAgreed = shallowRef(false)
 
 const { mutate: regist } = useWeilaMutation<{
   phone: string
@@ -153,9 +153,15 @@ const submit = handleSubmit((values: any) => {
       </a-form-item>
 
       <a-space :size="16" direction="vertical">
-        <a-checkbox v-model="privacyAgreed">
-          {{ t('login.form.privacyAgreement') }}
-        </a-checkbox>
+        <div flex="~ justify-between">
+          <a-checkbox v-model="privacyAgreed">
+            {{ $t('i-have-read-and-agree') }}
+          </a-checkbox>
+
+          <a-link href="https://demoui.weila.hk/common/corp-web/privacy">
+            {{ t('privacy-agreement') }}
+          </a-link>
+        </div>
         <a-button type="primary" long html-type="submit" :disabled="!privacyAgreed">
           {{ t('register.form.submit') }}
         </a-button>
