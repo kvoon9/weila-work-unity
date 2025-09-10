@@ -33,6 +33,7 @@ const { data, refetch: refreshImageCode } = useWeilaFetch<{ id: string, image: s
 const { mutateAsync: sendSmsVerifyCode } = useWeilaMutation<never, SendVerifySmsBody>('common/send-sms-verifycode')
 
 const router = useRouter()
+const privacyAgreed = ref(false)
 
 const { mutate: regist } = useWeilaMutation<{
   phone: string
@@ -81,6 +82,10 @@ function handleSendSmsCode() {
 
 
 const submit = handleSubmit((values: any) => {
+  if (!privacyAgreed.value) {
+    Message.error(t('form.error.privacy-agreement-required'))
+    return
+  }
   regist({
     phone: values.phone,
     country_code: values.country_code || '86',
@@ -148,7 +153,10 @@ const submit = handleSubmit((values: any) => {
       </a-form-item>
 
       <a-space :size="16" direction="vertical">
-        <a-button type="primary" long html-type="submit">
+        <a-checkbox v-model="privacyAgreed">
+          {{ t('login.form.privacyAgreement') }}
+        </a-checkbox>
+        <a-button type="primary" long html-type="submit" :disabled="!privacyAgreed">
           {{ t('register.form.submit') }}
         </a-button>
 

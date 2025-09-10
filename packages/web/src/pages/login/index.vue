@@ -57,6 +57,7 @@ const { countdown, isCounting: isActive, updateSendTime } = useSmsCountdown('sms
 watchEffect(() => imageCodeModalVisible.value && refreshImageCode())
 
 const [isRememberPassword, toggleRememberPassword] = useToggle(false)
+const privacyAgreed = shallowRef(false)
 
 const { mutateAsync: passwordLogin, isPending: passwordPending } = useWeilaMutation('/corp/auth/login', {
   // @ts-expect-error type error
@@ -143,10 +144,18 @@ function handleSendSmsCode() {
 }
 
 const login = handleLogin((values: any) => {
+  if (!privacyAgreed.value) {
+    Message.error(t('form.error.privacy-agreement-required'))
+    return
+  }
   passwordLogin({ ...values, password: md5(values.password) })
 })
 
 const loginBySms = handleSmsLogin((values: any) => {
+  if (!privacyAgreed.value) {
+    Message.error(t('form.error.privacy-agreement-required'))
+    return
+  }
   smsLogin(values)
 })
 
@@ -205,7 +214,16 @@ const loginBySms = handleSmsLogin((values: any) => {
                 <a-link>{{ t('login.form.forgetPassword') }}</a-link>
               </RouterLink>
             </div>
-            <a-button type="primary" html-type="submit" long :loading="passwordPending">
+            <div flex="~ justify-between">
+              <a-checkbox v-model="privacyAgreed">
+                {{ $t('i-have-read-and-agree') }}
+              </a-checkbox>
+
+              <a-link href="https://demoui.weila.hk/common/corp-web/privacy">
+                {{ t('privacy-agreement') }}
+              </a-link>
+            </div>
+            <a-button type="primary" html-type="submit" long :loading="passwordPending" :disabled="!privacyAgreed">
               {{ t('login.form.login') }}
             </a-button>
           </a-space>
@@ -255,7 +273,16 @@ const loginBySms = handleSmsLogin((values: any) => {
             </a-input>
           </a-form-item>
           <a-space :size="16" direction="vertical">
-            <a-button type="primary" html-type="submit" long :loading="smsPending">
+            <div flex="~ justify-between">
+              <a-checkbox v-model="privacyAgreed">
+                {{ $t('i-have-read-and-agree') }}
+              </a-checkbox>
+
+              <a-link href="https://demoui.weila.hk/common/corp-web/privacy">
+                {{ t('privacy-agreement') }}
+              </a-link>
+            </div>
+            <a-button type="primary" html-type="submit" long :loading="smsPending" :disabled="!privacyAgreed">
               {{ t('login.form.login') }}
             </a-button>
           </a-space>

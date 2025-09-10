@@ -189,6 +189,7 @@ group-list: Group list
 hint:
   please-select: Please select...
 home: Home
+i-have-read-and-agree: I have read and agree.
 img-verify-code: Graphic verification code
 job-number: Job ID
 latitude: latitude
@@ -252,6 +253,7 @@ login:
     cancel: Cancel
     confirm: Confirm
     form:
+      privacyAgreement: Privacy Policy
       successMsg: Login successful.
     get-sms-code: Get SMS verification code.
     weila-enterprise: Micro Flare Enterprise Edition
@@ -382,6 +384,7 @@ plus: >-
   It seems there is no text provided for translation. Please provide the text
   you would like to have translated.
 priority: Priority
+privacy-agreement: Privacy Policy
 project:
   name: Weila Enterprise Manager
 project-name: Weila Enterprise Edition
