@@ -9,6 +9,7 @@ import * as v from 'valibot'
 import { shallowRef } from 'vue'
 import { useForm } from 'zod-arco-rules/valibot'
 import { useLocalCrypto } from '~/composables/useLocalCrypto'
+import { useSmsCountdown } from '~/composables/useSmsCountdown'
 import { autoLogin } from '~/shared/states'
 
 definePage({
@@ -51,15 +52,7 @@ const { mutateAsync: sendSmsVerifyCode } = useWeilaMutation<never, SendVerifySms
 
 const imageCodeModalVisible = shallowRef(false)
 const imageCode = shallowRef('')
-const countdown = shallowRef(0)
-const { pause, resume, isActive } = useIntervalFn(() => {
-  if (countdown.value > 0) {
-    countdown.value--
-  }
-  else {
-    pause()
-  }
-}, 1000, { immediate: false })
+const { countdown, isCounting: isActive, updateSendTime } = useSmsCountdown('sms-login')
 
 watchEffect(() => imageCodeModalVisible.value && refreshImageCode())
 
@@ -143,9 +136,8 @@ function handleSendSmsCode() {
   }, {
     onSuccess: () => {
       Message.success(t('message.success'))
-      // 启动倒计时
-      countdown.value = 60
-      resume()
+      // 更新发送时间，启动倒计时
+      updateSendTime()
     },
   })
 }
@@ -243,6 +235,7 @@ const loginBySms = handleSmsLogin((values: any) => {
                 v-model="imageCode"
                 allow-clear
                 :max-length="6"
+                :placeholder="t('binding-phone-form.placeholder.image-verifycode')"
               />
               <img v-if="data?.image" :src="data.image" min-w-30 @click="() => refreshImageCode()">
             </a-space>

@@ -5,6 +5,7 @@ import md5 from 'md5'
 import * as v from 'valibot'
 import { shallowRef } from 'vue'
 import { useForm } from 'zod-arco-rules/valibot'
+import { useSmsCountdown } from '~/composables/useSmsCountdown'
 
 definePage({
   meta: {
@@ -29,7 +30,7 @@ const { form, rules, handleSubmit } = useForm(v.object({
 }))
 const { data, refetch: refreshImageCode } = useWeilaFetch<{ id: string, image: string }>('common/get-image-verifycode?width=160&height=80')
 
-const { mutate: sendSmsVerifyCode } = useWeilaMutation<never, SendVerifySmsBody>('common/send-sms-verifycode')
+const { mutateAsync: sendSmsVerifyCode } = useWeilaMutation<never, SendVerifySmsBody>('common/send-sms-verifycode')
 
 const router = useRouter()
 
@@ -44,25 +45,10 @@ const { mutate: regist } = useWeilaMutation<{
   },
 })
 
-const imageCodeModalVisible = shallowRef(false)
-$inspect(imageCodeModalVisible)
-watchEffect(() => imageCodeModalVisible.value && refreshImageCode())
-
 const imageCode = shallowRef('')
+const { countdown, isCounting: isActive, updateSendTime } = useSmsCountdown('sms-register')
 
 function handleSendSmsCode() {
-  if (!form.value.phone) {
-    Message.warning(t('message.please-enter-phone-number'))
-    return
-  }
-
-  if (data.value) {
-    imageCodeModalVisible.value = true
-    imageCode.value = ''
-  }
-}
-
-function handleImageCodeConfirm() {
   if (!data.value?.id) {
     Message.error(t('message.verify-code-error'))
     return
@@ -86,17 +72,13 @@ function handleImageCodeConfirm() {
     smstype: 'work-regist',
   }, {
     onSuccess: () => {
-      imageCodeModalVisible.value = false
-      imageCode.value = ''
       Message.success(t('message.success'))
+      // 更新发送时间，启动倒计时
+      updateSendTime()
     },
   })
 }
 
-function handleImageCodeCancel() {
-  imageCodeModalVisible.value = false
-  imageCode.value = ''
-}
 
 const submit = handleSubmit((values: any) => {
   regist({
@@ -130,16 +112,28 @@ const submit = handleSubmit((values: any) => {
         </a-input>
       </a-form-item>
 
+      <a-form-item>
+        <a-space>
+          <a-input
+            v-model="imageCode"
+            allow-clear
+            :max-length="6"
+            :placeholder="t('binding-phone-form.placeholder.image-verifycode')"
+          />
+          <img v-if="data?.image" :src="data.image" min-w-30 @click="() => refreshImageCode()">
+        </a-space>
+      </a-form-item>
+
       <a-form-item field="verifycode" hide-label>
         <a-input v-model="form.verifycode" :placeholder="t('register.form.verifyCode.placeholder')" allow-clear pr0>
           <template #suffix>
             <a-button
               type="text"
               :loading="false"
-              :disabled="!form.phone"
+              :disabled="!(form.phone && imageCode) || isActive"
               @click="handleSendSmsCode"
             >
-              {{ $t('get-sms-code') }}
+              {{ isActive ? `${countdown}s` : $t('get-sms-code') }}
             </a-button>
           </template>
         </a-input>
@@ -165,34 +159,6 @@ const submit = handleSubmit((values: any) => {
         </router-link>
       </a-space>
     </a-form>
-
-    <a-modal
-      v-model:visible="imageCodeModalVisible"
-      :title="$t('img-verify-code')"
-      :footer="false"
-      @cancel="handleImageCodeCancel"
-    >
-      <div space-y-8>
-        <div flex gap2>
-          <a-input
-            v-model="imageCode"
-            :placeholder="$t('binding-phone-form.placeholder.image-verifycode')"
-            allow-clear
-            :max-length="6"
-          />
-          <img v-if="data?.image" :src="data.image" min-w-30 @click="() => refreshImageCode()">
-        </div>
-        <div flex gap4>
-          <div flex-1 />
-          <a-button @click="handleImageCodeCancel">
-            {{ $t('button.cancel') }}
-          </a-button>
-          <a-button type="primary" @click="handleImageCodeConfirm">
-            {{ $t('button.ok') }}
-          </a-button>
-        </div>
-      </div>
-    </a-modal>
   </div>
 </template>
 
