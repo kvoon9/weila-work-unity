@@ -94,6 +94,17 @@ function goTo(path: string) {
           </div>
           <IconRight />
         </div>
+        <template #content>
+          <div bg-white border p4 rounded-lg space-y-4>
+            <a-descriptions
+              :column="1"
+              :data="[
+                { label: t('corp.number'), value: corp?.num },
+              ]"
+              bordered
+            />
+          </div>
+        </template>
       </a-trigger>
       <a-menu-item key="/contact/org">
         {{ $t('home') }}
