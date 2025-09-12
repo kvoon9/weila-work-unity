@@ -24,7 +24,7 @@ const selectedItem = shallowRef<Member | undefined>(undefined)
 function onSelect(member: Member, e: PointerEvent) {
   selectedItem.value = member
   // @ts-expect-error type error
-  if (!e.target?.className?.includes('arco-table')) {
+  if (!e.target?.className?.includes?.('arco-table')) {
     return void 0
   }
 

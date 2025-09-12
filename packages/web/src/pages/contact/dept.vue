@@ -28,7 +28,7 @@ const { data, refetch } = useWeilaFetch<{
 
 function onSelect(dept: DeptModel, e: PointerEvent) {
   // @ts-expect-error type error
-  if (!e.target?.className?.includes('arco-table')) {
+  if (!e.target?.className?.includes?.('arco-table')) {
     return void 0
   }
 
