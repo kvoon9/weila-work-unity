@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import type { SelfInfo } from '~/types'
 import type { Member } from '~/types/api'
-import Message from '@arco-design/web-vue/es/message'
 
+import Message from '@arco-design/web-vue/es/message'
 import { useQueryClient } from '@tanstack/vue-query'
 import * as v from 'valibot'
 import { useForm } from 'zod-arco-rules/valibot'
@@ -45,13 +46,17 @@ const qc = useQueryClient()
 
 watchEffect(() => open.value && reset())
 
-const { mutate: createMember, isPending } = useWeilaMutation('corp/address/change-member', {
+const { data: selfInfo } = useWeilaFetch<SelfInfo>('corp/user/get-selfinfo')
+
+const { mutate: edit, isPending } = useWeilaMutation('corp/address/change-member', {
   onSuccess() {
-    reset()
     open.value = false
     Message.success(t('message.success'))
+
     qc.invalidateQueries({ queryKey: ['corp/address/get-member-list'] })
     qc.invalidateQueries({ queryKey: ['corp/address/get-dept-member-list'] })
+    if (form.value.user_id === selfInfo.value.user_id)
+      qc.invalidateQueries({ queryKey: ['corp/user/get-selfinfo'] })
   },
 })
 
@@ -61,7 +66,7 @@ const submit = handleSubmit(async (values) => {
   if (!isRemoteImage(form.value.avatar || '')) {
     await upload()
   }
-  createMember(values)
+  edit(values)
 })
 </script>
 

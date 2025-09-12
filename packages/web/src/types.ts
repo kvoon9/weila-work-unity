@@ -42,3 +42,23 @@ export interface Corp {
   vip: number
   vip_expired: number
 }
+
+export interface SelfInfo {
+  user_id: number
+  user_num: string
+  job_num: string
+  sex: number
+  name: string
+  avatar: string
+  is_admin: number
+  dept_id: number
+  phone: string
+  country_code: string
+  state: number
+  type: number
+  tts: number
+  loc_share: number
+  track: number
+  group_count: number
+  created: number
+}

@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import type { SelfInfo } from '~/types'
 import { useFullscreen } from '@vueuse/core'
 import { computed, inject, shallowRef } from 'vue'
 import { useBundleInfo } from '~/composables/useBundleInfo'
@@ -20,26 +21,6 @@ const topMenu = computed(() => appStore.topMenu && appStore.menu)
 const toggleDrawerMenu = inject('toggleDrawerMenu') as () => void
 
 const { toggle: toggleLocales } = useToggleLocales()
-
-interface SelfInfo {
-  user_id: number
-  user_num: string
-  job_num: string
-  sex: number
-  name: string
-  avatar: string
-  is_admin: number
-  dept_id: number
-  phone: string
-  country_code: string
-  state: number
-  type: number
-  tts: number
-  loc_share: number
-  track: number
-  group_count: number
-  created: number
-}
 
 const { data: selfInfo } = useWeilaFetch<SelfInfo>('corp/user/get-selfinfo')
 
