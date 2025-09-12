@@ -65,5 +65,6 @@ export async function loadLanguageAsync(lang: string): Promise<Locale> {
 
 export const install: UserModule = ({ app }) => {
   app.use(i18n)
-  loadLanguageAsync(cashedLocaleName.value)
+
+  loadLanguageAsync(import.meta.env.DEV ? cashedLocaleName.value : 'zh-CN')
 }

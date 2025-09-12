@@ -128,6 +128,7 @@ export default defineConfig({
         'src/layout',
         'src/utils',
         'src/api/instances',
+        'src/api/shared',
       ],
       vueTemplate: true,
       resolvers: [VueAmapResolver()],

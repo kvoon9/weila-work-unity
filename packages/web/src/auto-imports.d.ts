@@ -277,6 +277,7 @@ declare global {
   const useSessionStorage: typeof import('@vueuse/core')['useSessionStorage']
   const useShare: typeof import('@vueuse/core')['useShare']
   const useSlots: typeof import('vue')['useSlots']
+  const useSmsCountdown: typeof import('./composables/useSmsCountdown')['useSmsCountdown']
   const useSorted: typeof import('@vueuse/core')['useSorted']
   const useSpeakerIcon: typeof import('./composables/useSpeakerIcon')['useSpeakerIcon']
   const useSpeechRecognition: typeof import('@vueuse/core')['useSpeechRecognition']
@@ -624,6 +625,7 @@ declare module 'vue' {
     readonly useSessionStorage: UnwrapRef<typeof import('@vueuse/core')['useSessionStorage']>
     readonly useShare: UnwrapRef<typeof import('@vueuse/core')['useShare']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
+    readonly useSmsCountdown: UnwrapRef<typeof import('./composables/useSmsCountdown')['useSmsCountdown']>
     readonly useSorted: UnwrapRef<typeof import('@vueuse/core')['useSorted']>
     readonly useSpeakerIcon: UnwrapRef<typeof import('./composables/useSpeakerIcon')['useSpeakerIcon']>
     readonly useSpeechRecognition: UnwrapRef<typeof import('@vueuse/core')['useSpeechRecognition']>

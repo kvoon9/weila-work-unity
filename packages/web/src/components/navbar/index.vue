@@ -3,6 +3,7 @@ import { useFullscreen } from '@vueuse/core'
 import { computed, inject, shallowRef } from 'vue'
 import { useBundleInfo } from '~/composables/useBundleInfo'
 import { useToggleLocales } from '~/composables/useToggleLocales'
+import { isDev } from '~/shared'
 import { useAuthStore } from '~/stores/auth'
 import { version } from '../../../package.json'
 import BindingPhone from '../BindingPhone.vue'
@@ -83,7 +84,7 @@ function reloadPage() {
       </a-tag>
     </a-space>
     <a-space size="large">
-      <li>
+      <li v-if="isDev">
         <a-tooltip :content="t('settings.language')">
           <a-button class="nav-btn" type="outline" shape="circle" @click="toggleLocales">
             <template #icon>

@@ -1,3 +1,5 @@
+import { shallowRef } from 'vue'
+
 export const isLargeScreen = useMediaQuery('(min-width: 1024px)')
 
 export const defaultArcoSettings = reactive({
@@ -44,3 +46,5 @@ export const appkey = computed(() => {
 
   return (import.meta.env.DEV || import.meta.env.MODE === 'staging') ? demo : normal
 })
+
+export const isDev = shallowRef(import.meta.env.DEV)

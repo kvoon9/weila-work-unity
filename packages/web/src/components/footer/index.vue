@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { useToggleLocales } from '~/composables/useToggleLocales'
+import { isDev } from '~/shared'
 
 const { t } = useI18n()
 const { toggle: toggleLocales } = useToggleLocales()
@@ -7,7 +8,7 @@ const { toggle: toggleLocales } = useToggleLocales()
 
 <template>
   <a-layout-footer flex="~ col center" p4 gap2 text-center>
-    <p>
+    <p v-if="isDev">
       <a-tooltip :content="t('settings.language')">
         <a-button class="nav-btn" type="outline" shape="circle" @click="toggleLocales">
           <template #icon>
