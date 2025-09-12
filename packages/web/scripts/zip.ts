@@ -1,5 +1,7 @@
+/* eslint-disable antfu/no-import-dist */
 import { $, echo } from 'zx'
-import { name, version } from '../package.json'
+import { timestamp } from '../dist/build-info.json'
+import { name } from '../package.json'
 
 export function genFormatDate(date: Date) {
   const Y = date.getFullYear()
@@ -12,13 +14,16 @@ export function genFormatDate(date: Date) {
 }
 
 async function run() {
+  const { stdout: branch } = await $`git branch --show-current`
+
   const input = `./dist/*`
-  // const input = `./dist/${name}`
-  const output = `pkg/${name}_${version}_${genFormatDate(new Date())}.zip`
+  const output = `pkg/${branch.trim()}_${name}_${genFormatDate(new Date(timestamp))}.zip`
 
   echo`${output}`
 
   await $`7z a ${output} ${input}`
+
+  await $`clippy ${output}`
 }
 
 await run()
